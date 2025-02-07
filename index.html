@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zhang Hongshen's Home Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            height: calc(100vh - 40px)
+        }
+
+        .language-switch {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+
+        select {
+            padding: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="language-switch">
+            <label for="language-select">🌐 </label>
+            <select id="language-select" onchange="switchLanguage(this.value)">
+                <option value="zh-CN">中文</option>
+                <option value="en">English</option>
+            </select>
+        </div>
+        <iframe id="resume-frame" src="resume_zh-CN.html"></iframe>
+    </div>
+
+
+    <script>
+        const resumeFiles = {
+            "zh-CN": "static/resume_zh-CN.html",
+            "en": "static/resume_en.html"
+        };
+
+        function switchLanguage(lang) {
+            document.getElementById("resume-frame").src = resumeFiles[lang];
+            localStorage.setItem("selectedLanguage", lang);
+        }
+
+        function detectUserLanguage() {
+            const userLang = navigator.language || navigator.userLanguage;
+            console.log("Detected language:", userLang);
+
+            return resumeFiles[userLang] ? userLang : "zh-CN";
+        }
+
+        // 页面加载时，检查是否有已保存的语言设置
+        window.onload = function () {
+            const savedLang = localStorage.getItem("selectedLanguage") || detectUserLanguage();
+            document.getElementById("language-select").value = savedLang;
+            switchLanguage(savedLang);
+        };
+    </script>
+
+</body>
+
+</html>

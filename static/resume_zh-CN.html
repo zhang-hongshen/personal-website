@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>张鸿燊</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1,
+        h2 {
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            border-bottom: 2px solid #333;
+            margin-top: 20px;
+        }
+
+        .contact-info,
+        .education,
+        .experience,
+        .project,
+        .skills,
+        .honors,
+        .others {
+            margin-bottom: 10px;
+        }
+
+        .contact-info p,
+        .education p,
+        .experience p,
+        .project p,
+        .skills ol,
+        .honors p,
+        .others p {
+            margin: 0;
+        }
+
+        .time {
+            float: right;
+            color: #555;
+        }
+
+        .clearfix::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>张鸿燊</h1>
+        <div class="contact-info">
+            <p style="text-align: center;">
+                <span>手机: xx-xxxxxxxxxxx</span>
+                <span>邮箱: zhanghongshen716@gmail.com</span>
+            </p>
+        </div>
+
+        <div class="education">
+            <h2>教育经历</h2>
+            <div class="clearfix">
+                <p><strong>南洋理工大学</strong><span class="time">2025.1 - 2026.1</span></p>
+                <p>机器学习 硕士<span class="time">新加坡</span></p>
+
+            </div>
+            <div class="clearfix">
+                <p><strong>西南交通大学</strong><span class="time">2018.9 - 2022.6</span></p>
+                <p>计算机科学与技术 本科<span class="time">中国</span></p>
+            </div>
+        </div>
+
+        <div class="experience">
+            <h2>工作经历</h2>
+            <div class="clearfix">
+                <p><strong>字节跳动</strong><span class="time">2022.7 - 2023.4</span></p>
+                <p>后端开发工程师</p>
+            </div>
+            <ol>
+                <li>参与飞书招聘老系统下线项目，编写数据迁移代码。成功迁移了<strong>超过300家企业</strong>的数据，将<strong>系统维护成本降低了30%</strong>。
+                </li>
+                <li>作为飞书招聘猎头项目技术负责人，负责需求分析和撰写技术方案。成功排查并<strong>解决了10+线上问题</strong>，优化线上排查流程，提高运维效率。
+                </li>
+            </ol>
+        </div>
+
+        <div class="project">
+            <h2>项目经历</h2>
+            <div class="clearfix">
+                <p><strong><a href="https://github.com/zhang-hongshen/ModelCraft">ModelCraft</a></strong><span
+                        class="time">2024.1 - 至今</span></p>
+                <p>ModelCraft是一款macOS原生的app，帮助用户快速本地运行大模型，利用RAG提高回答的质量。同时，应用内的模型商店可以帮助用户一键下载大模型，无需其他繁琐的操作。应用还包含知识库，本地模型管理，提示词库等功能。
+                </p>
+            </div>
+            <div class="clearfix">
+                <p><strong>飞书招聘</strong><span class="time">2022.7 - 2023.4</span></p>
+                <p>后端开发工程师</p>
+                <ol>
+                    <li>参与飞书招聘老系统下线项目，编写并测试数据迁移脚本。成功迁移了<strong>超过300家企业</strong>的数据，完成了约20张数据表的迁移，
+                        数据总量为<strong>2000万行</strong>。迁移期间，无任何事故发生。
+                    </li>
+                    <li>作为飞书招聘猎头项目技术负责人，负责需求分析和撰写技术方案。在任期间，无任何事故发生。
+                    </li>
+                    <li>负责组内单元测试，通过改进和补齐组内现有项目的单元测试，将组内所有项目的全量单元测试覆盖率平均提高了<strong>10%</strong>以上，并确保增量覆盖率均超过<strong>70%</strong>。
+                    </li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="skills">
+            <h2>技能</h2>
+            <ol>
+                <li>熟悉 Java 基础，了解Java并发编程以及JVM运行时原理。</li>
+                <li>熟悉 MySQL 基础，如索引，事务等。</li>
+                <li>熟悉 Redis 基本数据结构，了解其持久性、事务。</li>
+                <li>了解常见的消息队列，如Kafka, RocketMQ</li>
+                <li>了解常见的设计模式，如单例模式，工厂模式等。</li>
+                <li>了解 Python。</li>
+                <li>熟练使用 SpringBoot和Spring Cloud框架。</li>
+                <li>熟练使用 Docker, Docker-Compose等容器化工具</li>
+            </ol>
+        </div>
+        <div class="honors">
+            <h2>荣誉</h2>
+            <p>全国大学生市场调查与分析大赛四川省一等奖<span class="time">2021.4</p>
+            <p>全国大学生数学建模竞赛四川省一等奖<span class="time">2020.9</p>
+        </div>
+
+        <div class="others">
+            <h2>其他</h2>
+            <ul>
+                <li><strong>语言:</strong> CET-6, IELTS 6.5, GRE 321</li>
+                <li><strong>证书:</strong> 计算机二级</li>
+            </ul>
+        </div>
+    </div>
+
+    <span style="font-size: small; margin: 10px; color: gray;">上次更新: 2025年2月5日</span>
+</body>
+
+</html>
