@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -10,18 +10,10 @@
             font-family: Arial, sans-serif;
             text-align: center;
             background-color: #f4f4f4;
-            overflow: hidden;
         }
 
         .container {
-            width: 90%;
-            max-width: 900px;
-            margin: 20px auto;
-            background: #fff;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            height: calc(100vh - 40px)
+            height: 100vh
         }
 
         .language-switch {
@@ -37,8 +29,9 @@
 
         iframe {
             width: 100%;
-            height: 100%;
+            height: 1000px;
             border: none;
+            /* disable iframe scrolling bar*/
             overflow: hidden;
         }
     </style>
@@ -53,14 +46,14 @@
                 <option value="en">English</option>
             </select>
         </div>
-        <iframe id="resume-frame" src="resume_zh-CN.html"></iframe>
+        <iframe id="resume-frame" src="static/html/resume_en.html"></iframe>
     </div>
 
 
     <script>
         const resumeFiles = {
-            "zh-CN": "static/resume_zh-CN.html",
-            "en": "static/resume_en.html"
+            "en": "static/html/resume_en.html",
+            "zh-CN": "static/html/resume_zh-CN.html",
         };
 
         function switchLanguage(lang) {
@@ -75,12 +68,21 @@
             return resumeFiles[userLang] ? userLang : "zh-CN";
         }
 
-        // 页面加载时，检查是否有已保存的语言设置
         window.onload = function () {
             const savedLang = localStorage.getItem("selectedLanguage") || detectUserLanguage();
             document.getElementById("language-select").value = savedLang;
             switchLanguage(savedLang);
         };
+
+        function adjustIframeHeight() {
+            const iframe = document.getElementById("resume-frame");
+            iframe.onload = function () {
+                const doc = iframe.contentDocument || iframe.contentWindow.document;
+                iframe.style.height = doc.documentElement.scrollHeight + "px";
+            };
+        }
+
+        document.getElementById("resume-frame").addEventListener("load", adjustIframeHeight);
     </script>
 
 </body>

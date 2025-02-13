@@ -1,0 +1,62 @@
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1,
+h2 {
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+h2 {
+    border-bottom: 2px solid #333;
+    margin-top: 20px;
+}
+
+.contact-info,
+.education,
+.experience,
+.project,
+.skills,
+.honors,
+.others {
+    margin-bottom: 10px;
+}
+
+.contact-info p,
+.education p,
+.experience p,
+.project p,
+.skills ol,
+.honors p,
+.others p {
+    margin: 0;
+}
+
+.time {
+    float: right;
+    color: #555;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
