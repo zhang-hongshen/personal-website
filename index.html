@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Zhang Hongshen's Home Page</title>
     <style>
+        html,
+        body {
+            min-width: 400px;
+        }
+
         body {
             font-family: Arial, sans-serif;
             text-align: center;
@@ -13,14 +18,61 @@
         }
 
         .container {
-            height: 100vh
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        nav.navbar {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 0 30px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            min-width: 400px;
+        }
+
+        .navbar-tabs {
+            display: flex;
+            align-items: center;
+            flex: 1 1 auto;
+            min-width: 0;
+            overflow-x: auto;
+            scrollbar-width: thin;
+        }
+
+        .navbar-tabs a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            font-size: 18px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            border-bottom: 3px solid transparent;
+            padding: 0 18px;
+            white-space: nowrap;
+        }
+
+        .navbar-tabs a.active {
+            border-bottom: 3px solid #1976d2;
         }
 
         .language-switch {
+            margin-right: 30px;
             text-align: right;
-            margin-bottom: 10px;
+            margin-bottom: 0;
+            min-width: 140px;
+            flex-shrink: 0;
+            background: #fff;
+            z-index: 1;
         }
 
+        /* 移除媒体查询下的min-width和padding缩小 */
         select {
             padding: 5px;
             font-size: 14px;
@@ -33,12 +85,17 @@
             border: none;
             /* disable iframe scrolling bar*/
             overflow: hidden;
+            display: block;
         }
     </style>
+    <script src="common/translations.js"></script>
 </head>
 
 <body>
-    <div class="container">
+    <nav class="navbar">
+        <div class="navbar-tabs">
+            <a id="resume-tab" href="#">Resume</a>
+        </div>
         <div class="language-switch">
             <label for="language-select">🌐 </label>
             <select id="language-select" onchange="switchLanguage(this.value)">
@@ -46,32 +103,67 @@
                 <option value="en">English</option>
             </select>
         </div>
-        <iframe id="resume-frame" src="static/html/resume_en.html"></iframe>
+    </nav>
+    <div class="container">
+        <iframe id="resume-frame" src="resume/resume_en.html"></iframe>
     </div>
-
 
     <script>
         const resumeFiles = {
-            "en": "static/html/resume_en.html",
-            "zh-CN": "static/html/resume_zh-CN.html",
+            "en": "resume/resume_en.html",
+            "zh-CN": "resume/resume_zh-CN.html",
         };
 
-        function switchLanguage(lang) {
-            document.getElementById("resume-frame").src = resumeFiles[lang];
-            localStorage.setItem("selectedLanguage", lang);
-        }
-
-        function detectUserLanguage() {
+        function getSelectedLanguage() {
+            const stored = localStorage.getItem("selectedLanguage");
+            if (stored && resumeFiles[stored]) return stored;
             const userLang = navigator.language || navigator.userLanguage;
-            console.log("Detected language:", userLang);
-
-            return resumeFiles[userLang] ? userLang : "zh-CN";
+            if (resumeFiles[userLang]) return userLang;
+            return "en";
         }
+
+        function updateTexts(lang) {
+            // 移除Home tab高亮时才显示欢迎语
+            // document.getElementById("home-tab").innerText = translations[lang].homeTab;
+            // document.getElementById("resume-tab").innerText = translations[lang].resumeTab;
+        }
+
+        function switchLanguage(lang) {
+            localStorage.setItem("selectedLanguage", lang);
+            // 如果当前是Home tab，只切换文本；如果是Resume tab，切换iframe
+            document.getElementById("resume-frame").src = resumeFiles[lang];
+            updateTexts(lang);
+        }
+
+        function setActiveTab(tab, lang) {
+            document.getElementById("resume-tab").classList.add("active");
+        }
+
+        // 移除home相关逻辑，只保留resume相关逻辑
+        function getTabFromPath() {
+            const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
+            if (path === 'resume') return 'resume';
+            return 'resume'; // 默认
+        }
+
+        function setTabUrl(tab) {
+            const url = '/resume';
+            if (window.location.pathname !== url) {
+                history.pushState({ tab }, '', url);
+            }
+        }
+
+        window.onpopstate = function (event) {
+            const lang = getSelectedLanguage();
+            setActiveTab('resume', lang);
+            document.getElementById('resume-frame').src = resumeFiles[lang];
+        };
 
         window.onload = function () {
-            const savedLang = localStorage.getItem("selectedLanguage") || detectUserLanguage();
-            document.getElementById("language-select").value = savedLang;
-            switchLanguage(savedLang);
+            const lang = getSelectedLanguage();
+            document.getElementById("language-select").value = lang;
+            setActiveTab('resume', lang);
+            document.getElementById('resume-frame').src = resumeFiles[lang];
         };
 
         function adjustIframeHeight() {
@@ -81,8 +173,15 @@
                 iframe.style.height = doc.documentElement.scrollHeight + "px";
             };
         }
-
         document.getElementById("resume-frame").addEventListener("load", adjustIframeHeight);
+
+        document.getElementById("resume-tab").onclick = function (e) {
+            e.preventDefault();
+            setTabUrl('resume');
+            const lang = getSelectedLanguage();
+            setActiveTab("resume", lang);
+            document.getElementById("resume-frame").src = resumeFiles[lang];
+        };
     </script>
 
 </body>
