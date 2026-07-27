@@ -68,34 +68,75 @@ a:hover {
     margin: 0;
 }
 
-/* Flexbox rows for items that have dates on the right */
-.clearfix,
-.honors {
-    margin-bottom: 16px;
-}
-
-.clearfix p,
-.honors p {
+.education .row {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
-    margin: 0 0 4px 0;
+    align-items: center;
 }
 
-.clearfix p:first-child strong {
-    font-size: 16px;
-    color: var(--text-main);
+
+.education .row> :first-child {
+    flex: 1;
+    text-align: left;
 }
 
-.time {
-    color: var(--text-muted);
-    font-size: 14.5px;
-    font-weight: 400;
-    white-space: nowrap;
-    margin-left: 15px;
+.education .row> :last-child {
+    flex: 1;
+    text-align: right;
 }
 
-ol, ul {
+.experience .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.experience .row> :first-child {
+    flex: 1;
+    text-align: left;
+}
+
+.experience .row> :last-child {
+    flex: 1;
+    text-align: right;
+}
+
+.project .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.project .row> :first-child {
+    flex: 1;
+    text-align: left;
+}
+
+.project .row> :last-child {
+    flex: 1;
+    text-align: right;
+}
+
+/* Flexbox rows for items that have dates on the right */
+.honors .row {
+    display: flex;
+    align-items: center;
+}
+
+.honors .row> :first-child {
+    flex: 1;
+    text-align: left;
+}
+
+.honors .row> :last-child {
+    flex: 1;
+    text-align: right;
+}
+
+ol,
+ul {
     margin-top: 6px;
     margin-bottom: 20px;
     padding-left: 24px;
@@ -124,48 +165,43 @@ span[style*="font-size: small"] {
     color: #9aa0a6 !important;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
     body {
         padding: 0;
         background-color: var(--container-bg);
     }
-    
+
     .container {
         padding: 40px 25px;
         box-shadow: none;
         border-radius: 0;
         width: 100%;
     }
-    
+
     .clearfix p,
     .honors p {
         flex-direction: column;
         align-items: flex-start;
     }
-    
-    .time {
-        margin-left: 0;
-        margin-top: 2px;
-        font-size: 13.5px;
-    }
 }
 
-/* Print optimizations */
 @media print {
     body {
         background: none;
         padding: 0;
     }
+
     .container {
         box-shadow: none;
         padding: 0;
         max-width: 100%;
         border-radius: 0;
     }
+
     a {
         color: #000;
     }
+
     h2 {
         margin-top: 25px;
     }

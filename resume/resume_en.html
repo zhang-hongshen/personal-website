@@ -19,27 +19,42 @@
 
         <div class="education">
             <h2>Education</h2>
-            <div class="clearfix">
-                <p><strong>Nanyang Technological University</strong><span class="time">Jan, 2025 - May, 2026</span></p>
-                <p>Master of Science in Machine Learning<span class="time">Singapore</span></p>
-
-            </div>
-            <div class="clearfix">
-                <p><strong>Southwest Jiaotong University</strong><span class="time">Sep, 2018 - Jun, 2022</span></p>
-                <p>Bachelor of Engineering in Computer Science<span class="time">China</span></p>
-            </div>
+            <p class="row">
+                <span><strong>Nanyang Technological University</strong></span>
+                <span>Jan 2025 - May 2026</span>
+            </p>
+            <p class="row">
+                <span>Master of Science in Machine Learning</span>
+                <span>Singapore</span>
+            </p>
+            <p class="row">
+                <span><strong>Southwest Jiaotong University</strong></span>
+                <span>Sep 2018 - Jun 2022</span>
+            </p>
+            <p class="row">
+                <span>Bachelor of Engineering in Computer Science</span>
+                <span>China</span>
+            </p>
         </div>
 
         <div class="experience">
             <h2>Work Experience</h2>
-            <div class="clearfix">
-                <p><strong>China Mobile</strong><span class="time">Jul, 2026 - Current</span></p>
-                <p><span class="time">China</span></p>
-            </div>
-            <div class="clearfix">
-                <p><strong>ByteDance</strong><span class="time">Jul, 2022 - Apr, 2023</span></p>
-                <p>Backend Engineer<span class="time">China</span></p>
-            </div>
+            <p class="row">
+                <span><strong>China Mobile</strong></span>
+                <span class="time">Jul 2026 - Now</span>
+            </p>
+            <p class="row">
+                <span>Solution Manager</span>
+                <span class="time">China</span>
+            </p>
+            <p class="row">
+                <span><strong>ByteDance</strong></span>
+                <span class="time">Jul 2022 - Apr 2023</span>
+            </p>
+            <p class="row">
+                <span>Backend Engineer</span>
+                <span class="time">China</span>
+            </p>
             <ol>
                 <li>Old Lark System Retirement & Data Migration<br>
                     Developed and tested data migration scripts for the retirement of the old Lark system. Successfully
@@ -65,10 +80,14 @@
 
         <div class="experience">
             <h2>Internship Experience</h2>
-            <div class="clearfix">
-                <p><strong>Amazon</strong><span class="time">Jun, 2025 - Aug, 2025</span></p>
-                <p>Software Development Engineer Intern<span class="time">China</span></p>
-            </div>
+            <p class="row">
+                <span><strong>Amazon</strong></span>
+                <span>Jun 2025 - Aug 2025</span>
+            </p>
+            <p class="row">
+                <span>Software Development Engineer Intern</span>
+                <span>China</span>
+            </p>
             <div>
                 <ol>
                     <li>Designed and implemented an efficient RAG workflow using Python, Java, AWS, enabling large-scale
@@ -86,55 +105,62 @@
 
         <div class="project">
             <h2>Project</h2>
-            <div class="clearfix">
-                <p><strong><a href="https://github.com/zhang-hongshen/ModelCraft">ModelCraft</a></strong><span
-                        class="time">Jan, 2024 - Now</span></p>
-                <p>Tech Stack: Swift, SwiftUI, SwiftData, MLX</p>
-                <ol>
-                    <li>Designed a multi-step task orchestration system based on the ReAct architecture, enabling LLMs
-                        to autonomously invoke and schedule local tools.</li>
-                    <li>Built an Agentic RAG workflow with a local vector database, supporting multi-format data parsing
-                        (PDF, audio, images, etc.) to improve retrieval accuracy and reasoning performance.</li>
-                    <li>Leveraged the MLX inference framework for efficient local deployment, significantly improving
-                        inference performance.</li>
-                    <li>Implemented a rolling summarization mechanism to mitigate token overflow, enhancing long-context
-                        memory consistency and complex task handling capabilities.</li>
-                </ol>
-            </div>
-            <div class="clearfix">
-                <p><strong>Sentiment Analysis for Financial News</strong><span class="time">Mar, 2025 - Mar, 2025</span>
-                </p>
-                <p>Tech Stack: Python, PyTorch, Huggingface Transformers</p>
-                <ol>
-                    <li>Preprocessed financial news data, performed label encoding, tokenization, and dataset splitting.
-                    </li>
-                    <li>Supervised fine-tuned a pre-trained BERT model using HuggingFace Transformers,
-                        enhanced with LoRA for efficient parameter tuning.</li>
-                    <li>Applied CrossEntropy loss with L2 regularization and early stopping to mitigate overfitting and
-                        improve generalization.
-                    </li>
-                    <li>Achieved 86% classification accuracy, outperforming traditional ML baselines.
-                    </li>
-                </ol>
-            </div>
-            <div class="clearfix">
-                <p><strong><a href="https://github.com/zhang-hongshen/leadnews">Rednote-like social
-                            app</a></strong><span class="time">Dec, 2024 - Jan, 2025</span></p>
-                <p>Tech Stack: Spring Boot, Spring Cloud, Nacos, MySQL, Redis, Kafka, Elasticsearch, Minio,
-                    Freemarker
-                </p>
-                <ol>
-                    <li>Implemented scheduled publishing for articles and full-text search functionality.</li>
-                    <li>Used Freemarker template engine to render article detail pages, improving page load
-                        performance.
-                    </li>
-                    <li>Performed offline article scoring and leveraged Kafka Streams for real-time score updates.
-                    </li>
-                    <li>Implemented multi-level rate limiting, including Nginx rate limiting, Gateway rate limiting,
-                        and
-                        microservice-level rate limiting, to enhance service stability.</li>
-                </ol>
-            </div>
+            <p class="row">
+                <span>
+                    <a href="https://github.com/zhang-hongshen/ModelCraft">
+                        ModelCraft</a></strong>
+                </span>
+                <span>Jan 2024 - Now</span>
+            </p>
+            <p>Tech Stack: Swift, SwiftUI, SwiftData, MLX</p>
+            <ol>
+                <li>Designed a multi-step task orchestration system based on the ReAct architecture, enabling LLMs
+                    to autonomously invoke and schedule local tools.</li>
+                <li>Built an Agentic RAG workflow with a local vector database, supporting multi-format data parsing
+                    (PDF, audio, images, etc.) to improve retrieval accuracy and reasoning performance.</li>
+                <li>Leveraged the MLX inference framework for efficient local deployment, significantly improving
+                    inference performance.</li>
+                <li>Implemented a rolling summarization mechanism to mitigate token overflow, enhancing long-context
+                    memory consistency and complex task handling capabilities.</li>
+            </ol>
+            <p class="row">
+                <span><strong>Sentiment Analysis for Financial News</strong></span>
+                <span>Mar 2025 - Mar 2025</span>
+            </p>
+            <p>Tech Stack: Python, PyTorch, Huggingface Transformers</p>
+            <ol>
+                <li>Preprocessed financial news data, performed label encoding, tokenization, and dataset splitting.
+                </li>
+                <li>Supervised fine-tuned a pre-trained BERT model using HuggingFace Transformers,
+                    enhanced with LoRA for efficient parameter tuning.</li>
+                <li>Applied CrossEntropy loss with L2 regularization and early stopping to mitigate overfitting and
+                    improve generalization.
+                </li>
+                <li>Achieved 86% classification accuracy, outperforming traditional ML baselines.
+                </li>
+            </ol>
+
+            <p class="row">
+                <span>
+                    <strong><a href="https://github.com/zhang-hongshen/leadnews">Rednote-like social
+                            app</a></strong>
+                </span>
+                <span>Dec 2024 - Jan 2025</span>
+            </p>
+            <p>Tech Stack: Spring Boot, Spring Cloud, Nacos, MySQL, Redis, Kafka, Elasticsearch, Minio,
+                Freemarker
+            </p>
+            <ol>
+                <li>Implemented scheduled publishing for articles and full-text search functionality.</li>
+                <li>Used Freemarker template engine to render article detail pages, improving page load
+                    performance.
+                </li>
+                <li>Performed offline article scoring and leveraged Kafka Streams for real-time score updates.
+                </li>
+                <li>Implemented multi-level rate limiting, including Nginx rate limiting, Gateway rate limiting,
+                    and
+                    microservice-level rate limiting, to enhance service stability.</li>
+            </ol>
         </div>
 
         <div class="skills">
@@ -153,22 +179,31 @@
         </div>
         <div class="honors">
             <h2>Honors</h2>
-            <p>First prize, Sichuan Province, China Undergraduate Student Market Survey and Analysis Competition
-                <span class="time">Apr, 2021</span>
+            <p class="row">
+                <span>1st Prize, China Undergraduate Student Market Survey and Analysis
+                    Competition</span>
+                <span>Apr 2021</span>
             </p>
-            <p>Second prize, WeChat Mini Program Application Development Competition<span class="time">Dec, 2020</span>
+            <p class="row">
+                <span>2nd Prize, WeChat Mini Program Application Development Competition</span>
+                <span>Dec 2020</span>
             </p>
-            <p>First prize, Sichuan Province, China Undergraduate Mathematical Contest in Modeling
-                <span class="time">Sep, 2020</span>
+            <p class="row">
+                <span>1st Prize, China Undergraduate Mathematical Contest in Modeling</span>
+                <span>Sep 2020</span>
             </p>
-            <p>Third prize, National University Students Electrical Math Modeling Competition
-                <span class="time">Jul, 2019</span>
+            <p class="row">
+                <span>3rd Prize, National University Students Electrical Math Modeling Competition</span>
+                <span>Jul 2019</span>
             </p>
-            <p>Third prize, May Day Mathematical Contest in Modeling<span class="time">Jun, 2019</span></p>
+            <p class="row">
+                <span>3rd Prize, May Day Mathematical Contest in Modeling</span>
+                <span>Jun 2019</span>
+            </p>
         </div>
     </div>
 
-    <span style="font-size: small; margin: 10px; color: gray;">Last Updated: 26 Jul, 2026</span>
+    <span style="font-size: small; margin: 10px; color: gray;">Last Updated: 27 Jul 2026</span>
 </body>
 
 </html>

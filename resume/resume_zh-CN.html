@@ -20,27 +20,40 @@
 
         <div class="education">
             <h2>教育经历</h2>
-            <div class="clearfix">
-                <p><strong>南洋理工大学</strong><span class="time">2025.1 - 2026.5</span></p>
-                <p>计算机科学与技术 硕士<span class="time">新加坡</span></p>
-
-            </div>
-            <div class="clearfix">
-                <p><strong>西南交通大学</strong><span class="time">2018.9 - 2022.6</span></p>
-                <p>计算机科学与技术 本科<span class="time">中国</span></p>
-            </div>
+            <p class="row">
+                <span><strong>南洋理工大学</strong></span>
+                <span>2025.1 - 2026.5</span>
+            </p>
+            <p class="row">
+                <span>计算机科学与技术 硕士</span>
+                <span>新加坡</span>
+            </p class="row">
+            <p class="row">
+                <span><strong>西南交通大学</strong></span>
+                <span>2018.9 - 2022.6</span>
+            </p>
+            <p class="row">
+                <span>计算机科学与技术 本科</span>
+                <span>中国</span>
+            </p>
         </div>
 
         <div class="experience">
             <h2>工作经历</h2>
-            <div class="clearfix">
-                <p><strong>中国移动</strong><span class="time">2026.7 - 至今</span></p>
-                <p></p>
-            </div>
-            <div class="clearfix">
-                <p><strong>字节跳动</strong><span class="time">2022.7 - 2023.4</span></p>
-                <p>后端开发工程师</p>
-            </div>
+            <p class="row">
+                <span><strong>中国移动</strong></span>
+                <span class="time">2026.7 - 至今</span>
+            </p>
+            <p class="row">
+                <span>
+                    <strong>字节跳动</strong>
+                </span>
+                <span class="time">2022.7 - 2023.4</span>
+            </p>
+            <p class="row">
+                <span>后端开发工程师</span>
+                <span></span>
+            </p>
             <ol>
                 <li>飞书老系统下线与数据迁移<br>
                     负责开发和测试数据迁移脚本，完成旧版 Lark 系统的下线工作。成功迁移来自 300 多家企业的数据，
@@ -59,10 +72,14 @@
 
         <div class="experience">
             <h2>实习经历</h2>
-            <div class="clearfix">
-                <p><strong>亚马逊</strong><span class="time">2025.6 - 2025.8</span></p>
-                <p>软件开发实习生<span class="time">中国</span></p>
-            </div>
+            <p class="row">
+                <span><strong>亚马逊</strong></span>
+                <span>2025.6 - 2025.8</span>
+            </p>
+            <p class="row">
+                <span>软件开发实习生</span>
+                <span>中国</span>
+            </p>
             <div>
                 <ol>
                     <li>基于 Python、Java、AWS，设计并实现高效的 RAG 流程，支持大规模文档知识
@@ -78,38 +95,41 @@
 
         <div class="project">
             <h2>项目经历</h2>
-            <div class="clearfix">
-                <p><strong><a href="https://github.com/zhang-hongshen/ModelCraft">ModelCraft</a></strong><span
-                        class="time">2024.1 - 至今</span></p>
-                <p>项目技术栈：Swift, SwiftUI,  SwiftData, MLX</p>
-                <ol>
-                    <li>基于 ReAct 架构 设计多步任务编排系统，支持 LLM 自主调度本地工具。</li>
-                    <li>构建 Agentic RAG 工作流，搭建本地向量数据库并支持 PDF/音频/图片等多格式解析。</li>
-                    <li>基于 MLX 推理框架实现高效本地化部署，显著提升推理性能。</li>
-                    <li>实现滚动摘要机制解决 Token 溢出问题，增强长期上下文记忆与复杂任务处理能力。</li>
-                </ol>
-            </div>
-            <div class="clearfix">
-                <p><strong>金融新闻情感分类</strong><span class="time">2025.3 - 2025.3</span></p>
-                <p>项目技术栈: Python, PyTorch, Huggingface Transformers</p>
-                <ol>
-                    <li>负责金融新闻数据预处理、标签编码、分词与数据集划分。</li>
-                    <li>基于预训练的 BERT 模型，使用 HuggingFace Transformers实现 SFT，并结合 LoRA 实现高效参数训练。</li>
-                    <li>使用 CrossEntropy 损失函数，结合 L2正则 + 早停策略，有效缓解过拟合问题，提升模型泛化能力。</li>
-                    <li>模型在测试集上准确率达到 86%，优于传统的机器学习模型。</li>
-                </ol>
-            </div>
-            <div class="clearfix">
-                <p><strong><a href="https://github.com/zhang-hongshen/leadnews">类小红书App</a></strong><span
-                        class="time">2024.12 - 2025.1</span></p>
-                <p>项目技术栈：SpringBoot, Spring Cloud, Nacos, MySQL, Redis, Kafka, Elasticsearch, Minio, Freemarker </p>
-                <ol>
-                    <li>文章的定时发布，搜索。</li>
-                    <li>文章详情页内容使用模版引擎 Freemarker 渲染，提升页面加载性能。</li>
-                    <li>离线计算文章分数，使用Kafka Streams实时更新文章分数。</li>
-                    <li>多层次的限流(nginx限流，Gateway限流，微服务限流)，提升服务运行时的稳定性。</li>
-                </ol>
-            </div>
+            <p class="row">
+                <span>
+                    <strong><a href="https://github.com/zhang-hongshen/ModelCraft">ModelCraft</a></strong>
+                </span>
+                <span>2024.1 - 至今</span>
+            </p>
+            <p>项目技术栈：Swift, SwiftUI,  SwiftData, MLX</p>
+            <ol>
+                <li>基于 ReAct 架构 设计多步任务编排系统，支持 LLM 自主调度本地工具。</li>
+                <li>构建 Agentic RAG 工作流，搭建本地向量数据库并支持 PDF/音频/图片等多格式解析。</li>
+                <li>基于 MLX 推理框架实现高效本地化部署，显著提升推理性能。</li>
+                <li>实现滚动摘要机制解决 Token 溢出问题，增强长期上下文记忆与复杂任务处理能力。</li>
+            </ol>
+            <p class="row">
+                <span><strong>金融新闻情感分类</strong></span>
+                <span>2025.3 - 2025.3</span>
+            </p>
+            <p>项目技术栈: Python, PyTorch, Huggingface Transformers</p>
+            <ol>
+                <li>负责金融新闻数据预处理、标签编码、分词与数据集划分。</li>
+                <li>基于预训练的 BERT 模型，使用 HuggingFace Transformers实现 SFT，并结合 LoRA 实现高效参数训练。</li>
+                <li>使用 CrossEntropy 损失函数，结合 L2正则 + 早停策略，有效缓解过拟合问题，提升模型泛化能力。</li>
+                <li>模型在测试集上准确率达到 86%，优于传统的机器学习模型。</li>
+            </ol>
+            <p class="row">
+                <span><strong><a href="https://github.com/zhang-hongshen/leadnews">类小红书App</a></strong></span>
+                <span>2024.12 - 2025.1</span>
+            </p>
+            <p>项目技术栈：SpringBoot, Spring Cloud, Nacos, MySQL, Redis, Kafka, Elasticsearch, Minio, Freemarker </p>
+            <ol>
+                <li>文章的定时发布，搜索。</li>
+                <li>文章详情页内容使用模版引擎 Freemarker 渲染，提升页面加载性能。</li>
+                <li>离线计算文章分数，使用Kafka Streams实时更新文章分数。</li>
+                <li>多层次的限流(nginx限流，Gateway限流，微服务限流)，提升服务运行时的稳定性。</li>
+            </ol>
         </div>
 
         <div class="skills">
@@ -128,13 +148,34 @@
         </div>
         <div class="honors">
             <h2>荣誉</h2>
-            <p>全国大学生市场调查与分析大赛四川省一等奖<span class="time">2021.4</span></p>
-            <p>微信小程序应用开发大赛二等奖<span class="time">2020.12</span></p>
-            <p>综合三等奖学金<span class="time">2020.11</span></p>
-            <p>全国大学生数学建模竞赛四川省一等奖<span class="time">2020.9</span></p>
-            <p>西南交通大学数学建模校赛二等奖<span class="time">2020.6</span></p>
-            <p>全国大学生电工数学建模竞赛三等奖<span class="time">2019.7</span></p>
-            <p>五一数学建模竞赛三等奖<span class="time">2019.6</span></p>
+            <p class="row">
+                <span>全国大学生市场调查与分析大赛四川省一等奖</span>
+                <span>2021.4</span>
+            </p>
+            <p class="row">
+                <span>微信小程序应用开发大赛二等奖</span>
+                <span>2020.12</span>
+            </p>
+            <p class="row">
+                <span>综合三等奖学金</span>
+                <span>2020.11</span>
+            </p>
+            <p class="row">
+                <span>全国大学生数学建模竞赛四川省一等奖</span>
+                <span>2020.9</span>
+            </p>
+            <p class="row">
+                <span>西南交通大学数学建模校赛二等奖</span>
+                <span>2020.6</span>
+            </p>
+            <p class="row">
+                <span>全国大学生电工数学建模竞赛三等奖</span>
+                <span>2019.7</span>
+            </p>
+            <p class="row">
+                <span>五一数学建模竞赛三等奖</span>
+                <span>2019.6</span>
+            </p>
         </div>
 
         <div class="others">
@@ -146,7 +187,7 @@
         </div>
     </div>
 
-    <span style="font-size: small; margin: 10px; color: gray;">上次更新: 2026年7月26日</span>
+    <span style="font-size: small; margin: 10px; color: gray;">上次更新: 2026年7月27日</span>
 </body>
 
 </html>
