@@ -1,222 +1,76 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-root="" data-page="home" data-title-en="Mac Apps" data-title-zh="Mac 应用">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zhang Hongshen's Home Page</title>
-    <style>
-        html,
-        body {
-            min-width: 320px;
-            margin: 0;
-            padding: 0;
-            background-color: #f8fafc;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-
-        .container {
-            min-height: calc(100vh - 60px);
-            box-sizing: border-box;
-        }
-
-        nav.navbar {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-bottom: 1px solid #eaeaea;
-            padding: 0 40px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-
-        .navbar-tabs {
-            display: flex;
-            align-items: center;
-            height: 100%;
-        }
-
-        .navbar-tabs a {
-            text-decoration: none;
-            color: #5f6368;
-            font-weight: 600;
-            font-size: 16px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            border-bottom: 2px solid transparent;
-            padding: 0 18px;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-
-        .navbar-tabs a:hover {
-            color: #202124;
-        }
-
-        .navbar-tabs a.active {
-            color: #1a73e8;
-            border-bottom: 2px solid #1a73e8;
-        }
-
-        .language-switch {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        select {
-            padding: 6px 30px 6px 12px;
-            font-size: 14px;
-            font-family: inherit;
-            color: #3c4043;
-            background-color: #fff;
-            border: 1px solid #dadce0;
-            border-radius: 6px;
-            cursor: pointer;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            appearance: none;
-            -webkit-appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233c4043' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 8px center;
-            background-size: 14px;
-        }
-
-        select:hover {
-            border-color: #9aa0a6;
-        }
-
-        select:focus {
-            border-color: #1a73e8;
-            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
-        }
-
-        iframe {
-            width: 100%;
-            height: 1000px;
-            border: none;
-            /* disable iframe scrolling bar*/
-            overflow: hidden;
-            display: block;
-        }
-
-        @media (max-width: 600px) {
-            nav.navbar {
-                padding: 0 20px;
-            }
-        }
-    </style>
-    <script src="common/translations.js"></script>
+    <title>Mac Apps</title>
+    <meta name="description" content="ModelCraft and Arthub — native apps for macOS.">
+    <link rel="stylesheet" href="common/site.css">
+    <script src="common/site.js"></script>
 </head>
 
 <body>
-    <nav class="navbar">
-        <div class="navbar-tabs">
-            <a id="resume-tab" href="#">Resume</a>
-        </div>
-        <div class="language-switch">
-            <label for="language-select">🌐 </label>
-            <select id="language-select" onchange="switchLanguage(this.value)">
-                <option value="zh-CN">中文</option>
-                <option value="en">English</option>
-            </select>
-        </div>
-    </nav>
-    <div class="container">
-        <iframe id="resume-frame" src="resume/resume_en.html" scrolling="no"></iframe>
-    </div>
+    <main>
+        <section class="home-hero">
+            <div class="wrap">
+                <h1><span data-l="en">Native apps,<br>made for Mac.</span><span data-l="zh">为 Mac 打造的<br>原生应用</span></h1>
+                <p>
+                    <span data-l="en">Fast, focused tools that feel right at home on your Mac.</span>
+                    <span data-l="zh">流畅、专注，用起来就像 Mac 自带的一样。</span>
+                </p>
+            </div>
+        </section>
 
-    <script>
-        const resumeFiles = {
-            "en": "resume/resume_en.html",
-            "zh-CN": "resume/resume_zh-CN.html",
-        };
+        <section style="padding-top: 0;">
+            <div class="wrap">
 
-        function getSelectedLanguage() {
-            const stored = localStorage.getItem("selectedLanguage");
-            if (stored && resumeFiles[stored]) return stored;
-            const userLang = navigator.language || navigator.userLanguage;
-            if (resumeFiles[userLang]) return userLang;
-            return "en";
-        }
+                <div class="grid grid-2">
+                    <div class="card product-card" style="--brand: #4f9be8;">
+                        <a class="head" href="products/modelcraft/">
+                            <img src="assets/modelcraft/icon.png" alt="" width="80" height="80">
+                            <div>
+                                <h3>ModelCraft</h3>
+                                <p class="tagline"><span data-l="en">Local-first AI assistant</span><span data-l="zh">本地优先的 AI 助手</span></p>
+                            </div>
+                        </a>
+                        <p class="desc">
+                            <span data-l="en">Run language, image, music and video models directly on your Mac. Organise work into projects, give the assistant your documents as context, and let it work through multi-step tasks with tools.</span>
+                            <span data-l="zh">在 Mac 上直接运行语言、图像、音乐和视频模型。用项目组织工作，把文档作为上下文交给助手，让它借助工具完成多步骤任务。</span>
+                        </p>
+                        <div class="meta">
+                            <span class="tag">macOS 15+</span>
+                            <span class="tag"><span data-l="en">Apple silicon (M1 or later)</span><span data-l="zh">Apple 芯片（M1 及以上）</span></span>
+                        </div>
+                        <div class="btn-row">
+                            <a class="btn btn-primary" href="products/modelcraft/"><span data-l="en">Learn more &amp; download</span><span data-l="zh">了解并下载</span></a>
+                        </div>
+                    </div>
 
-        function updateTexts(lang) {
-            if (translations && translations[lang]) {
-                document.getElementById("resume-tab").innerText = translations[lang].resumeTab;
-            }
-        }
-
-        function switchLanguage(lang) {
-            localStorage.setItem("selectedLanguage", lang);
-            // 如果当前是Home tab，只切换文本；如果是Resume tab，切换iframe
-            document.getElementById("resume-frame").src = resumeFiles[lang];
-            updateTexts(lang);
-        }
-
-        function setActiveTab(tab, lang) {
-            document.getElementById("resume-tab").classList.add("active");
-        }
-
-        // 移除home相关逻辑，只保留resume相关逻辑
-        function getTabFromPath() {
-            const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
-            if (path === 'resume') return 'resume';
-            return 'resume'; // 默认
-        }
-
-        function setTabUrl(tab) {
-            const url = '/resume';
-            if (window.location.pathname !== url) {
-                history.pushState({ tab }, '', url);
-            }
-        }
-
-        window.onpopstate = function (event) {
-            const lang = getSelectedLanguage();
-            setActiveTab('resume', lang);
-            document.getElementById('resume-frame').src = resumeFiles[lang];
-            updateTexts(lang);
-        };
-
-        window.onload = function () {
-            const lang = getSelectedLanguage();
-            document.getElementById("language-select").value = lang;
-            setActiveTab('resume', lang);
-            document.getElementById('resume-frame').src = resumeFiles[lang];
-            updateTexts(lang);
-        };
-
-        function adjustIframeHeight() {
-            const iframe = document.getElementById("resume-frame");
-            try {
-                const doc = iframe.contentDocument || iframe.contentWindow.document;
-                if (doc && doc.documentElement) {
-                    // 额外增加一些像素防止因为高度计算微小误差导致出现滚动条
-                    iframe.style.height = (doc.documentElement.scrollHeight + 30) + "px";
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        }
-        document.getElementById("resume-frame").addEventListener("load", adjustIframeHeight);
-
-        document.getElementById("resume-tab").onclick = function (e) {
-            e.preventDefault();
-            setTabUrl('resume');
-            const lang = getSelectedLanguage();
-            setActiveTab("resume", lang);
-            document.getElementById("resume-frame").src = resumeFiles[lang];
-        };
-    </script>
-
+                    <div class="card product-card" style="--brand: #e5484d;">
+                        <a class="head" href="products/arthub/">
+                            <img src="assets/arthub/icon.png" alt="" width="80" height="80">
+                            <div>
+                                <h3>Arthub</h3>
+                                <p class="tagline"><span data-l="en">Your local media library</span><span data-l="zh">你的本地影音库</span></p>
+                            </div>
+                        </a>
+                        <p class="desc">
+                            <span data-l="en">Add the folders where your movies, TV shows and music live. Arthub identifies each file, fetches posters, cast and episode details, and plays everything with synced lyrics and subtitles.</span>
+                            <span data-l="zh">添加存放电影、剧集和音乐的文件夹，Arthub 会识别每个文件，自动获取海报、演职员和剧集信息，并支持同步歌词与字幕播放。</span>
+                        </p>
+                        <div class="meta">
+                            <span class="tag">macOS 14+</span>
+                            <span class="tag"><span data-l="en">Apple silicon &amp; Intel</span><span data-l="zh">Apple 芯片与 Intel 通用</span></span>
+                        </div>
+                        <div class="btn-row">
+                            <a class="btn btn-primary" href="products/arthub/"><span data-l="en">Learn more &amp; download</span><span data-l="zh">了解并下载</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 
 </html>

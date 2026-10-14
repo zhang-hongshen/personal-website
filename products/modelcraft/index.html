@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../../" data-page="product" data-title-en="ModelCraft — Local-first AI assistant for macOS" data-title-zh="ModelCraft — 面向 macOS 的本地优先 AI 助手">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModelCraft — Local-first AI assistant for macOS</title>
+    <meta name="description" content="ModelCraft brings local language and media models into one native macOS app: chat, projects, agent tools and on-device image, music and video generation.">
+    <link rel="icon" href="../../assets/modelcraft/icon.png">
+    <link rel="stylesheet" href="../../common/site.css">
+    <script src="../../common/site.js"></script>
+    <style>
+        :root { --accent-l: #2f7de1; --accent-d: #6aa8ff; }
+        .hero { background: radial-gradient(800px 360px at 30% 0%, color-mix(in srgb, #ff9a85 18%, transparent), transparent 65%), radial-gradient(800px 360px at 75% 5%, color-mix(in srgb, #72c1dc 20%, transparent), transparent 65%); }
+        .hero-shot { margin-top: 56px; }
+    </style>
+</head>
+
+<body>
+    <main>
+        <section class="hero">
+            <div class="wrap">
+                <img class="app-icon" src="../../assets/modelcraft/icon.png" alt="ModelCraft" width="136" height="136">
+                <h1>ModelCraft</h1>
+                <p class="tagline">
+                    <span data-l="en">A local-first AI assistant for macOS. Your models, your files, your Mac.</span>
+                    <span data-l="zh">面向 macOS、本地优先的 AI 助手。你的模型、你的文件，都留在你的 Mac 上。</span>
+                </p>
+                <div class="btn-row">
+                    <a class="btn btn-primary btn-download" data-release="zhang-hongshen/ModelCraft" href="https://github.com/zhang-hongshen/ModelCraft/releases/latest">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>
+                        <span class="btn-lines">
+                            <span><span data-l="en">Download for Mac</span><span data-l="zh">下载 Mac 版</span></span>
+                            <small><span data-l="en">Apple silicon · M1 or later</span><span data-l="zh">Apple 芯片 · M1 及以上</span></small>
+                        </span>
+                    </a>
+                </div>
+                <p class="btn-note">
+                    <span data-version-wrap hidden><span data-l="en">Version</span><span data-l="zh">版本</span> <span data-version="zhang-hongshen/ModelCraft"></span> · </span>
+                    <span data-l="en">For Macs with Apple silicon (M1, M2, M3, M4 and later) running macOS 15 or later. Intel-based Macs are not supported.</span>
+                    <span data-l="zh">适用于搭载 Apple 芯片（M1、M2、M3、M4 及更新）的 Mac，需 macOS 15 及以上。不支持 Intel 芯片的 Mac。</span>
+                </p>
+
+                <div class="hero-shot">
+                    <div class="shot">
+                        <img class="only-light" src="../../assets/modelcraft/chat_light.webp" alt="ModelCraft chat: the assistant generates an image and writes a notes file in one task" width="2400" height="1372">
+                        <img class="only-dark" src="../../assets/modelcraft/chat_dark.webp" alt="ModelCraft chat: the assistant generates an image and writes a notes file in one task" width="2400" height="1372" loading="lazy">
+                    </div>
+                    <p class="shot-caption">
+                        <span data-l="en">One request, several steps: generate an image locally, then write a design note about it to a file.</span>
+                        <span data-l="zh">一个请求、多个步骤：先在本地生成图片，再把设计说明写入文件。</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="wrap">
+                <p class="eyebrow"><span data-l="en">What it does</span><span data-l="zh">功能</span></p>
+                <h2 class="section-title"><span data-l="en">Everything an AI assistant should do — without the cloud</span><span data-l="zh">AI 助手该做的事，无需依赖云端</span></h2>
+                <p class="section-lead">
+                    <span data-l="en">Models run directly on your Mac. Nothing extra to set up, no account, no subscription.</span>
+                    <span data-l="zh">模型直接在 Mac 上运行。无需额外配置，无需账号，也没有订阅。</span>
+                </p>
+                <div class="grid grid-3">
+                    <div class="card feature">
+                        <div class="icon">💬</div>
+                        <h3><span data-l="en">Local model chat</span><span data-l="zh">本地模型对话</span></h3>
+                        <p><span data-l="en">Browse, download and switch between models from the built-in Model Store.</span><span data-l="zh">在内置模型商店中浏览、下载并切换模型。</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon">🛠️</div>
+                        <h3><span data-l="en">Agent with tools</span><span data-l="zh">会用工具的 Agent</span></h3>
+                        <p><span data-l="en">An agent that reads and writes files, runs terminal commands, fetches web pages and can operate the screen.</span><span data-l="zh">Agent 可以读写文件、执行终端命令、读取网页，还能操作屏幕。</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon">🎨</div>
+                        <h3><span data-l="en">Media generation</span><span data-l="zh">媒体生成</span></h3>
+                        <p><span data-l="en">Create images, videos and music right on your Mac.</span><span data-l="zh">直接在 Mac 上生成图片、视频和音乐。</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon">📁</div>
+                        <h3><span data-l="en">Projects &amp; documents</span><span data-l="zh">项目与文档</span></h3>
+                        <p><span data-l="en">Keep related chats and files together; the assistant searches your project documents when it answers.</span><span data-l="zh">把相关对话和文件放在一起，助手回答时会自动检索项目文档。</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon">🎙️</div>
+                        <h3><span data-l="en">Multimodal &amp; voice</span><span data-l="zh">多模态与语音</span></h3>
+                        <p><span data-l="en">Mix text, images, documents and audio in one conversation, or just talk to it in voice mode.</span><span data-l="zh">在同一次对话中混合文字、图片、文档和音频，或直接用语音模式交谈。</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon">🧠</div>
+                        <h3><span data-l="en">Context control</span><span data-l="zh">上下文管理</span></h3>
+                        <p><span data-l="en">See how much context is used and compact long conversations so long tasks keep running smoothly.</span><span data-l="zh">查看上下文用量、压缩长对话，让长任务也能顺畅执行。</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="wrap">
+                <div class="split">
+                    <div>
+                        <p class="eyebrow"><span data-l="en">Projects</span><span data-l="zh">项目</span></p>
+                        <h3><span data-l="en">A workspace that remembers</span><span data-l="zh">会记住上下文的工作区</span></h3>
+                        <p>
+                            <span data-l="en">Group chats and files by project. Drop in PDFs, notes or code, and the assistant pulls the relevant passages when it answers — the files never leave your Mac.</span>
+                            <span data-l="zh">按项目整理对话和文件。放入 PDF、笔记或代码，助手回答时会自动检索相关段落——文件始终不会离开你的 Mac。</span>
+                        </p>
+                    </div>
+                    <div class="shot">
+                        <img class="only-light" src="../../assets/modelcraft/project_light.webp" alt="ModelCraft project view" width="2400" height="1372" loading="lazy">
+                        <img class="only-dark" src="../../assets/modelcraft/project_dark.webp" alt="ModelCraft project view" width="2400" height="1372" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding-top: 0;">
+            <div class="wrap">
+                <div class="split reverse">
+                    <div>
+                        <p class="eyebrow"><span data-l="en">Model Store</span><span data-l="zh">模型商店</span></p>
+                        <h3><span data-l="en">Pick a model, click download</span><span data-l="zh">选好模型，点击下载</span></h3>
+                        <p>
+                            <span data-l="en">Search a large catalogue of open models, sorted by popularity. Downloads are managed for you and stored in one place you choose.</span>
+                            <span data-l="zh">搜索海量开源模型，按热度排序。下载由应用统一管理，并保存在你指定的位置。</span>
+                        </p>
+                    </div>
+                    <div class="shot">
+                        <img class="only-light" src="../../assets/modelcraft/model_store_light.webp" alt="ModelCraft Model Store" width="2400" height="1360" loading="lazy">
+                        <img class="only-dark" src="../../assets/modelcraft/model_store_dark.webp" alt="ModelCraft Model Store" width="2400" height="1360" loading="lazy">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="wrap">
+                <div class="grid grid-2">
+                    <div class="card install">
+                        <h2><span data-l="en">Install</span><span data-l="zh">安装</span></h2>
+                        <div class="requirements"><span class="tag">macOS 15+</span><span class="tag"><span data-l="en">Apple silicon (M1 or later)</span><span data-l="zh">Apple 芯片（M1 及以上）</span></span></div>
+                        <ol>
+                            <li><span data-l="en">Download <code>ModelCraft_&lt;version&gt;.dmg</code> and drag ModelCraft into Applications.</span><span data-l="zh">下载 <code>ModelCraft_&lt;版本号&gt;.dmg</code>，把 ModelCraft 拖入「应用程序」。</span></li>
+                            <li><span data-l="en">The app isn't notarized by Apple yet, so on first launch open <b>System Settings → Privacy &amp; Security</b> and click <b>Open Anyway</b>, or run:</span><span data-l="zh">应用尚未经过 Apple 公证，首次打开时请前往「系统设置 → 隐私与安全性」点击「仍要打开」，或运行：</span></li>
+                        </ol>
+                        <div class="codebox"><code>xattr -cr /Applications/ModelCraft.app</code><button class="copy-btn" type="button">Copy</button></div>
+                    </div>
+                    <div class="card install">
+                        <h2><span data-l="en">Privacy</span><span data-l="zh">隐私</span></h2>
+                        <p style="color: var(--text-2); margin: 0;">
+                            <span data-l="en">Inference and conversation data stay on your device. The network is used only for things you ask for: downloading models, fetching web pages, or other features you explicitly connect.</span>
+                            <span data-l="zh">推理与对话数据都保存在本地设备上。只有在你主动使用时才会联网：下载模型、读取网页，或你明确连接的其他功能。</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</body>
+
+</html>

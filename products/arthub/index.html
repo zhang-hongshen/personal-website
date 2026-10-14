@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../../" data-page="product" data-title-en="Arthub — Your local media library for macOS" data-title-zh="Arthub — macOS 本地影音库">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arthub — Your local media library for macOS</title>
+    <meta name="description" content="Arthub is a native macOS app that turns folders of movies, TV shows and music into a browsable library with posters, cast, synced lyrics and subtitles.">
+    <link rel="icon" href="../../assets/arthub/icon.png">
+    <link rel="stylesheet" href="../../common/site.css">
+    <script src="../../common/site.js"></script>
+    <style>
+        :root { --accent-l: #d93a3a; --accent-d: #ff5a52; }
+        .hero { background: radial-gradient(800px 380px at 50% 0%, color-mix(in srgb, #e5484d 22%, transparent), transparent 65%); }
+        .kinds { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 48px; }
+        .kinds > span {
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <section class="hero">
+            <div class="wrap">
+                <img class="app-icon" src="../../assets/arthub/icon.png" alt="Arthub" width="136" height="136">
+                <h1>Arthub</h1>
+                <p class="tagline">
+                    <span data-l="en">Your movies, shows and music — finally looking like a library. A native macOS app for the media you already own.</span>
+                    <span data-l="zh">让你的电影、剧集和音乐真正像一个影音库。为你已有的本地媒体打造的原生 macOS 应用。</span>
+                </p>
+                <div class="btn-row">
+                    <a class="btn btn-primary btn-download" data-release="zhang-hongshen/Arthub" href="https://github.com/zhang-hongshen/Arthub/releases/latest">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-5-5m5 5 5-5M5 21h14"/></svg>
+                        <span class="btn-lines">
+                            <span><span data-l="en">Download for Mac</span><span data-l="zh">下载 Mac 版</span></span>
+                            <small><span data-l="en">Universal · Apple silicon &amp; Intel</span><span data-l="zh">通用版 · Apple 芯片与 Intel</span></small>
+                        </span>
+                    </a>
+                </div>
+                <p class="btn-note">
+                    <span data-version-wrap hidden><span data-l="en">Version</span><span data-l="zh">版本</span> <span data-version="zhang-hongshen/Arthub"></span> · </span>
+                    <span data-l="en">One download for every Mac: runs natively on Apple silicon (M series) and on Intel-based Macs with macOS 14 or later.</span>
+                    <span data-l="zh">一个安装包适用于所有 Mac：在 Apple 芯片（M 系列）和 Intel 芯片的 Mac 上都能原生运行，需 macOS 14 及以上。</span>
+                </p>
+                <div class="kinds">
+                    <span>🎬 <span data-l="en">Movies</span><span data-l="zh">电影</span></span>
+                    <span>📺 <span data-l="en">TV Shows</span><span data-l="zh">剧集</span></span>
+                    <span>🎵 <span data-l="en">Music</span><span data-l="zh">音乐</span></span>
+                    <span>💬 <span data-l="en">Subtitles</span><span data-l="zh">字幕</span></span>
+                    <span>🎤 <span data-l="en">Synced lyrics</span><span data-l="zh">同步歌词</span></span>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="wrap">
+                <p class="eyebrow"><span data-l="en">What it does</span><span data-l="zh">功能</span></p>
+                <h2 class="section-title"><span data-l="en">Add a folder. Arthub does the rest.</span><span data-l="zh">添加文件夹，剩下的交给 Arthub。</span></h2>
+                <p class="section-lead">
+                    <span data-l="en">No server to run, no files to import or copy. Arthub reads your folders where they are and builds a library around them.</span>
+                    <span data-l="zh">无需搭建服务器，也不用导入或复制文件。Arthub 直接读取原有文件夹，并据此建立影音库。</span>
+                </p>
+                <div class="grid grid-3">
+                    <div class="card feature">
+                        <div class="icon">🎬</div>
+                        <h3><span data-l="en">Movies, matched</span><span data-l="zh">电影自动匹配</span></h3>
+                        <p><span data-l="en">Posters, backdrops, logos, cast &amp; crew, ratings and trailers, filled in automatically.</span><span data-l="zh">自动补全海报、背景图、Logo、演职员、评分和预告片。</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon">📺</div>
+                        <h3><span data-l="en">Shows by season</span><span data-l="zh">剧集按季整理</span></h3>
+                        <p><span data-l="en">Episode files are grouped into shows and seasons, with stills and air dates for every episode.</span><span data-l="zh">剧集文件自动归入剧集和季，每一集都有剧照和播出日期。</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon">🎵</div>
+                        <h3><span data-l="en">Music with lyrics</span><span data-l="zh">带歌词的音乐</span></h3>
+                        <p><span data-l="en">Artist, album and cover art read from your files, plus time-synced lyrics that follow along as you listen.</span><span data-l="zh">从文件中读取艺人、专辑和封面，并支持随播放滚动的同步歌词。</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon">💬</div>
+                        <h3><span data-l="en">Subtitles that just work</span><span data-l="zh">字幕开箱即用</span></h3>
+                        <p><span data-l="en">Subtitle files next to your videos are picked up automatically, with their language detected.</span><span data-l="zh">自动加载视频旁的字幕文件，并识别字幕语言。</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon">⏯️</div>
+                        <h3><span data-l="en">Native players</span><span data-l="zh">原生播放器</span></h3>
+                        <p><span data-l="en">Video and audio players with Now Playing, media keys, playback speed and resume where you left off.</span><span data-l="zh">视频与音频播放器支持「正在播放」、媒体键、倍速播放和断点续播。</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon">🔍</div>
+                        <h3><span data-l="en">Fast &amp; searchable</span><span data-l="zh">快速可搜索</span></h3>
+                        <p><span data-l="en">Matches are cached on disk so rescans are instant; live search across titles, artists and albums.</span><span data-l="zh">匹配结果缓存在本地，重新扫描瞬间完成；可实时搜索片名、艺人和专辑。</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding-top: 0;">
+            <div class="wrap">
+                <div class="split">
+                    <div>
+                        <p class="eyebrow"><span data-l="en">Smart recognition</span><span data-l="zh">智能识别</span></p>
+                        <h3><span data-l="en">Understands how you already name files</span><span data-l="zh">读懂你原本的命名方式</span></h3>
+                        <p>
+                            <span data-l="en">Separators, release tags like <code>1080p</code> or <code>BluRay</code>, editions and extras are handled for you. Season folders can be <code>Season 01</code>, <code>S01</code> or even <code>第一季</code>.</span>
+                            <span data-l="zh">分隔符、<code>1080p</code>、<code>BluRay</code> 等发布标签、版本和花絮都会被自动处理。季文件夹可以叫 <code>Season 01</code>、<code>S01</code>，甚至 <code>第一季</code>。</span>
+                        </p>
+                        <p>
+                            <span data-l="en">If a guess is wrong, match it by hand once — the choice is saved per file and survives rescans.</span>
+                            <span data-l="zh">如果识别有误，手动匹配一次即可——结果按文件保存，重新扫描也不会丢失。</span>
+                        </p>
+                    </div>
+<pre class="tree">TV Shows/
+└── Doctor Who (2005)/
+    ├── Season 01/
+    │   ├── Doctor Who S01E01.mkv
+    │   ├── Doctor Who S01E01.en.srt
+    │   └── Doctor Who S01E02-E03.mkv
+    └── Specials/
+        └── Doctor Who S00E01.mkv
+
+Music/
+└── Adele/
+    └── 25 (2015)/
+        ├── cover.jpg
+        ├── 01 Hello.flac
+        └── 01 Hello.lrc</pre>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding-top: 0;">
+            <div class="wrap">
+                <div class="split reverse">
+                    <div>
+                        <p class="eyebrow"><span data-l="en">Library management</span><span data-l="zh">资料库管理</span></p>
+                        <h3><span data-l="en">Keeps up with your drives</span><span data-l="zh">跟得上你的硬盘</span></h3>
+                        <ul>
+                            <li><span data-l="en">New or changed files are picked up automatically every 30 seconds.</span><span data-l="zh">每 30 秒自动发现新增或修改的文件。</span></li>
+                            <li><span data-l="en">Unplugged a drive? Its metadata stays; playback resumes once it's back.</span><span data-l="zh">拔掉移动硬盘？元数据依然保留，接回后即可继续播放。</span></li>
+                            <li><span data-l="en">Rename or move a file on the same volume and it keeps its match.</span><span data-l="zh">在同一磁盘内重命名或移动文件，匹配结果不会丢失。</span></li>
+                            <li><span data-l="en">Removing a folder only removes the index — never your media.</span><span data-l="zh">移除文件夹只会删除索引，绝不会动你的媒体文件。</span></li>
+                        </ul>
+                    </div>
+                    <div class="card install">
+                        <h2><span data-l="en">Install</span><span data-l="zh">安装</span></h2>
+                        <div class="requirements"><span class="tag">macOS 14+</span><span class="tag"><span data-l="en">Apple silicon &amp; Intel</span><span data-l="zh">Apple 芯片与 Intel</span></span></div>
+                        <ol>
+                            <li><span data-l="en">Download <code>Arthub_&lt;version&gt;.dmg</code> and drag Arthub into Applications.</span><span data-l="zh">下载 <code>Arthub_&lt;版本号&gt;.dmg</code>，把 Arthub 拖入「应用程序」。</span></li>
+                            <li><span data-l="en">The app isn't notarized by Apple yet, so on first launch open <b>System Settings → Privacy &amp; Security</b> and click <b>Open Anyway</b>, or run:</span><span data-l="zh">应用尚未经过 Apple 公证，首次打开时请前往「系统设置 → 隐私与安全性」点击「仍要打开」，或运行：</span></li>
+                        </ol>
+                        <div class="codebox"><code>xattr -cr /Applications/Arthub.app</code><button class="copy-btn" type="button">Copy</button></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+</body>
+
+</html>
