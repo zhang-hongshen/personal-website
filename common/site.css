@@ -291,11 +291,6 @@ code { font-family: var(--mono); font-size: 0.9em; }
 .btn svg { width: 18px; height: 18px; flex: none; }
 .btn-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .btn-note { font-size: 13px; color: var(--text-3); }
-.btn-download { height: auto; min-height: 56px; padding: 10px 28px 10px 22px; gap: 12px; }
-.btn-download svg { width: 22px; height: 22px; }
-.btn-lines { display: flex; flex-direction: column; align-items: flex-start; line-height: 1.25; }
-.btn-lines > span { font-size: 16px; }
-.btn-lines small { font-size: 12px; font-weight: 500; opacity: 0.85; }
 
 /* ---------- Sections ---------- */
 section { padding: 80px 0; }
@@ -326,17 +321,8 @@ h1, h2, h3 { line-height: 1.15; margin: 0; letter-spacing: -0.02em; }
 
 .feature { padding: 26px; transition: border-color 0.2s, transform 0.2s; }
 .feature:hover { border-color: var(--border-strong); transform: translateY(-2px); }
-.feature .icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    display: grid;
-    place-items: center;
-    font-size: 21px;
-    background: color-mix(in srgb, var(--accent) 12%, var(--surface));
-    border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
-    margin-bottom: 16px;
-}
+.feature .icon { display: flex; color: var(--accent); margin-bottom: 18px; }
+.feature .icon svg { width: 28px; height: 28px; }
 .feature h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; letter-spacing: -0.01em; }
 .feature p { margin: 0; color: var(--text-2); font-size: 15px; }
 
@@ -407,7 +393,7 @@ h1, h2, h3 { line-height: 1.15; margin: 0; letter-spacing: -0.02em; }
 .hero h1 { font-size: clamp(44px, 8vw, 76px); font-weight: 800; letter-spacing: -0.04em; }
 .hero .tagline { font-size: clamp(18px, 2.6vw, 22px); color: var(--text-2); margin: 16px auto 36px; max-width: 680px; }
 .hero .btn-row { justify-content: center; }
-.hero .btn-note { margin: 16px auto 0; max-width: 520px; }
+.hero .btn-note { margin: 14px auto 0; max-width: 520px; }
 
 /* Screenshots already include the macOS window frame and shadow on a transparent background. */
 .shot img { width: 100%; height: auto; }
@@ -423,41 +409,6 @@ h1, h2, h3 { line-height: 1.15; margin: 0; letter-spacing: -0.02em; }
 .split ul { color: var(--text-2); padding-left: 20px; margin: 0; }
 .split li { margin: 8px 0; }
 
-.install { padding: 30px; }
-.install h2 { font-size: 22px; font-weight: 700; margin-bottom: 14px; }
-.install ol { margin: 0 0 16px; padding-left: 20px; color: var(--text-2); }
-.install li { margin: 6px 0; }
-.requirements {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 0 0 18px;
-}
-.codebox {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 8px 8px 8px 16px;
-    overflow-x: auto;
-}
-.codebox code { white-space: nowrap; }
-.copy-btn {
-    font: inherit;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-2);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 5px 12px;
-    cursor: pointer;
-    flex: none;
-}
-.copy-btn:hover { color: var(--text); border-color: var(--border-strong); }
 
 pre.tree {
     margin: 0;
@@ -477,3 +428,8 @@ pre.tree {
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition: none !important; }
 }
+
+/* Centered statement, for a single message. */
+.statement { text-align: center; }
+.statement h2 { font-size: clamp(30px, 5vw, 48px); font-weight: 700; letter-spacing: -0.03em; }
+.statement p:not(.eyebrow) { color: var(--text-2); font-size: 18px; max-width: 560px; margin: 16px auto 0; }

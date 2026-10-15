@@ -85,8 +85,8 @@
     window.getSelectedTheme = getTheme;
 
     const PRODUCTS = [
-        ["modelcraft", "ModelCraft", "assets/modelcraft/icon.png", "Local-first AI assistant", "本地优先的 AI 助手"],
-        ["arthub", "Arthub", "assets/arthub/icon.png", "Your local media library", "你的本地影音库"],
+        ["modelcraft", "ModelCraft", "assets/modelcraft/icon.png", "On-device AI assistant", "设备端 AI 助手"],
+        ["arthub", "Arthub", "assets/arthub/icon.png", "Your media library", "你的影音库"],
     ];
 
     const svg = (body, cls = "") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
@@ -184,7 +184,7 @@
                     if (!res.ok) continue;
                     const data = await res.json();
                     const dmg = (data.assets || []).find((a) => a.name.toLowerCase().endsWith(".dmg"));
-                    release = { version: data.tag_name, url: dmg ? dmg.browser_download_url : null };
+                    release = { url: dmg ? dmg.browser_download_url : null };
                     try { sessionStorage.setItem(key, JSON.stringify(release)); } catch (e) { /* ignore */ }
                 } catch (e) {
                     continue;
@@ -193,26 +193,9 @@
             document.querySelectorAll(`[data-release="${repo}"]`).forEach((btn) => {
                 if (release.url) btn.href = release.url;
             });
-            document.querySelectorAll(`[data-version="${repo}"]`).forEach((el) => {
-                if (release.version) el.textContent = release.version.replace(/^v/, "");
-                el.closest("[data-version-wrap]")?.removeAttribute("hidden");
-            });
         }
     }
 
-    function bindCopyButtons() {
-        document.querySelectorAll(".copy-btn").forEach((btn) => {
-            btn.addEventListener("click", async () => {
-                const code = btn.parentElement.querySelector("code").textContent;
-                try {
-                    await navigator.clipboard.writeText(code);
-                    const old = btn.textContent;
-                    btn.textContent = "✓";
-                    setTimeout(() => (btn.textContent = old), 1500);
-                } catch (e) { /* clipboard unavailable */ }
-            });
-        });
-    }
 
     // Runs in <head>, so the theme is set before the first paint (no flash).
     applyLanguage(getLanguage());
@@ -221,7 +204,6 @@
         renderNav();
         applyLanguage(getLanguage());
         applyTheme(getTheme());
-        bindCopyButtons();
         resolveDownloads();
     });
 })();
