@@ -75,6 +75,7 @@
             b.title = label;
             b.setAttribute("aria-label", label);
         });
+        updateAppIcons();
         document.dispatchEvent(new CustomEvent("themechange", { detail: theme }));
     }
 
@@ -84,10 +85,36 @@
     }
     window.getSelectedTheme = getTheme;
 
+    // Products shown in the nav menu. Icons come in a light and a dark variant;
+    // any <img> or <link rel="icon"> with data-app-icon="<id>" follows the theme.
     const PRODUCTS = [
-        ["modelcraft", "ModelCraft", "assets/modelcraft/icon.png", "On-device AI assistant", "设备端 AI 助手"],
-        ["arthub", "Arthub", "assets/arthub/icon.png", "Your media library", "你的影音库"],
+        {
+            id: "modelcraft", name: "ModelCraft", en: "On-device AI assistant", zh: "设备端 AI 助手",
+            icon: { light: "assets/modelcraft/icon-light.png", dark: "assets/modelcraft/icon-dark.png" },
+        },
+        {
+            id: "arthub", name: "Arthub", en: "Media library", zh: "影音资料库",
+            icon: { light: "assets/arthub/icon-light.svg", dark: "assets/arthub/icon-dark.svg" },
+        },
     ];
+
+    const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    function effectiveTheme() {
+        const theme = document.documentElement.dataset.theme;
+        return theme || (darkQuery.matches ? "dark" : "light");
+    }
+
+    function updateAppIcons() {
+        const mode = effectiveTheme();
+        document.querySelectorAll("[data-app-icon]").forEach((el) => {
+            const product = PRODUCTS.find((p) => p.id === el.dataset.appIcon);
+            if (!product) return;
+            const url = root + product.icon[mode];
+            if (el.tagName === "LINK") { if (el.getAttribute("href") !== url) el.setAttribute("href", url); }
+            else if (el.getAttribute("src") !== url) el.setAttribute("src", url);
+        });
+    }
+    darkQuery.addEventListener("change", updateAppIcons);
 
     const svg = (body, cls = "") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
     const ICONS = {
@@ -119,10 +146,10 @@
         const tab = (id, href, en, zh) =>
             `<a href="${root}${href || "./"}" class="${id === page ? "active" : ""}">` +
             `<span data-l="en">${en}</span><span data-l="zh">${zh}</span></a>`;
-        const items = PRODUCTS.map(([id, name, icon, en, zh]) =>
-            `<a role="menuitem" href="${root}products/${id}/" class="${location.pathname.includes(`/products/${id}/`) ? "current" : ""}">` +
-            `<img src="${root}${icon}" alt="" width="36" height="36">` +
-            `<span><strong>${name}</strong><small><span data-l="en">${en}</span><span data-l="zh">${zh}</span></small></span></a>`
+        const items = PRODUCTS.map((p) =>
+            `<a role="menuitem" href="${root}products/${p.id}/" class="${location.pathname.includes(`/products/${p.id}/`) ? "current" : ""}">` +
+            `<img data-app-icon="${p.id}" src="${root}${p.icon[effectiveTheme()]}" alt="" width="36" height="36">` +
+            `<span><strong>${p.name}</strong><small><span data-l="en">${p.en}</span><span data-l="zh">${p.zh}</span></small></span></a>`
         ).join("");
         const languages = LANGUAGES.map((l) =>
             `<button type="button" role="menuitemradio" data-set-lang="${l.code}" lang="${l.code}" aria-checked="false">` +
