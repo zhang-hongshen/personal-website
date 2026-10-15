@@ -108,9 +108,8 @@ body::before {
     mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
 }
 
-/* Bilingual content: both languages live in the markup, one is hidden. */
-html[data-lang="en"] [data-l="zh"],
-html[data-lang="zh-CN"] [data-l="en"] { display: none !important; }
+/* Hidden until the page text has been translated (see site.js). */
+html.i18n-pending body { visibility: hidden; }
 
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 3px; }
@@ -169,7 +168,7 @@ code { font-family: var(--mono); font-size: 0.9em; }
     position: absolute;
     top: 100%;
     left: 50%;
-    min-width: 280px;
+    min-width: 200px;
     margin-top: 10px;
     padding: 6px;
     background: var(--surface);
@@ -199,8 +198,7 @@ code { font-family: var(--mono); font-size: 0.9em; }
 }
 .nav-menu a:hover, .nav-menu a.current { background: var(--surface-2); text-decoration: none; }
 .nav-menu img { width: 40px; height: 40px; margin: -2px; flex: none; }
-.nav-menu strong { display: block; font-size: 14px; font-weight: 600; line-height: 1.3; }
-.nav-menu small { display: block; font-size: 12px; color: var(--text-3); line-height: 1.4; }
+.nav-menu strong { font-size: 14px; font-weight: 600; }
 
 /* Language menu and theme button */
 .nav-controls { display: flex; align-items: center; gap: 6px; }
@@ -247,7 +245,6 @@ code { font-family: var(--mono); font-size: 0.9em; }
     cursor: pointer;
 }
 .lang-menu .nav-menu button:hover { background: var(--surface-2); }
-.lang-menu .nav-menu button small { display: block; color: var(--text-3); font-size: 12px; font-weight: 400; white-space: nowrap; }
 .lang-menu .nav-menu button .check { width: 16px; height: 16px; color: var(--accent); visibility: hidden; }
 .lang-menu .nav-menu button[aria-checked="true"] { font-weight: 600; }
 .lang-menu .nav-menu button[aria-checked="true"] .check { visibility: visible; }

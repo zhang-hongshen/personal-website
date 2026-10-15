@@ -1,0 +1,190 @@
+{
+  "common": {
+    "nav": {
+      "home": "首頁",
+      "products": "產品",
+      "about": "關於我",
+      "language": "語言"
+    },
+    "theme": {
+      "system": "跟隨系統",
+      "light": "淺色",
+      "dark": "深色",
+      "label": "主題：{current}（點按切換為{next}）"
+    }
+  },
+  "home": {
+    "made_for_every_day": "為日常而生",
+    "on_device_ai_assistant": "裝置端 AI 助理",
+    "a_private_ai_assistant_that": "完全在裝置端執行的私人 AI 助理。問答、寫作、生成圖片與音樂，處理日常事務。",
+    "learn_more": "進一步了解",
+    "media_library": "影音資料庫",
+    "movies_tv_shows_and_music": "自動整理電影、影集與音樂，配齊海報、歌詞與字幕。",
+    "meta": {
+      "title": "ModelCraft 與 Arthub",
+      "description": "ModelCraft 與 Arthub，為日常而生。"
+    }
+  },
+  "modelcraft": {
+    "ai_that_runs_entirely_on": "AI，完全在裝置端執行",
+    "download_for_macos": "下載 macOS 版",
+    "apple_silicon_m1_or_later": "Apple 晶片（M1 及後續機型）· macOS 15 或以上版本",
+    "capable_and_completely_private": "強大，而且私密",
+    "models_run_on_device_no": "模型在裝置端執行。無需帳號，沒有訂閱。",
+    "on_device_models": "裝置端模型",
+    "download_a_model_and_start": "下載即用，無需任何設定。",
+    "gets_things_done": "動手幫忙",
+    "organizes_files_looks_things_up": "整理檔案、上網查找資料，把一件事從頭做到尾。",
+    "images_video_music": "圖像、影片與音樂",
+    "generated_on_device_right_in": "在裝置端生成，直接呈現在對話中。",
+    "projects": "專案",
+    "conversations_and_files_kept_together": "對話與檔案集中存放，回答以專案中的文件為依據。",
+    "multimodal_voice": "多模態與語音",
+    "text_images_documents_and_audio": "文字、圖片、文件、音訊，或者直接開口。",
+    "long_conversations": "長對話",
+    "long_conversations_stay_fast_with": "長對話依然流暢，用量一目了然。",
+    "knowledge_always_at_hand": "資料，隨時可用",
+    "conversations_and_files_are_organized": "對話與檔案依專案整理，回答時會參考其中的文件。",
+    "model_store": "模型商店",
+    "pick_a_model_download_in": "挑選模型，一鍵下載",
+    "browse_popular_open_models_downloads": "瀏覽熱門開源模型，下載與儲存統一管理。",
+    "privacy": "隱私",
+    "data_stays_on_the_device": "資料，始終留在裝置上",
+    "conversations_are_processed_on_device": "對話全程在裝置端處理，僅在下載模型或瀏覽網頁時連網。",
+    "meta": {
+      "title": "ModelCraft — 裝置端 AI 助理",
+      "description": "ModelCraft 是完全在裝置端執行的私人 AI 助理，可用於對話、處理文件，以及生成圖像、影片與音樂。"
+    }
+  },
+  "arthub": {
+    "movies_shows_and_music_beautifully": "電影、影集與音樂，自成一庫",
+    "apple_silicon_m1_or_later": "Apple 晶片（M1 及後續機型）與 Intel 晶片 · macOS 14 或以上版本",
+    "add_a_folder_arthub_does": "加入資料夾，其餘交給 Arthub",
+    "files_stay_where_they_are": "檔案原地不動。無需伺服器，無需匯入。",
+    "movies": "電影",
+    "posters_cast_ratings_and_trailers": "海報、演職員、評分與預告片，自動補齊。",
+    "tv_shows": "影集",
+    "organized_by_season_and_episode": "依季與集整理，附劇照與播出日期。",
+    "music": "音樂",
+    "albums_artists_and_artwork_with": "專輯、藝人與封面，搭配逐句同步歌詞。",
+    "subtitles": "字幕",
+    "loaded_automatically_with_the_language": "自動載入，自動辨識語言。",
+    "playback": "播放",
+    "playback_speed_resume_media_keys": "倍速、接續播放，支援媒體鍵與「正在播放」。",
+    "search": "搜尋",
+    "instant_search_across_titles_artists": "片名、藝人、專輯，即時搜尋。",
+    "recognition": "智慧辨識",
+    "understands_real_world_file_names": "讀懂各種命名方式",
+    "resolution_and_source_tags_are": "自動忽略解析度、片源等標記；季資料夾寫作 Season 01、S01 或「第一季」皆可。手動更正一次，即會記住。",
+    "library": "資料庫",
+    "always_in_sync": "始終保持同步",
+    "automatic": "自動更新",
+    "new_and_changed_files_are": "新增與修改的檔案會被自動發現。",
+    "offline_friendly": "離線無憂",
+    "disconnect_a_drive_and_its": "外接硬碟中斷連線後，影片資訊依然保留。",
+    "move_freely": "隨意移動",
+    "moves_and_renames_on_the": "在同一磁碟內移動或重新命名，配對不會遺失。",
+    "non_destructive": "絕不更動原始檔案",
+    "removing_a_folder_never_touches": "移除資料夾不會更動原始檔案。",
+    "meta": {
+      "title": "Arthub — 影音資料庫",
+      "description": "Arthub 將電影、影集與音樂資料夾整理成影音資料庫，配齊海報、演職員、同步歌詞與字幕。"
+    }
+  },
+  "about": {
+    "software_engineer_backend_ai_agents": "軟體工程師 · 後端開發、AI Agent 與原生 macOS 應用程式",
+    "work_experience": "工作經歷",
+    "china_mobile": "中國移動",
+    "bytedance": "字節跳動",
+    "backend_engineer": "後端開發工程師",
+    "china": "中國",
+    "internship": "實習經歷",
+    "amazon": "亞馬遜",
+    "software_development_engineer_intern": "軟體開發實習生",
+    "projects": "專案經歷",
+    "jan_2024_present": "2024.1 – 至今",
+    "sentiment_analysis_for_financial_news": "金融新聞情感分類",
+    "mar_2025": "2025.3",
+    "rednote_like_social_app": "類小紅書 App",
+    "dec_2024_jan_2025": "2024.12 – 2025.1",
+    "education": "學歷",
+    "nanyang_technological_university": "南洋理工大學",
+    "m_sc_in_machine_learning": "資訊工程 碩士",
+    "jan_2025_may_2026": "2025.1 – 2026.5",
+    "singapore": "新加坡",
+    "southwest_jiaotong_university": "西南交通大學",
+    "b_eng_in_computer_science": "資訊工程 學士",
+    "sep_2018_jun_2022": "2018.9 – 2022.6",
+    "skills": "技能",
+    "languages_frontend": "語言與前端",
+    "backend_data": "後端與資料",
+    "machine_learning": "機器學習",
+    "llm_agents": "大型語言模型與 Agent",
+    "honors": [
+      {
+        "name": "全國大學生市場調查與分析大賽四川省一等獎",
+        "date": "2021.4"
+      },
+      {
+        "name": "微信小程式應用開發大賽二等獎",
+        "date": "2020.12"
+      },
+      {
+        "name": "綜合三等獎學金",
+        "date": "2020.11"
+      },
+      {
+        "name": "全國大學生數學建模競賽四川省一等獎",
+        "date": "2020.9"
+      },
+      {
+        "name": "西南交通大學數學建模校賽二等獎",
+        "date": "2020.6"
+      },
+      {
+        "name": "全國大學生電工數學建模競賽三等獎",
+        "date": "2019.7"
+      },
+      {
+        "name": "五一數學建模競賽三等獎",
+        "date": "2019.6"
+      }
+    ],
+    "languages_certificates": "語言與證照",
+    "last_updated_19_sep_2026": "最後更新：2026 年 9 月 19 日",
+    "meta": {
+      "title": "關於我"
+    },
+    "bullets": {
+      "rednote": [
+        "文章的排程發布與搜尋。",
+        "文章詳情頁使用範本引擎 <b>Freemarker</b> 算繪，提升頁面載入效能。",
+        "離線計算文章分數，使用 <b>Kafka Streams</b> 即時更新文章分數。",
+        "多層次限流（Nginx 限流、Gateway 限流、微服務限流），提升服務執行時的穩定性。"
+      ],
+      "sentiment": [
+        "負責金融新聞資料前處理、標籤編碼、斷詞與資料集切分。",
+        "基於預訓練的 <b>BERT</b> 模型，使用 Hugging Face Transformers 實作 SFT，並結合 <b>LoRA</b> 進行高效參數訓練。",
+        "使用 CrossEntropy 損失函數，結合 L2 正規化與提前停止策略，有效緩解過擬合，提升模型泛化能力。",
+        "模型在測試集上準確率達到 <span class=\"metric\">86%</span>，優於傳統機器學習模型。"
+      ],
+      "modelcraft": [
+        "基於 <b>ReAct</b> 建構 Agent 任務編排與工具呼叫系統，支援自主呼叫搜尋、終端機、Computer Use 等本機工具。",
+        "基於 Swift + MLX 實作 <b>Stable Diffusion</b>、<b>LTX-Video</b>、<b>MusicGen</b> 等模型推論 Pipeline，支援本機圖像、影片及音訊生成。",
+        "實作 KV Cache、滾動摘要等上下文管理機制，最佳化端側推論與長任務執行效率。",
+        "建構 <b>Agentic RAG</b>，支援多種格式檔案解析、向量檢索。"
+      ],
+      "amazon": [
+        "基於 Python、Java、AWS，設計並實作高效的 <b>RAG</b> 流程，支援大規模文件知識檢索與智慧回答。",
+        "使用 <b>React Native</b> 設計聊天互動介面，針對 Kindle 等輸入／輸出受限環境深度最佳化，實現流暢、低延遲的閱讀問答體驗。",
+        "使用 <b>C++</b> 開發核心 Native 模組，最佳化網路請求與記憶體管理，確保應用程式在資源受限裝置上依然高效穩定執行。"
+      ],
+      "bytedance": [
+        "<span class=\"lead\">飛書舊系統下線與資料遷移</span>負責開發和測試資料遷移腳本，完成舊版 Lark 系統的下線工作。成功遷移來自 <span class=\"metric\">300 多家企業</span>的資料，涉及 20 張資料表、總計 <span class=\"metric\">2000 萬列</span>記錄，全程零故障，系統維運成本降低 <span class=\"metric\">30%</span>。",
+        "<span class=\"lead\">飛書獵頭專案技術負責人</span>主導技術方案設計與落地，參與需求分析，解決了 <span class=\"metric\">10 多個</span>線上問題，最佳化了故障排查流程。",
+        "<span class=\"lead\">單元測試最佳化</span>推動團隊專案的單元測試最佳化工作，提升舊程式碼的測試覆蓋率，確保新增程式碼覆蓋率穩定在 <span class=\"metric\">70% 以上</span>，整體專案覆蓋率提升超過 <span class=\"metric\">10%</span>。"
+      ]
+    },
+    "certificate": "全國計算機等級考試二級合格證書"
+  }
+}

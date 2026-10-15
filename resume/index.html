@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-root="../" data-page="resume" data-title-en="Resume" data-title-zh="简历">
+<html lang="en" data-root="../" data-page="about" data-i18n-title="about.meta.title">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resume</title>
+    <title>About me</title>
     <link rel="stylesheet" href="../common/site.css">
     <script src="../common/site.js"></script>
     <style>
@@ -219,8 +219,7 @@
             <header class="profile">
                 <div class="profile-main">
                     <p class="headline">
-                        <span data-l="en">Software Engineer · Backend, AI Agents &amp; native macOS apps</span>
-                        <span data-l="zh">软件工程师 · 后端开发、AI Agent 与原生 macOS 应用</span>
+                        <span data-i18n="about.software_engineer_backend_ai_agents">Software Engineer · Backend, AI Agents &amp; native macOS apps</span>
                     </p>
                     <div class="contacts">
                         <a class="chip" href="mailto:zhanghongshen716@gmail.com"><svg><use href="#i-mail"/></svg>zhanghongshen716@gmail.com</a>
@@ -235,14 +234,14 @@
                     <section class="resume-section" style="padding: 0;">
                         <div class="section-head">
                             <span class="badge"><svg><use href="#i-briefcase"/></svg></span>
-                            <h2><span data-l="en">Work Experience</span><span data-l="zh">工作经历</span></h2>
+                            <h2><span data-i18n="about.work_experience">Work Experience</span></h2>
                         </div>
                         <div class="timeline">
                             <article class="entry" style="--hue: #0086d0;">
                                 <div class="mark logo"><img src="../assets/logos/china-mobile.svg" alt="China Mobile" width="26" height="26"></div>
                                 <div>
                                     <div class="entry-head">
-                                        <h3><span data-l="en">China Mobile</span><span data-l="zh">中国移动</span></h3>
+                                        <h3><span data-i18n="about.china_mobile">China Mobile</span></h3>
                                     </div>
                                 </div>
                             </article>
@@ -251,19 +250,10 @@
                                 <div class="mark logo"><svg role="img" aria-label="ByteDance"><use href="../assets/icons/brands.svg#bytedance"/></svg></div>
                                 <div>
                                     <div class="entry-head">
-                                        <h3><span data-l="en">ByteDance</span><span data-l="zh">字节跳动</span></h3>
+                                        <h3><span data-i18n="about.bytedance">ByteDance</span></h3>
                                     </div>
-                                    <p class="role"><span data-l="en">Backend Engineer</span><span data-l="zh">后端开发工程师</span><span class="sep">·</span><span data-l="en">China</span><span data-l="zh">中国</span></p>
-                                    <ul data-l="en">
-                                        <li><span class="lead">Old Lark system retirement &amp; data migration</span>Developed and tested data migration scripts for retiring the old Lark system. Migrated data from <span class="metric">300+ enterprises</span> across 20 tables and <span class="metric">20M rows</span> with zero incidents, cutting maintenance costs by <span class="metric">30%</span>.</li>
-                                        <li><span class="lead">Technical owner, Lark Headhunting</span>Led technical planning and solution design, took part in requirement analysis, resolved <span class="metric">10+</span> production issues and streamlined troubleshooting, with zero incidents through the development cycle.</li>
-                                        <li><span class="lead">Unit testing improvements</span>Raised coverage of legacy code and kept every incremental change above <span class="metric">70%</span> coverage, lifting overall project coverage by <span class="metric">10%+</span>.</li>
-                                    </ul>
-                                    <ul data-l="zh">
-                                        <li><span class="lead">飞书老系统下线与数据迁移</span>负责开发和测试数据迁移脚本，完成旧版 Lark 系统的下线工作。成功迁移来自 <span class="metric">300 多家企业</span>的数据，涉及 20 张数据表、总计 <span class="metric">2000 万行</span>记录，全程无故障，系统运维成本降低 <span class="metric">30%</span>。</li>
-                                        <li><span class="lead">飞书猎头项目技术负责人</span>主导技术方案设计与落地，参与需求分析，解决了 <span class="metric">10 多个</span>线上问题，优化了故障排查流程。</li>
-                                        <li><span class="lead">单元测试优化</span>推动团队项目的单元测试优化工作，提升旧代码的测试覆盖率，确保新增代码覆盖率稳定在 <span class="metric">70% 以上</span>，整体项目覆盖率提升超过 <span class="metric">10%</span>。</li>
-                                    </ul>
+                                    <p class="role"><span data-i18n="about.backend_engineer">Backend Engineer</span><span class="sep">·</span><span data-i18n="about.china">China</span></p>
+                                    <ul data-i18n-list="about.bullets.bytedance"><template><li data-field-html="."></li></template></ul>
                                 </div>
                             </article>
                         </div>
@@ -272,26 +262,17 @@
                     <section class="resume-section" style="padding: 0;">
                         <div class="section-head">
                             <span class="badge"><svg><use href="#i-rocket"/></svg></span>
-                            <h2><span data-l="en">Internship</span><span data-l="zh">实习经历</span></h2>
+                            <h2><span data-i18n="about.internship">Internship</span></h2>
                         </div>
                         <div class="timeline">
                             <article class="entry" style="--hue: #ff9900;">
                                 <div class="mark logo"><svg role="img" aria-label="Amazon" style="color: var(--text);"><use href="../assets/icons/brands.svg#amazon"/></svg></div>
                                 <div>
                                     <div class="entry-head">
-                                        <h3><span data-l="en">Amazon</span><span data-l="zh">亚马逊</span></h3>
+                                        <h3><span data-i18n="about.amazon">Amazon</span></h3>
                                     </div>
-                                    <p class="role"><span data-l="en">Software Development Engineer Intern</span><span data-l="zh">软件开发实习生</span><span class="sep">·</span><span data-l="en">China</span><span data-l="zh">中国</span></p>
-                                    <ul data-l="en">
-                                        <li>Designed and implemented an efficient <b>RAG</b> workflow with Python, Java and AWS for large-scale document retrieval and intelligent answers.</li>
-                                        <li>Built a conversational interface in <b>React Native</b>, optimised for input/output-constrained devices such as Kindle, with smooth, low-latency interaction.</li>
-                                        <li>Developed core native modules in <b>C++</b> for networking and memory management, keeping the app fast and stable on resource-constrained devices.</li>
-                                    </ul>
-                                    <ul data-l="zh">
-                                        <li>基于 Python、Java、AWS，设计并实现高效的 <b>RAG</b> 流程，支持大规模文档知识检索与智能回答。</li>
-                                        <li>使用 <b>React Native</b> 设计聊天交互界面，针对 Kindle 等输入/输出受限环境深度优化，实现流畅、低延迟的阅读问答体验。</li>
-                                        <li>使用 <b>C++</b> 开发核心 Native 模块，优化网络请求与内存管理，确保应用在资源受限设备上依然高效稳定运行。</li>
-                                    </ul>
+                                    <p class="role"><span data-i18n="about.software_development_engineer_intern">Software Development Engineer Intern</span><span class="sep">·</span><span data-i18n="about.china">China</span></p>
+                                    <ul data-i18n-list="about.bullets.amazon"><template><li data-field-html="."></li></template></ul>
                                 </div>
                             </article>
                         </div>
@@ -300,7 +281,7 @@
                     <section class="resume-section" style="padding: 0;">
                         <div class="section-head">
                             <span class="badge"><svg><use href="#i-code"/></svg></span>
-                            <h2><span data-l="en">Projects</span><span data-l="zh">项目经历</span></h2>
+                            <h2><span data-i18n="about.projects">Projects</span></h2>
                         </div>
                         <div class="timeline">
                             <article class="entry" style="--hue: #8b5cf6;">
@@ -308,20 +289,9 @@
                                 <div>
                                     <div class="entry-head">
                                         <h3><a href="https://github.com/zhang-hongshen/ModelCraft">ModelCraft<svg><use href="#i-arrow"/></svg></a></h3>
-                                        <span class="when"><svg><use href="#i-calendar"/></svg><span data-l="en">Jan 2024 – Present</span><span data-l="zh">2024.1 – 至今</span></span>
+                                        <span class="when"><svg><use href="#i-calendar"/></svg><span data-i18n="about.jan_2024_present">Jan 2024 – Present</span></span>
                                     </div>
-                                    <ul data-l="en">
-                                        <li>Built a <b>ReAct</b>-based agent orchestration and tool-calling system that autonomously uses local tools such as search, terminal and Computer Use.</li>
-                                        <li>Implemented inference pipelines for <b>Stable Diffusion</b>, <b>LTX-Video</b> and <b>MusicGen</b> in Swift + MLX for on-device image, video and audio generation.</li>
-                                        <li>Implemented KV cache and rolling summarisation for context management, improving on-device inference and long-running tasks.</li>
-                                        <li>Built an <b>Agentic RAG</b> pipeline with multi-format file parsing and vector retrieval.</li>
-                                    </ul>
-                                    <ul data-l="zh">
-                                        <li>基于 <b>ReAct</b> 构建 Agent 任务编排与工具调用系统，支持自主调用搜索、终端、Computer Use 等本地工具。</li>
-                                        <li>基于 Swift + MLX 实现 <b>Stable Diffusion</b>、<b>LTX-Video</b>、<b>MusicGen</b> 等模型推理 Pipeline，支持本地图像、视频及音频生成。</li>
-                                        <li>实现 KV Cache、滚动摘要等上下文管理机制，优化端侧推理与长任务执行效率。</li>
-                                        <li>构建 <b>Agentic RAG</b>，支持多种格式文件解析、向量检索。</li>
-                                    </ul>
+                                    <ul data-i18n-list="about.bullets.modelcraft"><template><li data-field-html="."></li></template></ul>
                                     <div class="stack"><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#swift"/></svg>Swift</span><span class="tag">SwiftUI</span><span class="tag">SwiftData</span><span class="tag">MLX</span></div>
                                 </div>
                             </article>
@@ -330,21 +300,10 @@
                                 <div class="mark"><svg><use href="#i-chart"/></svg></div>
                                 <div>
                                     <div class="entry-head">
-                                        <h3><span data-l="en">Sentiment Analysis for Financial News</span><span data-l="zh">金融新闻情感分类</span></h3>
-                                        <span class="when"><svg><use href="#i-calendar"/></svg><span data-l="en">Mar 2025</span><span data-l="zh">2025.3</span></span>
+                                        <h3><span data-i18n="about.sentiment_analysis_for_financial_news">Sentiment Analysis for Financial News</span></h3>
+                                        <span class="when"><svg><use href="#i-calendar"/></svg><span data-i18n="about.mar_2025">Mar 2025</span></span>
                                     </div>
-                                    <ul data-l="en">
-                                        <li>Preprocessed financial news: label encoding, tokenisation and dataset splitting.</li>
-                                        <li>Fine-tuned a pre-trained <b>BERT</b> model with Hugging Face Transformers, using <b>LoRA</b> for parameter-efficient training.</li>
-                                        <li>Used cross-entropy loss with L2 regularisation and early stopping to curb overfitting and improve generalisation.</li>
-                                        <li>Reached <span class="metric">86%</span> test accuracy, outperforming traditional ML baselines.</li>
-                                    </ul>
-                                    <ul data-l="zh">
-                                        <li>负责金融新闻数据预处理、标签编码、分词与数据集划分。</li>
-                                        <li>基于预训练的 <b>BERT</b> 模型，使用 Hugging Face Transformers 实现 SFT，并结合 <b>LoRA</b> 实现高效参数训练。</li>
-                                        <li>使用 CrossEntropy 损失函数，结合 L2 正则与早停策略，有效缓解过拟合，提升模型泛化能力。</li>
-                                        <li>模型在测试集上准确率达到 <span class="metric">86%</span>，优于传统机器学习模型。</li>
-                                    </ul>
+                                    <ul data-i18n-list="about.bullets.sentiment"><template><li data-field-html="."></li></template></ul>
                                     <div class="stack"><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#python"/></svg>Python</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#pytorch"/></svg>PyTorch</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#huggingface"/></svg>Transformers</span></div>
                                 </div>
                             </article>
@@ -353,21 +312,10 @@
                                 <div class="mark"><svg><use href="#i-news"/></svg></div>
                                 <div>
                                     <div class="entry-head">
-                                        <h3><a href="https://github.com/zhang-hongshen/leadnews"><span data-l="en">Rednote-like Social App</span><span data-l="zh">类小红书 App</span><svg><use href="#i-arrow"/></svg></a></h3>
-                                        <span class="when"><svg><use href="#i-calendar"/></svg><span data-l="en">Dec 2024 – Jan 2025</span><span data-l="zh">2024.12 – 2025.1</span></span>
+                                        <h3><a href="https://github.com/zhang-hongshen/leadnews"><span data-i18n="about.rednote_like_social_app">Rednote-like Social App</span><svg><use href="#i-arrow"/></svg></a></h3>
+                                        <span class="when"><svg><use href="#i-calendar"/></svg><span data-i18n="about.dec_2024_jan_2025">Dec 2024 – Jan 2025</span></span>
                                     </div>
-                                    <ul data-l="en">
-                                        <li>Implemented scheduled article publishing and full-text search.</li>
-                                        <li>Rendered article detail pages with the <b>Freemarker</b> template engine to speed up page loads.</li>
-                                        <li>Scored articles offline and used <b>Kafka Streams</b> for real-time score updates.</li>
-                                        <li>Added multi-level rate limiting (Nginx, gateway and per-service) to keep services stable.</li>
-                                    </ul>
-                                    <ul data-l="zh">
-                                        <li>文章的定时发布与搜索。</li>
-                                        <li>文章详情页使用模板引擎 <b>Freemarker</b> 渲染，提升页面加载性能。</li>
-                                        <li>离线计算文章分数，使用 <b>Kafka Streams</b> 实时更新文章分数。</li>
-                                        <li>多层次限流（Nginx 限流、Gateway 限流、微服务限流），提升服务运行时的稳定性。</li>
-                                    </ul>
+                                    <ul data-i18n-list="about.bullets.rednote"><template><li data-field-html="."></li></template></ul>
                                     <div class="stack"><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#springboot"/></svg>Spring Boot</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#spring"/></svg>Spring Cloud</span><span class="tag">Nacos</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#mysql"/></svg>MySQL</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#redis"/></svg>Redis</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#kafka"/></svg>Kafka</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#elasticsearch"/></svg>Elasticsearch</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#minio"/></svg>MinIO</span><span class="tag">Freemarker</span></div>
                                 </div>
                             </article>
@@ -380,41 +328,41 @@
                     <section class="resume-section" style="padding: 0;">
                         <div class="section-head">
                             <span class="badge"><svg><use href="#i-cap"/></svg></span>
-                            <h2><span data-l="en">Education</span><span data-l="zh">教育经历</span></h2>
+                            <h2><span data-i18n="about.education">Education</span></h2>
                         </div>
                         <div class="school">
-                            <h3><span data-l="en">Nanyang Technological University</span><span data-l="zh">南洋理工大学</span></h3>
-                            <p><span data-l="en">M.Sc. in Machine Learning</span><span data-l="zh">计算机科学与技术 硕士</span></p>
-                            <span class="when"><svg><use href="#i-calendar"/></svg><span data-l="en">Jan 2025 – May 2026</span><span data-l="zh">2025.1 – 2026.5</span></span>
-                            <span class="when" style="margin-left: 10px;"><svg><use href="#i-pin"/></svg><span data-l="en">Singapore</span><span data-l="zh">新加坡</span></span>
+                            <h3><span data-i18n="about.nanyang_technological_university">Nanyang Technological University</span></h3>
+                            <p><span data-i18n="about.m_sc_in_machine_learning">M.Sc. in Machine Learning</span></p>
+                            <span class="when"><svg><use href="#i-calendar"/></svg><span data-i18n="about.jan_2025_may_2026">Jan 2025 – May 2026</span></span>
+                            <span class="when" style="margin-left: 10px;"><svg><use href="#i-pin"/></svg><span data-i18n="about.singapore">Singapore</span></span>
                         </div>
                         <div class="school">
-                            <h3><span data-l="en">Southwest Jiaotong University</span><span data-l="zh">西南交通大学</span></h3>
-                            <p><span data-l="en">B.Eng. in Computer Science</span><span data-l="zh">计算机科学与技术 本科</span></p>
-                            <span class="when"><svg><use href="#i-calendar"/></svg><span data-l="en">Sep 2018 – Jun 2022</span><span data-l="zh">2018.9 – 2022.6</span></span>
-                            <span class="when" style="margin-left: 10px;"><svg><use href="#i-pin"/></svg><span data-l="en">China</span><span data-l="zh">中国</span></span>
+                            <h3><span data-i18n="about.southwest_jiaotong_university">Southwest Jiaotong University</span></h3>
+                            <p><span data-i18n="about.b_eng_in_computer_science">B.Eng. in Computer Science</span></p>
+                            <span class="when"><svg><use href="#i-calendar"/></svg><span data-i18n="about.sep_2018_jun_2022">Sep 2018 – Jun 2022</span></span>
+                            <span class="when" style="margin-left: 10px;"><svg><use href="#i-pin"/></svg><span data-i18n="about.china">China</span></span>
                         </div>
                     </section>
 
                     <section class="resume-section" style="padding: 0;">
                         <div class="section-head">
                             <span class="badge"><svg><use href="#i-layers"/></svg></span>
-                            <h2><span data-l="en">Skills</span><span data-l="zh">技能</span></h2>
+                            <h2><span data-i18n="about.skills">Skills</span></h2>
                         </div>
                         <div class="skill-group">
-                            <h4><span data-l="en">Languages &amp; Frontend</span><span data-l="zh">语言与前端</span></h4>
+                            <h4><span data-i18n="about.languages_frontend">Languages &amp; Frontend</span></h4>
                             <div class="chips"><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#java"/></svg>Java</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#python"/></svg>Python</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#typescript"/></svg>TypeScript</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#react"/></svg>React</span></div>
                         </div>
                         <div class="skill-group">
-                            <h4><span data-l="en">Backend &amp; Data</span><span data-l="zh">后端与数据</span></h4>
+                            <h4><span data-i18n="about.backend_data">Backend &amp; Data</span></h4>
                             <div class="chips"><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#springboot"/></svg>Spring Boot</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#spring"/></svg>Spring Cloud</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#mysql"/></svg>MySQL</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#redis"/></svg>Redis</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#kafka"/></svg>Kafka</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#rocketmq"/></svg>RocketMQ</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#aws"/></svg>AWS</span></div>
                         </div>
                         <div class="skill-group">
-                            <h4><span data-l="en">Machine Learning</span><span data-l="zh">机器学习</span></h4>
+                            <h4><span data-i18n="about.machine_learning">Machine Learning</span></h4>
                             <div class="chips"><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#pytorch"/></svg>PyTorch</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#scikitlearn"/></svg>Scikit-learn</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#huggingface"/></svg>Transformers</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#numpy"/></svg>NumPy</span><span class="tag"><svg class="ti" aria-hidden="true"><use href="../assets/icons/brands.svg#pandas"/></svg>Pandas</span><span class="tag">CNN / RNN / LSTM</span><span class="tag">Transformer</span></div>
                         </div>
                         <div class="skill-group">
-                            <h4><span data-l="en">LLM &amp; Agents</span><span data-l="zh">大模型与 Agent</span></h4>
+                            <h4><span data-i18n="about.llm_agents">LLM &amp; Agents</span></h4>
                             <div class="chips"><span class="tag">RAG</span><span class="tag">LoRA</span><span class="tag">Prompt-tuning</span><span class="tag">ReAct</span><span class="tag">Plan-and-Execute</span><span class="tag">MCP</span><span class="tag">Agent Skills</span></div>
                         </div>
                     </section>
@@ -422,44 +370,28 @@
                     <section class="resume-section" style="padding: 0;">
                         <div class="section-head">
                             <span class="badge"><svg><use href="#i-award"/></svg></span>
-                            <h2><span data-l="en">Honors</span><span data-l="zh">荣誉</span></h2>
+                            <h2><span data-i18n="about.honors">Honors</span></h2>
                         </div>
-                        <ul class="honors" data-l="en">
-                            <li><svg><use href="#i-award"/></svg><div>1st Prize, China Undergraduate Market Survey and Analysis Competition<span class="when">Apr 2021</span></div></li>
-                            <li><svg><use href="#i-award"/></svg><div>2nd Prize, WeChat Mini Program Development Competition<span class="when">Dec 2020</span></div></li>
-                            <li><svg><use href="#i-award"/></svg><div>1st Prize, China Undergraduate Mathematical Contest in Modeling<span class="when">Sep 2020</span></div></li>
-                            <li><svg><use href="#i-award"/></svg><div>3rd Prize, National Electrical Math Modeling Competition<span class="when">Jul 2019</span></div></li>
-                            <li><svg><use href="#i-award"/></svg><div>3rd Prize, May Day Mathematical Contest in Modeling<span class="when">Jun 2019</span></div></li>
-                        </ul>
-                        <ul class="honors" data-l="zh">
-                            <li><svg><use href="#i-award"/></svg><div>全国大学生市场调查与分析大赛四川省一等奖<span class="when">2021.4</span></div></li>
-                            <li><svg><use href="#i-award"/></svg><div>微信小程序应用开发大赛二等奖<span class="when">2020.12</span></div></li>
-                            <li><svg><use href="#i-award"/></svg><div>综合三等奖学金<span class="when">2020.11</span></div></li>
-                            <li><svg><use href="#i-award"/></svg><div>全国大学生数学建模竞赛四川省一等奖<span class="when">2020.9</span></div></li>
-                            <li><svg><use href="#i-award"/></svg><div>西南交通大学数学建模校赛二等奖<span class="when">2020.6</span></div></li>
-                            <li><svg><use href="#i-award"/></svg><div>全国大学生电工数学建模竞赛三等奖<span class="when">2019.7</span></div></li>
-                            <li><svg><use href="#i-award"/></svg><div>五一数学建模竞赛三等奖<span class="when">2019.6</span></div></li>
-                        </ul>
+                        <ul class="honors" data-i18n-list="about.honors"><template><li><svg><use href="#i-award"/></svg><div><span data-field="name"></span><span class="when" data-field="date"></span></div></li></template></ul>
                     </section>
 
                     <section class="resume-section" style="padding: 0;">
                         <div class="section-head">
                             <span class="badge"><svg><use href="#i-globe"/></svg></span>
-                            <h2><span data-l="en">Languages &amp; Certificates</span><span data-l="zh">语言与证书</span></h2>
+                            <h2><span data-i18n="about.languages_certificates">Languages &amp; Certificates</span></h2>
                         </div>
                         <div class="scores">
                             <div class="score"><b>7.0</b><span>IELTS</span></div>
                             <div class="score"><b>321</b><span>GRE</span></div>
                             <div class="score"><b>527</b><span>CET-6</span></div>
                         </div>
-                        <p class="note" data-l="zh"><svg><use href="#i-cert"/></svg>全国计算机等级考试二级合格证书</p>
+                        <p class="note" data-i18n-optional><svg><use href="#i-cert"/></svg><span data-i18n="about.certificate"></span></p>
                     </section>
                 </aside>
             </div>
 
             <p class="updated">
-                <span data-l="en">Last updated: 19 Sep 2026</span>
-                <span data-l="zh">上次更新：2026 年 9 月 19 日</span>
+                <span data-i18n="about.last_updated_19_sep_2026">Last updated: 19 Sep 2026</span>
             </p>
         </div>
     </main>

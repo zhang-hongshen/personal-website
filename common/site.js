@@ -1,15 +1,21 @@
-// Shared navigation, language and theme switching, and download links for every page.
+// Shared navigation, translations, theme switching and download links for every page.
 // Each page sets <html data-root="..."> (relative path to the site root) and
-// <html data-page="home|product|resume">.
+// <html data-page="home|product|about">.
 (function () {
-    // To add a language: add it here, add its content as data-l="<short>" spans,
-    // a data-title-<short> attribute on <html>, and a hide rule in site.css.
+    const html = document.documentElement;
+    const root = html.dataset.root || "";
+    const page = html.dataset.page || "";
+
+    // ---------- Languages ----------
+    // Each language has one file, locales/<code>.json. To add a language, add the
+    // file and an entry here; `match` lists browser language prefixes it serves.
     const LANGUAGES = [
-        { code: "zh-CN", short: "zh", name: "简体中文", english: "Chinese (Simplified)" },
-        { code: "en", short: "en", name: "English", english: "English" },
+        { code: "zh-CN", name: "简体中文", match: ["zh-cn", "zh-sg", "zh-hans", "zh"] },
+        { code: "zh-TW", name: "繁體中文", match: ["zh-tw", "zh-hk", "zh-mo", "zh-hant"] },
+        { code: "en", name: "English", match: ["en"] },
     ];
-    const root = document.documentElement.dataset.root || "";
-    const page = document.documentElement.dataset.page || "";
+    const FALLBACK = "en";
+    const dictionaries = {};
 
     function getLanguage() {
         try {
@@ -18,39 +24,101 @@
         } catch (e) { /* storage unavailable */ }
         const preferred = (navigator.languages || [navigator.language || ""]).map((l) => l.toLowerCase());
         for (const pref of preferred) {
-            const match = LANGUAGES.find((l) => pref === l.code.toLowerCase() || pref.startsWith(l.short));
-            if (match) return match.code;
+            // Most specific prefix wins, so zh-TW is not caught by plain "zh".
+            const hits = LANGUAGES.flatMap((l) => l.match.filter((m) => pref.startsWith(m)).map((m) => [m.length, l.code]));
+            if (hits.length) return hits.sort((a, b) => b[0] - a[0])[0][1];
         }
-        return "en";
+        return FALLBACK;
     }
 
-    function applyLanguage(code) {
-        const lang = LANGUAGES.find((l) => l.code === code) || LANGUAGES[0];
-        const html = document.documentElement;
-        html.dataset.lang = lang.code;
+    function loadDictionary(code) {
+        if (!dictionaries[code]) {
+            dictionaries[code] = fetch(`${root}locales/${code}.json`)
+                .then((res) => (res.ok ? res.json() : {}))
+                .catch(() => ({}));
+        }
+        return dictionaries[code];
+    }
+
+    const lookup = (dict, key) => key.split(".").reduce((o, k) => (o == null ? undefined : o[k]), dict);
+    let current = { code: FALLBACK, dict: {}, fallback: {} };
+    function t(key) {
+        const value = lookup(current.dict, key);
+        return value !== undefined ? value : lookup(current.fallback, key);
+    }
+    const format = (s, vars) => s.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? "");
+
+    // data-i18n="key"            → textContent
+    // data-i18n-html="key"       → innerHTML (strings with inline markup)
+    // data-i18n-attr="attr:key"  → attribute value
+    // data-i18n-list="key"       → renders an array through the element's <template>;
+    //                              [data-field] / [data-field-html] pick item fields ("." = the item)
+    // data-i18n-optional         → hidden when its key has no value in any language
+    // <html data-i18n-title>     → document.title
+    function translate(scope = document) {
+        scope.querySelectorAll("[data-i18n]").forEach((el) => {
+            const v = t(el.dataset.i18n);
+            if (typeof v === "string") el.textContent = v;
+        });
+        scope.querySelectorAll("[data-i18n-html]").forEach((el) => {
+            const v = t(el.dataset.i18nHtml);
+            if (typeof v === "string") el.innerHTML = v;
+        });
+        scope.querySelectorAll("[data-i18n-attr]").forEach((el) => {
+            const [attr, key] = el.dataset.i18nAttr.split(":");
+            const v = t(key);
+            if (typeof v === "string") el.setAttribute(attr, v);
+        });
+        scope.querySelectorAll("[data-i18n-list]").forEach((el) => {
+            const items = t(el.dataset.i18nList);
+            const template = el.querySelector(":scope > template");
+            if (!Array.isArray(items) || !template) return;
+            el.querySelectorAll(":scope > :not(template)").forEach((n) => n.remove());
+            for (const item of items) {
+                const node = template.content.cloneNode(true);
+                const field = (name) => (name === "." ? item : item[name]);
+                node.querySelectorAll("[data-field]").forEach((f) => (f.textContent = field(f.dataset.field) ?? ""));
+                node.querySelectorAll("[data-field-html]").forEach((f) => (f.innerHTML = field(f.dataset.fieldHtml) ?? ""));
+                el.append(node);
+            }
+        });
+        scope.querySelectorAll("[data-i18n-optional]").forEach((el) => {
+            const keyed = el.querySelector("[data-i18n]") || el;
+            el.hidden = t(keyed.dataset.i18n) === undefined;
+        });
+        if (html.dataset.i18nTitle) {
+            const title = t(html.dataset.i18nTitle);
+            if (typeof title === "string") document.title = title;
+        }
+    }
+
+    async function applyLanguage(code) {
+        const lang = LANGUAGES.find((l) => l.code === code) || LANGUAGES.find((l) => l.code === FALLBACK);
+        const [dict, fallback] = await Promise.all([loadDictionary(lang.code), loadDictionary(FALLBACK)]);
+        current = { code: lang.code, dict, fallback };
         html.lang = lang.code;
-        const title = html.getAttribute(`data-title-${lang.short}`);
-        if (title) document.title = title;
+        html.dataset.lang = lang.code;
+        if (document.readyState === "loading") {
+            await new Promise((r) => document.addEventListener("DOMContentLoaded", r, { once: true }));
+        }
+        translate();
         document.querySelectorAll(".lang-label").forEach((el) => (el.textContent = lang.name));
         document.querySelectorAll("[data-set-lang]").forEach((b) =>
             b.setAttribute("aria-checked", String(b.dataset.setLang === lang.code)));
+        updateThemeButton();
+        html.classList.remove("i18n-pending");
         document.dispatchEvent(new CustomEvent("langchange", { detail: lang.code }));
     }
 
     window.switchLanguage = function (code) {
         try { localStorage.setItem("selectedLanguage", code); } catch (e) { /* ignore */ }
-        applyLanguage(code);
+        return applyLanguage(code);
     };
     window.getSelectedLanguage = getLanguage;
 
-    // Theme: "system" (default, follows the OS), "light" or "dark".
-    // The nav button cycles light → dark → system.
+    // ---------- Theme ----------
+    // "system" (default, follows the OS), "light" or "dark"; the nav button cycles light → dark → system.
     const THEME_CYCLE = ["light", "dark", "system"];
-    const THEME_LABELS = {
-        system: { en: "Theme: System", zh: "主题：跟随系统" },
-        light: { en: "Theme: Light", zh: "主题：浅色" },
-        dark: { en: "Theme: Dark", zh: "主题：深色" },
-    };
 
     function getTheme() {
         try {
@@ -60,21 +128,24 @@
         return "system";
     }
 
-    function applyTheme(theme) {
-        const html = document.documentElement;
-        if (theme === "system") html.removeAttribute("data-theme");
-        else html.dataset.theme = theme;
+    function updateThemeButton() {
+        const theme = getTheme();
+        const next = THEME_CYCLE[(THEME_CYCLE.indexOf(theme) + 1) % THEME_CYCLE.length];
+        const template = t("common.theme.label");
         document.querySelectorAll(".theme-btn").forEach((b) => {
             b.innerHTML = ICONS[theme];
-            const short = (html.dataset.lang || "en").startsWith("zh") ? "zh" : "en";
-            const next = THEME_CYCLE[(THEME_CYCLE.indexOf(theme) + 1) % THEME_CYCLE.length];
-            const nextName = THEME_LABELS[next][short].split(/[:：]/)[1].trim();
-            const label = short === "zh"
-                ? `${THEME_LABELS[theme].zh}（点击切换为${nextName}）`
-                : `${THEME_LABELS[theme].en} (click for ${nextName})`;
-            b.title = label;
-            b.setAttribute("aria-label", label);
+            if (typeof template === "string") {
+                const label = format(template, { current: t(`common.theme.${theme}`), next: t(`common.theme.${next}`) });
+                b.title = label;
+                b.setAttribute("aria-label", label);
+            }
         });
+    }
+
+    function applyTheme(theme) {
+        if (theme === "system") html.removeAttribute("data-theme");
+        else html.dataset.theme = theme;
+        updateThemeButton();
         updateAppIcons();
         document.dispatchEvent(new CustomEvent("themechange", { detail: theme }));
     }
@@ -85,23 +156,23 @@
     }
     window.getSelectedTheme = getTheme;
 
-    // Products shown in the nav menu. Icons come in a light and a dark variant;
-    // any <img> or <link rel="icon"> with data-app-icon="<id>" follows the theme.
+    // ---------- Products ----------
+    // Icons come in a light and a dark variant; any <img> or <link rel="icon">
+    // with data-app-icon="<id>" follows the theme.
     const PRODUCTS = [
         {
-            id: "modelcraft", name: "ModelCraft", en: "On-device AI assistant", zh: "设备端 AI 助手",
+            id: "modelcraft", name: "ModelCraft",
             icon: { light: "assets/modelcraft/icon-light.png", dark: "assets/modelcraft/icon-dark.png" },
         },
         {
-            id: "arthub", name: "Arthub", en: "Media library", zh: "影音资料库",
+            id: "arthub", name: "Arthub",
             icon: { light: "assets/arthub/icon-light.svg", dark: "assets/arthub/icon-dark.svg" },
         },
     ];
 
     const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
     function effectiveTheme() {
-        const theme = document.documentElement.dataset.theme;
-        return theme || (darkQuery.matches ? "dark" : "light");
+        return html.dataset.theme || (darkQuery.matches ? "dark" : "light");
     }
 
     function updateAppIcons() {
@@ -116,6 +187,7 @@
     }
     darkQuery.addEventListener("change", updateAppIcons);
 
+    // ---------- Navigation ----------
     const svg = (body, cls = "") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
     const ICONS = {
         system: svg('<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/>'),
@@ -143,36 +215,35 @@
     }
 
     function renderNav() {
-        const tab = (id, href, en, zh) =>
-            `<a href="${root}${href || "./"}" class="${id === page ? "active" : ""}">` +
-            `<span data-l="en">${en}</span><span data-l="zh">${zh}</span></a>`;
+        const tab = (id, href, key, fallback) =>
+            `<a href="${root}${href || "./"}" class="${id === page ? "active" : ""}" data-i18n="${key}">${fallback}</a>`;
         const items = PRODUCTS.map((p) =>
             `<a role="menuitem" href="${root}products/${p.id}/" class="${location.pathname.includes(`/products/${p.id}/`) ? "current" : ""}">` +
             `<img data-app-icon="${p.id}" src="${root}${p.icon[effectiveTheme()]}" alt="" width="36" height="36">` +
-            `<span><strong>${p.name}</strong><small><span data-l="en">${p.en}</span><span data-l="zh">${p.zh}</span></small></span></a>`
+            `<strong>${p.name}</strong></a>`
         ).join("");
         const languages = LANGUAGES.map((l) =>
             `<button type="button" role="menuitemradio" data-set-lang="${l.code}" lang="${l.code}" aria-checked="false">` +
-            `<span>${l.name}${l.english !== l.name ? ` <small>${l.english}</small>` : ""}</span>${ICONS.check}</button>`
+            `<span>${l.name}</span>${ICONS.check}</button>`
         ).join("");
         const nav = document.createElement("nav");
         nav.className = "navbar";
         nav.innerHTML = `
             <div class="wrap">
                 <div class="navbar-tabs">
-                    ${tab("home", "", "Home", "首页")}
+                    ${tab("home", "", "common.nav.home", "Home")}
                     <div class="nav-dropdown">
                         <button type="button" class="${page === "product" ? "active" : ""}" aria-haspopup="true" aria-expanded="false">
-                            <span data-l="en">Products</span><span data-l="zh">产品</span>
+                            <span data-i18n="common.nav.products">Products</span>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                         </button>
                         <div class="nav-menu" role="menu">${items}</div>
                     </div>
-                    ${tab("resume", "resume/", "Resume", "简历")}
                 </div>
                 <div class="nav-controls">
+                    <div class="navbar-tabs">${tab("about", "resume/", "common.nav.about", "About me")}</div>
                     <div class="lang-menu">
-                        <button type="button" class="icon-btn lang-btn" aria-haspopup="true" aria-expanded="false" aria-label="Language / 语言" title="Language / 语言">
+                        <button type="button" class="icon-btn lang-btn" aria-haspopup="true" aria-expanded="false" data-i18n-attr="aria-label:common.nav.language">
                             ${ICONS.globe}<span class="lang-label"></span>${ICONS.chevron}
                         </button>
                         <div class="nav-menu" role="menu">${languages}</div>
@@ -187,15 +258,15 @@
         nav.querySelectorAll("[data-set-lang]").forEach((b) =>
             b.addEventListener("click", () => {
                 window.switchLanguage(b.dataset.setLang);
-                applyTheme(getTheme()); // refresh the theme button's label language
                 setLangOpen(false);
             }));
         nav.querySelector(".theme-btn").addEventListener("click", () => {
-            const current = getTheme();
-            setTheme(THEME_CYCLE[(THEME_CYCLE.indexOf(current) + 1) % THEME_CYCLE.length]);
+            const theme = getTheme();
+            setTheme(THEME_CYCLE[(THEME_CYCLE.indexOf(theme) + 1) % THEME_CYCLE.length]);
         });
     }
 
+    // ---------- Downloads ----------
     // Point download buttons straight at the latest .dmg on GitHub Releases.
     // Without the API (offline, rate-limited) they keep linking to the releases page.
     async function resolveDownloads() {
@@ -223,14 +294,18 @@
         }
     }
 
-
-    // Runs in <head>, so the theme is set before the first paint (no flash).
-    applyLanguage(getLanguage());
+    // ---------- Start ----------
+    // Runs in <head>: the theme is set before the first paint, and the page stays
+    // hidden until its text is translated (at most ~1.5 s, in case a file fails to load).
     applyTheme(getTheme());
+    html.classList.add("i18n-pending");
+    setTimeout(() => html.classList.remove("i18n-pending"), 1500);
+    const ready = applyLanguage(getLanguage());
     document.addEventListener("DOMContentLoaded", () => {
         renderNav();
-        applyLanguage(getLanguage());
-        applyTheme(getTheme());
+        updateThemeButton();
+        updateAppIcons();
+        ready.then(() => applyLanguage(current.code));
         resolveDownloads();
     });
 })();

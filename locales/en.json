@@ -1,0 +1,181 @@
+{
+  "common": {
+    "nav": {
+      "home": "Home",
+      "products": "Products",
+      "about": "About me",
+      "language": "Language"
+    },
+    "theme": {
+      "system": "System",
+      "light": "Light",
+      "dark": "Dark",
+      "label": "Theme: {current} (click for {next})"
+    }
+  },
+  "home": {
+    "made_for_every_day": "Made for every day",
+    "on_device_ai_assistant": "On-device AI assistant",
+    "a_private_ai_assistant_that": "A private AI assistant that runs entirely on-device. Ask questions, write, create images and music, and get everyday work done.",
+    "learn_more": "Learn more",
+    "media_library": "Media library",
+    "movies_tv_shows_and_music": "Movies, TV shows and music, organized automatically — with artwork, lyrics and subtitles.",
+    "meta": {
+      "title": "ModelCraft & Arthub",
+      "description": "ModelCraft and Arthub — made for every day."
+    }
+  },
+  "modelcraft": {
+    "ai_that_runs_entirely_on": "AI that runs entirely on-device",
+    "download_for_macos": "Download for macOS",
+    "apple_silicon_m1_or_later": "Apple silicon (M1 or later) · macOS 15 or later",
+    "capable_and_completely_private": "Capable. And completely private",
+    "models_run_on_device_no": "Models run on-device. No account, no subscription.",
+    "on_device_models": "On-device models",
+    "download_a_model_and_start": "Download a model and start. Nothing to configure.",
+    "gets_things_done": "Gets things done",
+    "organizes_files_looks_things_up": "Organizes files, looks things up online and sees a task through from start to finish.",
+    "images_video_music": "Images, video & music",
+    "generated_on_device_right_in": "Generated on-device, right in the conversation.",
+    "projects": "Projects",
+    "conversations_and_files_kept_together": "Conversations and files kept together. Answers draw on the documents in each project.",
+    "multimodal_voice": "Multimodal & voice",
+    "text_images_documents_and_audio": "Text, images, documents and audio — or just speak.",
+    "long_conversations": "Long conversations",
+    "long_conversations_stay_fast_with": "Long conversations stay fast, with usage visible at a glance.",
+    "knowledge_always_at_hand": "Knowledge, always at hand",
+    "conversations_and_files_are_organized": "Conversations and files are organized by project, and answers draw on the documents inside.",
+    "model_store": "Model Store",
+    "pick_a_model_download_in": "Pick a model. Download in one click",
+    "browse_popular_open_models_downloads": "Browse popular open models. Downloads and storage are handled automatically.",
+    "privacy": "Privacy",
+    "data_stays_on_the_device": "Data stays on the device",
+    "conversations_are_processed_on_device": "Conversations are processed on-device. The network is used only to download models or browse the web.",
+    "meta": {
+      "title": "ModelCraft — AI that runs on-device",
+      "description": "ModelCraft is a private AI assistant that runs entirely on-device, for conversations, documents, and creating images, video and music."
+    }
+  },
+  "arthub": {
+    "movies_shows_and_music_beautifully": "Movies, shows and music. Beautifully organized",
+    "apple_silicon_m1_or_later": "Apple silicon (M1 or later) and Intel · macOS 14 or later",
+    "add_a_folder_arthub_does": "Add a folder. Arthub does the rest",
+    "files_stay_where_they_are": "Files stay where they are. No server, no importing.",
+    "movies": "Movies",
+    "posters_cast_ratings_and_trailers": "Posters, cast, ratings and trailers, filled in automatically.",
+    "tv_shows": "TV shows",
+    "organized_by_season_and_episode": "Organized by season and episode, with stills and air dates.",
+    "music": "Music",
+    "albums_artists_and_artwork_with": "Albums, artists and artwork, with time-synced lyrics.",
+    "subtitles": "Subtitles",
+    "loaded_automatically_with_the_language": "Loaded automatically, with the language detected.",
+    "playback": "Playback",
+    "playback_speed_resume_media_keys": "Playback speed, resume, media keys and Now Playing.",
+    "search": "Search",
+    "instant_search_across_titles_artists": "Instant search across titles, artists and albums.",
+    "recognition": "Recognition",
+    "understands_real_world_file_names": "Understands real-world file names",
+    "resolution_and_source_tags_are": "Resolution and source tags are ignored, and season folders can be named Season 01, S01 or 第一季. A corrected match is remembered.",
+    "library": "Library",
+    "always_in_sync": "Always in sync",
+    "automatic": "Automatic",
+    "new_and_changed_files_are": "New and changed files are picked up on their own.",
+    "offline_friendly": "Offline-friendly",
+    "disconnect_a_drive_and_its": "Disconnect a drive and its details remain.",
+    "move_freely": "Move freely",
+    "moves_and_renames_on_the": "Moves and renames on the same drive keep their match.",
+    "non_destructive": "Non-destructive",
+    "removing_a_folder_never_touches": "Removing a folder never touches the original files.",
+    "meta": {
+      "title": "Arthub — Movies, shows and music, beautifully organized",
+      "description": "Arthub turns folders of movies, TV shows and music into a library, with artwork, cast, synced lyrics and subtitles."
+    }
+  },
+  "about": {
+    "software_engineer_backend_ai_agents": "Software Engineer · Backend, AI Agents & native macOS apps",
+    "work_experience": "Work Experience",
+    "china_mobile": "China Mobile",
+    "bytedance": "ByteDance",
+    "backend_engineer": "Backend Engineer",
+    "china": "China",
+    "internship": "Internship",
+    "amazon": "Amazon",
+    "software_development_engineer_intern": "Software Development Engineer Intern",
+    "projects": "Projects",
+    "jan_2024_present": "Jan 2024 – Present",
+    "sentiment_analysis_for_financial_news": "Sentiment Analysis for Financial News",
+    "mar_2025": "Mar 2025",
+    "rednote_like_social_app": "Rednote-like Social App",
+    "dec_2024_jan_2025": "Dec 2024 – Jan 2025",
+    "education": "Education",
+    "nanyang_technological_university": "Nanyang Technological University",
+    "m_sc_in_machine_learning": "M.Sc. in Machine Learning",
+    "jan_2025_may_2026": "Jan 2025 – May 2026",
+    "singapore": "Singapore",
+    "southwest_jiaotong_university": "Southwest Jiaotong University",
+    "b_eng_in_computer_science": "B.Eng. in Computer Science",
+    "sep_2018_jun_2022": "Sep 2018 – Jun 2022",
+    "skills": "Skills",
+    "languages_frontend": "Languages & Frontend",
+    "backend_data": "Backend & Data",
+    "machine_learning": "Machine Learning",
+    "llm_agents": "LLM & Agents",
+    "honors": [
+      {
+        "name": "1st Prize, China Undergraduate Market Survey and Analysis Competition",
+        "date": "Apr 2021"
+      },
+      {
+        "name": "2nd Prize, WeChat Mini Program Development Competition",
+        "date": "Dec 2020"
+      },
+      {
+        "name": "1st Prize, China Undergraduate Mathematical Contest in Modeling",
+        "date": "Sep 2020"
+      },
+      {
+        "name": "3rd Prize, National Electrical Math Modeling Competition",
+        "date": "Jul 2019"
+      },
+      {
+        "name": "3rd Prize, May Day Mathematical Contest in Modeling",
+        "date": "Jun 2019"
+      }
+    ],
+    "languages_certificates": "Languages & Certificates",
+    "last_updated_19_sep_2026": "Last updated: 19 Sep 2026",
+    "meta": {
+      "title": "About me"
+    },
+    "bullets": {
+      "rednote": [
+        "Implemented scheduled article publishing and full-text search.",
+        "Rendered article detail pages with the <b>Freemarker</b> template engine to speed up page loads.",
+        "Scored articles offline and used <b>Kafka Streams</b> for real-time score updates.",
+        "Added multi-level rate limiting (Nginx, gateway and per-service) to keep services stable."
+      ],
+      "sentiment": [
+        "Preprocessed financial news: label encoding, tokenisation and dataset splitting.",
+        "Fine-tuned a pre-trained <b>BERT</b> model with Hugging Face Transformers, using <b>LoRA</b> for parameter-efficient training.",
+        "Used cross-entropy loss with L2 regularisation and early stopping to curb overfitting and improve generalisation.",
+        "Reached <span class=\"metric\">86%</span> test accuracy, outperforming traditional ML baselines."
+      ],
+      "modelcraft": [
+        "Built a <b>ReAct</b>-based agent orchestration and tool-calling system that autonomously uses local tools such as search, terminal and Computer Use.",
+        "Implemented inference pipelines for <b>Stable Diffusion</b>, <b>LTX-Video</b> and <b>MusicGen</b> in Swift + MLX for on-device image, video and audio generation.",
+        "Implemented KV cache and rolling summarisation for context management, improving on-device inference and long-running tasks.",
+        "Built an <b>Agentic RAG</b> pipeline with multi-format file parsing and vector retrieval."
+      ],
+      "amazon": [
+        "Designed and implemented an efficient <b>RAG</b> workflow with Python, Java and AWS for large-scale document retrieval and intelligent answers.",
+        "Built a conversational interface in <b>React Native</b>, optimised for input/output-constrained devices such as Kindle, with smooth, low-latency interaction.",
+        "Developed core native modules in <b>C++</b> for networking and memory management, keeping the app fast and stable on resource-constrained devices."
+      ],
+      "bytedance": [
+        "<span class=\"lead\">Old Lark system retirement &amp; data migration</span>Developed and tested data migration scripts for retiring the old Lark system. Migrated data from <span class=\"metric\">300+ enterprises</span> across 20 tables and <span class=\"metric\">20M rows</span> with zero incidents, cutting maintenance costs by <span class=\"metric\">30%</span>.",
+        "<span class=\"lead\">Technical owner, Lark Headhunting</span>Led technical planning and solution design, took part in requirement analysis, resolved <span class=\"metric\">10+</span> production issues and streamlined troubleshooting, with zero incidents through the development cycle.",
+        "<span class=\"lead\">Unit testing improvements</span>Raised coverage of legacy code and kept every incremental change above <span class=\"metric\">70%</span> coverage, lifting overall project coverage by <span class=\"metric\">10%+</span>."
+      ]
+    }
+  }
+}
