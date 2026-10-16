@@ -5,6 +5,8 @@
     const html = document.documentElement;
     const root = html.dataset.root || "";
     const page = html.dataset.page || "";
+    // Pages load site.js as site.js?v=<version>; the same query busts the cache for locales.
+    const version = document.currentScript ? new URL(document.currentScript.src).search : "";
 
     // ---------- Languages ----------
     // Each language has one file, locales/<code>.json. To add a language, add the
@@ -33,7 +35,7 @@
 
     function loadDictionary(code) {
         if (!dictionaries[code]) {
-            dictionaries[code] = fetch(`${root}locales/${code}.json`)
+            dictionaries[code] = fetch(`${root}locales/${code}.json${version}`)
                 .then((res) => (res.ok ? res.json() : {}))
                 .catch(() => ({}));
         }
