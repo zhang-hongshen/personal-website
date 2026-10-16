@@ -31,7 +31,7 @@
     "tell_modelcraft_what_you_need": "Tell ModelCraft what you need, and it works Arthub and Keel for you — finding a film and pressing play, or looking up keys in Redis.",
     "coming_soon": "Coming soon",
     "meta": {
-      "title": "ModelCraft, Arthub & Keel",
+      "title": "Home",
       "description": "ModelCraft, Arthub and Keel — made for every day."
     }
   },
@@ -68,7 +68,7 @@
     "example_keel": "“Which keys in Keel use the most memory?”",
     "coming_soon": "Coming soon",
     "meta": {
-      "title": "ModelCraft — AI that runs on-device",
+      "title": "ModelCraft",
       "description": "ModelCraft is a private AI assistant that runs entirely on-device, for conversations, documents, and creating images, video and music."
     }
   },
@@ -103,7 +103,7 @@
     "non_destructive": "Non-destructive",
     "removing_a_folder_never_touches": "Removing a folder never touches the original files.",
     "meta": {
-      "title": "Arthub — Movies, shows and music, beautifully organized",
+      "title": "Arthub",
       "description": "Arthub turns folders of movies, TV shows and music into a library, with artwork, cast, synced lyrics and subtitles."
     }
   },
@@ -139,7 +139,7 @@
     "large_values_handled": "Large values handled",
     "strings_over_1_mb_load": "Strings over 1 MB load just the beginning; binary values stay read-only.",
     "meta": {
-      "title": "Keel — A native Redis client",
+      "title": "Keel",
       "description": "Keel is a native SwiftUI Redis client for macOS and iOS, compatible with Valkey, Dragonfly, KeyDB and Garnet."
     }
   },

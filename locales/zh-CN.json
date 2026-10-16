@@ -31,7 +31,7 @@
     "tell_modelcraft_what_you_need": "告诉 ModelCraft 你想做什么，它会替你操作 Arthub 与 Keel：找到电影并开始播放，或在 Redis 中查找 Key。",
     "coming_soon": "即将推出",
     "meta": {
-      "title": "ModelCraft、Arthub 与 Keel",
+      "title": "首页",
       "description": "ModelCraft、Arthub 与 Keel，为日常而生。"
     }
   },
@@ -68,7 +68,7 @@
     "example_keel": "“Keel 里哪些 Key 最占内存？”",
     "coming_soon": "即将推出",
     "meta": {
-      "title": "ModelCraft — 设备端 AI 助手",
+      "title": "ModelCraft",
       "description": "ModelCraft 是完全在设备端运行的私人 AI 助手，可用于对话、处理文档，以及生成图像、视频与音乐。"
     }
   },
@@ -103,7 +103,7 @@
     "non_destructive": "绝不改动原文件",
     "removing_a_folder_never_touches": "移除文件夹不会改动原文件。",
     "meta": {
-      "title": "Arthub — 影音资料库",
+      "title": "Arthub",
       "description": "Arthub 将电影、剧集与音乐文件夹整理成影音资料库，配齐海报、演职员、同步歌词与字幕。"
     }
   },
@@ -139,7 +139,7 @@
     "large_values_handled": "大值无压力",
     "strings_over_1_mb_load": "超过 1 MB 的字符串只加载开头，二进制值只读。",
     "meta": {
-      "title": "Keel — 原生 Redis 客户端",
+      "title": "Keel",
       "description": "Keel 是用 SwiftUI 编写的原生 Redis 客户端，支持 macOS 与 iOS，兼容 Valkey、Dragonfly、KeyDB 与 Garnet。"
     }
   },
