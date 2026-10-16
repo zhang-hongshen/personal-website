@@ -22,13 +22,15 @@
     "movies_tv_shows_and_music": "自動整理電影、影集與音樂，配齊海報、歌詞與字幕。",
     "redis_client": "Redis 用戶端",
     "a_native_redis_client_for": "原生 Redis 用戶端。瀏覽 Key、編輯資料、掌握伺服器狀態，快速流暢，告別 Electron。",
+    "vocal_pitch_correction": "人聲修音",
+    "put_your_singing_on_pitch": "把歌聲修準。一鍵 Auto Tune，也能親手調整每一個音符。",
     "better_together": "連動",
     "one_conversation_every_app": "一次對話，調動所有 App",
     "tell_modelcraft_what_you_need": "告訴 ModelCraft 你想做什麼，它會替你操作 Arthub 與 Keel：找到電影並開始播放，或在 Redis 中查找 Key。",
     "coming_soon": "即將推出",
     "meta": {
       "title": "首頁",
-      "description": "ModelCraft、Arthub 與 Keel，為日常而生。"
+      "description": "ModelCraft、Arthub、Keel 與 TuneStudio，為日常而生。"
     }
   },
   "modelcraft": {
@@ -137,6 +139,46 @@
     "meta": {
       "title": "Keel",
       "description": "Keel 是以 SwiftUI 編寫的原生 Redis 用戶端，相容 Valkey、Dragonfly、KeyDB 與 Garnet。"
+    }
+  },
+  "tunestudio": {
+    "put_your_singing_on_pitch": "把歌聲修準，不必進錄音室",
+    "coming_soon": "即將推出",
+    "requirements": "macOS 15 或更新版本",
+    "one_click_or_every_note": "一鍵修音，或逐個音符",
+    "made_for_beginners_with_room": "為初學者設計，也留足了進階空間：想省事就用 Auto Tune，想掌控就親手編輯。",
+    "open_any_recording": "開啟任意錄音",
+    "wav_mp3_and_m4a": "支援 WAV、MP3 與 M4A，開啟檔案或直接拖進視窗。",
+    "see_your_singing": "看見你的演唱",
+    "a_pitch_curve_over_a": "鋼琴捲簾上顯示音高曲線，每個長音顯示為一個色塊。",
+    "auto_tune_in_one_click": "一鍵 Auto Tune",
+    "natural_balanced_or_robotic": "自然、標準或電音三種風格，再點一次即可聽原聲。",
+    "fine_tune_by_hand": "手動微調",
+    "drag_notes_up_or_down": "上下拖動音符，按住 ⌥ 以音分精調，還能拆分與合併音符。",
+    "non_destructive": "無損編輯",
+    "your_original_file_is_never": "原始檔案永遠不會被修改，每一步都可以復原。",
+    "export": "匯出",
+    "wav_for_best_quality_or": "WAV 音質最佳，M4A 檔案更小。",
+    "auto_tune": "Auto Tune",
+    "three_styles_one_click": "三種風格，一鍵切換",
+    "natural": "自然",
+    "gently_nudges_notes_toward_pitch": "輕輕把音推向準確音高，保留嗓音特色。",
+    "balanced": "標準",
+    "puts_every_held_note_on": "每個長音都修到準確音高，保留顫音。",
+    "robotic": "電音",
+    "snaps_notes_flat_onto_pitch": "把音高完全拉直，得到經典的電音效果。",
+    "simple_by_default": "預設就很簡單",
+    "open_tune_listen_export": "開啟、修音、試聽、匯出",
+    "open": "開啟",
+    "choose_a_recording_of_a": "選擇一段單人聲錄音，背景音樂越少效果越好。",
+    "tune": "修音",
+    "click_auto_tune_in_the": "點擊工具列上的 Auto Tune，或把任意音符拖到想要的位置。",
+    "listen": "試聽",
+    "press_space_to_play_not": "按空白鍵播放。不滿意？⌘Z 就能回到之前。",
+    "save_the_result_as_a": "把結果另存為新的 WAV 或 M4A 檔案。",
+    "meta": {
+      "title": "TuneStudio",
+      "description": "TuneStudio 是一款原生 macOS 修音應用：一鍵 Auto Tune，或親手編輯每一個音符。"
     }
   },
   "about": {

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-root="../../" data-page="product" data-i18n-title="tunestudio.meta.title">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="../../assets/site/icon.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="../../assets/site/icon-32.png" type="image/png">
+    <link rel="apple-touch-icon" href="../../assets/site/apple-touch-icon.png">
+    <title>TuneStudio</title>
+    <meta name="description" data-i18n-attr="content:tunestudio.meta.description" content="TuneStudio is a native macOS app that puts a sung vocal on pitch — Auto Tune in one click, or edit every note by hand.">
+    <link rel="stylesheet" href="../../common/site.css?v=202610170203">
+    <script src="../../common/site.js?v=202610170203"></script>
+    <style>
+        :root { --accent-l: #5240e4; --accent-d: #8f85ff; }
+        .hero { background: radial-gradient(800px 380px at 50% 0%, color-mix(in srgb, #6a5cf0 18%, transparent), transparent 65%); }
+        .points { display: grid; gap: 28px 40px; grid-template-columns: 1fr; }
+        @media (min-width: 560px) { .points { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 960px) { .points { grid-template-columns: repeat(4, 1fr); } }
+        .points h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+        .points p { margin: 0; color: var(--text-2); font-size: 15px; }
+        .points .step { display: block; font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 6px; }
+        .styles { list-style: none; padding: 0 !important; }
+        .styles li { margin: 12px 0; }
+        .styles strong { color: var(--text); }
+        .roll { border: 1px solid var(--border); border-radius: 16px; background: var(--surface); overflow: hidden; }
+        .roll svg { display: block; width: 100%; height: auto; }
+        .roll .row { fill: color-mix(in srgb, var(--text) 5%, transparent); }
+        .roll .grid-line { stroke: color-mix(in srgb, var(--text) 8%, transparent); stroke-width: 1; }
+        .roll .note { fill: color-mix(in srgb, #f5a524 28%, transparent); stroke: #f5a524; stroke-width: 1.5; }
+        .roll .note.edited { fill: color-mix(in srgb, var(--accent) 28%, transparent); stroke: var(--accent); }
+        .roll .raw { fill: none; stroke: color-mix(in srgb, var(--text) 35%, transparent); stroke-width: 2; stroke-dasharray: 4 4; }
+        .roll .tuned { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+        .roll .playhead { stroke: var(--text); stroke-width: 1.5; opacity: .6; }
+    </style>
+</head>
+
+<body>
+    <main>
+        <section class="hero">
+            <div class="wrap">
+                <img class="app-icon" data-app-icon="tunestudio" src="../../assets/tunestudio/icon-light.svg" alt="" width="160" height="160">
+                <h1>TuneStudio</h1>
+                <p class="tagline">
+                    <span data-i18n="tunestudio.put_your_singing_on_pitch">Put your singing on pitch. No studio required</span>
+                </p>
+                <div class="btn-row">
+                    <span class="btn btn-primary" aria-disabled="true">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                        <span data-i18n="tunestudio.coming_soon">Coming Soon</span>
+                    </span>
+                </div>
+                <p class="btn-note">
+                    <span data-i18n="tunestudio.requirements">macOS 15 or later</span>
+                </p>
+            </div>
+        </section>
+
+        <section>
+            <div class="wrap">
+                <h2 class="section-title"><span data-i18n="tunestudio.one_click_or_every_note">One click, or every note</span></h2>
+                <p class="section-lead">
+                    <span data-i18n="tunestudio.made_for_beginners_with_room">Made for beginners, with room to grow — Auto Tune when you want it done, hands-on editing when you want control.</span>
+                </p>
+                <div class="grid grid-3">
+                    <div class="card feature">
+                        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg></div>
+                        <h3><span data-i18n="tunestudio.open_any_recording">Open any recording</span></h3>
+                        <p><span data-i18n="tunestudio.wav_mp3_and_m4a">WAV, MP3 and M4A — open a file or drop it on the window.</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c2-6 4-6 6 0s4 6 6 0 4-6 6 0"/></svg></div>
+                        <h3><span data-i18n="tunestudio.see_your_singing">See your singing</span></h3>
+                        <p><span data-i18n="tunestudio.a_pitch_curve_over_a">A pitch curve over a piano roll, with every held note shown as a block.</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3z"/></svg></div>
+                        <h3><span data-i18n="tunestudio.auto_tune_in_one_click">Auto Tune in one click</span></h3>
+                        <p><span data-i18n="tunestudio.natural_balanced_or_robotic">Natural, Balanced or Robotic. Click again to hear the original.</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M5 9l7-7 7 7M5 15l7 7 7-7"/></svg></div>
+                        <h3><span data-i18n="tunestudio.fine_tune_by_hand">Fine-tune by hand</span></h3>
+                        <p><span data-i18n="tunestudio.drag_notes_up_or_down">Drag notes up or down, hold ⌥ for cents, and split or merge notes.</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-15-6.7L3 13"/></svg></div>
+                        <h3><span data-i18n="tunestudio.non_destructive">Non-destructive</span></h3>
+                        <p><span data-i18n="tunestudio.your_original_file_is_never">Your original file is never changed, and every edit can be undone.</span></p>
+                    </div>
+                    <div class="card feature">
+                        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 12-5-5m5 5 5-5M5 21h14"/></svg></div>
+                        <h3><span data-i18n="tunestudio.export">Export</span></h3>
+                        <p><span data-i18n="tunestudio.wav_for_best_quality_or">WAV for the best quality, or M4A for a smaller file.</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section style="padding-top: 24px;">
+            <div class="wrap">
+                <div class="split">
+                    <div>
+                        <p class="eyebrow"><span data-i18n="tunestudio.auto_tune">Auto Tune</span></p>
+                        <h3><span data-i18n="tunestudio.three_styles_one_click">Three styles, one click</span></h3>
+                        <ul class="styles">
+                            <li><strong data-i18n="tunestudio.natural">Natural</strong> — <span data-i18n="tunestudio.gently_nudges_notes_toward_pitch">gently nudges notes toward pitch, so your voice keeps its character.</span></li>
+                            <li><strong data-i18n="tunestudio.balanced">Balanced</strong> — <span data-i18n="tunestudio.puts_every_held_note_on">puts every held note on pitch and keeps your vibrato.</span></li>
+                            <li><strong data-i18n="tunestudio.robotic">Robotic</strong> — <span data-i18n="tunestudio.snaps_notes_flat_onto_pitch">snaps notes flat onto pitch for the classic electronic sound.</span></li>
+                        </ul>
+                    </div>
+                    <div class="roll" aria-hidden="true">
+                        <svg viewBox="0 0 600 300">
+                            <rect class="row" x="0" y="30" width="600" height="30"/>
+                            <rect class="row" x="0" y="90" width="600" height="30"/>
+                            <rect class="row" x="0" y="180" width="600" height="30"/>
+                            <rect class="row" x="0" y="240" width="600" height="30"/>
+                            <line class="grid-line" x1="150" y1="0" x2="150" y2="300"/>
+                            <line class="grid-line" x1="300" y1="0" x2="300" y2="300"/>
+                            <line class="grid-line" x1="450" y1="0" x2="450" y2="300"/>
+                            <rect class="note" x="40" y="150" width="120" height="30" rx="6"/>
+                            <rect class="note edited" x="180" y="90" width="150" height="30" rx="6"/>
+                            <rect class="note" x="350" y="120" width="90" height="30" rx="6"/>
+                            <rect class="note" x="460" y="180" width="110" height="30" rx="6"/>
+                            <path class="raw" d="M40 172 C70 158 100 176 130 160 S150 150 165 140 C185 110 210 112 240 118 S300 100 330 112 C345 128 365 140 390 132 S430 140 445 150 C460 175 490 186 520 200 S560 190 570 196"/>
+                            <path class="tuned" d="M40 165 C70 164 100 166 160 165 C170 150 175 110 185 105 L330 105 C340 120 345 135 355 135 L440 135 C450 150 455 190 465 195 L570 195"/>
+                            <line class="playhead" x1="250" y1="0" x2="250" y2="300"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="statement" style="padding-bottom: 32px;">
+            <div class="wrap">
+                <p class="eyebrow"><span data-i18n="tunestudio.simple_by_default">Simple by default</span></p>
+                <h2><span data-i18n="tunestudio.open_tune_listen_export">Open, tune, listen, export</span></h2>
+            </div>
+        </section>
+        <section style="padding-top: 24px;">
+            <div class="wrap">
+                <div class="points">
+                    <div>
+                        <span class="step">1</span>
+                        <h3><span data-i18n="tunestudio.open">Open</span></h3>
+                        <p><span data-i18n="tunestudio.choose_a_recording_of_a">Choose a recording of a single voice. Less background music works best.</span></p>
+                    </div>
+                    <div>
+                        <span class="step">2</span>
+                        <h3><span data-i18n="tunestudio.tune">Tune</span></h3>
+                        <p><span data-i18n="tunestudio.click_auto_tune_in_the">Click Auto Tune in the toolbar, or drag any note where you want it.</span></p>
+                    </div>
+                    <div>
+                        <span class="step">3</span>
+                        <h3><span data-i18n="tunestudio.listen">Listen</span></h3>
+                        <p><span data-i18n="tunestudio.press_space_to_play_not">Press Space to play. Not happy? ⌘Z takes you back.</span></p>
+                    </div>
+                    <div>
+                        <span class="step">4</span>
+                        <h3><span data-i18n="tunestudio.export">Export</span></h3>
+                        <p><span data-i18n="tunestudio.save_the_result_as_a">Save the result as a new WAV or M4A file.</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

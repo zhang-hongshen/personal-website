@@ -22,13 +22,15 @@
     "movies_tv_shows_and_music": "Movies, TV shows and music, organized automatically — with artwork, lyrics and subtitles.",
     "redis_client": "Redis client",
     "a_native_redis_client_for": "A native Redis client. Browse keys, edit values and keep an eye on the server — fast, with no Electron.",
+    "vocal_pitch_correction": "Vocal pitch correction",
+    "put_your_singing_on_pitch": "Put your singing on pitch. One click for Auto Tune, or move every note by hand.",
     "better_together": "Better together",
     "one_conversation_every_app": "One conversation, every app",
     "tell_modelcraft_what_you_need": "Tell ModelCraft what you need, and it works Arthub and Keel for you — finding a film and pressing play, or looking up keys in Redis.",
     "coming_soon": "Coming soon",
     "meta": {
       "title": "Home",
-      "description": "ModelCraft, Arthub and Keel — made for every day."
+      "description": "ModelCraft, Arthub, Keel and TuneStudio — made for every day."
     }
   },
   "modelcraft": {
@@ -137,6 +139,46 @@
     "meta": {
       "title": "Keel",
       "description": "Keel is a native SwiftUI Redis client, compatible with Valkey, Dragonfly, KeyDB and Garnet."
+    }
+  },
+  "tunestudio": {
+    "put_your_singing_on_pitch": "Put your singing on pitch. No studio required",
+    "coming_soon": "Coming Soon",
+    "requirements": "macOS 15 or later",
+    "one_click_or_every_note": "One click, or every note",
+    "made_for_beginners_with_room": "Made for beginners, with room to grow — Auto Tune when you want it done, hands-on editing when you want control.",
+    "open_any_recording": "Open any recording",
+    "wav_mp3_and_m4a": "WAV, MP3 and M4A — open a file or drop it on the window.",
+    "see_your_singing": "See your singing",
+    "a_pitch_curve_over_a": "A pitch curve over a piano roll, with every held note shown as a block.",
+    "auto_tune_in_one_click": "Auto Tune in one click",
+    "natural_balanced_or_robotic": "Natural, Balanced or Robotic. Click again to hear the original.",
+    "fine_tune_by_hand": "Fine-tune by hand",
+    "drag_notes_up_or_down": "Drag notes up or down, hold ⌥ for cents, and split or merge notes.",
+    "non_destructive": "Non-destructive",
+    "your_original_file_is_never": "Your original file is never changed, and every edit can be undone.",
+    "export": "Export",
+    "wav_for_best_quality_or": "WAV for the best quality, or M4A for a smaller file.",
+    "auto_tune": "Auto Tune",
+    "three_styles_one_click": "Three styles, one click",
+    "natural": "Natural",
+    "gently_nudges_notes_toward_pitch": "gently nudges notes toward pitch, so your voice keeps its character.",
+    "balanced": "Balanced",
+    "puts_every_held_note_on": "puts every held note on pitch and keeps your vibrato.",
+    "robotic": "Robotic",
+    "snaps_notes_flat_onto_pitch": "snaps notes flat onto pitch for the classic electronic sound.",
+    "simple_by_default": "Simple by default",
+    "open_tune_listen_export": "Open, tune, listen, export",
+    "open": "Open",
+    "choose_a_recording_of_a": "Choose a recording of a single voice. Less background music works best.",
+    "tune": "Tune",
+    "click_auto_tune_in_the": "Click Auto Tune in the toolbar, or drag any note where you want it.",
+    "listen": "Listen",
+    "press_space_to_play_not": "Press Space to play. Not happy? ⌘Z takes you back.",
+    "save_the_result_as_a": "Save the result as a new WAV or M4A file.",
+    "meta": {
+      "title": "TuneStudio",
+      "description": "TuneStudio is a native macOS app that puts a sung vocal on pitch — Auto Tune in one click, or edit every note by hand."
     }
   },
   "about": {

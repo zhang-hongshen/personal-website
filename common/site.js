@@ -174,6 +174,10 @@
             id: "keel", name: "Keel",
             icon: { light: "assets/keel/icon-light.png", dark: "assets/keel/icon-dark.png" },
         },
+        {
+            id: "tunestudio", name: "TuneStudio", ring: false,
+            icon: { light: "assets/tunestudio/icon-light.svg", dark: "assets/tunestudio/icon-dark.svg" },
+        },
     ];
 
     const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
@@ -276,10 +280,11 @@
     // <div class="product-ring" data-product-ring="modelcraft"> draws that product in the
     // middle with every other product on an orbit around it, linked by flowing lines.
     // Empty dashed slots between them leave room for products still to come.
+    // Products with ring: false don't work with the hub yet and stay off the orbit.
     function renderRings() {
         document.querySelectorAll("[data-product-ring]").forEach((el) => {
             const hub = PRODUCTS.find((p) => p.id === el.dataset.productRing) || PRODUCTS[0];
-            const others = PRODUCTS.filter((p) => p !== hub);
+            const others = PRODUCTS.filter((p) => p !== hub && p.ring !== false);
             const step = 360 / others.length;
             const start = -90 + step / 2; // two products sit left and right
             const at = (deg) => {
