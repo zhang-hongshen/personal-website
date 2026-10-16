@@ -373,6 +373,7 @@ h1, h2, h3 { line-height: 1.15; margin: 0; letter-spacing: -0.02em; }
 .product-card .tagline { color: var(--text-2); margin: 4px 0 0; font-size: 15px; }
 .product-card .desc { color: var(--text-2); margin: 0; }
 .product-card .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+.product-card .btn-row { margin-top: auto; }
 .tag {
     display: inline-flex;
     align-items: center;
