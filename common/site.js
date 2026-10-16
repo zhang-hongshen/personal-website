@@ -300,10 +300,7 @@
                 ${slots.map(([x, y]) => `<span class="ring-slot" style="--x:${x}%;--y:${y}%" aria-hidden="true"></span>`).join("")}
                 <a class="ring-hub" href="${root}products/${hub.id}/" aria-label="${hub.name}">${icon(hub)}</a>
                 ${nodes.map(({ p, xy: [x, y] }) => `
-                    <a class="ring-node" href="${root}products/${p.id}/" style="--x:${x}%;--y:${y}%">
-                        ${icon(p)}
-                        <span><strong>${p.name}</strong><small data-i18n="common.ring.${p.id}"></small></span>
-                    </a>`).join("")}`;
+                    <a class="ring-node" href="${root}products/${p.id}/" style="--x:${x}%;--y:${y}%" aria-label="${p.name}">${icon(p)}</a>`).join("")}`;
         });
     }
 

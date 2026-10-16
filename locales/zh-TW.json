@@ -11,10 +11,6 @@
       "light": "淺色",
       "dark": "深色",
       "label": "主題：{current}（點按切換為{next}）"
-    },
-    "ring": {
-      "arthub": "找片、播放",
-      "keel": "查詢、整理 Redis"
     }
   },
   "home": {

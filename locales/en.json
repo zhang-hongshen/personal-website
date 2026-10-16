@@ -11,10 +11,6 @@
       "light": "Light",
       "dark": "Dark",
       "label": "Theme: {current} (click for {next})"
-    },
-    "ring": {
-      "arthub": "Find & play media",
-      "keel": "Query & tidy Redis"
     }
   },
   "home": {
