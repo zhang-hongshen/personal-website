@@ -25,7 +25,7 @@
     "media_library": "Media library",
     "movies_tv_shows_and_music": "Movies, TV shows and music, organized automatically — with artwork, lyrics and subtitles.",
     "redis_client": "Redis client",
-    "a_native_redis_client_for": "A native Redis client for Mac and iPhone. Browse keys, edit values and keep an eye on the server — fast, with no Electron.",
+    "a_native_redis_client_for": "A native Redis client. Browse keys, edit values and keep an eye on the server — fast, with no Electron.",
     "better_together": "Better together",
     "one_conversation_every_app": "One conversation, every app",
     "tell_modelcraft_what_you_need": "Tell ModelCraft what you need, and it works Arthub and Keel for you — finding a film and pressing play, or looking up keys in Redis.",
@@ -108,7 +108,7 @@
     }
   },
   "keel": {
-    "a_native_redis_client": "A native Redis client. Fast, and at home on Mac",
+    "a_native_redis_client": "A native Redis client. Fast, and feels right at home",
     "coming_soon": "Coming Soon",
     "requirements": "macOS 26 or later · iOS 26 or later",
     "everything_redis_in_one_place": "Everything Redis, in one place",
@@ -140,7 +140,7 @@
     "strings_over_1_mb_load": "Strings over 1 MB load just the beginning; binary values stay read-only.",
     "meta": {
       "title": "Keel",
-      "description": "Keel is a native SwiftUI Redis client for macOS and iOS, compatible with Valkey, Dragonfly, KeyDB and Garnet."
+      "description": "Keel is a native SwiftUI Redis client, compatible with Valkey, Dragonfly, KeyDB and Garnet."
     }
   },
   "about": {

@@ -25,7 +25,7 @@
     "media_library": "影音资料库",
     "movies_tv_shows_and_music": "自动整理电影、剧集与音乐，配齐海报、歌词与字幕。",
     "redis_client": "Redis 客户端",
-    "a_native_redis_client_for": "为 Mac 与 iPhone 打造的原生 Redis 客户端。浏览 Key、编辑数据、掌握服务器状态，快速流畅，告别 Electron。",
+    "a_native_redis_client_for": "原生 Redis 客户端。浏览 Key、编辑数据、掌握服务器状态，快速流畅，告别 Electron。",
     "better_together": "联动",
     "one_conversation_every_app": "一次对话，调动所有 App",
     "tell_modelcraft_what_you_need": "告诉 ModelCraft 你想做什么，它会替你操作 Arthub 与 Keel：找到电影并开始播放，或在 Redis 中查找 Key。",
@@ -140,7 +140,7 @@
     "strings_over_1_mb_load": "超过 1 MB 的字符串只加载开头，二进制值只读。",
     "meta": {
       "title": "Keel",
-      "description": "Keel 是用 SwiftUI 编写的原生 Redis 客户端，支持 macOS 与 iOS，兼容 Valkey、Dragonfly、KeyDB 与 Garnet。"
+      "description": "Keel 是用 SwiftUI 编写的原生 Redis 客户端，兼容 Valkey、Dragonfly、KeyDB 与 Garnet。"
     }
   },
   "about": {
