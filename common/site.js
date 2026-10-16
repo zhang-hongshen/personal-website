@@ -168,6 +168,10 @@
             id: "arthub", name: "Arthub",
             icon: { light: "assets/arthub/icon-light.svg", dark: "assets/arthub/icon-dark.svg" },
         },
+        {
+            id: "keel", name: "Keel",
+            icon: { light: "assets/keel/icon-light.png", dark: "assets/keel/icon-dark.png" },
+        },
     ];
 
     const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");

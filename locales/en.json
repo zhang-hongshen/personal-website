@@ -20,9 +20,11 @@
     "learn_more": "Learn more",
     "media_library": "Media library",
     "movies_tv_shows_and_music": "Movies, TV shows and music, organized automatically — with artwork, lyrics and subtitles.",
+    "redis_client": "Redis client",
+    "a_native_redis_client_for": "A native Redis client for Mac and iPhone. Browse keys, edit values and keep an eye on the server — fast, with no Electron.",
     "meta": {
-      "title": "ModelCraft & Arthub",
-      "description": "ModelCraft and Arthub — made for every day."
+      "title": "ModelCraft, Arthub & Keel",
+      "description": "ModelCraft, Arthub and Keel — made for every day."
     }
   },
   "modelcraft": {
@@ -89,6 +91,42 @@
     "meta": {
       "title": "Arthub — Movies, shows and music, beautifully organized",
       "description": "Arthub turns folders of movies, TV shows and music into a library, with artwork, cast, synced lyrics and subtitles."
+    }
+  },
+  "keel": {
+    "a_native_redis_client": "A native Redis client. Fast, and at home on Mac",
+    "coming_soon": "Coming Soon",
+    "requirements": "macOS 26 or later · iOS 26 or later",
+    "everything_redis_in_one_place": "Everything Redis, in one place",
+    "works_with_redis_and_every": "Works with Redis and every RESP database — Valkey, Dragonfly, KeyDB and Garnet.",
+    "key_browser": "Key browser",
+    "built_on_scan_never_keys": "Built on SCAN, never KEYS. A namespace tree or a flat list, smooth past 100,000 keys.",
+    "value_editor": "Value editor",
+    "strings_hashes_lists_sets_and": "Strings, hashes, lists, sets and sorted sets — view as text, JSON or hex, with a live TTL countdown.",
+    "streams": "Streams",
+    "page_through_add_trim_entries": "Page through, add and trim entries, and manage consumer groups.",
+    "command_console": "Command console",
+    "its_own_connection_blocking_commands": "Its own connection, blocking commands you can stop, history, completion and formatted results.",
+    "memory_analysis": "Memory analysis",
+    "see_memory_by_type_expiry": "See memory by type, expiry and key prefix, and find the largest keys.",
+    "server_info": "Server info",
+    "memory_clients_hit_rate_and": "Memory, clients, hit rate and keyspace at a glance, plus config and the slow log.",
+    "connections": "Connections",
+    "tls_acl_and_ssh_tunnels": "TLS, ACL and SSH tunnels",
+    "connect_with_a_username_pick": "Connect with an ACL username, pick a database and tag it with a color. SSH tunnels sign in with a password or private key, and passwords live in the Keychain.",
+    "safety": "Safety",
+    "careful_by_default": "Careful by default",
+    "confirm_first": "Confirm first",
+    "deletes_flushdb_and_other_dangerous": "Deletes, FLUSHDB and other dangerous commands always ask first.",
+    "preview_then_delete": "Preview, then delete",
+    "delete_by_pattern_shows_the": "Delete by pattern shows the matching keys first, then UNLINKs them in batches.",
+    "transactional_edits": "Transactional edits",
+    "changes_to_a_value_are": "Changes to a value are applied in a transaction.",
+    "large_values_handled": "Large values handled",
+    "strings_over_1_mb_load": "Strings over 1 MB load just the beginning; binary values stay read-only.",
+    "meta": {
+      "title": "Keel — A native Redis client",
+      "description": "Keel is a native SwiftUI Redis client for macOS and iOS, compatible with Valkey, Dragonfly, KeyDB and Garnet."
     }
   },
   "about": {

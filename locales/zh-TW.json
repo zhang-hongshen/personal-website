@@ -20,9 +20,11 @@
     "learn_more": "進一步了解",
     "media_library": "影音資料庫",
     "movies_tv_shows_and_music": "自動整理電影、影集與音樂，配齊海報、歌詞與字幕。",
+    "redis_client": "Redis 用戶端",
+    "a_native_redis_client_for": "為 Mac 與 iPhone 打造的原生 Redis 用戶端。瀏覽 Key、編輯資料、掌握伺服器狀態，快速流暢，告別 Electron。",
     "meta": {
-      "title": "ModelCraft 與 Arthub",
-      "description": "ModelCraft 與 Arthub，為日常而生。"
+      "title": "ModelCraft、Arthub 與 Keel",
+      "description": "ModelCraft、Arthub 與 Keel，為日常而生。"
     }
   },
   "modelcraft": {
@@ -89,6 +91,42 @@
     "meta": {
       "title": "Arthub — 影音資料庫",
       "description": "Arthub 將電影、影集與音樂資料夾整理成影音資料庫，配齊海報、演職員、同步歌詞與字幕。"
+    }
+  },
+  "keel": {
+    "a_native_redis_client": "原生 Redis 用戶端，快速、順手",
+    "coming_soon": "即將推出",
+    "requirements": "macOS 26 或更新版本 · iOS 26 或更新版本",
+    "everything_redis_in_one_place": "Redis 的一切，盡在一處",
+    "works_with_redis_and_every": "相容 Redis 及所有 RESP 協定資料庫：Valkey、Dragonfly、KeyDB 與 Garnet。",
+    "key_browser": "Key 瀏覽器",
+    "built_on_scan_never_keys": "基於 SCAN，從不使用 KEYS。命名空間樹與平鋪清單兩種檢視，10 萬個以上的 Key 依然流暢。",
+    "value_editor": "值編輯器",
+    "strings_hashes_lists_sets_and": "String、Hash、List、Set、ZSet 皆可編輯，以文字、JSON 或十六進位檢視，TTL 即時倒數。",
+    "streams": "Stream",
+    "page_through_add_trim_entries": "分頁瀏覽、新增與修剪項目，管理消費者群組。",
+    "command_console": "命令主控台",
+    "its_own_connection_blocking_commands": "獨立連線，阻塞命令可隨時停止，支援命令歷史、補全與結果格式化。",
+    "memory_analysis": "記憶體分析",
+    "see_memory_by_type_expiry": "依類型、到期時間與 Key 前綴統計記憶體，找出最大的 Key。",
+    "server_info": "伺服器資訊",
+    "memory_clients_hit_rate_and": "記憶體、用戶端數、命中率與鍵空間一目了然，還有設定與慢查詢日誌。",
+    "connections": "連線",
+    "tls_acl_and_ssh_tunnels": "TLS、ACL 與 SSH 通道",
+    "connect_with_a_username_pick": "支援 ACL 使用者名稱、資料庫編號與顏色標籤。SSH 通道支援密碼與私鑰登入，密碼存放在系統鑰匙圈中。",
+    "safety": "安全",
+    "careful_by_default": "預設謹慎",
+    "confirm_first": "先確認，再執行",
+    "deletes_flushdb_and_other_dangerous": "刪除、FLUSHDB 等危險命令執行前必須再次確認。",
+    "preview_then_delete": "先預覽，再刪除",
+    "delete_by_pattern_shows_the": "依模式刪除時先列出符合的 Key，再分批 UNLINK。",
+    "transactional_edits": "交易式修改",
+    "changes_to_a_value_are": "對值的修改在交易中完成。",
+    "large_values_handled": "大值無壓力",
+    "strings_over_1_mb_load": "超過 1 MB 的字串只載入開頭，二進位值唯讀。",
+    "meta": {
+      "title": "Keel — 原生 Redis 用戶端",
+      "description": "Keel 是以 SwiftUI 編寫的原生 Redis 用戶端，支援 macOS 與 iOS，相容 Valkey、Dragonfly、KeyDB 與 Garnet。"
     }
   },
   "about": {
