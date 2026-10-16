@@ -335,6 +335,10 @@ h1, h2, h3 { line-height: 1.15; margin: 0; letter-spacing: -0.02em; }
 }
 .home-hero p { color: var(--text-2); font-size: clamp(17px, 2.2vw, 20px); margin: 20px auto 0; max-width: 560px; }
 
+.together { text-align: center; }
+.together .section-lead { margin: 0 auto 16px; }
+.together .product-ring { margin-top: 40px; }
+
 /* ---------- Product cards ---------- */
 .product-card {
     --brand: var(--accent);
@@ -420,8 +424,90 @@ pre.tree {
 }
 
 
+/* ---------- Product ring (rendered by site.js) ---------- */
+.product-ring {
+    --ring: #e08a4e;
+    position: relative;
+    width: min(100%, 460px);
+    aspect-ratio: 1;
+    margin: 0 auto;
+}
+.product-ring::before {
+    content: "";
+    position: absolute;
+    inset: 18%;
+    border-radius: 50%;
+    background: radial-gradient(circle, color-mix(in srgb, var(--ring) 22%, transparent), transparent 70%);
+    pointer-events: none;
+}
+.product-ring svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.ring-orbit {
+    fill: none;
+    stroke: var(--border-strong);
+    stroke-width: 0.3;
+    stroke-dasharray: 0.8 1.6;
+    animation: ring-orbit 60s linear infinite;
+}
+.ring-link { stroke: var(--border-strong); stroke-width: 0.3; }
+.ring-flow {
+    stroke: var(--ring);
+    stroke-width: 0.6;
+    stroke-linecap: round;
+    stroke-dasharray: 14 86;
+    animation: ring-flow 2.7s linear infinite;
+}
+@keyframes ring-orbit { to { stroke-dashoffset: -48; } }
+@keyframes ring-flow { from { stroke-dashoffset: 14; } to { stroke-dashoffset: -86; } }
+
+.ring-hub, .ring-node, .ring-slot {
+    position: absolute;
+    left: var(--x, 50%);
+    top: var(--y, 50%);
+    transform: translate(-50%, -50%);
+}
+.ring-hub { width: 30%; aspect-ratio: 1; border-radius: 50%; }
+.ring-hub img { position: relative; width: 100%; height: 100%; }
+.ring-hub::before, .ring-hub::after {
+    content: "";
+    position: absolute;
+    inset: 8%;
+    border-radius: 50%;
+    border: 1px solid color-mix(in srgb, var(--ring) 55%, transparent);
+    animation: ring-pulse 3.6s ease-out infinite;
+}
+.ring-hub::after { animation-delay: -1.8s; }
+@keyframes ring-pulse {
+    from { transform: scale(1); opacity: 0.9; }
+    to { transform: scale(1.9); opacity: 0; }
+}
+
+.ring-node { width: 20%; aspect-ratio: 1; color: var(--text); text-align: center; }
+.ring-node:hover { text-decoration: none; }
+.ring-node img { width: 100%; height: 100%; transition: transform 0.2s; }
+.ring-node:hover img { transform: scale(1.06); }
+.ring-node > span {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 140px;
+    line-height: 1.3;
+}
+.ring-node strong { display: block; font-size: 14px; font-weight: 600; }
+.ring-node small { display: block; font-size: 12.5px; color: var(--text-2); }
+
+.ring-slot {
+    width: 9%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 1px dashed var(--border-strong);
+    background: var(--bg);
+}
+
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition: none !important; }
+    .product-ring *, .product-ring *::before, .product-ring *::after { animation: none !important; }
 }
 
 /* Centered statement, for a single message. */

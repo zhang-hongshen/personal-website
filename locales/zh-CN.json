@@ -11,6 +11,10 @@
       "light": "浅色",
       "dark": "深色",
       "label": "主题：{current}（点击切换为{next}）"
+    },
+    "ring": {
+      "arthub": "找片、播放",
+      "keel": "查询、整理 Redis"
     }
   },
   "home": {
@@ -22,6 +26,10 @@
     "movies_tv_shows_and_music": "自动整理电影、剧集与音乐，配齐海报、歌词与字幕。",
     "redis_client": "Redis 客户端",
     "a_native_redis_client_for": "为 Mac 与 iPhone 打造的原生 Redis 客户端。浏览 Key、编辑数据、掌握服务器状态，快速流畅，告别 Electron。",
+    "better_together": "联动",
+    "one_conversation_every_app": "一次对话，调动所有 App",
+    "tell_modelcraft_what_you_need": "告诉 ModelCraft 你想做什么，它会替你操作 Arthub 与 Keel：找到电影并开始播放，或在 Redis 中查找 Key。",
+    "coming_soon": "即将推出",
     "meta": {
       "title": "ModelCraft、Arthub 与 Keel",
       "description": "ModelCraft、Arthub 与 Keel，为日常而生。"
@@ -53,6 +61,12 @@
     "privacy": "隐私",
     "data_stays_on_the_device": "数据，始终留在设备上",
     "conversations_are_processed_on_device": "对话全程在设备端处理，仅在下载模型或访问网页时联网。",
+    "integrations": "联动",
+    "works_your_other_apps_for": "替你操作其他 App",
+    "modelcraft_connects_to_arthub_and": "ModelCraft 可与 Arthub、Keel 联动，直接替你动手：说想看哪部电影，它就开始播放；问起某个 Key，它就去 Redis 里查。更多 App 将陆续支持。",
+    "example_arthub": "“在 Arthub 里播放我在追的剧的下一集”",
+    "example_keel": "“Keel 里哪些 Key 最占内存？”",
+    "coming_soon": "即将推出",
     "meta": {
       "title": "ModelCraft — 设备端 AI 助手",
       "description": "ModelCraft 是完全在设备端运行的私人 AI 助手，可用于对话、处理文档，以及生成图像、视频与音乐。"

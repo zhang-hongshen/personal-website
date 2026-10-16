@@ -11,6 +11,10 @@
       "light": "Light",
       "dark": "Dark",
       "label": "Theme: {current} (click for {next})"
+    },
+    "ring": {
+      "arthub": "Find & play media",
+      "keel": "Query & tidy Redis"
     }
   },
   "home": {
@@ -22,6 +26,10 @@
     "movies_tv_shows_and_music": "Movies, TV shows and music, organized automatically — with artwork, lyrics and subtitles.",
     "redis_client": "Redis client",
     "a_native_redis_client_for": "A native Redis client for Mac and iPhone. Browse keys, edit values and keep an eye on the server — fast, with no Electron.",
+    "better_together": "Better together",
+    "one_conversation_every_app": "One conversation, every app",
+    "tell_modelcraft_what_you_need": "Tell ModelCraft what you need, and it works Arthub and Keel for you — finding a film and pressing play, or looking up keys in Redis.",
+    "coming_soon": "Coming soon",
     "meta": {
       "title": "ModelCraft, Arthub & Keel",
       "description": "ModelCraft, Arthub and Keel — made for every day."
@@ -53,6 +61,12 @@
     "privacy": "Privacy",
     "data_stays_on_the_device": "Data stays on the device",
     "conversations_are_processed_on_device": "Conversations are processed on-device. The network is used only to download models or browse the web.",
+    "integrations": "Integrations",
+    "works_your_other_apps_for": "Works your other apps for you",
+    "modelcraft_connects_to_arthub_and": "ModelCraft connects to Arthub and Keel and acts on your behalf. Ask for a film and it starts playing; ask about a key and it looks it up in Redis. More apps will follow.",
+    "example_arthub": "“Play the next episode of my show in Arthub”",
+    "example_keel": "“Which keys in Keel use the most memory?”",
+    "coming_soon": "Coming soon",
     "meta": {
       "title": "ModelCraft — AI that runs on-device",
       "description": "ModelCraft is a private AI assistant that runs entirely on-device, for conversations, documents, and creating images, video and music."

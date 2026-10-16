@@ -270,6 +270,41 @@
         });
     }
 
+    // ---------- Product ring ----------
+    // <div class="product-ring" data-product-ring="modelcraft"> draws that product in the
+    // middle with every other product on an orbit around it, linked by flowing lines.
+    // Empty dashed slots between them leave room for products still to come.
+    function renderRings() {
+        document.querySelectorAll("[data-product-ring]").forEach((el) => {
+            const hub = PRODUCTS.find((p) => p.id === el.dataset.productRing) || PRODUCTS[0];
+            const others = PRODUCTS.filter((p) => p !== hub);
+            const step = 360 / others.length;
+            const start = -90 + step / 2; // two products sit left and right
+            const at = (deg) => {
+                const a = (deg * Math.PI) / 180;
+                return [50 + 36 * Math.cos(a), 50 + 36 * Math.sin(a)].map((v) => +v.toFixed(2));
+            };
+            const nodes = others.map((p, i) => ({ p, xy: at(start + i * step) }));
+            const slots = others.map((_, i) => at(start + (i + 0.5) * step));
+            const icon = (p) => `<img data-app-icon="${p.id}" src="${root}${p.icon[effectiveTheme()]}" alt="">`;
+
+            el.innerHTML = `
+                <svg viewBox="0 0 100 100" aria-hidden="true">
+                    <circle class="ring-orbit" cx="50" cy="50" r="36"/>
+                    ${nodes.map(({ xy: [x, y] }, i) => `
+                        <line class="ring-link" x1="50" y1="50" x2="${x}" y2="${y}"/>
+                        <line class="ring-flow" x1="50" y1="50" x2="${x}" y2="${y}" pathLength="100" style="animation-delay:${-i * 0.9}s"/>`).join("")}
+                </svg>
+                ${slots.map(([x, y]) => `<span class="ring-slot" style="--x:${x}%;--y:${y}%" aria-hidden="true"></span>`).join("")}
+                <a class="ring-hub" href="${root}products/${hub.id}/" aria-label="${hub.name}">${icon(hub)}</a>
+                ${nodes.map(({ p, xy: [x, y] }) => `
+                    <a class="ring-node" href="${root}products/${p.id}/" style="--x:${x}%;--y:${y}%">
+                        ${icon(p)}
+                        <span><strong>${p.name}</strong><small data-i18n="common.ring.${p.id}"></small></span>
+                    </a>`).join("")}`;
+        });
+    }
+
     // ---------- Downloads ----------
     // Point download buttons straight at the latest .dmg on GitHub Releases.
     // Without the API (offline, rate-limited) they keep linking to the releases page.
@@ -307,6 +342,7 @@
     const ready = applyLanguage(getLanguage());
     document.addEventListener("DOMContentLoaded", () => {
         renderNav();
+        renderRings();
         updateThemeButton();
         updateAppIcons();
         ready.then(() => applyLanguage(current.code));
