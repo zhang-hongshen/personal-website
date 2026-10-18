@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2B2E36"/><stop offset="1" stop-color="#121217"/></linearGradient>
+    <filter id="icon-shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="10" stdDeviation="12" flood-opacity="0.28"/></filter>
+    <filter id="layer-shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="14" flood-opacity="0.3"/></filter>
+  </defs>
+  <rect x="100" y="100" width="824" height="824" rx="185" fill="url(#bg)" filter="url(#icon-shadow)"/>
+  <g transform="translate(100 100) scale(0.8046875)">
+    <path d="M560.51,416.38L879.27,601.79C906.06,617.37 906.06,642.63 879.27,658.21L560.51,843.62C533.72,859.20 490.28,859.20 463.49,843.62L144.73,658.21C117.94,642.63 117.94,617.37 144.73,601.79L463.49,416.38C490.28,400.80 533.72,400.80 560.51,416.38Z" fill="#294DCC" fill-opacity="0.75" filter="url(#layer-shadow)"/>
+    <path d="M560.51,298.38L879.27,483.79C906.06,499.37 906.06,524.63 879.27,540.21L560.51,725.62C533.72,741.20 490.28,741.20 463.49,725.62L144.73,540.21C117.94,524.63 117.94,499.37 144.73,483.79L463.49,298.38C490.28,282.80 533.72,282.80 560.51,298.38Z" fill="#3873F2" fill-opacity="0.85" filter="url(#layer-shadow)"/>
+    <path d="M560.51,180.38L879.27,365.79C906.06,381.37 906.06,406.63 879.27,422.21L560.51,607.62C533.72,623.20 490.28,623.20 463.49,607.62L144.73,422.21C117.94,406.63 117.94,381.37 144.73,365.79L463.49,180.38C490.28,164.80 533.72,164.80 560.51,180.38Z" fill="#4D9EFF" fill-opacity="1" filter="url(#layer-shadow)"/>
+    <g fill="none" stroke="#FFFFFF" stroke-width="38" stroke-linecap="round" stroke-linejoin="round"><path d="M402.98,459.39 L481.02,389.13 L402.98,318.87"/><path d="M521.02,469.13 L621.02,469.13"/></g>
+  </g>
+</svg>

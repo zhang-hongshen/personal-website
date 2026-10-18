@@ -26,12 +26,14 @@
     "put_your_singing_on_pitch": "把歌声修准。一键 Auto Tune，也能亲手调整每一个音符。",
     "better_together": "联动",
     "one_conversation_every_app": "一次对话，调动所有 App",
-    "tell_modelcraft_what_you_need": "告诉 ModelCraft 你想做什么，它会替你操作 Arthub 与 Keel：找到电影并开始播放，或在 Redis 中查找 Key。",
+    "tell_modelcraft_what_you_need": "告诉 ModelCraft 你想做什么，它会替你操作其他 App：在 Arthub 里播放电影、在 Keel 里查找 Key、在 TuneStudio 里修音，或启动一个容器。",
     "coming_soon": "即将推出",
     "meta": {
       "title": "首页",
-      "description": "ModelCraft、Arthub、Keel 与 TuneStudio，为日常而生。"
-    }
+      "description": "ModelCraft、Arthub、Keel、TuneStudio 与 Container，为日常而生。"
+    },
+    "linux_containers": "Linux 容器",
+    "run_linux_containers_on_your_mac": "在 Mac 上运行 Linux 容器，每个容器都在独立的轻量虚拟机中。端口与文件夹的用法和 docker run 一样。"
   },
   "modelcraft": {
     "ai_that_runs_entirely_on": "AI，完全在设备端运行",
@@ -61,14 +63,16 @@
     "conversations_are_processed_on_device": "对话全程在设备端处理，仅在下载模型或访问网页时联网。",
     "integrations": "联动",
     "works_your_other_apps_for": "替你操作其他 App",
-    "modelcraft_connects_to_arthub_and": "ModelCraft 可与 Arthub、Keel 联动，直接替你动手：说想看哪部电影，它就开始播放；问起某个 Key，它就去 Redis 里查。更多 App 将陆续支持。",
+    "modelcraft_connects_to_arthub_and": "ModelCraft 可与 Arthub、Keel、TuneStudio、Container 联动，直接替你动手：说想看哪部电影，它就开始播放；问起某个 Key，它就去 Redis 里查；要一个数据库，它就启动容器。更多 App 将陆续支持。",
     "example_arthub": "“在 Arthub 里播放我在追的剧的下一集”",
     "example_keel": "“Keel 里哪些 Key 最占内存？”",
     "coming_soon": "即将推出",
     "meta": {
       "title": "ModelCraft",
       "description": "ModelCraft 是完全在设备端运行的私人 AI 助手，可用于对话、处理文档，以及生成图像、视频与音乐。"
-    }
+    },
+    "example_tunestudio": "“用 TuneStudio 给我的人声做一次自然风格的 Auto Tune”",
+    "example_container": "“启动一个 Postgres 容器，端口 5432”"
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "电影、剧集与音乐，自成一库",
@@ -180,6 +184,44 @@
       "title": "TuneStudio",
       "description": "TuneStudio 是一款原生 macOS 修音应用：一键 Auto Tune，或亲手编辑每一个音符。"
     }
+  },
+  "container": {
+    "meta": {
+      "title": "Container",
+      "description": "Container 是一款原生 macOS 应用，在 Apple 芯片上运行 Linux 容器，每个容器都在独立的轻量虚拟机中。"
+    },
+    "linux_containers_native_on_your_mac": "Linux 容器，原生跑在 Mac 上",
+    "coming_soon": "即将推出",
+    "requirements": "需要 macOS 26 或更高版本，Apple 芯片",
+    "every_container_its_own_vm": "每个容器，一台独立虚拟机",
+    "built_on_apples_containerization": "基于 Apple 的 Containerization 框架。每个容器运行在几秒即可启动的轻量虚拟机中，无需 Docker Desktop。",
+    "images": "镜像",
+    "pull_list_search_and_delete": "从任意仓库拉取 OCI 镜像，并可列出、搜索、删除。",
+    "containers": "容器",
+    "create_start_stop_inspect": "创建、启动、停止、查看、删除，并为每个容器设置 CPU 与内存上限。",
+    "published_ports": "端口映射",
+    "ports_the_image_exposes": "镜像暴露的端口会自动填好，且只监听 127.0.0.1。",
+    "host_folders": "挂载文件夹",
+    "mount_folders_from_your_mac": "挂载 Mac 上的文件夹，可设为只读。镜像声明的卷会预先填好。",
+    "networks": "网络",
+    "join_containers_to_networks": "让容器加入一个或多个网络，彼此互通。",
+    "isolated_by_design": "天然隔离",
+    "one_vm_per_container": "一个容器一台虚拟机，各个工作负载与 Mac、与彼此相互隔离。",
+    "familiar": "熟悉的用法",
+    "docker_run_without_the_terminal": "docker run，不用打开终端",
+    "choose_host_ports_or_leave": "选择主机端口，或不映射。",
+    "pick_a_folder_with_choose": "点“选择…”挑一个文件夹。",
+    "set_cpu_cores_and_memory": "用滑块设置 CPU 核数与内存。",
+    "running": "运行中",
+    "stopped": "已停止",
+    "simple_by_default": "默认就简单",
+    "pull_create_run": "拉取、创建、运行",
+    "pull": "拉取",
+    "type_an_image_name_like": "输入镜像名，比如 nginx，从仓库拉取。",
+    "create": "创建",
+    "ports_and_volumes_are_already": "端口和卷已根据镜像填好，按需调整即可。",
+    "run": "运行",
+    "click_create_and_start_and": "点击“创建并启动”，然后在浏览器打开 localhost。"
   },
   "about": {
     "software_engineer_backend_ai_agents": "软件工程师 · 后端开发、AI Agent 与原生 macOS 应用",

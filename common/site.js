@@ -175,8 +175,12 @@
             icon: { light: "assets/keel/icon-light.png", dark: "assets/keel/icon-dark.png" },
         },
         {
-            id: "tunestudio", name: "TuneStudio", ring: false,
+            id: "tunestudio", name: "TuneStudio",
             icon: { light: "assets/tunestudio/icon-light.svg", dark: "assets/tunestudio/icon-dark.svg" },
+        },
+        {
+            id: "container", name: "Container", ringTop: true,
+            icon: { light: "assets/container/icon-light.svg", dark: "assets/container/icon-dark.svg" },
         },
     ];
 
@@ -281,12 +285,14 @@
     // middle with every other product on an orbit around it, linked by flowing lines.
     // Empty dashed slots between them leave room for products still to come.
     // Products with ring: false don't work with the hub yet and stay off the orbit.
+    // The product with ringTop: true sits at the top; otherwise two products sit left and right.
     function renderRings() {
         document.querySelectorAll("[data-product-ring]").forEach((el) => {
             const hub = PRODUCTS.find((p) => p.id === el.dataset.productRing) || PRODUCTS[0];
             const others = PRODUCTS.filter((p) => p !== hub && p.ring !== false);
             const step = 360 / others.length;
-            const start = -90 + step / 2; // two products sit left and right
+            const top = others.findIndex((p) => p.ringTop);
+            const start = top >= 0 ? -90 - top * step : -90 + step / 2;
             const at = (deg) => {
                 const a = (deg * Math.PI) / 180;
                 return [50 + 36 * Math.cos(a), 50 + 36 * Math.sin(a)].map((v) => +v.toFixed(2));
