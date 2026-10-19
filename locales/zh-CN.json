@@ -33,7 +33,7 @@
       "description": "ModelCraft、Arthub、Keel、TuneStudio 与 Container，为日常而生。"
     },
     "linux_containers": "Linux 容器",
-    "run_linux_containers_on_your_mac": "在 Mac 上运行 Linux 容器，每个容器都在独立的轻量虚拟机中。端口与文件夹的用法和 docker run 一样。"
+    "run_linux_containers_on_your_mac": "在 Mac 上运行 Linux 容器。选好镜像，设置端口和文件夹，一键启动。"
   },
   "modelcraft": {
     "ai_that_runs_entirely_on": "AI，完全在设备端运行",
@@ -188,15 +188,13 @@
   "container": {
     "meta": {
       "title": "Container",
-      "description": "Container 是一款原生 macOS 应用，在 Apple 芯片上运行 Linux 容器，每个容器都在独立的轻量虚拟机中。"
+      "description": "Container 是一款原生 macOS 应用，在 Apple 芯片上运行 Linux 容器。"
     },
     "linux_containers_native_on_your_mac": "Linux 容器，原生跑在 Mac 上",
     "coming_soon": "即将推出",
     "requirements": "需要 macOS 26 或更高版本，Apple 芯片",
-    "every_container_its_own_vm": "每个容器，一台独立虚拟机",
-    "built_on_apples_containerization": "基于 Apple 的 Containerization 框架。每个容器运行在几秒即可启动的轻量虚拟机中，无需 Docker Desktop。",
     "images": "镜像",
-    "pull_list_search_and_delete": "从任意仓库拉取 OCI 镜像，并可列出、搜索、删除。",
+    "pull_list_search_and_delete": "从任意仓库拉取镜像，并可列出、搜索、删除。",
     "containers": "容器",
     "create_start_stop_inspect": "创建、启动、停止、查看、删除，并为每个容器设置 CPU 与内存上限。",
     "published_ports": "端口映射",
@@ -206,12 +204,8 @@
     "networks": "网络",
     "join_containers_to_networks": "让容器加入一个或多个网络，彼此互通。",
     "isolated_by_design": "天然隔离",
-    "one_vm_per_container": "一个容器一台虚拟机，各个工作负载与 Mac、与彼此相互隔离。",
-    "familiar": "熟悉的用法",
-    "docker_run_without_the_terminal": "docker run，不用打开终端",
     "choose_host_ports_or_leave": "选择主机端口，或不映射。",
-    "pick_a_folder_with_choose": "点“选择…”挑一个文件夹。",
-    "set_cpu_cores_and_memory": "用滑块设置 CPU 核数与内存。",
+    "set_cpu_cores_and_memory": "为每个容器设置 CPU 核数与内存。",
     "running": "运行中",
     "stopped": "已停止",
     "simple_by_default": "默认就简单",
@@ -221,7 +215,16 @@
     "create": "创建",
     "ports_and_volumes_are_already": "端口和卷已根据镜像填好，按需调整即可。",
     "run": "运行",
-    "click_create_and_start_and": "点击“创建并启动”，然后在浏览器打开 localhost。"
+    "click_create_and_start_and": "点击“创建并启动”，然后在浏览器打开 localhost。",
+    "containers_made_simple": "容器，从未如此简单",
+    "pull_an_image_create_a": "拉取镜像、创建容器、一键启动——都在一个几秒就能打开的原生 Mac 应用里完成。",
+    "each_container_stays_apart": "每个容器都与 Mac、与彼此相互隔离。",
+    "setup": "设置",
+    "everything_in_one_form": "一张表单搞定",
+    "ports": "端口",
+    "folders": "文件夹",
+    "resources": "资源",
+    "pick_a_folder_read_only": "选择 Mac 上的文件夹，可设为只读。"
   },
   "about": {
     "software_engineer_backend_ai_agents": "软件工程师 · 后端开发、AI Agent 与原生 macOS 应用",

@@ -33,7 +33,7 @@
       "description": "ModelCraft, Arthub, Keel, TuneStudio and Container — made for every day."
     },
     "linux_containers": "Linux containers",
-    "run_linux_containers_on_your_mac": "Run Linux containers on your Mac, each in its own lightweight VM. Ports and folders work like docker run."
+    "run_linux_containers_on_your_mac": "Run Linux containers on your Mac. Pick an image, set ports and folders, and start it in one click."
   },
   "modelcraft": {
     "ai_that_runs_entirely_on": "AI that runs entirely on-device",
@@ -188,15 +188,13 @@
   "container": {
     "meta": {
       "title": "Container",
-      "description": "Container is a native macOS app for running Linux containers on Apple silicon, each in its own lightweight VM."
+      "description": "Container is a native macOS app for running Linux containers on Apple silicon."
     },
     "linux_containers_native_on_your_mac": "Linux containers, native on your Mac",
     "coming_soon": "Coming Soon",
     "requirements": "macOS 26 or later on Apple silicon",
-    "every_container_its_own_vm": "Every container, its own VM",
-    "built_on_apples_containerization": "Built on Apple's Containerization framework. Each container runs in a lightweight VM that starts in seconds — no Docker Desktop required.",
     "images": "Images",
-    "pull_list_search_and_delete": "Pull, list, search and delete OCI images from any registry.",
+    "pull_list_search_and_delete": "Pull, list, search and delete images from any registry.",
     "containers": "Containers",
     "create_start_stop_inspect": "Create, start, stop, inspect and delete — with CPU and memory limits for each.",
     "published_ports": "Published ports",
@@ -206,12 +204,8 @@
     "networks": "Networks",
     "join_containers_to_networks": "Join containers to one or more networks so they can reach each other.",
     "isolated_by_design": "Isolated by design",
-    "one_vm_per_container": "One VM per container keeps each workload apart from your Mac and from the others.",
-    "familiar": "Familiar",
-    "docker_run_without_the_terminal": "docker run, without the terminal",
     "choose_host_ports_or_leave": "choose host ports, or leave them unpublished.",
-    "pick_a_folder_with_choose": "pick a folder with Choose…",
-    "set_cpu_cores_and_memory": "set CPU cores and memory with a slider.",
+    "set_cpu_cores_and_memory": "set CPU cores and memory for each container.",
     "running": "Running",
     "stopped": "Stopped",
     "simple_by_default": "Simple by default",
@@ -221,7 +215,16 @@
     "create": "Create",
     "ports_and_volumes_are_already": "Ports and volumes are already filled in from the image. Adjust what you need.",
     "run": "Run",
-    "click_create_and_start_and": "Click Create and Start, then open localhost in your browser."
+    "click_create_and_start_and": "Click Create and Start, then open localhost in your browser.",
+    "containers_made_simple": "Containers, made simple",
+    "pull_an_image_create_a": "Pull an image, create a container and start it — all in a native Mac app that launches in seconds.",
+    "each_container_stays_apart": "Each container stays apart from your Mac and from the others.",
+    "setup": "Setup",
+    "everything_in_one_form": "Everything in one form",
+    "ports": "Ports",
+    "folders": "Folders",
+    "resources": "Resources",
+    "pick_a_folder_read_only": "pick a folder from your Mac, read-only if you like."
   },
   "about": {
     "software_engineer_backend_ai_agents": "Software Engineer · Backend, AI Agents & native macOS apps",

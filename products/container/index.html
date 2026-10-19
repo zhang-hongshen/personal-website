@@ -8,9 +8,9 @@
     <link rel="alternate icon" href="../../assets/site/icon-32.png" type="image/png">
     <link rel="apple-touch-icon" href="../../assets/site/apple-touch-icon.png">
     <title>Container</title>
-    <meta name="description" data-i18n-attr="content:container.meta.description" content="Container is a native macOS app for running Linux containers on Apple silicon, each in its own lightweight VM.">
-    <link rel="stylesheet" href="../../common/site.css?v=202610190000">
-    <script src="../../common/site.js?v=202610190000"></script>
+    <meta name="description" data-i18n-attr="content:container.meta.description" content="Container is a native macOS app for running Linux containers on Apple silicon.">
+    <link rel="stylesheet" href="../../common/site.css?v=202610191200">
+    <script src="../../common/site.js?v=202610191200"></script>
     <style>
         :root { --accent-l: #1a5cf2; --accent-d: #4d9eff; }
         .hero { background: radial-gradient(800px 380px at 50% 0%, color-mix(in srgb, #339eff 18%, transparent), transparent 65%); }
@@ -21,7 +21,7 @@
         .points .step { display: block; font-size: 13px; font-weight: 600; color: var(--accent); margin-bottom: 6px; }
         .runs { list-style: none; padding: 0 !important; }
         .runs li { margin: 12px 0; }
-        .runs code { font-size: 14px; color: var(--text); }
+        .runs strong { color: var(--text); }
         .list { border: 1px solid var(--border); border-radius: 16px; background: var(--surface); overflow: hidden; }
         .list .row { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-top: 1px solid var(--border); font-size: 15px; }
         .list .row:first-child { border-top: 0; }
@@ -56,15 +56,15 @@
 
         <section>
             <div class="wrap">
-                <h2 class="section-title"><span data-i18n="container.every_container_its_own_vm">Every container, its own VM</span></h2>
+                <h2 class="section-title"><span data-i18n="container.containers_made_simple">Containers, made simple</span></h2>
                 <p class="section-lead">
-                    <span data-i18n="container.built_on_apples_containerization">Built on Apple's Containerization framework. Each container runs in a lightweight VM that starts in seconds — no Docker Desktop required.</span>
+                    <span data-i18n="container.pull_an_image_create_a">Pull an image, create a container and start it — all in a native Mac app that launches in seconds.</span>
                 </p>
                 <div class="grid grid-3">
                     <div class="card feature">
                         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 12-5-5m5 5 5-5M5 21h14"/></svg></div>
                         <h3><span data-i18n="container.images">Images</span></h3>
-                        <p><span data-i18n="container.pull_list_search_and_delete">Pull, list, search and delete OCI images from any registry.</span></p>
+                        <p><span data-i18n="container.pull_list_search_and_delete">Pull, list, search and delete images from any registry.</span></p>
                     </div>
                     <div class="card feature">
                         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5v10l-9 5-9-5V7z"/><path d="m3 7 9 5 9-5M12 12v10"/></svg></div>
@@ -89,7 +89,7 @@
                     <div class="card feature">
                         <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6z"/></svg></div>
                         <h3><span data-i18n="container.isolated_by_design">Isolated by design</span></h3>
-                        <p><span data-i18n="container.one_vm_per_container">One VM per container keeps each workload apart from your Mac and from the others.</span></p>
+                        <p><span data-i18n="container.each_container_stays_apart">Each container stays apart from your Mac and from the others.</span></p>
                     </div>
                 </div>
             </div>
@@ -99,19 +99,19 @@
             <div class="wrap">
                 <div class="split">
                     <div>
-                        <p class="eyebrow"><span data-i18n="container.familiar">Familiar</span></p>
-                        <h3><span data-i18n="container.docker_run_without_the_terminal">docker run, without the terminal</span></h3>
+                        <p class="eyebrow"><span data-i18n="container.setup">Setup</span></p>
+                        <h3><span data-i18n="container.everything_in_one_form">Everything in one form</span></h3>
                         <ul class="runs">
-                            <li><code>-p 8080:80</code> — <span data-i18n="container.choose_host_ports_or_leave">choose host ports, or leave them unpublished.</span></li>
-                            <li><code>-v ~/site:/usr/share/nginx/html</code> — <span data-i18n="container.pick_a_folder_with_choose">pick a folder with Choose…</span></li>
-                            <li><code>--cpus 2 --memory 1g</code> — <span data-i18n="container.set_cpu_cores_and_memory">set CPU cores and memory with a slider.</span></li>
+                            <li><strong data-i18n="container.ports">Ports</strong> — <span data-i18n="container.choose_host_ports_or_leave">choose host ports, or leave them unpublished.</span></li>
+                            <li><strong data-i18n="container.folders">Folders</strong> — <span data-i18n="container.pick_a_folder_read_only">pick a folder from your Mac, read-only if you like.</span></li>
+                            <li><strong data-i18n="container.resources">Resources</strong> — <span data-i18n="container.set_cpu_cores_and_memory">set CPU cores and memory for each container.</span></li>
                         </ul>
                     </div>
                     <div class="list" aria-hidden="true">
-                        <div class="row"><span class="name">nginx</span><span class="image">docker.io/library/nginx:latest</span><span class="status running" data-i18n="container.running">Running</span></div>
-                        <div class="row"><span class="name">postgres</span><span class="image">docker.io/library/postgres:17</span><span class="status running" data-i18n="container.running">Running</span></div>
-                        <div class="row"><span class="name">redis</span><span class="image">docker.io/library/redis:8</span><span class="status stopped" data-i18n="container.stopped">Stopped</span></div>
-                        <div class="row"><span class="name">ubuntu</span><span class="image">docker.io/library/ubuntu:24.04</span><span class="status stopped" data-i18n="container.stopped">Stopped</span></div>
+                        <div class="row"><span class="name">nginx</span><span class="image">nginx:latest</span><span class="status running" data-i18n="container.running">Running</span></div>
+                        <div class="row"><span class="name">postgres</span><span class="image">postgres:17</span><span class="status running" data-i18n="container.running">Running</span></div>
+                        <div class="row"><span class="name">redis</span><span class="image">redis:8</span><span class="status stopped" data-i18n="container.stopped">Stopped</span></div>
+                        <div class="row"><span class="name">ubuntu</span><span class="image">ubuntu:24.04</span><span class="status stopped" data-i18n="container.stopped">Stopped</span></div>
                     </div>
                 </div>
             </div>
