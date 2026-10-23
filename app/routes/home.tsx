@@ -14,6 +14,8 @@ const TAGLINES: Record<string, { tagline: string; desc: string }> = {
     keel: { tagline: "home.redis_client", desc: "home.a_native_redis_client_for" },
     tunestudio: { tagline: "home.vocal_pitch_correction", desc: "home.put_your_singing_on_pitch" },
     container: { tagline: "home.linux_containers", desc: "home.run_linux_containers_on_your_mac" },
+    cellar: { tagline: "home.notes_and_databases", desc: "home.pages_tables_and_databases_that" },
+    quaero: { tagline: "home.sql_client", desc: "home.a_native_sql_client_for" },
 };
 
 export default function Home() {

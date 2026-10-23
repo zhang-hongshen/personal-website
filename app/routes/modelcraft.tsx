@@ -74,6 +74,8 @@ export default function ModelCraft() {
                             <li>{t("modelcraft.example_keel")}</li>
                             <li>{t("modelcraft.example_tunestudio")}</li>
                             <li>{t("modelcraft.example_container")}</li>
+                            <li>{t("modelcraft.example_cellar")}</li>
+                            <li>{t("modelcraft.example_quaero")}</li>
                         </ul>
                         <p><Badge>{t("modelcraft.coming_soon")}</Badge></p>
                     </div>

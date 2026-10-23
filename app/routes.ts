@@ -7,6 +7,8 @@ export default [
     route("products/keel", "routes/keel.tsx"),
     route("products/tunestudio", "routes/tunestudio.tsx"),
     route("products/container", "routes/container.tsx"),
+    route("products/cellar", "routes/cellar.tsx"),
+    route("products/quaero", "routes/quaero.tsx"),
     route("resume", "routes/resume.tsx"),
     // /404 is prerendered and copied to 404.html for Cloudflare Pages (scripts/postbuild.mjs).
     route("404", "routes/not-found.tsx", { id: "not-found" }),

@@ -34,10 +34,14 @@
     "coming_soon": "Coming soon",
     "meta": {
       "title": "Home",
-      "description": "ModelCraft, Arthub, Keel, TuneStudio and Container — made for every day."
+      "description": "ModelCraft, Arthub, Keel, TuneStudio, Container, Cellar and Quaero — made for every day."
     },
     "linux_containers": "Linux containers",
-    "run_linux_containers_on_your_mac": "Run Linux containers on your Mac. Pick an image, set ports and folders, and start it in one click."
+    "run_linux_containers_on_your_mac": "Run Linux containers on your Mac. Pick an image, set ports and folders, and start it in one click.",
+    "notes_and_databases": "Notes and databases",
+    "pages_tables_and_databases_that": "Pages, tables and databases that live on your Mac. Write, organize and search — all offline.",
+    "sql_client": "SQL client",
+    "a_native_sql_client_for": "A native SQL client for MySQL, PostgreSQL and SQLite. Browse tables, edit rows and run queries."
   },
   "modelcraft": {
     "ai_that_runs_entirely_on": "AI that runs entirely on-device",
@@ -67,7 +71,7 @@
     "conversations_are_processed_on_device": "Conversations are processed on-device. The network is used only to download models or browse the web.",
     "integrations": "Integrations",
     "works_your_other_apps_for": "Works your other apps for you",
-    "modelcraft_connects_to_arthub_and": "ModelCraft connects to Arthub, Keel, TuneStudio and Container and acts on your behalf. Ask for a film and it starts playing; ask about a key and it looks it up in Redis; ask for a database and it starts the container. More apps will follow.",
+    "modelcraft_connects_to_arthub_and": "ModelCraft connects to Arthub, Keel, TuneStudio, Container, Cellar and Quaero and acts on your behalf. Ask for a film and it starts playing; ask about a key and it looks it up in Redis; ask for a database and it starts the container. More apps will follow.",
     "example_arthub": "“Play the next episode of my show in Arthub”",
     "example_keel": "“Which keys in Keel use the most memory?”",
     "coming_soon": "Coming soon",
@@ -76,7 +80,9 @@
       "description": "ModelCraft is a private AI assistant that runs entirely on-device, for conversations, documents, and creating images, video and music."
     },
     "example_tunestudio": "“Auto Tune my vocal in TuneStudio, Natural style”",
-    "example_container": "“Start a Postgres container on port 5432”"
+    "example_container": "“Start a Postgres container on port 5432”",
+    "example_cellar": "“Add this paper to my Reading list in Cellar”",
+    "example_quaero": "“How many orders were refunded last month? Ask Quaero”"
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "Movies, shows and music. Beautifully organized",
@@ -229,6 +235,76 @@
     "folders": "Folders",
     "resources": "Resources",
     "pick_a_folder_read_only": "pick a folder from your Mac, read-only if you like."
+  },
+  "cellar": {
+    "meta": {
+      "title": "Cellar",
+      "description": "Cellar is a local-first macOS app for notes and databases. Everything is stored in SQLite on your Mac, with no network access."
+    },
+    "notes_and_databases_that_stay": "Notes and databases that stay on your Mac",
+    "coming_soon": "Coming Soon",
+    "requirements": "macOS 14.4 or later",
+    "everything_is_a_block": "Everything is a block",
+    "write_notes_build_databases_and": "Write notes, build databases and link them together. Every page is made of blocks you can type, drag and nest.",
+    "pages_and_blocks": "Pages and blocks",
+    "headings_lists_to_dos_code": "Headings, lists, to-dos, code, images, Mermaid diagrams and mind maps — type “/” to add any of them.",
+    "databases": "Databases",
+    "custom_properties_relations_rollups_and": "Custom properties, relations and rollups. Any page can hold one.",
+    "saved_views": "Saved views",
+    "table_board_and_list_views": "Table, board, gallery, list, calendar, timeline and chart, each with its own filters and sorts.",
+    "quick_search": "Quick search",
+    "k_finds_any_page_or": "⌘K finds any page or row, in English or Chinese, and suggests related pages too.",
+    "import": "Import",
+    "bring_in_markdown_obsidian_vaults": "Bring in Markdown, Obsidian vaults, Notion exports, CSV and Word documents.",
+    "export": "Export",
+    "pages_to_markdown_html_or": "Pages to Markdown, HTML or Word; databases to CSV.",
+    "structure_when_you_need_it": "Structure when you need it",
+    "turn_any_page_into_a": "Turn any page into a database. Rows are pages too, so each one can hold notes of its own. Link databases with relations and sum them up with rollups.",
+    "privacy": "Privacy",
+    "local_first_by_design": "Local-first by design",
+    "one_sqlite_file": "One SQLite file",
+    "every_page_and_row_is": "Every page, row and block is stored in SQLite on your Mac.",
+    "no_network": "No network",
+    "cellar_never_connects_to_the": "Cellar never connects to the internet. Diagrams draw offline, too.",
+    "undo_everything": "Undo everything",
+    "edits_deletes_and_whole_imports": "Edits, deletes and whole imports each come back with ⌘Z.",
+    "yours_to_take": "Yours to take",
+    "export_to_open_formats_whenever": "Export to open formats whenever you like. No lock-in."
+  },
+  "quaero": {
+    "meta": {
+      "title": "Quaero",
+      "description": "Quaero is a native macOS SQL client for MySQL, PostgreSQL and SQLite."
+    },
+    "a_native_sql_client": "A native SQL client for MySQL, PostgreSQL and SQLite",
+    "coming_soon": "Coming Soon",
+    "requirements": "macOS 15 or later",
+    "your_databases_at_a_glance": "Your databases at a glance",
+    "connect_browse_query_and_export": "Connect, browse, query and export — in a Mac app built with SwiftUI and nothing else.",
+    "connections": "Connections",
+    "save_connections_to_mysql_postgresql": "Save connections to MySQL, PostgreSQL and SQLite, and test one before you save it.",
+    "schema_browser": "Schema browser",
+    "databases_tables_and_views_with": "Databases, tables and views, with each table's columns, comments and CREATE statement.",
+    "table_content": "Table content",
+    "browse_rows_and_edit_cells": "Browse rows and edit cells in place. NULL and binary values are easy to tell apart.",
+    "filters": "Filters",
+    "combine_conditions_with_match_all": "Combine conditions with Match All or Match Any. The filter searches the whole table.",
+    "sql_console": "SQL console",
+    "run_several_statements_at_once": "Run several statements at once and pick between their results.",
+    "export": "Export",
+    "save_rows_as_csv_or": "Save rows as CSV or an Excel workbook, or copy them straight into a spreadsheet.",
+    "sql_next_to_your_rows": "SQL next to your rows",
+    "the_console_opens_beside_the": "The console opens beside the table you are looking at and runs in the same database. Press ⌘Return to run, and see the row count and time of each statement.",
+    "security": "Security",
+    "careful_with_your_credentials": "Careful with your credentials",
+    "passwords_in_keychain": "Passwords in Keychain",
+    "passwords_are_kept_in_the": "Passwords are kept in the macOS Keychain, never in settings or logs.",
+    "tls_when_you_want_it": "TLS when you want it",
+    "require_encryption_or_verify_the": "Require encryption, or verify the server's certificate and host name too.",
+    "no_dependencies": "No dependencies",
+    "the_mysql_and_postgresql_protocols": "The MySQL and PostgreSQL protocols are built in. No drivers to install.",
+    "null_is_null": "NULL is NULL",
+    "sql_null_shows_as_a": "SQL NULL shows as a badge, so it never looks like the text “NULL”."
   },
   "about": {
     "software_engineer_backend_ai_agents": "Software Engineer · Backend, AI Agents & native macOS apps",

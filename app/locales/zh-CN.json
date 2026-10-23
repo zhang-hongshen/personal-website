@@ -34,10 +34,14 @@
     "coming_soon": "即将推出",
     "meta": {
       "title": "首页",
-      "description": "ModelCraft、Arthub、Keel、TuneStudio 与 Container，为日常而生。"
+      "description": "ModelCraft、Arthub、Keel、TuneStudio、Container、Cellar 与 Quaero，为日常而生。"
     },
     "linux_containers": "Linux 容器",
-    "run_linux_containers_on_your_mac": "在 Mac 上运行 Linux 容器。选好镜像，设置端口和文件夹，一键启动。"
+    "run_linux_containers_on_your_mac": "在 Mac 上运行 Linux 容器。选好镜像，设置端口和文件夹，一键启动。",
+    "notes_and_databases": "笔记与数据库",
+    "pages_tables_and_databases_that": "页面、表格和数据库都存在你的 Mac 上。书写、整理、搜索，全部离线完成。",
+    "sql_client": "SQL 客户端",
+    "a_native_sql_client_for": "原生 SQL 客户端，支持 MySQL、PostgreSQL 与 SQLite。浏览表、编辑数据、运行查询。"
   },
   "modelcraft": {
     "ai_that_runs_entirely_on": "AI，完全在设备端运行",
@@ -67,7 +71,7 @@
     "conversations_are_processed_on_device": "对话全程在设备端处理，仅在下载模型或访问网页时联网。",
     "integrations": "联动",
     "works_your_other_apps_for": "替你操作其他 App",
-    "modelcraft_connects_to_arthub_and": "ModelCraft 可与 Arthub、Keel、TuneStudio、Container 联动，直接替你动手：说想看哪部电影，它就开始播放；问起某个 Key，它就去 Redis 里查；要一个数据库，它就启动容器。更多 App 将陆续支持。",
+    "modelcraft_connects_to_arthub_and": "ModelCraft 可与 Arthub、Keel、TuneStudio、Container、Cellar、Quaero 联动，直接替你动手：说想看哪部电影，它就开始播放；问起某个 Key，它就去 Redis 里查；要一个数据库，它就启动容器。更多 App 将陆续支持。",
     "example_arthub": "“在 Arthub 里播放我在追的剧的下一集”",
     "example_keel": "“Keel 里哪些 Key 最占内存？”",
     "coming_soon": "即将推出",
@@ -76,7 +80,9 @@
       "description": "ModelCraft 是完全在设备端运行的私人 AI 助手，可用于对话、处理文档，以及生成图像、视频与音乐。"
     },
     "example_tunestudio": "“用 TuneStudio 给我的人声做一次自然风格的 Auto Tune”",
-    "example_container": "“启动一个 Postgres 容器，端口 5432”"
+    "example_container": "“启动一个 Postgres 容器，端口 5432”",
+    "example_cellar": "“把这篇论文加到 Cellar 的阅读清单里”",
+    "example_quaero": "“用 Quaero 查一下上个月有多少订单退款”"
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "电影、剧集与音乐，自成一库",
@@ -229,6 +235,76 @@
     "folders": "文件夹",
     "resources": "资源",
     "pick_a_folder_read_only": "选择 Mac 上的文件夹，可设为只读。"
+  },
+  "cellar": {
+    "meta": {
+      "title": "Cellar",
+      "description": "Cellar 是一款本地优先的 macOS 笔记与数据库应用，所有内容都存放在你 Mac 上的 SQLite 中，不联网。"
+    },
+    "notes_and_databases_that_stay": "只留在你 Mac 上的笔记与数据库",
+    "coming_soon": "即将推出",
+    "requirements": "macOS 14.4 或更高版本",
+    "everything_is_a_block": "一切皆是块",
+    "write_notes_build_databases_and": "记笔记、建数据库，再把它们连起来。每个页面都由可输入、可拖动、可嵌套的块组成。",
+    "pages_and_blocks": "页面与块",
+    "headings_lists_to_dos_code": "标题、列表、待办、代码、图片、Mermaid 图表和思维导图——输入“/”即可添加。",
+    "databases": "数据库",
+    "custom_properties_relations_rollups_and": "自定义属性、关联与汇总，任何页面都能放一个。",
+    "saved_views": "保存的视图",
+    "table_board_and_list_views": "表格、看板、画廊、列表、日历、时间线和图表，各自保存筛选与排序。",
+    "quick_search": "快速搜索",
+    "k_finds_any_page_or": "⌘K 找到任意页面或行，中英文都行，还会推荐相关页面。",
+    "import": "导入",
+    "bring_in_markdown_obsidian_vaults": "导入 Markdown、Obsidian 库、Notion 导出文件、CSV 和 Word 文档。",
+    "export": "导出",
+    "pages_to_markdown_html_or": "页面导出为 Markdown、HTML 或 Word；数据库导出为 CSV。",
+    "structure_when_you_need_it": "需要时再加结构",
+    "turn_any_page_into_a": "任何页面都能变成数据库。每一行也是一个页面，可以写自己的笔记。用关联把数据库连起来，用汇总统计它们。",
+    "privacy": "隐私",
+    "local_first_by_design": "生来本地优先",
+    "one_sqlite_file": "一个 SQLite 文件",
+    "every_page_and_row_is": "每个页面、每一行、每个块都存在你 Mac 上的 SQLite 里。",
+    "no_network": "不联网",
+    "cellar_never_connects_to_the": "Cellar 从不连接互联网，图表也离线绘制。",
+    "undo_everything": "一切皆可撤销",
+    "edits_deletes_and_whole_imports": "编辑、删除，乃至整次导入，都能用 ⌘Z 撤回。",
+    "yours_to_take": "数据随你带走",
+    "export_to_open_formats_whenever": "随时导出为开放格式，不被锁定。"
+  },
+  "quaero": {
+    "meta": {
+      "title": "Quaero",
+      "description": "Quaero 是一款原生 macOS SQL 客户端，支持 MySQL、PostgreSQL 与 SQLite。"
+    },
+    "a_native_sql_client": "原生 SQL 客户端，支持 MySQL、PostgreSQL 与 SQLite",
+    "coming_soon": "即将推出",
+    "requirements": "macOS 15 或更高版本",
+    "your_databases_at_a_glance": "数据库，一目了然",
+    "connect_browse_query_and_export": "连接、浏览、查询、导出——一款纯 SwiftUI 打造的 Mac 应用。",
+    "connections": "连接",
+    "save_connections_to_mysql_postgresql": "保存 MySQL、PostgreSQL 和 SQLite 连接，保存前可先测试。",
+    "schema_browser": "结构浏览",
+    "databases_tables_and_views_with": "数据库、表与视图，附带每张表的列、注释和 CREATE 语句。",
+    "table_content": "表数据",
+    "browse_rows_and_edit_cells": "浏览数据，直接编辑单元格。NULL 与二进制值一眼就能分清。",
+    "filters": "筛选",
+    "combine_conditions_with_match_all": "多个条件可按“全部匹配”或“任一匹配”组合，在整张表中筛选。",
+    "sql_console": "SQL 控制台",
+    "run_several_statements_at_once": "一次运行多条语句，并在各自的结果之间切换。",
+    "export": "导出",
+    "save_rows_as_csv_or": "把数据存为 CSV 或 Excel 工作簿，或直接复制到电子表格。",
+    "sql_next_to_your_rows": "SQL 就在数据旁边",
+    "the_console_opens_beside_the": "控制台在当前表旁边打开，并在同一个数据库中运行。按 ⌘Return 执行，每条语句都显示行数与耗时。",
+    "security": "安全",
+    "careful_with_your_credentials": "妥善对待你的凭据",
+    "passwords_in_keychain": "密码存于钥匙串",
+    "passwords_are_kept_in_the": "密码保存在 macOS 钥匙串中，绝不写入设置或日志。",
+    "tls_when_you_want_it": "按需启用 TLS",
+    "require_encryption_or_verify_the": "可要求加密，也可同时校验服务器证书与主机名。",
+    "no_dependencies": "零依赖",
+    "the_mysql_and_postgresql_protocols": "内置 MySQL 与 PostgreSQL 协议，无需安装驱动。",
+    "null_is_null": "NULL 就是 NULL",
+    "sql_null_shows_as_a": "SQL NULL 显示为标记，不会和文本“NULL”混淆。"
   },
   "about": {
     "software_engineer_backend_ai_agents": "软件工程师 · 后端开发、AI Agent 与原生 macOS 应用",

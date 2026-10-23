@@ -11,6 +11,8 @@ export default {
         "/products/keel",
         "/products/tunestudio",
         "/products/container",
+        "/products/cellar",
+        "/products/quaero",
         "/resume",
         "/404",
     ],

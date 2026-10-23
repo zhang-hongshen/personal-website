@@ -39,6 +39,16 @@ export const PRODUCTS: Product[] = [
         icon: { light: "/assets/container/icon-light.svg", dark: "/assets/container/icon-dark.svg" },
         accent: { light: "#1a5cf2", dark: "#4d9eff" },
     },
+    {
+        id: "cellar", name: "Cellar", brand: "#ee9a3a",
+        icon: { light: "/assets/cellar/icon-light.svg", dark: "/assets/cellar/icon-dark.svg" },
+        accent: { light: "#b0560f", dark: "#f5ad4c" },
+    },
+    {
+        id: "quaero", name: "Quaero", brand: "#3a3f9e",
+        icon: { light: "/assets/quaero/icon-light.svg", dark: "/assets/quaero/icon-dark.svg" },
+        accent: { light: "#3a3f9e", dark: "#8f96ff" },
+    },
 ];
 
 export function getProduct(id: string): Product {
