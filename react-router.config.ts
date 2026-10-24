@@ -13,6 +13,7 @@ export default {
         "/products/container",
         "/products/cellar",
         "/products/quaero",
+        "/products/pinch",
         "/resume",
         "/404",
     ],

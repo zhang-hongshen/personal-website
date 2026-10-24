@@ -6,13 +6,15 @@ import { Button } from "~/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
+    DropdownMenuGroup,
     DropdownMenuItem,
+    DropdownMenuLabel,
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem,
     DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { LANGUAGES, setLanguage } from "~/lib/i18n";
-import { PRODUCTS } from "~/lib/products";
+import { PRODUCT_GROUPS } from "~/lib/products";
 import { useTheme } from "~/lib/theme";
 import { cn } from "~/lib/utils";
 import { ProductIcon } from "./product-icon";
@@ -45,14 +47,23 @@ export function Navbar() {
                             {t("common.nav.products")}
                             <ChevronDown className="size-3.5 opacity-70 transition-transform duration-200 group-data-[state=open]:rotate-180" strokeWidth={2.5} />
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="center">
-                            {PRODUCTS.map((p) => (
-                                <DropdownMenuItem key={p.id} asChild className={cn(pathname.startsWith(`/products/${p.id}`) && "bg-accent")}>
-                                    <Link to={`/products/${p.id}/`}>
-                                        <ProductIcon id={p.id} className="-m-0.5 size-10 flex-none" width={36} height={36} />
-                                        <strong className="font-semibold">{p.name}</strong>
-                                    </Link>
-                                </DropdownMenuItem>
+                        <DropdownMenuContent
+                            align="center"
+                            collisionPadding={10}
+                            className="grid max-h-[var(--radix-dropdown-menu-content-available-height)] gap-x-1.5 overflow-y-auto min-[560px]:grid-cols-2"
+                        >
+                            {PRODUCT_GROUPS.map(({ category, products }) => (
+                                <DropdownMenuGroup key={category}>
+                                    <DropdownMenuLabel>{t(`common.category.${category}`)}</DropdownMenuLabel>
+                                    {products.map((p) => (
+                                        <DropdownMenuItem key={p.id} asChild className={cn(pathname.startsWith(`/products/${p.id}`) && "bg-accent")}>
+                                            <Link to={`/products/${p.id}/`}>
+                                                <ProductIcon id={p.id} className="-m-0.5 size-10 flex-none" width={36} height={36} />
+                                                <strong className="font-semibold">{p.name}</strong>
+                                            </Link>
+                                        </DropdownMenuItem>
+                                    ))}
+                                </DropdownMenuGroup>
                             ))}
                         </DropdownMenuContent>
                     </DropdownMenu>

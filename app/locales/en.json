@@ -15,6 +15,12 @@
     "not_found": {
       "title": "Page not found",
       "back_home": "Back to home"
+    },
+    "category": {
+      "ai": "AI",
+      "developer": "Developer tools",
+      "media": "Media & creativity",
+      "productivity": "Productivity & utilities"
     }
   },
   "home": {
@@ -34,14 +40,16 @@
     "coming_soon": "Coming soon",
     "meta": {
       "title": "Home",
-      "description": "ModelCraft, Arthub, Keel, TuneStudio, Container, Cellar and Quaero — made for every day."
+      "description": "ModelCraft, Arthub, Keel, TuneStudio, Container, Cellar, Quaero and Pinch — made for every day."
     },
     "linux_containers": "Linux containers",
     "run_linux_containers_on_your_mac": "Run Linux containers on your Mac. Pick an image, set ports and folders, and it's running in seconds.",
     "notes_and_databases": "Notes and databases",
     "pages_tables_and_databases_that": "Notes, tables and databases, all kept locally. Write, organize and find anything — even offline.",
     "sql_client": "SQL client",
-    "a_native_sql_client_for": "A native SQL client for MySQL, PostgreSQL and SQLite. Quick to open and smooth to use — browse tables, edit rows and run queries."
+    "a_native_sql_client_for": "A native SQL client for MySQL, PostgreSQL and SQLite. Quick to open and smooth to use — browse tables, edit rows and run queries.",
+    "trackpad_scale": "Trackpad scale",
+    "weigh_light_objects_on_your": "Weigh light objects on your MacBook's trackpad. Tare, hold, count pieces and calibrate — like a real scale."
   },
   "modelcraft": {
     "ai_that_runs_entirely_on": "AI that runs entirely locally",
@@ -303,6 +311,41 @@
     "the_mysql_and_postgresql_protocols": "The MySQL and PostgreSQL protocols are built in. No drivers to install, nothing extra to slow it down.",
     "null_is_null": "NULL is NULL",
     "sql_null_shows_as_a": "SQL NULL shows as a badge, so it never looks like the text “NULL”."
+  },
+  "pinch": {
+    "meta": {
+      "title": "Pinch",
+      "description": "Pinch turns a MacBook's Force Touch trackpad into a small scale for light objects, with tare, hold, counting mode and calibration."
+    },
+    "turn_your_trackpad_into_a": "Turn your trackpad into a scale",
+    "coming_soon": "Coming Soon",
+    "requirements": "macOS 27 or later · a Mac with a Force Touch trackpad",
+    "a_real_scale_on_your": "A real scale on your desk",
+    "the_force_touch_trackpad_already": "The Force Touch trackpad already feels how hard you press. Pinch reads that pressure and shows it as weight, with the keys you'd find on a kitchen scale.",
+    "lcd_readout": "LCD readout",
+    "slanted_seven_segment_digits_a": "Slanted seven-segment digits, a Stable light and a Net sign, just like an electronic scale.",
+    "tare": "Tare",
+    "zero_the_reading_with_whatever": "Zero the reading with whatever is already on your finger, so you only weigh what you add.",
+    "hold": "Hold",
+    "freeze_the_reading_and_keep": "Freeze the reading and keep it on screen after you lift your finger.",
+    "counting_mode": "Counting mode",
+    "weigh_ten_pieces_once_and": "Weigh ten pieces once, and Pinch tells you how many are on the pad.",
+    "calibration": "Calibration",
+    "calibrate_with_one_known_weight": "Calibrate with a single known weight, like a coin. The result is saved for next time.",
+    "five_units": "Five units",
+    "grams_ounces_carats_troy_ounces": "Grams, ounces, carats, troy ounces and grains, up to 1,000 g.",
+    "count_instead_of_weigh": "Count instead of weigh",
+    "press_tare_add_ten_identical": "Turn on counting mode, press Tare, add ten identical pieces and press Tare again. Pinch learns the weight of one piece and shows whole pieces from then on. Every key has a shortcut you can change in Settings.",
+    "how_it_works": "How it works",
+    "four_steps_to_a_reading": "Four steps to a reading",
+    "rest_a_finger": "Rest a finger",
+    "rest_one_finger_lightly_on": "Rest one finger lightly on the trackpad. Don't click.",
+    "tare_it": "Tare",
+    "press_tare_so_your_finger": "Press Tare so your finger itself counts as zero.",
+    "add_the_object": "Add the object",
+    "place_the_object_on_your": "Place the object on your fingertip or nail.",
+    "read_the_weight": "Read the weight",
+    "when_the_reading_settles_the": "When it settles, Stable lights up and the trackpad taps once."
   },
   "about": {
     "software_engineer_backend_ai_agents": "Software Engineer · Backend, AI Agents & native macOS apps",

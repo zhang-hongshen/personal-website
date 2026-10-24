@@ -46,6 +46,20 @@ function DropdownMenuItem({ className, ...props }: React.ComponentProps<typeof D
     );
 }
 
+function DropdownMenuGroup(props: React.ComponentProps<typeof DropdownMenuPrimitive.Group>) {
+    return <DropdownMenuPrimitive.Group data-slot="dropdown-menu-group" {...props} />;
+}
+
+function DropdownMenuLabel({ className, ...props }: React.ComponentProps<typeof DropdownMenuPrimitive.Label>) {
+    return (
+        <DropdownMenuPrimitive.Label
+            data-slot="dropdown-menu-label"
+            className={cn("px-2.5 pt-2 pb-1 text-xs font-semibold text-faint", className)}
+            {...props}
+        />
+    );
+}
+
 function DropdownMenuRadioGroup(props: React.ComponentProps<typeof DropdownMenuPrimitive.RadioGroup>) {
     return <DropdownMenuPrimitive.RadioGroup data-slot="dropdown-menu-radio-group" {...props} />;
 }
@@ -77,6 +91,8 @@ export {
     DropdownMenuTrigger,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuGroup,
+    DropdownMenuLabel,
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem,
 };

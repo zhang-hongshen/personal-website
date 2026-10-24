@@ -15,6 +15,12 @@
     "not_found": {
       "title": "找不到该页面",
       "back_home": "返回首页"
+    },
+    "category": {
+      "ai": "AI",
+      "developer": "开发者工具",
+      "media": "影音与创作",
+      "productivity": "效率与工具"
     }
   },
   "home": {
@@ -34,14 +40,16 @@
     "coming_soon": "即将推出",
     "meta": {
       "title": "首页",
-      "description": "ModelCraft、Arthub、Keel、TuneStudio、Container、Cellar 与 Quaero，为日常而生。"
+      "description": "ModelCraft、Arthub、Keel、TuneStudio、Container、Cellar、Quaero 与 Pinch——为日常而生。"
     },
     "linux_containers": "Linux 容器",
     "run_linux_containers_on_your_mac": "在 Mac 上运行 Linux 容器。选好镜像，设置端口和文件夹，几秒就能跑起来。",
     "notes_and_databases": "笔记与数据库",
     "pages_tables_and_databases_that": "笔记、表格与数据库，全部保存在本地。书写、整理、随手找到，离线也能用。",
     "sql_client": "SQL 客户端",
-    "a_native_sql_client_for": "原生 SQL 客户端，支持 MySQL、PostgreSQL 与 SQLite。打开迅速、操作流畅，浏览表、编辑数据、运行查询。"
+    "a_native_sql_client_for": "原生 SQL 客户端，支持 MySQL、PostgreSQL 与 SQLite。打开迅速、操作流畅，浏览表、编辑数据、运行查询。",
+    "trackpad_scale": "触控板秤",
+    "weigh_light_objects_on_your": "用 MacBook 的触控板称轻巧的物件。去皮、锁定、计数、校准，像一台真正的电子秤。"
   },
   "modelcraft": {
     "ai_that_runs_entirely_on": "AI，完全在本地运行",
@@ -303,6 +311,41 @@
     "the_mysql_and_postgresql_protocols": "内置 MySQL 与 PostgreSQL 协议，无需安装驱动，轻装上阵。",
     "null_is_null": "NULL 就是 NULL",
     "sql_null_shows_as_a": "SQL NULL 显示为标记，不会和文本“NULL”混淆。"
+  },
+  "pinch": {
+    "meta": {
+      "title": "Pinch",
+      "description": "Pinch 把 MacBook 的力度触控板变成一台称轻物的小秤，支持去皮、锁定、计数模式与校准。"
+    },
+    "turn_your_trackpad_into_a": "把触控板变成一台秤",
+    "coming_soon": "即将推出",
+    "requirements": "macOS 27 或更高版本 · 配备力度触控板的 Mac",
+    "a_real_scale_on_your": "桌上的一台真秤",
+    "the_force_touch_trackpad_already": "力度触控板本来就能感知你按得多用力。Pinch 读取这份压力并换算成重量，还配上了厨房秤上的那几个按键。",
+    "lcd_readout": "液晶读数",
+    "slanted_seven_segment_digits_a": "倾斜的七段数字、稳定指示灯和净重标记，和电子秤一模一样。",
+    "tare": "去皮",
+    "zero_the_reading_with_whatever": "把手指上已有的重量归零，只称你后来放上的东西。",
+    "hold": "锁定",
+    "freeze_the_reading_and_keep": "冻结读数，抬起手指后依然留在屏幕上。",
+    "counting_mode": "计数模式",
+    "weigh_ten_pieces_once_and": "先称一次 10 个，Pinch 就能告诉你板上有几个。",
+    "calibration": "校准",
+    "calibrate_with_one_known_weight": "用一个已知重量的物件（比如一枚硬币）校准，结果会保存下来。",
+    "five_units": "五种单位",
+    "grams_ounces_carats_troy_ounces": "克、盎司、克拉、金衡盎司和格令，最大 1000 克。",
+    "count_instead_of_weigh": "不称重，直接数个数",
+    "press_tare_add_ten_identical": "打开计数模式，按去皮，放上 10 个相同的物件，再按一次去皮。Pinch 记下单个的重量，之后直接显示个数。每个按键都有快捷键，可在设置里修改。",
+    "how_it_works": "使用方法",
+    "four_steps_to_a_reading": "四步得出读数",
+    "rest_a_finger": "放上手指",
+    "rest_one_finger_lightly_on": "一根手指轻轻搭在触控板上，不要按下去。",
+    "tare_it": "去皮",
+    "press_tare_so_your_finger": "按去皮，让手指本身的压力归零。",
+    "add_the_object": "放上物件",
+    "place_the_object_on_your": "把物件放在指尖或指甲上。",
+    "read_the_weight": "读取重量",
+    "when_the_reading_settles_the": "读数稳定后，“稳定”灯亮起，触控板轻震一下。"
   },
   "about": {
     "software_engineer_backend_ai_agents": "软件工程师 · 后端开发、AI Agent 与原生 macOS 应用",
