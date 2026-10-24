@@ -19,7 +19,7 @@ const FEATURES: Feature[] = [
 ];
 
 const POINTS = [
-    { title: "cellar.one_sqlite_file", body: "cellar.every_page_and_row_is" },
+    { title: "cellar.stored_locally", body: "cellar.every_page_and_row_is" },
     { title: "cellar.no_network", body: "cellar.cellar_never_connects_to_the" },
     { title: "cellar.undo_everything", body: "cellar.edits_deletes_and_whole_imports" },
     { title: "cellar.yours_to_take", body: "cellar.export_to_open_formats_whenever" },

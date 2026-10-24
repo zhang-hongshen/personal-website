@@ -19,13 +19,13 @@
   },
   "home": {
     "made_for_every_day": "Made for every day",
-    "on_device_ai_assistant": "On-device AI assistant",
-    "a_private_ai_assistant_that": "A private AI assistant that runs entirely on-device. Ask questions, write, create images and music, and get everyday work done.",
+    "on_device_ai_assistant": "Local AI assistant",
+    "a_private_ai_assistant_that": "A private AI assistant that runs entirely locally. Ask questions, write, create images and music, and get everyday work done.",
     "learn_more": "Learn more",
     "media_library": "Media library",
     "movies_tv_shows_and_music": "Movies, TV shows and music, organized automatically — with artwork, lyrics and subtitles.",
     "redis_client": "Redis client",
-    "a_native_redis_client_for": "A native Redis client. Browse keys, edit values and keep an eye on the server — fast, with no Electron.",
+    "a_native_redis_client_for": "A native Redis client that opens instantly and stays smooth past 100,000 keys. Browse, edit and watch the server without the wait.",
     "vocal_pitch_correction": "Vocal pitch correction",
     "put_your_singing_on_pitch": "Put your singing on pitch. One click for Auto Tune, or move every note by hand.",
     "better_together": "Better together",
@@ -37,24 +37,24 @@
       "description": "ModelCraft, Arthub, Keel, TuneStudio, Container, Cellar and Quaero — made for every day."
     },
     "linux_containers": "Linux containers",
-    "run_linux_containers_on_your_mac": "Run Linux containers on your Mac. Pick an image, set ports and folders, and start it in one click.",
+    "run_linux_containers_on_your_mac": "Run Linux containers on your Mac. Pick an image, set ports and folders, and it's running in seconds.",
     "notes_and_databases": "Notes and databases",
-    "pages_tables_and_databases_that": "Pages, tables and databases that live on your Mac. Write, organize and search — all offline.",
+    "pages_tables_and_databases_that": "Notes, tables and databases, all kept locally. Write, organize and find anything — even offline.",
     "sql_client": "SQL client",
-    "a_native_sql_client_for": "A native SQL client for MySQL, PostgreSQL and SQLite. Browse tables, edit rows and run queries."
+    "a_native_sql_client_for": "A native SQL client for MySQL, PostgreSQL and SQLite. Quick to open and smooth to use — browse tables, edit rows and run queries."
   },
   "modelcraft": {
-    "ai_that_runs_entirely_on": "AI that runs entirely on-device",
+    "ai_that_runs_entirely_on": "AI that runs entirely locally",
     "download_for_macos": "Download for macOS",
     "apple_silicon_m1_or_later": "Apple silicon (M1 or later) · macOS 15 or later",
     "capable_and_completely_private": "Capable. And completely private",
-    "models_run_on_device_no": "Models run on-device. No account, no subscription.",
-    "on_device_models": "On-device models",
+    "models_run_on_device_no": "Models run locally. No account, no subscription.",
+    "on_device_models": "Local models",
     "download_a_model_and_start": "Download a model and start. Nothing to configure.",
     "gets_things_done": "Gets things done",
     "organizes_files_looks_things_up": "Organizes files, looks things up online and sees a task through from start to finish.",
     "images_video_music": "Images, video & music",
-    "generated_on_device_right_in": "Generated on-device, right in the conversation.",
+    "generated_on_device_right_in": "Generated locally, right in the conversation.",
     "projects": "Projects",
     "conversations_and_files_kept_together": "Conversations and files kept together. Answers draw on the documents in each project.",
     "multimodal_voice": "Multimodal & voice",
@@ -67,8 +67,8 @@
     "pick_a_model_download_in": "Pick a model. Download in one click",
     "browse_popular_open_models_downloads": "Browse popular open models. Downloads and storage are handled automatically.",
     "privacy": "Privacy",
-    "data_stays_on_the_device": "Data stays on the device",
-    "conversations_are_processed_on_device": "Conversations are processed on-device. The network is used only to download models or browse the web.",
+    "data_stays_on_the_device": "Your data stays local",
+    "conversations_are_processed_on_device": "Conversations are processed locally. The network is used only to download models or browse the web.",
     "integrations": "Integrations",
     "works_your_other_apps_for": "Works your other apps for you",
     "modelcraft_connects_to_arthub_and": "ModelCraft connects to Arthub, Keel, TuneStudio, Container, Cellar and Quaero and acts on your behalf. Ask for a film and it starts playing; ask about a key and it looks it up in Redis; ask for a database and it starts the container. More apps will follow.",
@@ -77,7 +77,7 @@
     "coming_soon": "Coming soon",
     "meta": {
       "title": "ModelCraft",
-      "description": "ModelCraft is a private AI assistant that runs entirely on-device, for conversations, documents, and creating images, video and music."
+      "description": "ModelCraft is a private AI assistant that runs entirely locally, for conversations, documents, and creating images, video and music."
     },
     "example_tunestudio": "“Auto Tune my vocal in TuneStudio, Natural style”",
     "example_container": "“Start a Postgres container on port 5432”",
@@ -120,13 +120,13 @@
     }
   },
   "keel": {
-    "a_native_redis_client": "A native Redis client. Fast, and feels right at home",
+    "a_native_redis_client": "A native Redis client. Fast, fluid, instant",
     "coming_soon": "Coming Soon",
     "requirements": "macOS 26 or later · iOS 26 or later",
     "everything_redis_in_one_place": "Everything Redis, in one place",
     "works_with_redis_and_every": "Works with Redis and every RESP database — Valkey, Dragonfly, KeyDB and Garnet.",
     "key_browser": "Key browser",
-    "built_on_scan_never_keys": "Built on SCAN, never KEYS. A namespace tree or a flat list, smooth past 100,000 keys.",
+    "built_on_scan_never_keys": "A namespace tree or a flat list that scrolls smoothly past 100,000 keys — built on SCAN, so it never stalls the server with KEYS.",
     "value_editor": "Value editor",
     "strings_hashes_lists_sets_and": "Strings, hashes, lists, sets and sorted sets — view as text, JSON or hex, with a live TTL countdown.",
     "streams": "Streams",
@@ -149,10 +149,10 @@
     "transactional_edits": "Transactional edits",
     "changes_to_a_value_are": "Changes to a value are applied in a transaction.",
     "large_values_handled": "Large values handled",
-    "strings_over_1_mb_load": "Strings over 1 MB load just the beginning; binary values stay read-only.",
+    "strings_over_1_mb_load": "Strings over 1 MB load just the beginning, so even huge values open instantly; binary values stay read-only.",
     "meta": {
       "title": "Keel",
-      "description": "Keel is a native SwiftUI Redis client, compatible with Valkey, Dragonfly, KeyDB and Garnet."
+      "description": "Keel is a fast, smooth native Redis client, compatible with Valkey, Dragonfly, KeyDB and Garnet."
     }
   },
   "tunestudio": {
@@ -164,11 +164,11 @@
     "open_any_recording": "Open any recording",
     "wav_mp3_and_m4a": "WAV, MP3 and M4A — open a file or drop it on the window.",
     "see_your_singing": "See your singing",
-    "a_pitch_curve_over_a": "A pitch curve over a piano roll, with every held note shown as a block.",
+    "a_pitch_curve_over_a": "Your pitch drawn as a line above piano keys, with every held note shown as a block.",
     "auto_tune_in_one_click": "Auto Tune in one click",
     "natural_balanced_or_robotic": "Natural, Balanced or Robotic. Click again to hear the original.",
     "fine_tune_by_hand": "Fine-tune by hand",
-    "drag_notes_up_or_down": "Drag notes up or down, hold ⌥ for cents, and split or merge notes.",
+    "drag_notes_up_or_down": "Drag notes up or down, hold ⌥ for finer steps, and split or merge notes.",
     "non_destructive": "Non-destructive",
     "your_original_file_is_never": "Your original file is never changed, and every edit can be undone.",
     "export": "Export",
@@ -192,13 +192,13 @@
     "save_the_result_as_a": "Save the result as a new WAV or M4A file.",
     "meta": {
       "title": "TuneStudio",
-      "description": "TuneStudio is a native macOS app that puts a sung vocal on pitch — Auto Tune in one click, or edit every note by hand."
+      "description": "TuneStudio puts your singing on pitch — Auto Tune in one click, or adjust every note by hand."
     }
   },
   "container": {
     "meta": {
       "title": "Container",
-      "description": "Container is a native macOS app for running Linux containers on Apple silicon."
+      "description": "Container runs Linux containers natively on your Mac, in a light app that opens in seconds."
     },
     "linux_containers_native_on_your_mac": "Linux containers, native on your Mac",
     "coming_soon": "Coming Soon",
@@ -239,17 +239,17 @@
   "cellar": {
     "meta": {
       "title": "Cellar",
-      "description": "Cellar is a local-first macOS app for notes and databases. Everything is stored in SQLite on your Mac, with no network access."
+      "description": "Cellar is a notes and databases app that keeps everything local. Write, organize and link your ideas, no internet needed."
     },
-    "notes_and_databases_that_stay": "Notes and databases that stay on your Mac",
+    "notes_and_databases_that_stay": "Notes and databases that stay local",
     "coming_soon": "Coming Soon",
     "requirements": "macOS 14.4 or later",
     "everything_is_a_block": "Everything is a block",
     "write_notes_build_databases_and": "Write notes, build databases and link them together. Every page is made of blocks you can type, drag and nest.",
     "pages_and_blocks": "Pages and blocks",
-    "headings_lists_to_dos_code": "Headings, lists, to-dos, code, images, Mermaid diagrams and mind maps — type “/” to add any of them.",
+    "headings_lists_to_dos_code": "Headings, lists, to-dos, code, images, diagrams and mind maps — type “/” to add any of them.",
     "databases": "Databases",
-    "custom_properties_relations_rollups_and": "Custom properties, relations and rollups. Any page can hold one.",
+    "custom_properties_relations_rollups_and": "Add your own fields, link databases together and let totals add up on their own. Any page can hold one.",
     "saved_views": "Saved views",
     "table_board_and_list_views": "Table, board, gallery, list, calendar, timeline and chart, each with its own filters and sorts.",
     "quick_search": "Quick search",
@@ -259,11 +259,11 @@
     "export": "Export",
     "pages_to_markdown_html_or": "Pages to Markdown, HTML or Word; databases to CSV.",
     "structure_when_you_need_it": "Structure when you need it",
-    "turn_any_page_into_a": "Turn any page into a database. Rows are pages too, so each one can hold notes of its own. Link databases with relations and sum them up with rollups.",
+    "turn_any_page_into_a": "Turn any page into a database. Rows are pages too, so each one can hold notes of its own. Link databases together and let the totals take care of themselves.",
     "privacy": "Privacy",
-    "local_first_by_design": "Local-first by design",
-    "one_sqlite_file": "One SQLite file",
-    "every_page_and_row_is": "Every page, row and block is stored in SQLite on your Mac.",
+    "local_first_by_design": "Local by design",
+    "stored_locally": "Stored locally",
+    "every_page_and_row_is": "Every page, row and block is saved locally, in a single file that's yours.",
     "no_network": "No network",
     "cellar_never_connects_to_the": "Cellar never connects to the internet. Diagrams draw offline, too.",
     "undo_everything": "Undo everything",
@@ -274,13 +274,13 @@
   "quaero": {
     "meta": {
       "title": "Quaero",
-      "description": "Quaero is a native macOS SQL client for MySQL, PostgreSQL and SQLite."
+      "description": "Quaero is a fast, native SQL client for MySQL, PostgreSQL and SQLite."
     },
-    "a_native_sql_client": "A native SQL client for MySQL, PostgreSQL and SQLite",
+    "a_native_sql_client": "A fast, native SQL client for MySQL, PostgreSQL and SQLite",
     "coming_soon": "Coming Soon",
     "requirements": "macOS 15 or later",
     "your_databases_at_a_glance": "Your databases at a glance",
-    "connect_browse_query_and_export": "Connect, browse, query and export — in a Mac app built with SwiftUI and nothing else.",
+    "connect_browse_query_and_export": "Connect, browse, query and export — native, quick to open and smooth to use.",
     "connections": "Connections",
     "save_connections_to_mysql_postgresql": "Save connections to MySQL, PostgreSQL and SQLite, and test one before you save it.",
     "schema_browser": "Schema browser",
@@ -298,11 +298,11 @@
     "security": "Security",
     "careful_with_your_credentials": "Careful with your credentials",
     "passwords_in_keychain": "Passwords in Keychain",
-    "passwords_are_kept_in_the": "Passwords are kept in the macOS Keychain, never in settings or logs.",
+    "passwords_are_kept_in_the": "Passwords are kept in the system Keychain, never in settings or logs.",
     "tls_when_you_want_it": "TLS when you want it",
     "require_encryption_or_verify_the": "Require encryption, or verify the server's certificate and host name too.",
     "no_dependencies": "No dependencies",
-    "the_mysql_and_postgresql_protocols": "The MySQL and PostgreSQL protocols are built in. No drivers to install.",
+    "the_mysql_and_postgresql_protocols": "The MySQL and PostgreSQL protocols are built in. No drivers to install, nothing extra to slow it down.",
     "null_is_null": "NULL is NULL",
     "sql_null_shows_as_a": "SQL NULL shows as a badge, so it never looks like the text “NULL”."
   },

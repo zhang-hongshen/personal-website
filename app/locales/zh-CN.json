@@ -19,13 +19,13 @@
   },
   "home": {
     "made_for_every_day": "为日常而生",
-    "on_device_ai_assistant": "设备端 AI 助手",
-    "a_private_ai_assistant_that": "完全在设备端运行的私人 AI 助手。问答、写作、生成图片与音乐，处理日常事务。",
+    "on_device_ai_assistant": "本地 AI 助手",
+    "a_private_ai_assistant_that": "完全在本地运行的私人 AI 助手。问答、写作、生成图片与音乐，处理日常事务。",
     "learn_more": "了解更多",
     "media_library": "影音资料库",
     "movies_tv_shows_and_music": "自动整理电影、剧集与音乐，配齐海报、歌词与字幕。",
     "redis_client": "Redis 客户端",
-    "a_native_redis_client_for": "原生 Redis 客户端。浏览 Key、编辑数据、掌握服务器状态，快速流畅，告别 Electron。",
+    "a_native_redis_client_for": "原生 Redis 客户端，秒开即用，10 万个 Key 依然丝滑。浏览、编辑、监控服务器，不用等待。",
     "vocal_pitch_correction": "人声修音",
     "put_your_singing_on_pitch": "把歌声修准。一键 Auto Tune，也能亲手调整每一个音符。",
     "better_together": "联动",
@@ -37,24 +37,24 @@
       "description": "ModelCraft、Arthub、Keel、TuneStudio、Container、Cellar 与 Quaero，为日常而生。"
     },
     "linux_containers": "Linux 容器",
-    "run_linux_containers_on_your_mac": "在 Mac 上运行 Linux 容器。选好镜像，设置端口和文件夹，一键启动。",
+    "run_linux_containers_on_your_mac": "在 Mac 上运行 Linux 容器。选好镜像，设置端口和文件夹，几秒就能跑起来。",
     "notes_and_databases": "笔记与数据库",
-    "pages_tables_and_databases_that": "页面、表格和数据库都存在你的 Mac 上。书写、整理、搜索，全部离线完成。",
+    "pages_tables_and_databases_that": "笔记、表格与数据库，全部保存在本地。书写、整理、随手找到，离线也能用。",
     "sql_client": "SQL 客户端",
-    "a_native_sql_client_for": "原生 SQL 客户端，支持 MySQL、PostgreSQL 与 SQLite。浏览表、编辑数据、运行查询。"
+    "a_native_sql_client_for": "原生 SQL 客户端，支持 MySQL、PostgreSQL 与 SQLite。打开迅速、操作流畅，浏览表、编辑数据、运行查询。"
   },
   "modelcraft": {
-    "ai_that_runs_entirely_on": "AI，完全在设备端运行",
+    "ai_that_runs_entirely_on": "AI，完全在本地运行",
     "download_for_macos": "下载 macOS 版",
     "apple_silicon_m1_or_later": "Apple 芯片（M1 及以后）· macOS 15 或更高版本",
     "capable_and_completely_private": "强大，而且私密",
-    "models_run_on_device_no": "模型在设备端运行。无需账号，没有订阅。",
-    "on_device_models": "设备端模型",
+    "models_run_on_device_no": "模型在本地运行。无需账号，没有订阅。",
+    "on_device_models": "本地模型",
     "download_a_model_and_start": "下载即用，无需任何配置。",
     "gets_things_done": "动手帮忙",
     "organizes_files_looks_things_up": "整理文件、上网查找资料，把一件事从头做到尾。",
     "images_video_music": "图像、视频与音乐",
-    "generated_on_device_right_in": "在设备端生成，直接呈现在对话中。",
+    "generated_on_device_right_in": "在本地生成，直接呈现在对话中。",
     "projects": "项目",
     "conversations_and_files_kept_together": "对话与文件集中存放，回答基于项目中的文档。",
     "multimodal_voice": "多模态与语音",
@@ -67,8 +67,8 @@
     "pick_a_model_download_in": "挑选模型，一键下载",
     "browse_popular_open_models_downloads": "浏览热门开源模型，下载与存储统一管理。",
     "privacy": "隐私",
-    "data_stays_on_the_device": "数据，始终留在设备上",
-    "conversations_are_processed_on_device": "对话全程在设备端处理，仅在下载模型或访问网页时联网。",
+    "data_stays_on_the_device": "数据，始终留在本地",
+    "conversations_are_processed_on_device": "对话全程在本地处理，仅在下载模型或访问网页时联网。",
     "integrations": "联动",
     "works_your_other_apps_for": "替你操作其他 App",
     "modelcraft_connects_to_arthub_and": "ModelCraft 可与 Arthub、Keel、TuneStudio、Container、Cellar、Quaero 联动，直接替你动手：说想看哪部电影，它就开始播放；问起某个 Key，它就去 Redis 里查；要一个数据库，它就启动容器。更多 App 将陆续支持。",
@@ -77,7 +77,7 @@
     "coming_soon": "即将推出",
     "meta": {
       "title": "ModelCraft",
-      "description": "ModelCraft 是完全在设备端运行的私人 AI 助手，可用于对话、处理文档，以及生成图像、视频与音乐。"
+      "description": "ModelCraft 是完全在本地运行的私人 AI 助手，可用于对话、处理文档，以及生成图像、视频与音乐。"
     },
     "example_tunestudio": "“用 TuneStudio 给我的人声做一次自然风格的 Auto Tune”",
     "example_container": "“启动一个 Postgres 容器，端口 5432”",
@@ -120,13 +120,13 @@
     }
   },
   "keel": {
-    "a_native_redis_client": "原生 Redis 客户端，快速、顺手",
+    "a_native_redis_client": "原生 Redis 客户端，快速、丝滑",
     "coming_soon": "即将推出",
     "requirements": "macOS 26 或更高版本 · iOS 26 或更高版本",
     "everything_redis_in_one_place": "Redis 的一切，尽在一处",
     "works_with_redis_and_every": "兼容 Redis 及所有 RESP 协议数据库：Valkey、Dragonfly、KeyDB 与 Garnet。",
     "key_browser": "Key 浏览器",
-    "built_on_scan_never_keys": "基于 SCAN，从不使用 KEYS。命名空间树与平铺列表两种视图，10 万个以上的 Key 依然流畅。",
+    "built_on_scan_never_keys": "命名空间树或平铺列表，10 万个以上的 Key 依然丝滑滚动；全程使用 SCAN，不会因 KEYS 拖慢服务器。",
     "value_editor": "值编辑器",
     "strings_hashes_lists_sets_and": "String、Hash、List、Set、ZSet 均可编辑，按文本、JSON 或十六进制查看，TTL 实时倒计时。",
     "streams": "Stream",
@@ -149,10 +149,10 @@
     "transactional_edits": "事务化修改",
     "changes_to_a_value_are": "对值的修改在事务中完成。",
     "large_values_handled": "大值无压力",
-    "strings_over_1_mb_load": "超过 1 MB 的字符串只加载开头，二进制值只读。",
+    "strings_over_1_mb_load": "超过 1 MB 的字符串只加载开头，再大的值也能秒开；二进制值只读。",
     "meta": {
       "title": "Keel",
-      "description": "Keel 是用 SwiftUI 编写的原生 Redis 客户端，兼容 Valkey、Dragonfly、KeyDB 与 Garnet。"
+      "description": "Keel 是一款快速流畅的原生 Redis 客户端，兼容 Valkey、Dragonfly、KeyDB 与 Garnet。"
     }
   },
   "tunestudio": {
@@ -164,11 +164,11 @@
     "open_any_recording": "打开任意录音",
     "wav_mp3_and_m4a": "支持 WAV、MP3 与 M4A，打开文件或直接拖进窗口。",
     "see_your_singing": "看见你的演唱",
-    "a_pitch_curve_over_a": "钢琴卷帘上显示音高曲线，每个长音显示为一个色块。",
+    "a_pitch_curve_over_a": "你的音高以曲线画在琴键上方，每个长音显示为一个色块。",
     "auto_tune_in_one_click": "一键 Auto Tune",
     "natural_balanced_or_robotic": "自然、标准或电音三种风格，再点一次即可听原声。",
     "fine_tune_by_hand": "手动微调",
-    "drag_notes_up_or_down": "上下拖动音符，按住 ⌥ 以音分精调，还能拆分与合并音符。",
+    "drag_notes_up_or_down": "上下拖动音符，按住 ⌥ 可精细微调，还能拆分与合并音符。",
     "non_destructive": "无损编辑",
     "your_original_file_is_never": "原始文件永远不会被修改，每一步都可以撤销。",
     "export": "导出",
@@ -192,13 +192,13 @@
     "save_the_result_as_a": "把结果另存为新的 WAV 或 M4A 文件。",
     "meta": {
       "title": "TuneStudio",
-      "description": "TuneStudio 是一款原生 macOS 修音应用：一键 Auto Tune，或亲手编辑每一个音符。"
+      "description": "TuneStudio 帮你把歌声修准：一键 Auto Tune，或亲手调整每一个音符。"
     }
   },
   "container": {
     "meta": {
       "title": "Container",
-      "description": "Container 是一款原生 macOS 应用，在 Apple 芯片上运行 Linux 容器。"
+      "description": "Container 让 Linux 容器原生跑在 Mac 上，应用轻快，几秒就能打开。"
     },
     "linux_containers_native_on_your_mac": "Linux 容器，原生跑在 Mac 上",
     "coming_soon": "即将推出",
@@ -239,17 +239,17 @@
   "cellar": {
     "meta": {
       "title": "Cellar",
-      "description": "Cellar 是一款本地优先的 macOS 笔记与数据库应用，所有内容都存放在你 Mac 上的 SQLite 中，不联网。"
+      "description": "Cellar 是一款笔记与数据库应用，所有内容都保存在本地。书写、整理、关联你的想法，无需联网。"
     },
-    "notes_and_databases_that_stay": "只留在你 Mac 上的笔记与数据库",
+    "notes_and_databases_that_stay": "只留在本地的笔记与数据库",
     "coming_soon": "即将推出",
     "requirements": "macOS 14.4 或更高版本",
     "everything_is_a_block": "一切皆是块",
     "write_notes_build_databases_and": "记笔记、建数据库，再把它们连起来。每个页面都由可输入、可拖动、可嵌套的块组成。",
     "pages_and_blocks": "页面与块",
-    "headings_lists_to_dos_code": "标题、列表、待办、代码、图片、Mermaid 图表和思维导图——输入“/”即可添加。",
+    "headings_lists_to_dos_code": "标题、列表、待办、代码、图片、流程图和思维导图——输入“/”即可添加。",
     "databases": "数据库",
-    "custom_properties_relations_rollups_and": "自定义属性、关联与汇总，任何页面都能放一个。",
+    "custom_properties_relations_rollups_and": "自定义字段，把数据库互相关联，统计自动完成。任何页面都能放一个。",
     "saved_views": "保存的视图",
     "table_board_and_list_views": "表格、看板、画廊、列表、日历、时间线和图表，各自保存筛选与排序。",
     "quick_search": "快速搜索",
@@ -259,11 +259,11 @@
     "export": "导出",
     "pages_to_markdown_html_or": "页面导出为 Markdown、HTML 或 Word；数据库导出为 CSV。",
     "structure_when_you_need_it": "需要时再加结构",
-    "turn_any_page_into_a": "任何页面都能变成数据库。每一行也是一个页面，可以写自己的笔记。用关联把数据库连起来，用汇总统计它们。",
+    "turn_any_page_into_a": "任何页面都能变成数据库。每一行也是一个页面，可以写自己的笔记。把数据库连起来，统计自动帮你算好。",
     "privacy": "隐私",
-    "local_first_by_design": "生来本地优先",
-    "one_sqlite_file": "一个 SQLite 文件",
-    "every_page_and_row_is": "每个页面、每一行、每个块都存在你 Mac 上的 SQLite 里。",
+    "local_first_by_design": "生来就在本地",
+    "stored_locally": "全部存在本地",
+    "every_page_and_row_is": "每个页面、每一行、每个块都保存在本地，集中在一个属于你的文件里。",
     "no_network": "不联网",
     "cellar_never_connects_to_the": "Cellar 从不连接互联网，图表也离线绘制。",
     "undo_everything": "一切皆可撤销",
@@ -274,13 +274,13 @@
   "quaero": {
     "meta": {
       "title": "Quaero",
-      "description": "Quaero 是一款原生 macOS SQL 客户端，支持 MySQL、PostgreSQL 与 SQLite。"
+      "description": "Quaero 是一款快速流畅的原生 SQL 客户端，支持 MySQL、PostgreSQL 与 SQLite。"
     },
-    "a_native_sql_client": "原生 SQL 客户端，支持 MySQL、PostgreSQL 与 SQLite",
+    "a_native_sql_client": "快速流畅的原生 SQL 客户端，支持 MySQL、PostgreSQL 与 SQLite",
     "coming_soon": "即将推出",
     "requirements": "macOS 15 或更高版本",
     "your_databases_at_a_glance": "数据库，一目了然",
-    "connect_browse_query_and_export": "连接、浏览、查询、导出——一款纯 SwiftUI 打造的 Mac 应用。",
+    "connect_browse_query_and_export": "连接、浏览、查询、导出——原生打造，打开即用，操作流畅。",
     "connections": "连接",
     "save_connections_to_mysql_postgresql": "保存 MySQL、PostgreSQL 和 SQLite 连接，保存前可先测试。",
     "schema_browser": "结构浏览",
@@ -298,11 +298,11 @@
     "security": "安全",
     "careful_with_your_credentials": "妥善对待你的凭据",
     "passwords_in_keychain": "密码存于钥匙串",
-    "passwords_are_kept_in_the": "密码保存在 macOS 钥匙串中，绝不写入设置或日志。",
+    "passwords_are_kept_in_the": "密码保存在系统钥匙串中，绝不写入设置或日志。",
     "tls_when_you_want_it": "按需启用 TLS",
     "require_encryption_or_verify_the": "可要求加密，也可同时校验服务器证书与主机名。",
     "no_dependencies": "零依赖",
-    "the_mysql_and_postgresql_protocols": "内置 MySQL 与 PostgreSQL 协议，无需安装驱动。",
+    "the_mysql_and_postgresql_protocols": "内置 MySQL 与 PostgreSQL 协议，无需安装驱动，轻装上阵。",
     "null_is_null": "NULL 就是 NULL",
     "sql_null_shows_as_a": "SQL NULL 显示为标记，不会和文本“NULL”混淆。"
   },
