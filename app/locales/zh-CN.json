@@ -71,18 +71,18 @@
     "conversations_are_processed_on_device": "对话全程在本地处理，仅在下载模型或访问网页时联网。",
     "integrations": "联动",
     "works_your_other_apps_for": "替你操作其他 App",
-    "modelcraft_connects_to_arthub_and": "ModelCraft 可与 Arthub、Keel、TuneStudio、Container、Cellar、Quaero 联动，直接替你动手：说想看哪部电影，它就开始播放；问起某个 Key，它就去 Redis 里查；要一个数据库，它就启动容器。更多 App 将陆续支持。",
+    "modelcraft_connects_to_arthub_and": "ModelCraft 可与 Arthub、Cellar、Keel、TuneStudio 联动，直接替你动手：说想看哪部电影，它就开始播放；问起某个 Key，它就去 Redis 里查。更多 App 将陆续支持。",
     "example_arthub": "“在 Arthub 里播放我在追的剧的下一集”",
     "example_keel": "“Keel 里哪些 Key 最占内存？”",
-    "coming_soon": "即将推出",
     "meta": {
       "title": "ModelCraft",
       "description": "ModelCraft 是完全在本地运行的私人 AI 助手，可用于对话、处理文档，以及生成图像、视频与音乐。"
     },
     "example_tunestudio": "“用 TuneStudio 给我的人声做一次自然风格的 Auto Tune”",
-    "example_container": "“启动一个 Postgres 容器，端口 5432”",
     "example_cellar": "“把这篇论文加到 Cellar 的阅读清单里”",
-    "example_quaero": "“用 Quaero 查一下上个月有多少订单退款”"
+    "scheduled_tasks": "定时任务",
+    "runs_on_its_own_schedule": "到点，自己开工",
+    "give_it_a_prompt_and_a_time": "写下要做的事，定好时间。每天或每周，它都会结合已连接的 App 按时完成：汇总今天的笔记，替你挑一部周五晚上的电影。"
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "电影、剧集与音乐，自成一库",

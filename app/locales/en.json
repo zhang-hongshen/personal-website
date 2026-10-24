@@ -71,18 +71,18 @@
     "conversations_are_processed_on_device": "Conversations are processed locally. The network is used only to download models or browse the web.",
     "integrations": "Integrations",
     "works_your_other_apps_for": "Works your other apps for you",
-    "modelcraft_connects_to_arthub_and": "ModelCraft connects to Arthub, Keel, TuneStudio, Container, Cellar and Quaero and acts on your behalf. Ask for a film and it starts playing; ask about a key and it looks it up in Redis; ask for a database and it starts the container. More apps will follow.",
+    "modelcraft_connects_to_arthub_and": "ModelCraft connects to Arthub, Cellar, Keel and TuneStudio and acts on your behalf. Ask for a film and it starts playing; ask about a key and it looks it up in Redis. More apps will follow.",
     "example_arthub": "“Play the next episode of my show in Arthub”",
     "example_keel": "“Which keys in Keel use the most memory?”",
-    "coming_soon": "Coming soon",
     "meta": {
       "title": "ModelCraft",
       "description": "ModelCraft is a private AI assistant that runs entirely locally, for conversations, documents, and creating images, video and music."
     },
     "example_tunestudio": "“Auto Tune my vocal in TuneStudio, Natural style”",
-    "example_container": "“Start a Postgres container on port 5432”",
     "example_cellar": "“Add this paper to my Reading list in Cellar”",
-    "example_quaero": "“How many orders were refunded last month? Ask Quaero”"
+    "scheduled_tasks": "Scheduled Tasks",
+    "runs_on_its_own_schedule": "Runs on its own schedule",
+    "give_it_a_prompt_and_a_time": "Give it a prompt and a time. Every day or every week, it runs the task with your connected apps — a digest of today's notes, a movie for Friday night."
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "Movies, shows and music. Beautifully organized",

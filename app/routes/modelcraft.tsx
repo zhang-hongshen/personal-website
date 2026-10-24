@@ -1,12 +1,10 @@
 import { useTranslation } from "react-i18next";
 
 import { Glyph } from "~/components/glyph";
-import { ProductRing } from "~/components/product-ring";
 import {
     DownloadButton, Eyebrow, FeatureGrid, Hero, ProductMeta, Section, SectionLead, SectionTitle, Shot, Split, Statement,
     type Feature,
 } from "~/components/sections";
-import { Badge } from "~/components/ui/badge";
 import { getProduct, type AccentHandle } from "~/lib/products";
 
 export const handle: AccentHandle = { accent: getProduct("modelcraft").accent };
@@ -73,13 +71,21 @@ export default function ModelCraft() {
                             <li>{t("modelcraft.example_arthub")}</li>
                             <li>{t("modelcraft.example_keel")}</li>
                             <li>{t("modelcraft.example_tunestudio")}</li>
-                            <li>{t("modelcraft.example_container")}</li>
                             <li>{t("modelcraft.example_cellar")}</li>
-                            <li>{t("modelcraft.example_quaero")}</li>
                         </ul>
-                        <p><Badge>{t("modelcraft.coming_soon")}</Badge></p>
                     </div>
-                    <ProductRing hub="modelcraft" />
+                    <Shot light="/assets/modelcraft/connectors_light.webp" dark="/assets/modelcraft/connectors_dark.webp" alt="ModelCraft Connectors" width={2400} height={1350} />
+                </Split>
+            </Section>
+
+            <Section className="pt-0">
+                <Split reverse>
+                    <div>
+                        <Eyebrow>{t("modelcraft.scheduled_tasks")}</Eyebrow>
+                        <h3>{t("modelcraft.runs_on_its_own_schedule")}</h3>
+                        <p>{t("modelcraft.give_it_a_prompt_and_a_time")}</p>
+                    </div>
+                    <Shot light="/assets/modelcraft/scheduled_tasks_light.webp" dark="/assets/modelcraft/scheduled_tasks_dark.webp" alt="ModelCraft Scheduled Tasks" width={2400} height={1350} />
                 </Split>
             </Section>
 

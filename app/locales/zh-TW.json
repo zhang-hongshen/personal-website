@@ -71,18 +71,18 @@
     "conversations_are_processed_on_device": "對話全程在本機處理，僅在下載模型或瀏覽網頁時連網。",
     "integrations": "連動",
     "works_your_other_apps_for": "替你操作其他 App",
-    "modelcraft_connects_to_arthub_and": "ModelCraft 可與 Arthub、Keel、TuneStudio、Container、Cellar、Quaero 連動，直接替你動手：說想看哪部電影，它就開始播放；問起某個 Key，它就去 Redis 裡查；要一個資料庫，它就啟動容器。更多 App 將陸續支援。",
+    "modelcraft_connects_to_arthub_and": "ModelCraft 可與 Arthub、Cellar、Keel、TuneStudio 連動，直接替你動手：說想看哪部電影，它就開始播放；問起某個 Key，它就去 Redis 裡查。更多 App 將陸續支援。",
     "example_arthub": "「在 Arthub 裡播放我在追的影集的下一集」",
     "example_keel": "「Keel 裡哪些 Key 最占記憶體？」",
-    "coming_soon": "即將推出",
     "meta": {
       "title": "ModelCraft",
       "description": "ModelCraft 是完全在本機執行的私人 AI 助理，可用於對話、處理文件，以及生成圖像、影片與音樂。"
     },
     "example_tunestudio": "「用 TuneStudio 幫我的人聲做一次自然風格的 Auto Tune」",
-    "example_container": "「啟動一個 Postgres 容器，連接埠 5432」",
     "example_cellar": "「把這篇論文加到 Cellar 的閱讀清單裡」",
-    "example_quaero": "「用 Quaero 查一下上個月有多少訂單退款」"
+    "scheduled_tasks": "排程任務",
+    "runs_on_its_own_schedule": "時間一到，自己開工",
+    "give_it_a_prompt_and_a_time": "寫下要做的事，排好時間。每天或每週，它都會結合已連接的 App 準時完成：彙整今天的筆記，替你挑一部週五晚上的電影。"
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "電影、影集與音樂，自成一庫",
