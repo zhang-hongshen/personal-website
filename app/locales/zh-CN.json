@@ -61,8 +61,6 @@
     "text_images_documents_and_audio": "文字、图片、文档、音频，或者直接开口。",
     "long_conversations": "长对话",
     "long_conversations_stay_fast_with": "长对话依然流畅，用量一目了然。",
-    "knowledge_always_at_hand": "资料，随时可用",
-    "conversations_and_files_are_organized": "对话与文件按项目整理，回答时会参考其中的文档。",
     "model_store": "模型商店",
     "pick_a_model_download_in": "挑选模型，一键下载",
     "browse_popular_open_models_downloads": "浏览热门开源模型，下载与存储统一管理。",

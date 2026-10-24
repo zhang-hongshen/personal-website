@@ -30,7 +30,7 @@ export default function ModelCraft() {
                 action={<DownloadButton repo="zhang-hongshen/ModelCraft" />}
                 note={t("modelcraft.apple_silicon_m1_or_later")}
             >
-                <Shot className="mt-16" light="/assets/modelcraft/chat_light.webp" dark="/assets/modelcraft/chat_dark.webp" alt="ModelCraft conversation" width={2400} height={1372} eager />
+                <Shot className="mt-16" light="/assets/modelcraft/chat_light.webp" dark="/assets/modelcraft/chat_dark.webp" alt="ModelCraft conversation" width={2400} height={1374} eager />
             </Hero>
 
             <Section>
@@ -40,24 +40,13 @@ export default function ModelCraft() {
             </Section>
 
             <Section className="pt-6">
-                <Split>
-                    <div>
-                        <Eyebrow>{t("modelcraft.projects")}</Eyebrow>
-                        <h3>{t("modelcraft.knowledge_always_at_hand")}</h3>
-                        <p>{t("modelcraft.conversations_and_files_are_organized")}</p>
-                    </div>
-                    <Shot light="/assets/modelcraft/project_light.webp" dark="/assets/modelcraft/project_dark.webp" alt="ModelCraft projects" width={2400} height={1372} />
-                </Split>
-            </Section>
-
-            <Section className="pt-0">
                 <Split reverse>
                     <div>
                         <Eyebrow>{t("modelcraft.model_store")}</Eyebrow>
                         <h3>{t("modelcraft.pick_a_model_download_in")}</h3>
                         <p>{t("modelcraft.browse_popular_open_models_downloads")}</p>
                     </div>
-                    <Shot light="/assets/modelcraft/model_store_light.webp" dark="/assets/modelcraft/model_store_dark.webp" alt="ModelCraft Model Store" width={2400} height={1360} />
+                    <Shot light="/assets/modelcraft/model_store_light.webp" dark="/assets/modelcraft/model_store_dark.webp" alt="ModelCraft Model Store" width={2400} height={1374} />
                 </Split>
             </Section>
 
@@ -74,7 +63,7 @@ export default function ModelCraft() {
                             <li>{t("modelcraft.example_cellar")}</li>
                         </ul>
                     </div>
-                    <Shot light="/assets/modelcraft/connectors_light.webp" dark="/assets/modelcraft/connectors_dark.webp" alt="ModelCraft Connectors" width={2400} height={1350} />
+                    <Shot light="/assets/modelcraft/connectors_light.webp" dark="/assets/modelcraft/connectors_dark.webp" alt="ModelCraft Connectors" width={2400} height={1374} />
                 </Split>
             </Section>
 
@@ -85,7 +74,7 @@ export default function ModelCraft() {
                         <h3>{t("modelcraft.runs_on_its_own_schedule")}</h3>
                         <p>{t("modelcraft.give_it_a_prompt_and_a_time")}</p>
                     </div>
-                    <Shot light="/assets/modelcraft/scheduled_tasks_light.webp" dark="/assets/modelcraft/scheduled_tasks_dark.webp" alt="ModelCraft Scheduled Tasks" width={2400} height={1350} />
+                    <Shot light="/assets/modelcraft/scheduled_tasks_light.webp" dark="/assets/modelcraft/scheduled_tasks_dark.webp" alt="ModelCraft Scheduled Tasks" width={2400} height={1374} />
                 </Split>
             </Section>
 
