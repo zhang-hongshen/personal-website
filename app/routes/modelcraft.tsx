@@ -6,6 +6,14 @@ import {
     type Feature,
 } from "~/components/sections";
 import { getProduct, type AccentHandle } from "~/lib/products";
+import chatLight from "~/assets/modelcraft/chat_light.webp";
+import chatDark from "~/assets/modelcraft/chat_dark.webp";
+import modelStoreLight from "~/assets/modelcraft/model_store_light.webp";
+import modelStoreDark from "~/assets/modelcraft/model_store_dark.webp";
+import connectorsLight from "~/assets/modelcraft/connectors_light.webp";
+import connectorsDark from "~/assets/modelcraft/connectors_dark.webp";
+import scheduledTasksLight from "~/assets/modelcraft/scheduled_tasks_light.webp";
+import scheduledTasksDark from "~/assets/modelcraft/scheduled_tasks_dark.webp";
 
 export const handle: AccentHandle = { accent: getProduct("modelcraft").accent };
 
@@ -30,7 +38,7 @@ export default function ModelCraft() {
                 action={<DownloadButton repo="zhang-hongshen/ModelCraft" />}
                 note={t("modelcraft.apple_silicon_m1_or_later")}
             >
-                <Shot className="mt-16" light="/assets/modelcraft/chat_light.webp" dark="/assets/modelcraft/chat_dark.webp" alt="ModelCraft conversation" width={2400} height={1374} eager />
+                <Shot className="mt-16" light={chatLight} dark={chatDark} alt="ModelCraft conversation" width={2400} height={1374} eager />
             </Hero>
 
             <Section>
@@ -46,7 +54,7 @@ export default function ModelCraft() {
                         <h3>{t("modelcraft.pick_a_model_download_in")}</h3>
                         <p>{t("modelcraft.browse_popular_open_models_downloads")}</p>
                     </div>
-                    <Shot light="/assets/modelcraft/model_store_light.webp" dark="/assets/modelcraft/model_store_dark.webp" alt="ModelCraft Model Store" width={2400} height={1374} />
+                    <Shot light={modelStoreLight} dark={modelStoreDark} alt="ModelCraft Model Store" width={2400} height={1374} />
                 </Split>
             </Section>
 
@@ -63,7 +71,7 @@ export default function ModelCraft() {
                             <li>{t("modelcraft.example_cellar")}</li>
                         </ul>
                     </div>
-                    <Shot light="/assets/modelcraft/connectors_light.webp" dark="/assets/modelcraft/connectors_dark.webp" alt="ModelCraft Connectors" width={2400} height={1374} />
+                    <Shot light={connectorsLight} dark={connectorsDark} alt="ModelCraft Connectors" width={2400} height={1374} />
                 </Split>
             </Section>
 
@@ -74,7 +82,7 @@ export default function ModelCraft() {
                         <h3>{t("modelcraft.runs_on_its_own_schedule")}</h3>
                         <p>{t("modelcraft.give_it_a_prompt_and_a_time")}</p>
                     </div>
-                    <Shot light="/assets/modelcraft/scheduled_tasks_light.webp" dark="/assets/modelcraft/scheduled_tasks_dark.webp" alt="ModelCraft Scheduled Tasks" width={2400} height={1374} />
+                    <Shot light={scheduledTasksLight} dark={scheduledTasksDark} alt="ModelCraft Scheduled Tasks" width={2400} height={1374} />
                 </Split>
             </Section>
 
