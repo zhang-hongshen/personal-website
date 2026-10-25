@@ -1,6 +1,6 @@
-import { Check, FileText, Table2 } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 
+import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { newId, type Block, type BlockType, type Doc, type Strings } from "./content";
 
@@ -161,15 +161,14 @@ export function PageEditor({ page, docs, caret, strings, onChange, onCaretDone, 
                 if (block.type === "page") {
                     const target = docs.find((d) => d.id === block.target);
                     if (!target) return null;
-                    const Icon = target.kind === "database" ? Table2 : FileText;
-                    return (
+                                        return (
                         <button
                             key={block.id}
                             type="button"
                             className="-mx-1.5 my-px flex items-center gap-2 self-start rounded-md px-1.5 py-1 text-[15px] underline decoration-current/25 underline-offset-[3px] hover:bg-black/5 hover:text-(--cellar-accent) dark:hover:bg-white/7"
                             onClick={() => onOpen(target.id)}
                         >
-                            <Icon className="size-4 opacity-60" strokeWidth={1.8} />
+                            <SFSymbol name={target.kind === "database" ? "tablecells" : "doc.text"} className="size-4 opacity-60" />
                             {target.title || strings.untitled}
                         </button>
                     );
@@ -188,7 +187,7 @@ export function PageEditor({ page, docs, caret, strings, onChange, onCaretDone, 
                                 )}
                                 onClick={() => update(block.id, { checked: !block.checked })}
                             >
-                                {block.checked && <Check className="size-3" strokeWidth={3} />}
+                                {block.checked && <SFSymbol name="checkmark" className="size-2.5" />}
                             </button>
                         )}
                         {block.type === "bullet" && <span className="w-4 shrink-0 text-center">•</span>}

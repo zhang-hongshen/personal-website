@@ -1,6 +1,6 @@
-import { FileText, Plus } from "lucide-react";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
+import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { newId, type Color, type Column, type Doc, type Row, type Strings } from "./content";
 
@@ -90,7 +90,7 @@ export function DatabaseView({ db, layout, strings, onChange }: {
                         <tr key={row.id} className="group border-b border-(--cellar-line) motion-safe:animate-in motion-safe:fade-in">
                             <td className="max-w-0 py-1.5 pr-3" onDoubleClick={() => setEditing(row.id)}>
                                 <span className="flex items-center gap-2">
-                                    <FileText className="size-3.5 shrink-0 opacity-50" strokeWidth={1.8} />
+                                    <SFSymbol name="doc.text" className="size-3.5 shrink-0 opacity-50" />
                                     {title(row)}
                                 </span>
                             </td>
@@ -108,7 +108,7 @@ export function DatabaseView({ db, layout, strings, onChange }: {
                 </tbody>
             </table>
             <button type="button" className="mt-1 flex items-center gap-1.5 rounded-md px-1.5 py-1.5 text-(--cellar-muted) hover:bg-black/5 hover:text-current dark:hover:bg-white/7" onClick={() => addRow()}>
-                <Plus className="size-3.5" /> {strings.newRow}
+                <SFSymbol name="plus" className="size-3" /> {strings.newRow}
             </button>
         </div>
     );
@@ -144,7 +144,7 @@ function BoardColumn({ label, count, newLabel, onDrop, onAdd, children }: {
             </header>
             {children}
             <button type="button" className="flex items-center gap-1.5 rounded-md px-1.5 py-1 text-[12px] text-(--cellar-muted) hover:bg-black/5 hover:text-current dark:hover:bg-white/7" onClick={onAdd}>
-                <Plus className="size-3.5" /> {newLabel}
+                <SFSymbol name="plus" className="size-3" /> {newLabel}
             </button>
         </section>
     );

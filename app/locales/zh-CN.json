@@ -91,9 +91,6 @@
     "give_it_a_prompt_and_a_time": "写下要做的事，定好时间。每天或每周，它都会结合已连接的 App 按时完成：汇总今天的笔记，替你挑一部周五晚上的电影。",
     "demo_chat": "对话",
     "demo_connectors": "连接器",
-    "demo_download": "下载 {name}",
-    "demo_install": "安装 {name}",
-    "demo_uninstall": "卸载 {name}",
     "demo_hint": "试试看：发一条消息、开个新对话、下载一个模型，或者添加一个定时任务。"
   },
   "arthub": {
@@ -255,7 +252,7 @@
     },
     "notes_and_databases_that_stay": "只留在本地的笔记与数据库",
     "coming_soon": "即将推出",
-    "requirements": "macOS 14.4 或更高版本",
+    "requirements": "macOS 15.0 或更高版本",
     "everything_is_a_block": "一切皆是块",
     "write_notes_build_databases_and": "记笔记、建数据库，再把它们连起来。每个页面都由可输入、可拖动、可嵌套的块组成。",
     "pages_and_blocks": "页面与块",

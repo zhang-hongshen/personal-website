@@ -91,9 +91,6 @@
     "give_it_a_prompt_and_a_time": "Give it a prompt and a time. Every day or every week, it runs the task with your connected apps — a digest of today's notes, a movie for Friday night.",
     "demo_chat": "Chat",
     "demo_connectors": "Connectors",
-    "demo_download": "Download {name}",
-    "demo_install": "Install {name}",
-    "demo_uninstall": "Uninstall {name}",
     "demo_hint": "Try it: send a message, start a new chat, download a model, or add a scheduled task."
   },
   "arthub": {
@@ -255,7 +252,7 @@
     },
     "notes_and_databases_that_stay": "Notes and databases that stay local",
     "coming_soon": "Coming Soon",
-    "requirements": "macOS 14.4 or later",
+    "requirements": "macOS 15.0 or later",
     "everything_is_a_block": "Everything is a block",
     "write_notes_build_databases_and": "Write notes, build databases and link them together. Every page is made of blocks you can type, drag and nest.",
     "pages_and_blocks": "Pages and blocks",

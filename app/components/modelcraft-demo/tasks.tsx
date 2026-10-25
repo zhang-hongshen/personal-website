@@ -1,17 +1,20 @@
-import { CalendarClock, Clock, Ellipsis, LoaderCircle, Plus } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 
+import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import type { Task } from "./data";
-import { ACCENT, ACCENT_BG, BODY, CARD, MAIN, MUTED, PILL, SMALL, TEXT, TITLE, u } from "./ui";
+import { Spinner } from "./spinner";
+import { ACCENT, ACCENT_BG, BAR, BODY, CAPSULE, CARD, MUTED, SMALL, TITLE, TOOL_ITEM } from "./ui";
 
-export function TasksView({ tasks, canAdd, running, ran, onAdd, onToggle, onRun, onOpenRun }: {
+/** Scheduled Tasks. "+" adds a prepared task where the app opens its editor sheet. */
+export function TasksView({ tasks, canAdd, running, ran, sidebarButton, onAdd, onToggle, onRun, onOpenRun }: {
     tasks: Task[];
     /** Whether presets are left for "+" to add. */
     canAdd: boolean;
     running: string[];
     /** Tasks run in this visit. */
     ran: string[];
+    sidebarButton: ReactNode;
     onAdd: () => void;
     onToggle: (id: string) => void;
     onRun: (id: string) => void;
@@ -27,52 +30,55 @@ export function TasksView({ tasks, canAdd, running, ran, onAdd, onToggle, onRun,
     }, [tasks.length]);
 
     return (
-        <div className={cn("absolute inset-0", MAIN, TEXT)}>
-            <p className={cn("absolute", TITLE)} style={{ left: u(25), top: u(18) }}>Scheduled Tasks</p>
-            <div className={cn("absolute flex items-center rounded-full", CARD, MUTED)} style={{ right: u(14), top: u(8), height: u(48), padding: `0 ${u(12)}`, gap: u(18) }}>
-                <CalendarClock style={{ width: u(24), height: u(24) }} strokeWidth={1.6} />
-                <button
-                    type="button"
-                    aria-label="New Task"
-                    disabled={!canAdd}
-                    className={cn("relative flex items-center justify-center rounded-full disabled:opacity-35", canAdd && "hover:text-[#a95f2f] dark:hover:text-[#d99462]")}
-                    style={{ width: u(30), height: u(30) }}
-                    onClick={onAdd}
-                >
-                    <Plus style={{ width: u(26), height: u(26) }} strokeWidth={1.8} />
-                    {canAdd && ran.length === 0 && tasks.length === 3 && (
-                        <span className="absolute -inset-[0.3cqw] rounded-full shadow-[0_0_0_0.18cqw_#a95f2f] motion-safe:animate-pulse dark:shadow-[0_0_0_0.18cqw_#d99462]" />
-                    )}
-                </button>
-            </div>
+        <div className="flex h-full flex-col">
+            <header className={BAR}>
+                {sidebarButton}
+                <h4 className={cn("flex-1", TITLE)}>Scheduled Tasks</h4>
+                <div className={cn(CAPSULE, "gap-1 px-1")}>
+                    <span className="flex size-7 items-center justify-center"><SFSymbol name="calendar.badge.clock" className="size-4" /></span>
+                    <button
+                        type="button"
+                        aria-label="New Task"
+                        title="New Task"
+                        disabled={!canAdd}
+                        className={TOOL_ITEM}
+                        onClick={onAdd}
+                    >
+                        <SFSymbol name="plus" className="size-3.5" />
+                        {canAdd && tasks.length === 3 && (
+                            <span className="absolute inset-0 rounded-full shadow-[0_0_0_2px_#b4581f] motion-safe:animate-pulse dark:shadow-[0_0_0_2px_#e8915a]" />
+                        )}
+                    </button>
+                </div>
+            </header>
 
-            <div ref={list} className="absolute inset-x-0 bottom-0 flex flex-col overflow-y-auto" style={{ top: u(85), padding: `0 ${u(8)} ${u(20)} ${u(20)}`, gap: u(16) }}>
+            <div ref={list} className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 pb-4">
                 {tasks.map((task) => {
                     const isRunning = running.includes(task.id);
                     return (
-                        <article key={task.id} className={cn("relative shrink-0 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2", CARD)} style={{ padding: `${u(22)} ${u(20)}`, borderRadius: u(16) }}>
-                            <h4 className={TITLE}>{task.title}</h4>
-                            <p className={cn(SMALL, MUTED)} style={{ marginTop: u(4) }}>{task.schedule}</p>
-                            <p className={BODY} style={{ marginTop: u(10), paddingRight: u(300) }}>{task.prompt}</p>
-                            <p className={cn("flex items-center", SMALL, MUTED)} style={{ marginTop: u(10), gap: u(10) }}>
-                                <Clock style={{ width: u(16), height: u(16) }} />
-                                {task.enabled ? task.next : "Paused"}
-                                {ran.includes(task.id) && (
-                                    <button type="button" className={cn("underline-offset-2 hover:underline", ACCENT)} onClick={() => onOpenRun(task.id)}>
-                                        · Last run just now — open
-                                    </button>
-                                )}
-                            </p>
-
-                            <div className="absolute flex items-center" style={{ top: u(20), right: u(20), gap: u(16) }}>
+                        <article key={task.id} className={cn("flex shrink-0 flex-wrap gap-x-4 gap-y-3 rounded-xl p-4 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2", CARD)}>
+                            <div className="min-w-[220px] flex-1">
+                                <h5 className={TITLE}>{task.title}</h5>
+                                <p className={cn("mt-0.5", SMALL, MUTED)}>{task.schedule}</p>
+                                <p className={cn("mt-2", BODY)}>{task.prompt}</p>
+                                <p className={cn("mt-2 flex flex-wrap items-center gap-x-2", SMALL, MUTED)}>
+                                    <SFSymbol name="clock" className="size-3" />
+                                    {task.enabled ? task.next : "Paused"}
+                                    {ran.includes(task.id) && (
+                                        <button type="button" className={cn("underline-offset-2 hover:underline", ACCENT)} onClick={() => onOpenRun(task.id)}>
+                                            · Last run just now — open
+                                        </button>
+                                    )}
+                                </p>
+                            </div>
+                            <div className="flex items-start gap-3">
                                 <button
                                     type="button"
                                     disabled={isRunning}
-                                    className={cn("flex items-center rounded-[0.4cqw] transition-colors", PILL, ACCENT, BODY)}
-                                    style={{ height: u(34), padding: `0 ${u(16)}`, gap: u(6) }}
+                                    className={cn("flex h-7 items-center gap-1.5 rounded-md bg-[#b4581f]/8 px-3 text-[13px] dark:bg-[#e8915a]/12", ACCENT)}
                                     onClick={() => onRun(task.id)}
                                 >
-                                    {isRunning && <LoaderCircle className="motion-safe:animate-spin" style={{ width: u(16), height: u(16) }} />}
+                                    {isRunning && <Spinner className="size-3.5" />}
                                     {isRunning ? "Running" : "Run Now"}
                                 </button>
                                 <button
@@ -80,16 +86,12 @@ export function TasksView({ tasks, canAdd, running, ran, onAdd, onToggle, onRun,
                                     role="switch"
                                     aria-checked={task.enabled}
                                     aria-label={`${task.title} enabled`}
-                                    className={cn("relative rounded-full transition-colors", task.enabled ? ACCENT_BG : "bg-black/15 dark:bg-white/15")}
-                                    style={{ width: u(70), height: u(32) }}
+                                    className={cn("relative h-7 w-[52px] shrink-0 rounded-full transition-colors", task.enabled ? ACCENT_BG : "bg-black/15 dark:bg-white/15")}
                                     onClick={() => onToggle(task.id)}
                                 >
-                                    <span
-                                        className="absolute rounded-full bg-white shadow transition-[left]"
-                                        style={{ top: u(3), width: u(40), height: u(26), left: task.enabled ? u(27) : u(3) }}
-                                    />
+                                    <span className={cn("absolute top-[3px] h-[22px] w-[30px] rounded-full bg-white shadow transition-[left]", task.enabled ? "left-[19px]" : "left-[3px]")} />
                                 </button>
-                                <Ellipsis className={MUTED} style={{ width: u(22), height: u(22) }} />
+                                <SFSymbol name="ellipsis" className={cn("mt-1 w-4", MUTED)} />
                             </div>
                         </article>
                     );

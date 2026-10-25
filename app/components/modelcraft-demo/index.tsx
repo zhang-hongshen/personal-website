@@ -1,31 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
-import modelStoreLight from "~/assets/modelcraft/model_store_light.webp";
-import modelStoreDark from "~/assets/modelcraft/model_store_dark.webp";
-import connectorsLight from "~/assets/modelcraft/connectors_light.webp";
-import connectorsDark from "~/assets/modelcraft/connectors_dark.webp";
-import scheduledTasksLight from "~/assets/modelcraft/scheduled_tasks_light.webp";
-import scheduledTasksDark from "~/assets/modelcraft/scheduled_tasks_dark.webp";
 import { ChatView, type Pending } from "./chat";
 import { CHATS, CONNECTORS, DEFAULT_MODEL, MODELS, PRESET_TASKS, TASKS, replyTo, type Chat, type View } from "./data";
 import { Sidebar } from "./sidebar";
-import { ConnectorsOverlay, DownloadedView, StoreOverlay } from "./store";
+import { ConnectorsView, DownloadedView, StoreView, type Download } from "./store";
 import { TasksView } from "./tasks";
-import { rect } from "./ui";
+import { FONT, MAIN, TEXT, TOOL } from "./ui";
 
-// A ModelCraft window that works like the app, within limits. The window's frame comes from the
-// screenshots; the sidebar, chat, Scheduled Tasks and Downloaded Models are drawn in HTML over it, and
-// the Model Store and Connectors keep their screenshots with buttons laid over the app's own. Nothing
-// leaves the page: replies are prepared in data.ts, and a reload starts over.
-
-/** The screenshot under each view; views drawn in HTML cover all of it but the frame. */
-const BASE: { light: string; dark: string; alt: string; views: View[] }[] = [
-    { light: scheduledTasksLight, dark: scheduledTasksDark, alt: "ModelCraft", views: ["chat", "downloaded", "tasks"] },
-    { light: modelStoreLight, dark: modelStoreDark, alt: "ModelCraft Model Store", views: ["store"] },
-    { light: connectorsLight, dark: connectorsDark, alt: "ModelCraft Connectors", views: ["connectors"] },
-];
+// A ModelCraft window drawn in HTML that works like the app, within limits: chat with prepared
+// replies, the Model Store with downloads, Connectors, Downloaded Models and Scheduled Tasks. Nothing
+// leaves the page, and a reload starts over.
 
 const TABS: { view: View; label: string }[] = [
     { view: "chat", label: "modelcraft.demo_chat" },
@@ -46,32 +33,34 @@ export function ModelCraftDemo({ className }: { className?: string }) {
     const [touched, setTouched] = useState(false);
     const [chats, setChats] = useState<Chat[]>(CHATS);
     const [pending, setPending] = useState<Pending | null>(null);
-    const [model, setModel] = useState(DEFAULT_MODEL.name);
-    // Download progress from 0 to 1 by model name; `downloaded` keeps the finished ones in order.
-    const [downloads, setDownloads] = useState<Record<string, number>>({});
-    const [downloaded, setDownloaded] = useState<string[]>([]);
-    const started = useRef<Record<string, number>>({});
+    const [model, setModel] = useState(DEFAULT_MODEL);
+    // Downloads by model name; `downloaded` keeps the finished ones in order.
+    const [downloads, setDownloads] = useState<Record<string, Download>>({});
+    const [downloaded, setDownloaded] = useState<string[]>([DEFAULT_MODEL]);
     const [installed, setInstalled] = useState(() => Object.fromEntries(CONNECTORS.map((c) => [c.name, c.installed])));
     const [tasks, setTasks] = useState(TASKS);
     const [running, setRunning] = useState<string[]>([]);
     // The conversation each task's latest run made, by task id.
     const [runs, setRuns] = useState<Record<string, string>>({});
+    // Shown or hidden by the toggle; null until then, which shows it on wide screens only.
+    const [sidebar, setSidebar] = useState<boolean | null>(null);
 
-    const downloading = Object.values(downloads).some((p) => p < 1);
+    const downloading = Object.values(downloads).some((d) => d.progress < 1 && !d.stopped);
     useEffect(() => {
         if (!downloading) return;
+        let last = performance.now();
         let frame = requestAnimationFrame(function tick(now) {
-            const done: string[] = [];
-            const next: Record<string, number> = {};
-            for (const [name, start] of Object.entries(started.current)) {
-                next[name] = Math.min(1, (now - start) / DOWNLOAD_MS);
-                if (next[name] === 1) {
-                    done.push(name);
-                    delete started.current[name];
+            const step = (now - last) / DOWNLOAD_MS;
+            last = now;
+            setDownloads((ds) => {
+                const next = { ...ds };
+                for (const [name, d] of Object.entries(ds)) {
+                    if (d.stopped || d.progress >= 1) continue;
+                    next[name] = { ...d, progress: Math.min(1, d.progress + step) };
+                    if (next[name].progress === 1) setDownloaded((list) => (list.includes(name) ? list : [...list, name]));
                 }
-            }
-            setDownloads((d) => ({ ...d, ...next }));
-            if (done.length) setDownloaded((d) => [...d, ...done]);
+                return next;
+            });
             frame = requestAnimationFrame(tick);
         });
         return () => cancelAnimationFrame(frame);
@@ -94,21 +83,14 @@ export function ModelCraftDemo({ className }: { className?: string }) {
         return () => clearTimeout(timer);
     }, [pending]);
 
-    const open = (v: View) => {
-        setTouched(true);
-        if (v === "chat" && view !== "chat" && chatId === null && chats.length) setChatId(chats[0].id);
-        setView(v);
-    };
-    const openChat = (id: string) => {
+    const go = (v: View, id: string | null = chatId) => {
         setTouched(true);
         setChatId(id);
-        setView("chat");
+        setView(v);
+        // On a narrow screen the sidebar covers the window, so going somewhere puts it away.
+        if (!matchMedia("(min-width: 640px)").matches) setSidebar(null);
     };
-    const newChat = () => {
-        setTouched(true);
-        setChatId(null);
-        setView("chat");
-    };
+    const open = (v: View) => go(v, v === "chat" && chatId === null && chats.length ? chats[0].id : chatId);
 
     const send = (text: string) => {
         if (pending) return;
@@ -127,10 +109,18 @@ export function ModelCraftDemo({ className }: { className?: string }) {
 
     const download = (name: string) => {
         setTouched(true);
-        if (name in downloads) return;
-        started.current[name] = performance.now();
-        setDownloads((d) => ({ ...d, [name]: 0 }));
+        setDownloads((ds) => ({ ...ds, [name]: ds[name] ? { ...ds[name], stopped: !ds[name].stopped } : { progress: 0, stopped: false } }));
     };
+    const deleteModel = (name: string) => {
+        setDownloaded((list) => list.filter((m) => m !== name));
+        setDownloads(({ [name]: _, ...rest }) => rest);
+        if (model === name) setModel(DEFAULT_MODEL);
+    };
+
+    const toggleConnector = useCallback((name: string) => {
+        setTouched(true);
+        setInstalled((s) => ({ ...s, [name]: !s[name] }));
+    }, []);
 
     const runTask = (id: string) => {
         setTouched(true);
@@ -147,62 +137,85 @@ export function ModelCraftDemo({ className }: { className?: string }) {
     };
 
     const nextPreset = PRESET_TASKS.find((p) => !tasks.some((x) => x.id === p.id));
-    const models = [DEFAULT_MODEL, ...downloaded.map((name) => MODELS.find((m) => m.name === name)!)];
     const chat = view === "chat" && chatId ? chats.find((c) => c.id === chatId) ?? null : null;
+    const sidebarButton = sidebar !== true && (
+        <button
+            type="button"
+            aria-label="Show Sidebar"
+            title="Show Sidebar"
+            className={cn(TOOL, sidebar === null && "sm:hidden")}
+            onClick={() => setSidebar(true)}
+        >
+            <SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" />
+        </button>
+    );
 
     return (
         <div className={className}>
             <div
-                className="relative aspect-[2400/1374] w-full text-left select-none [container-type:inline-size]"
-                style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", system-ui, sans-serif' }}
+                className="relative flex h-[min(640px,80vh)] w-full overflow-hidden rounded-[18px] border border-black/12 text-left shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)] dark:border-white/12"
+                style={{ fontFamily: FONT }}
             >
-                {BASE.map((b, i) => {
-                    const shown = b.views.includes(view);
-                    return (
-                        <div key={b.alt} aria-hidden={!shown} className={cn("absolute inset-0 transition-opacity duration-300", shown ? "opacity-100" : "pointer-events-none opacity-0")}>
-                            <img className="only-light size-full object-cover object-top" src={b.light} alt={b.alt} width={2400} height={1374} loading={i === 0 ? undefined : "lazy"} draggable={false} />
-                            <img className="only-dark size-full object-cover object-top" src={b.dark} alt={b.alt} width={2400} height={1374} loading="lazy" draggable={false} />
-                        </div>
-                    );
-                })}
+                <Sidebar
+                    view={view}
+                    chatId={chatId}
+                    chats={chats}
+                    hint={!touched}
+                    className={cn(
+                        "absolute inset-y-0 left-0 z-30 transition-transform duration-200 sm:static",
+                        sidebar === null ? "-translate-x-full sm:translate-x-0" : sidebar ? "translate-x-0 shadow-xl sm:shadow-none" : "-translate-x-full sm:hidden",
+                    )}
+                    onOpen={open}
+                    onOpenChat={(id) => go("chat", id)}
+                    onNewChat={() => go("chat", null)}
+                    onHide={() => setSidebar(false)}
+                />
 
-                {view === "store" && <StoreOverlay downloads={downloads} onDownload={download} />}
-                {view === "connectors" && (
-                    <ConnectorsOverlay installed={installed} onToggle={(name) => { setTouched(true); setInstalled((s) => ({ ...s, [name]: !s[name] })); }} />
-                )}
-
-                <div className="absolute select-text" style={rect(344, 52, 1570, 990)} hidden={!["chat", "downloaded", "tasks"].includes(view)}>
+                <main className={cn("relative min-w-0 flex-1 select-text", MAIN, TEXT)}>
                     {view === "chat" && (
                         <ChatView
                             chat={chat}
                             pending={pending}
                             model={model}
-                            models={models.map((m) => m.name)}
+                            models={downloaded}
                             focus={touched}
+                            sidebarButton={sidebarButton}
                             onSend={send}
                             onPickModel={setModel}
-                            onNewChat={newChat}
+                            onNewChat={() => go("chat", null)}
                         />
                     )}
-                    {view === "downloaded" && <DownloadedView models={models} current={model} onPick={(name) => { setModel(name); setView("chat"); }} />}
+                    {view === "store" && <StoreView downloads={downloads} sidebarButton={sidebarButton} onDownload={download} />}
+                    {view === "downloaded" && (
+                        <DownloadedView
+                            models={downloaded.map((name) => MODELS.find((m) => m.name === name)!)}
+                            current={model}
+                            sidebarButton={sidebarButton}
+                            onPick={(name) => {
+                                setModel(name);
+                                go("chat", chatId ?? chats[0]?.id ?? null);
+                            }}
+                            onDelete={deleteModel}
+                        />
+                    )}
+                    {view === "connectors" && <ConnectorsView installed={installed} sidebarButton={sidebarButton} onToggle={toggleConnector} />}
                     {view === "tasks" && (
                         <TasksView
                             tasks={tasks}
                             canAdd={nextPreset !== undefined}
                             running={running}
                             ran={Object.keys(runs)}
+                            sidebarButton={sidebarButton}
                             onAdd={() => {
                                 setTouched(true);
                                 if (nextPreset) setTasks((ts) => [...ts, nextPreset]);
                             }}
                             onToggle={(id) => setTasks((ts) => ts.map((x) => (x.id === id ? { ...x, enabled: !x.enabled } : x)))}
                             onRun={runTask}
-                            onOpenRun={(id) => openChat(runs[id])}
+                            onOpenRun={(id) => go("chat", runs[id])}
                         />
                     )}
-                </div>
-
-                <Sidebar view={view} chatId={chatId} chats={chats} hint={!touched} onOpen={open} onOpenChat={openChat} onNewChat={newChat} />
+                </main>
             </div>
 
             <div className="mt-6 flex flex-col items-center gap-3">
@@ -223,7 +236,7 @@ export function ModelCraftDemo({ className }: { className?: string }) {
                         </button>
                     ))}
                 </div>
-                <p className="text-[13px] text-faint">{t("modelcraft.demo_hint")}</p>
+                <p className="text-center text-[13px] text-faint">{t("modelcraft.demo_hint")}</p>
             </div>
         </div>
     );

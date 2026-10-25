@@ -1,7 +1,8 @@
-import { ChevronLeft, ChevronRight, FileText, ListFilter, PanelLeft, Plus, Search, Table2 } from "lucide-react";
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
+import { CAPSULE, MAC_FONT, TOOL_ITEM } from "~/components/mac-window";
+import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { newId, seed, strings, type Block, type Doc, type Lang, type Row } from "./content";
 import { DatabaseView, type Layout } from "./database";
@@ -72,7 +73,7 @@ export function CellarDemo({ className }: { className?: string }) {
             <div
                 style={VARS}
                 className={cn(
-                    "relative flex h-[min(620px,78vh)] w-full overflow-hidden rounded-[12px] border border-black/12 text-left text-[#1d1d1f] shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)] [--cellar-line:rgb(0_0_0/0.07)] [--cellar-muted:#86868b] [--cellar-window:#ffffff]",
+                    "relative flex h-[min(620px,78vh)] w-full overflow-hidden rounded-[18px] border border-black/12 text-left text-[#1d1d1f] shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)] [--cellar-line:rgb(0_0_0/0.07)] [--cellar-muted:#86868b] [--cellar-window:#ffffff]",
                     "dark:border-white/12 dark:text-[#ececec] dark:[--cellar-accent:#0a84ff] dark:[--cellar-line:rgb(255_255_255/0.08)] dark:[--cellar-muted:#98989d] dark:[--cellar-window:#1f1f1f]",
                 )}
             >
@@ -82,7 +83,7 @@ export function CellarDemo({ className }: { className?: string }) {
                         "absolute inset-y-0 left-0 z-30 flex w-[230px] shrink-0 flex-col border-r border-(--cellar-line) bg-[#f2f0ee] text-[13px] transition-transform duration-200 sm:static dark:bg-[#2a2827]",
                         sidebar === null ? "-translate-x-full sm:translate-x-0" : sidebar ? "translate-x-0 shadow-xl sm:shadow-none" : "-translate-x-full sm:hidden",
                     )}
-                    style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", system-ui, sans-serif' }}
+                    style={{ fontFamily: MAC_FONT }}
                 >
                     <div className="flex h-[52px] shrink-0 items-center px-4">
                         <span className="flex gap-2" aria-hidden>
@@ -90,15 +91,15 @@ export function CellarDemo({ className }: { className?: string }) {
                             <i className="size-3 rounded-full bg-[#febc2e]" />
                             <i className="size-3 rounded-full bg-[#28c840]" />
                         </span>
-                        <span className="ml-auto flex items-center gap-1 text-(--cellar-muted)">
-                            <IconButton label={s.newPage} onClick={newPage} hint={!edited.current}><Plus className="size-[17px]" /></IconButton>
-                            <IconButton label={s.hidePanel} onClick={() => setSidebar(false)}><PanelLeft className="size-[17px]" /></IconButton>
+                        <span className={cn(CAPSULE, "ml-auto gap-0.5 px-0.5")}>
+                            <IconButton label={s.newPage} onClick={newPage} hint={!edited.current}><SFSymbol name="plus" className="size-3.5" /></IconButton>
+                            <IconButton label={s.hidePanel} onClick={() => setSidebar(false)}><SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" /></IconButton>
                         </span>
                     </div>
 
                     <div className="relative flex items-center gap-1 px-2.5 pb-1.5">
                         <label className="flex flex-1 items-center gap-1.5 rounded-md bg-black/6 px-2 py-[5px] text-(--cellar-muted) dark:bg-white/8">
-                            <Search className="size-3.5 shrink-0" />
+                            <SFSymbol name="magnifyingglass" className="size-3 shrink-0" />
                             <input
                                 value={query ?? ""}
                                 placeholder={s.search}
@@ -112,7 +113,7 @@ export function CellarDemo({ className }: { className?: string }) {
                                 }}
                             />
                         </label>
-                        <ListFilter className="size-4 text-(--cellar-muted)" />
+                        <SFSymbol name="line.3.horizontal.decrease.circle" className="size-4 shrink-0 text-(--cellar-muted)" />
                         {query !== null && query !== "" && (
                             <div className="absolute top-full right-2.5 left-2.5 z-10 rounded-lg border border-black/10 bg-(--cellar-window) p-1 shadow-[0_10px_30px_rgb(0_0_0/0.18)] dark:border-white/10">
                                 {matches.length === 0 && <p className="px-2 py-1.5 text-(--cellar-muted)">{s.noResults}</p>}
@@ -156,19 +157,21 @@ export function CellarDemo({ className }: { className?: string }) {
                     </nav>
                 </aside>
 
-                <main className="relative flex min-w-0 flex-1 flex-col bg-(--cellar-window)" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", system-ui, sans-serif' }}>
-                    <header className="flex h-[52px] shrink-0 items-center gap-1 border-b border-(--cellar-line) px-3 text-(--cellar-muted)">
+                <main className="relative flex min-w-0 flex-1 flex-col bg-(--cellar-window)" style={{ fontFamily: MAC_FONT }}>
+                    <header className="flex h-[52px] shrink-0 items-center gap-2 px-3">
                         {sidebar !== true && (
-                            <span className={cn("contents", sidebar === null && "sm:hidden")}>
-                                <IconButton label={s.showPanel} onClick={() => setSidebar(true)}><PanelLeft className="size-[17px]" /></IconButton>
+                            <span className={cn(CAPSULE, "px-0.5", sidebar === null && "sm:hidden")}>
+                                <IconButton label={s.showPanel} onClick={() => setSidebar(true)}><SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" /></IconButton>
                             </span>
                         )}
-                        <IconButton label={s.back} disabled={history.at === 0} onClick={() => go(-1)}><ChevronLeft className="size-[18px]" /></IconButton>
-                        <IconButton label={s.forward} disabled={history.at === history.list.length - 1} onClick={() => go(1)}><ChevronRight className="size-[18px]" /></IconButton>
+                        <span className={cn(CAPSULE, "gap-0.5 px-0.5")}>
+                            <IconButton label={s.back} disabled={history.at === 0} onClick={() => go(-1)}><SFSymbol name="chevron.left" className="size-3.5" /></IconButton>
+                            <IconButton label={s.forward} disabled={history.at === history.list.length - 1} onClick={() => go(1)}><SFSymbol name="chevron.right" className="size-3.5" /></IconButton>
+                        </span>
                         <h4 className="ml-1.5 min-w-0 truncate text-[15px] font-semibold text-[#1d1d1f] dark:text-[#ececec]">{doc.title || s.untitled}</h4>
                         {doc.kind === "database" && (
                             <div className="ml-auto flex items-center gap-2">
-                                <div className="flex rounded-md bg-black/6 p-0.5 text-[12px] dark:bg-white/8">
+                                <div className={cn(CAPSULE, "p-0.5 text-[12px]")}>
                                     {(["table", "board"] as Layout[]).map((l) => (
                                         <button
                                             key={l}
@@ -211,8 +214,7 @@ export function CellarDemo({ className }: { className?: string }) {
 }
 
 function DocIcon({ doc }: { doc: Doc }) {
-    const Icon = doc.kind === "database" ? Table2 : FileText;
-    return <Icon className="size-[15px] shrink-0 text-(--cellar-accent)" strokeWidth={1.8} />;
+    return <SFSymbol name={doc.kind === "database" ? "tablecells" : "doc.text"} className="size-[15px] shrink-0 text-(--cellar-accent)" />;
 }
 
 function IconButton({ label, disabled, hint, onClick, children }: { label: string; disabled?: boolean; hint?: boolean; onClick: () => void; children: ReactNode }) {
@@ -222,11 +224,11 @@ function IconButton({ label, disabled, hint, onClick, children }: { label: strin
             aria-label={label}
             title={label}
             disabled={disabled}
-            className="relative flex size-7 items-center justify-center rounded-md hover:bg-black/6 hover:text-current disabled:opacity-35 disabled:hover:bg-transparent dark:hover:bg-white/8"
+            className={TOOL_ITEM}
             onClick={onClick}
         >
             {children}
-            {hint && <span className="absolute inset-0 rounded-md shadow-[0_0_0_2px_var(--cellar-accent)] motion-safe:animate-pulse" />}
+            {hint && <span className="absolute inset-0 rounded-full shadow-[0_0_0_2px_var(--cellar-accent)] motion-safe:animate-pulse" />}
         </button>
     );
 }

@@ -91,9 +91,6 @@
     "give_it_a_prompt_and_a_time": "寫下要做的事，排好時間。每天或每週，它都會結合已連接的 App 準時完成：彙整今天的筆記，替你挑一部週五晚上的電影。",
     "demo_chat": "對話",
     "demo_connectors": "連接器",
-    "demo_download": "下載 {name}",
-    "demo_install": "安裝 {name}",
-    "demo_uninstall": "解除安裝 {name}",
     "demo_hint": "試試看：傳一則訊息、開個新對話、下載一個模型，或者新增一個排程任務。"
   },
   "arthub": {
@@ -255,7 +252,7 @@
     },
     "notes_and_databases_that_stay": "只留在本機的筆記與資料庫",
     "coming_soon": "即將推出",
-    "requirements": "macOS 14.4 或更新版本",
+    "requirements": "macOS 15.0 或更新版本",
     "everything_is_a_block": "一切皆是區塊",
     "write_notes_build_databases_and": "寫筆記、建資料庫，再把它們連起來。每個頁面都由可輸入、可拖移、可巢狀的區塊組成。",
     "pages_and_blocks": "頁面與區塊",

@@ -1,34 +1,39 @@
 // Content of the ModelCraft demo: the Model Store's models, the conversations and scheduled tasks it
-// starts with, and the replies the chat gives. The app's own text is English, as in the screenshots;
-// replies follow the language of what the visitor types.
+// starts with, and the replies the chat gives. The app's own text is English; replies follow the
+// language of what the visitor types.
 
 export type View = "chat" | "store" | "downloaded" | "connectors" | "tasks";
 
-export type Model = { name: string; size: string; x: number; y: number };
+/** The Model Store's tabs, as the app names them. */
+export type Category = "Text" | "Vision" | "Omni";
+export type Model = { name: string; size: string; downloads: string; category: Category };
 
-/** Model Store cards, row by row, with the center of each one's download arrow on the 2000px-wide screenshot. */
-export const MODELS: Model[] = [
-    ["Qwen3.8-27B-4bit", "16.07 GB"], ["olmOCR-2-7B-1025-mlx-8bit", "9.46 GB"], ["Devstral-Small-2-24B-Instruct-2512-4bit", "44.38 GB"],
-    ["Qwen3.6-27B-4bit", "16.07 GB"], ["Qwen3.8-27B-8bit", "58.1 GB"],
-    ["Qwen3.6-35B-A3B-4bit", "20.42 GB"], ["gemma-3-4b-it-qat-4bit", "6.43 GB"], ["gemma-3-12b-it-4bit", "16.1 GB"],
-    ["gemma-4-e4b-it-4bit", "10.4 GB"], ["Qwen3.5-9B-MLX-4bit", "5.97 GB"],
-    ["gemma-3-4b-it-8bit", "11.39 GB"], ["gemma-4-e2b-it-4bit", "7.16 GB"], ["Qwen2-VL-2B-Instruct-4bit", "1.26 GB"],
-    ["Qwen2.5-VL-7B-Instruct-4bit", "5.65 GB"], ["gemma-3-27b-it-qat-4bit", "33.71 GB"],
-    ["Qwen3.5-9B-4bit", "5.97 GB"], ["gemma-4-31b-it-4bit", "36.86 GB"], ["Qwen3-VL-4B-Instruct-4bit", "3.11 GB"],
-    ["gemma-3-12b-it-qat-4bit", "23.72 GB"], ["gemma-4-E2B-it-qat-mobile", "2.43 GB"],
-    ["gemma-4-26b-a4b-it-4bit", "46.32 GB"], ["llava-v1.6-mistral-7b-4bit", "4.26 GB"], ["gemma-4-E4B-it-qat-mobile", "3.49 GB"],
-    ["llava-1.5-7b-4bit", "12.12 GB"],
-].map(([name, size], i) => ({ name, size, x: [623, 930, 1238, 1546, 1853][i % 5], y: [170, 357, 543, 729, 915][Math.floor(i / 5)] }));
+/** Model Store entries, most downloaded first, as the store listed them. */
+export const MODELS: Model[] = ([
+    ["Qwen3.8-27B-4bit", "16.07 GB", "881K", "Text"], ["olmOCR-2-7B-1025-mlx-8bit", "9.46 GB", "109K", "Vision"],
+    ["Devstral-Small-2-24B-Instruct-2512-4bit", "44.38 GB", "69K", "Text"], ["Qwen3.6-27B-4bit", "16.07 GB", "66K", "Text"],
+    ["Qwen3.8-27B-8bit", "58.1 GB", "48K", "Text"], ["Qwen3.6-35B-A3B-4bit", "20.42 GB", "46K", "Text"],
+    ["gemma-3-4b-it-qat-4bit", "6.43 GB", "38K", "Vision"], ["gemma-3-12b-it-4bit", "16.1 GB", "38K", "Vision"],
+    ["gemma-4-e4b-it-4bit", "10.4 GB", "32K", "Omni"], ["Qwen3.5-9B-MLX-4bit", "5.97 GB", "28K", "Text"],
+    ["gemma-3-4b-it-8bit", "11.39 GB", "25K", "Vision"], ["gemma-4-e2b-it-4bit", "7.16 GB", "24K", "Omni"],
+    ["Qwen2-VL-2B-Instruct-4bit", "1.26 GB", "21K", "Vision"], ["Qwen2.5-VL-7B-Instruct-4bit", "5.65 GB", "21K", "Vision"],
+    ["gemma-3-27b-it-qat-4bit", "33.71 GB", "19K", "Vision"], ["Qwen3.5-9B-4bit", "5.97 GB", "19K", "Text"],
+    ["gemma-4-31b-it-4bit", "36.86 GB", "19K", "Omni"], ["Qwen3-VL-4B-Instruct-4bit", "3.11 GB", "19K", "Vision"],
+    ["gemma-3-12b-it-qat-4bit", "23.72 GB", "19K", "Vision"], ["gemma-4-E2B-it-qat-mobile", "2.43 GB", "18K", "Omni"],
+    ["gemma-4-26b-a4b-it-4bit", "46.32 GB", "16K", "Omni"], ["llava-v1.6-mistral-7b-4bit", "4.26 GB", "14K", "Vision"],
+    ["gemma-4-E4B-it-qat-mobile", "3.49 GB", "14K", "Omni"], ["llava-1.5-7b-4bit", "12.12 GB", "14K", "Vision"],
+    ["Qwen3.5-2B-6bit", "2.21 GB", "11K", "Text"],
+] as const).map(([name, size, downloads, category]) => ({ name, size, downloads, category }));
 
-/** The model already downloaded in the screenshots. */
-export const DEFAULT_MODEL = { name: "Qwen3.5-2B-6bit", size: "2.21 GB" };
+/** The model that comes downloaded. */
+export const DEFAULT_MODEL = "Qwen3.5-2B-6bit";
 
-/** Connector rows, by the vertical center of each one's Install / Uninstall button. */
+/** The connectors, with the product each one opens, and whether it starts installed. */
 export const CONNECTORS = [
-    { name: "Arthub", y: 193, installed: true },
-    { name: "Cellar", y: 322, installed: true },
-    { name: "Keel", y: 451, installed: false },
-    { name: "TuneStudio", y: 580, installed: false },
+    { id: "arthub", name: "Arthub", summary: "Browse and play the movies, TV shows, and music in your media library.", installed: true },
+    { id: "cellar", name: "Cellar", summary: "Search the pages, databases, and notes in your knowledge base.", installed: true },
+    { id: "keel", name: "Keel", summary: "Browse and edit the keys in your Redis databases.", installed: false },
+    { id: "tunestudio", name: "TuneStudio", summary: "Put sung vocals on pitch and export the corrected audio.", installed: false },
 ];
 
 export type Message = { role: "user" | "assistant"; text: string; tool?: string };
