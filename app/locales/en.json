@@ -162,7 +162,8 @@
     "meta": {
       "title": "Keel",
       "description": "Keel is a fast, smooth native Redis client, compatible with Valkey, Dragonfly, KeyDB and Garnet."
-    }
+    },
+    "demo_hint": "Try it: browse the keys, edit a value, watch a TTL run out, or run commands in the console."
   },
   "tunestudio": {
     "put_your_singing_on_pitch": "Put your singing on pitch. No studio required",
@@ -243,7 +244,8 @@
     "ports": "Ports",
     "folders": "Folders",
     "resources": "Resources",
-    "pick_a_folder_read_only": "pick a folder from your Mac, read-only if you like."
+    "pick_a_folder_read_only": "pick a folder from your Mac, read-only if you like.",
+    "demo_hint": "Try it: start or stop a container, create one from an image, pull an image, or open its terminal."
   },
   "cellar": {
     "meta": {
@@ -314,7 +316,8 @@
     "no_dependencies": "No dependencies",
     "the_mysql_and_postgresql_protocols": "The MySQL and PostgreSQL protocols are built in. No drivers to install, nothing extra to slow it down.",
     "null_is_null": "NULL is NULL",
-    "sql_null_shows_as_a": "SQL NULL shows as a badge, so it never looks like the text “NULL”."
+    "sql_null_shows_as_a": "SQL NULL shows as a badge, so it never looks like the text “NULL”.",
+    "demo_hint": "Try it: open a table, filter its rows, double-click a cell to edit it, or run SQL in the console."
   },
   "pinch": {
     "meta": {

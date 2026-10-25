@@ -180,14 +180,26 @@ export function replyTo(prompt: string, installed: Record<string, boolean>): Mes
             ),
         };
     }
-    return {
-        role: "assistant",
-        text: say(
-            "This window is a preview on the website, so my answers here are prepared in advance. Try asking about your **notes in Cellar** or **a movie in Arthub** — or download ModelCraft to talk with a model running on your own Mac.",
-            "这个窗口是网页上的演示，这里的回答是预先准备好的。可以试试问我 **Cellar 里的笔记**，或者让我从 **Arthub 里挑部电影**。下载 ModelCraft，就能和在你自己 Mac 上运行的模型真正对话。",
-        ),
-    };
+    // Anything else gets one of a few general answers, the same one each time for the same prompt.
+    const general = GENERAL[[...prompt].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 0) % GENERAL.length];
+    return { role: "assistant", text: say(...general) };
 }
+
+/** General answers, in English and Chinese, for prompts the replies above don't cover. */
+const GENERAL: [string, string][] = [
+    [
+        "Good question. Here's how I'd think it through:\n1. Start with what you already know and what you actually need to decide.\n2. Break it into two or three smaller questions and answer those first.\n3. Write down the trade-offs, then pick the option you'd regret least.\nWant me to go deeper on any of these?",
+        "好问题。我会这样想：\n1. 先理清你已经知道什么，真正要决定的是什么。\n2. 把它拆成两三个小问题，先逐个回答。\n3. 把各个选择的利弊写下来，选一个最不容易后悔的。\n要我展开讲其中哪一点吗？",
+    ],
+    [
+        "Here's the short answer, then the details:\n- **In short:** it depends on how much time you have and what matters most to you.\n- **If you're short on time:** go with the simplest option that works today.\n- **If you can wait:** try two options side by side and compare.\nTell me a bit more and I'll make it specific.",
+        "先说结论，再说细节：\n- **简单说：** 取决于你有多少时间，以及你最看重什么。\n- **时间紧：** 先选今天就能用的最简单的方案。\n- **不着急：** 拿两个方案并排试一试再比较。\n多告诉我一点情况，我可以说得更具体。",
+    ],
+    [
+        "Sure. A few things that might help:\n- Everything I do here stays on this Mac; nothing is sent anywhere.\n- I can look things up in your connected apps, like **Cellar** and **Arthub**, when that helps.\n- Longer jobs can run on their own as **Scheduled Tasks**.\nWhere would you like to start?",
+        "好的。有几点可能用得上：\n- 我在这里做的一切都只在这台 Mac 上，不会发到任何地方。\n- 需要的时候，我可以去你连接的应用里查，比如 **Cellar** 和 **Arthub**。\n- 耗时的事情可以设成 **定时任务** 自己运行。\n你想从哪里开始？",
+    ],
+];
 
 /** Prompts offered under an empty New Chat. */
 export const SUGGESTIONS = [

@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 import { Glyph } from "~/components/glyph";
+import { KeelDemo } from "~/components/keel-demo";
 import {
     ComingSoonButton, Eyebrow, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Split, Statement, Tree,
     type Feature,
@@ -49,7 +50,10 @@ export default function Keel() {
                 tagline={t("keel.a_native_redis_client")}
                 action={<ComingSoonButton label={t("keel.coming_soon")} />}
                 note={t("keel.requirements")}
-            />
+            >
+                <KeelDemo className="mt-16" />
+                <p className="mt-5 text-center text-[13px] text-faint">{t("keel.demo_hint")}</p>
+            </Hero>
 
             <Section>
                 <SectionTitle>{t("keel.everything_redis_in_one_place")}</SectionTitle>

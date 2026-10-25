@@ -162,7 +162,8 @@
     "meta": {
       "title": "Keel",
       "description": "Keel 是一款快速流畅的原生 Redis 客户端，兼容 Valkey、Dragonfly、KeyDB 与 Garnet。"
-    }
+    },
+    "demo_hint": "试试看：浏览 Key，修改一个值，看着 TTL 倒计时结束，或者在控制台里执行命令。"
   },
   "tunestudio": {
     "put_your_singing_on_pitch": "把歌声修准，不必进录音棚",
@@ -243,7 +244,8 @@
     "ports": "端口",
     "folders": "文件夹",
     "resources": "资源",
-    "pick_a_folder_read_only": "选择 Mac 上的文件夹，可设为只读。"
+    "pick_a_folder_read_only": "选择 Mac 上的文件夹，可设为只读。",
+    "demo_hint": "试试看：启动或停止容器，用镜像新建一个容器，拉取镜像，或者打开它的终端。"
   },
   "cellar": {
     "meta": {
@@ -314,7 +316,8 @@
     "no_dependencies": "零依赖",
     "the_mysql_and_postgresql_protocols": "内置 MySQL 与 PostgreSQL 协议，无需安装驱动，轻装上阵。",
     "null_is_null": "NULL 就是 NULL",
-    "sql_null_shows_as_a": "SQL NULL 显示为标记，不会和文本“NULL”混淆。"
+    "sql_null_shows_as_a": "SQL NULL 显示为标记，不会和文本“NULL”混淆。",
+    "demo_hint": "试试看：打开一张表，筛选数据，双击单元格修改，或者在控制台里运行 SQL。"
   },
   "pinch": {
     "meta": {

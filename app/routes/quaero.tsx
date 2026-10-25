@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 import { Glyph } from "~/components/glyph";
+import { QuaeroDemo } from "~/components/quaero-demo";
 import {
     ComingSoonButton, Eyebrow, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Split, Statement, Tree,
     type Feature,
@@ -48,7 +49,10 @@ export default function Quaero() {
                 tagline={t("quaero.a_native_sql_client")}
                 action={<ComingSoonButton label={t("quaero.coming_soon")} />}
                 note={t("quaero.requirements")}
-            />
+            >
+                <QuaeroDemo className="mt-16" />
+                <p className="mt-5 text-center text-[13px] text-faint">{t("quaero.demo_hint")}</p>
+            </Hero>
 
             <Section>
                 <SectionTitle>{t("quaero.your_databases_at_a_glance")}</SectionTitle>

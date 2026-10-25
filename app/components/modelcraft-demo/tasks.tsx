@@ -1,9 +1,9 @@
 import { useEffect, useRef, type ReactNode } from "react";
 
+import { Spinner } from "~/components/mac-ui";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import type { Task } from "./data";
-import { Spinner } from "./spinner";
 import { ACCENT, ACCENT_BG, BAR, BODY, CAPSULE, CARD, MUTED, SMALL, TITLE, TOOL_ITEM } from "./ui";
 
 /** Scheduled Tasks. "+" adds a prepared task where the app opens its editor sheet. */

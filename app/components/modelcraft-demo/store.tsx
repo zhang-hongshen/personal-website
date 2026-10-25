@@ -1,10 +1,10 @@
 import { useEffect, useState, type ReactNode } from "react";
 
+import { Spinner } from "~/components/mac-ui";
 import { ProductIcon } from "~/components/product-icon";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { CONNECTORS, DEFAULT_MODEL, MODELS, type Category, type Model } from "./data";
-import { Spinner } from "./spinner";
 import { ACCENT, ACCENT_BG, BAR, CAPSULE, CARD, FAINT, LINE, MUTED, SMALL, TEXT, TITLE, TOOL } from "./ui";
 
 /** The icon the app shows while a model's organization avatar loads; avatars aren't fetched here. */

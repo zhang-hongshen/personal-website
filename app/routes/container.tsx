@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 
+import { ContainerDemo } from "~/components/container-demo";
 import { Glyph } from "~/components/glyph";
 import {
     ComingSoonButton, Eyebrow, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Split, Statement,
@@ -49,7 +50,10 @@ export default function Container() {
                 tagline={t("container.linux_containers_native_on_your_mac")}
                 action={<ComingSoonButton label={t("container.coming_soon")} />}
                 note={t("container.requirements")}
-            />
+            >
+                <ContainerDemo className="mt-16" />
+                <p className="mt-5 text-center text-[13px] text-faint">{t("container.demo_hint")}</p>
+            </Hero>
 
             <Section>
                 <SectionTitle>{t("container.containers_made_simple")}</SectionTitle>
