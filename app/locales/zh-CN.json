@@ -91,7 +91,7 @@
     "give_it_a_prompt_and_a_time": "写下要做的事，定好时间。每天或每周，它都会结合已连接的 App 按时完成：汇总今天的笔记，替你挑一部周五晚上的电影。",
     "demo_chat": "对话",
     "demo_connectors": "连接器",
-    "demo_hint": "试试看：发一条消息、开个新对话、下载一个模型，或者添加一个定时任务。"
+    "demo_hint": "试试看：发一条消息，展开回复里的工具调用看看它做了什么，下载一个模型，或者添加一个定时任务。"
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "电影、剧集与音乐，自成一库",

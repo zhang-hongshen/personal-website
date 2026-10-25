@@ -1,7 +1,6 @@
 import { useState, type ReactNode } from "react";
 
 import { MAC, SearchField } from "~/components/mac-ui";
-import { CAPSULE, TOOL_ITEM } from "~/components/mac-window";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { TYPES, glob, remaining, type Entry, type KeyType } from "./data";
@@ -37,16 +36,17 @@ function tree(keys: string[]): Folder {
     return root;
 }
 
-export function KeyBrowser({ db, selected, now, onSelect }: {
+export function KeyBrowser({ db, selected, now, type, asTree, onSelect }: {
     db: Record<string, Entry>;
+    /** The toolbar's type filter and view, as folders or a flat list. */
+    type: KeyType | "all";
+    asTree: boolean;
     selected: string | null;
     /** The current time once the page runs, for TTLs; null while prerendering. */
     now: number | null;
     onSelect: (key: string) => void;
 }) {
     const [pattern, setPattern] = useState("");
-    const [type, setType] = useState<KeyType | "all">("all");
-    const [asTree, setAsTree] = useState(true);
     const [collapsed, setCollapsed] = useState<string[]>([]);
 
     const keys = Object.keys(db)
@@ -98,16 +98,7 @@ export function KeyBrowser({ db, selected, now, onSelect }: {
     return (
         <div className="flex min-h-0 flex-1 flex-col">
             <div className="flex items-center gap-1.5 px-3 pb-2">
-                <SearchField value={pattern} placeholder="Filter keys, e.g. user:*" onChange={setPattern} className="min-w-0 flex-1" />
-                <select aria-label="Type" value={type} className={cn(CAPSULE, "w-[84px] px-2.5 text-[12px] outline-none", type !== "all" && MAC.accent)} onChange={(e) => setType(e.target.value as KeyType | "all")}>
-                    <option value="all">All Types</option>
-                    {(Object.keys(TYPES) as KeyType[]).map((t) => <option key={t} value={t}>{TYPES[t].name}</option>)}
-                </select>
-                <div className={cn(CAPSULE, "px-0.5")}>
-                    <button type="button" className={TOOL_ITEM} aria-label={asTree ? "as List" : "as Folders"} title={asTree ? "as List" : "as Folders"} onClick={() => setAsTree((v) => !v)}>
-                        <SFSymbol name={asTree ? "list.bullet.indent" : "list.bullet"} className="size-3.5" />
-                    </button>
-                </div>
+                <SearchField value={pattern} placeholder="Filter keys, e.g. user:*" onChange={setPattern} className="w-full" />
             </div>
             <div className="flex min-h-0 flex-1 flex-col gap-px overflow-y-auto pb-3">
                 {asTree ? [...root.folders.flatMap((f) => folder(f, 0)), ...root.keys.map((k) => row(k, k, 0))] : keys.map((k) => row(k, k, 0))}

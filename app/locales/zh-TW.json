@@ -91,7 +91,7 @@
     "give_it_a_prompt_and_a_time": "寫下要做的事，排好時間。每天或每週，它都會結合已連接的 App 準時完成：彙整今天的筆記，替你挑一部週五晚上的電影。",
     "demo_chat": "對話",
     "demo_connectors": "連接器",
-    "demo_hint": "試試看：傳一則訊息、開個新對話、下載一個模型，或者新增一個排程任務。"
+    "demo_hint": "試試看：傳一則訊息，展開回覆裡的工具呼叫看看它做了什麼，下載一個模型，或者新增一個排程任務。"
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "電影、影集與音樂，自成一庫",

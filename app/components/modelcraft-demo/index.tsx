@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { ChatView, type Pending } from "./chat";
-import { CHATS, CONNECTORS, DEFAULT_MODEL, MODELS, PRESET_TASKS, TASKS, replyTo, type Chat, type View } from "./data";
+import { CHATS, replyTo, type Chat } from "./conversations";
+import { CONNECTORS, DEFAULT_MODEL, MODELS, PRESET_TASKS, TASKS, type View } from "./data";
 import { Sidebar } from "./sidebar";
 import { ConnectorsView, DownloadedView, StoreView, type Download } from "./store";
 import { TasksView } from "./tasks";
@@ -23,7 +24,7 @@ const TABS: { view: View; label: string }[] = [
 
 const DOWNLOAD_MS = 2400;
 const THINK_MS = 700;
-const TOOL_MS = 1000;
+const TOOL_MS = 900;
 const RUN_MS = 1600;
 
 export function ModelCraftDemo({ className }: { className?: string }) {
@@ -76,8 +77,8 @@ export function ModelCraftDemo({ className }: { className?: string }) {
             return;
         }
         const timer = setTimeout(() => setPending((p) => p && (
-            phase === "thinking" ? { ...p, phase: message.tool ? "tool" : "typing" }
-                : phase === "tool" ? { ...p, phase: "typing" }
+            phase === "thinking" ? { ...p, phase: message.tools ? "tool" : "typing" }
+                : phase === "tool" ? (p.step < message.tools!.length - 1 ? { ...p, step: p.step + 1 } : { ...p, phase: "typing" })
                     : { ...p, shown: p.shown + 3 }
         )), phase === "thinking" ? THINK_MS : phase === "tool" ? TOOL_MS : 16);
         return () => clearTimeout(timer);
@@ -104,7 +105,7 @@ export function ModelCraftDemo({ className }: { className?: string }) {
         }
         const target = id;
         setChats((cs) => cs.map((c) => (c.id === target ? { ...c, messages: [...c.messages, { role: "user", text }] } : c)));
-        setPending({ chatId: target, message: replyTo(text, installed), phase: "thinking", shown: 0 });
+        setPending({ chatId: target, message: replyTo(text, installed), phase: "thinking", step: 0, shown: 0 });
     };
 
     const download = (name: string) => {

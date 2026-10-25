@@ -1,6 +1,7 @@
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
-import type { Chat, View } from "./data";
+import type { Chat } from "./conversations";
+import type { View } from "./data";
 import { ACCENT, FAINT, HEADER, SIDEBAR, TEXT, TOOL } from "./ui";
 
 // The app's navigation (AppNavigationView), with its symbols.

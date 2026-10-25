@@ -1,6 +1,6 @@
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
-import { MAC, Segmented } from "~/components/mac-ui";
+import { MAC } from "~/components/mac-ui";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { bytes, shortRef, type Container, type Image, type Network, type Volume } from "./data";
@@ -9,14 +9,15 @@ import { bytes, shortRef, type Container, type Image, type Network, type Volume 
 
 export type Pull = { ref: string; done: number; total: number };
 
-export function ImagesView({ images, pulls, query, selected, onSelect }: {
+export function ImagesView({ images, pulls, query, grid, selected, onSelect }: {
     images: Image[];
+    /** Tiles instead of rows; the toolbar's List / Grid control sets it. */
+    grid: boolean;
     pulls: Pull[];
     query: string;
     selected: string | null;
     onSelect: (ref: string) => void;
 }) {
-    const [grid, setGrid] = useState(false);
     const match = (ref: string) => ref.toLowerCase().includes(query.trim().toLowerCase());
     const shown = images.filter((i) => match(i.ref)).sort((a, b) => a.ref.localeCompare(b.ref));
     const name = (ref: string) => {
@@ -30,9 +31,6 @@ export function ImagesView({ images, pulls, query, selected, onSelect }: {
     };
     return (
         <div className="flex min-h-0 flex-1 flex-col">
-            <div className="px-4 pb-2">
-                <Segmented options={[{ value: "list", label: "List" }, { value: "grid", label: "Grid" }]} value={grid ? "grid" : "list"} onChange={(v) => setGrid(v === "grid")} className="w-40" />
-            </div>
             <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-3">
                 {pulls.filter((p) => match(p.ref)).map((p) => (
                     <div key={p.ref} className={cn("mb-1 flex items-center gap-3 rounded-lg border px-3 py-2", MAC.line)}>

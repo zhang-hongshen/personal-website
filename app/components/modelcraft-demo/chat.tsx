@@ -1,12 +1,13 @@
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 
-import { SFSymbol } from "~/components/sf-symbol";
+import { ProductIcon } from "~/components/product-icon";
+import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
-import { SUGGESTIONS, type Chat, type Message } from "./data";
+import { CONNECTOR_NAME, SUGGESTIONS, groupTitle, toolLabel, type Chat, type Message, type Tool } from "./conversations";
 import { ACCENT, ACCENT_BG, BAR, BODY, BUBBLE, CAPSULE, CARD, FAINT, MUTED, SMALL, TEXT, TITLE, TOOL_ITEM } from "./ui";
 
-/** A reply on its way: thinking, then using a connector, then typing out `shown` characters. */
-export type Pending = { chatId: string; message: Message; phase: "thinking" | "tool" | "typing"; shown: number };
+/** A reply on its way: thinking, then running its tool calls one `step` at a time, then typing out `shown` characters. */
+export type Pending = { chatId: string; message: Message; phase: "thinking" | "tool" | "typing"; step: number; shown: number };
 
 export function ChatView({ chat, pending, model, models, focus, sidebarButton, onSend, onPickModel, onNewChat }: {
     /** Null for a new chat. */
@@ -27,7 +28,7 @@ export function ChatView({ chat, pending, model, models, focus, sidebarButton, o
     useEffect(() => {
         const el = scroller.current;
         if (el) el.scrollTop = el.scrollHeight;
-    }, [chat?.id, chat?.messages.length, reply?.shown, reply?.phase]);
+    }, [chat?.id, chat?.messages.length, reply?.shown, reply?.phase, reply?.step]);
 
     const composer = (
         <Composer model={model} models={models} busy={pending !== null} autoFocus={focus} onSend={onSend} onPickModel={onPickModel} />
@@ -68,7 +69,7 @@ export function ChatView({ chat, pending, model, models, focus, sidebarButton, o
                 <>
                     <div ref={scroller} className={cn("min-h-0 flex-1 overflow-y-auto px-5 pt-2 pb-4", BODY)}>
                         {chat.messages.map((m, i) => <MessageView key={i} message={m} />)}
-                        {reply && <MessageView message={reply.message} phase={reply.phase} shown={reply.shown} />}
+                        {reply && <MessageView message={reply.message} phase={reply.phase} step={reply.step} shown={reply.shown} />}
                     </div>
                     <div className="px-3 pb-3">{composer}</div>
                 </>
@@ -77,7 +78,7 @@ export function ChatView({ chat, pending, model, models, focus, sidebarButton, o
     );
 }
 
-function MessageView({ message, phase, shown }: { message: Message; phase?: Pending["phase"]; shown?: number }) {
+function MessageView({ message, phase, step, shown }: { message: Message; phase?: Pending["phase"]; step?: number; shown?: number }) {
     if (message.role === "user") {
         return (
             <div className="mb-6 flex justify-end">
@@ -89,17 +90,94 @@ function MessageView({ message, phase, shown }: { message: Message; phase?: Pend
     const text = shown === undefined ? message.text : message.text.slice(0, shown);
     return (
         <div className="mb-6">
-            {message.tool && (
-                <p className={cn("mb-2 flex items-center gap-1.5", SMALL, MUTED)}>
-                    <SFSymbol name="chevron.right" className="size-2.5" />
-                    <span className={phase === "tool" ? "motion-safe:animate-pulse" : undefined}>
-                        {phase === "tool" ? `Using ${message.tool}…` : `Used ${message.tool}`}
-                    </span>
-                </p>
-            )}
+            {message.tools && <ToolGroup tools={message.tools} running={phase === "tool" ? step ?? 0 : undefined} />}
             {phase !== "tool" && <Rich text={text} />}
         </div>
     );
+}
+
+/** A reply's tool calls (ToolCallGroupView): a summary that opens to one row per call. */
+function ToolGroup({ tools, running }: { tools: Tool[]; /** The call in progress, while the reply is still working. */ running?: number }) {
+    const [open, setOpen] = useState(false);
+    const shown = running === undefined ? tools : tools.slice(0, running + 1);
+    return (
+        <div className="mb-3">
+            <button type="button" aria-expanded={open} className={cn("flex items-center gap-1.5 text-left font-medium hover:text-[#1c1c1c] dark:hover:text-[#f2f3f0]", MUTED)} onClick={() => setOpen((o) => !o)}>
+                <SFSymbol name="chevron.right" className={cn("size-2.5 shrink-0 transition-transform", open && "rotate-90")} />
+                <span className={running !== undefined ? "motion-safe:animate-pulse" : undefined}>
+                    {running !== undefined ? `${toolLabel(tools[running], true)}…` : groupTitle(tools)}
+                </span>
+            </button>
+            {open && (
+                <div className="mt-2 ml-1 flex flex-col gap-2 border-l border-black/10 pl-4 motion-safe:animate-in motion-safe:fade-in dark:border-white/10">
+                    {shown.map((t, i) => <ToolRow key={i} tool={t} running={i === running} />)}
+                </div>
+            )}
+        </div>
+    );
+}
+
+const NATIVE_ICON: Record<Tool["kind"], SymbolName> = { connector: "app.connected.to.app.below.fill", native: "calendar", command: "terminal", fetch: "network", file: "doc.text.magnifyingglass" };
+
+/** One call: its icon and what it did, opening to what it sent and got back. */
+function ToolRow({ tool, running }: { tool: Tool; running: boolean }) {
+    const [open, setOpen] = useState(false);
+    return (
+        <div className={SMALL}>
+            <button type="button" aria-expanded={open} disabled={running} className={cn("flex items-center gap-2 text-left", MUTED, !running && "hover:text-[#1c1c1c] dark:hover:text-[#f2f3f0]")} onClick={() => setOpen((o) => !o)}>
+                {tool.kind === "connector" ? (
+                    <ProductIcon id={tool.app} className="size-4 shrink-0" width={16} height={16} />
+                ) : (
+                    <SFSymbol name={tool.kind === "native" ? tool.icon : NATIVE_ICON[tool.kind]} className="size-3.5 shrink-0" />
+                )}
+                <span className={running ? "motion-safe:animate-pulse" : undefined}>{toolLabel(tool, running)}</span>
+                {!running && <SFSymbol name="chevron.down" className={cn("size-2 shrink-0 transition-transform", !open && "-rotate-90")} />}
+            </button>
+            {open && !running && <div className="mt-2 motion-safe:animate-in motion-safe:fade-in">{<ToolDetail tool={tool} />}</div>}
+        </div>
+    );
+}
+
+function ToolDetail({ tool }: { tool: Tool }) {
+    const block = cn("max-h-48 overflow-auto rounded-lg border border-black/8 p-2.5 font-mono text-[11px] leading-[1.5] whitespace-pre-wrap select-text dark:border-white/10", CARD);
+    switch (tool.kind) {
+        case "connector":
+            return (
+                <div className="flex flex-col gap-1.5">
+                    <p className={cn("text-[11px]", FAINT)}>{CONNECTOR_NAME[tool.app]} · {tool.name}</p>
+                    <pre className={block}>{tool.args}</pre>
+                    <p className={cn("text-[11px]", FAINT)}>Result</p>
+                    <pre className={block}>{tool.result}</pre>
+                </div>
+            );
+        case "native":
+        case "file":
+            return (
+                <dl className={cn("grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 rounded-lg border border-black/8 p-2.5 dark:border-white/10", CARD)}>
+                    {tool.card.map(([k, v]) => [<dt key={`${k}:k`} className={FAINT}>{k}</dt>, <dd key={`${k}:v`} className="select-text">{v}</dd>])}
+                </dl>
+            );
+        case "command":
+            return (
+                <div className="overflow-hidden rounded-lg bg-[#1e1e1e] font-mono text-[11px] leading-[1.5] text-[#e5e5e5] shadow-sm">
+                    <div className="flex gap-1.5 px-2.5 py-1.5">
+                        <i className="size-2.5 rounded-full bg-[#ff5f57]/70" /><i className="size-2.5 rounded-full bg-[#febc2e]/70" /><i className="size-2.5 rounded-full bg-[#28c840]/70" />
+                    </div>
+                    <div className="px-2.5 pb-2.5 select-text">
+                        <p><span className="font-bold text-[#e8915a]">&gt;</span> {tool.command}</p>
+                        <pre className="mt-1 whitespace-pre-wrap text-white/60">{tool.output}</pre>
+                    </div>
+                </div>
+            );
+        case "fetch":
+            return (
+                <div className={cn("rounded-lg border border-black/8 p-2.5 dark:border-white/10", CARD)}>
+                    <p className="font-medium">{tool.title}</p>
+                    <p className={cn("truncate text-[11px]", ACCENT)}>{tool.url}</p>
+                    <p className={cn("mt-1.5 whitespace-pre-wrap", MUTED)}>{tool.excerpt}</p>
+                </div>
+            );
+    }
 }
 
 /** Paragraphs, "- " bullets and "1. " numbered items, with **bold**. */
@@ -123,10 +201,12 @@ function Rich({ text }: { text: string }) {
     );
 }
 
-/** Bold runs, including one still being typed out. */
+/** Bold runs and `code`, including one still being typed out. */
 function inline(text: string): ReactNode {
-    return text.split(/(\*\*[^*]+(?:\*\*|$))/).map((part, i) =>
-        part.startsWith("**") ? <b key={i} className="font-semibold">{part.replace(/\*+/g, "")}</b> : <Fragment key={i}>{part}</Fragment>,
+    return text.split(/(\*\*[^*]+(?:\*\*|$)|`[^`]+`?)/).map((part, i) =>
+        part.startsWith("**") ? <b key={i} className="font-semibold">{part.replace(/\*+/g, "")}</b>
+            : part.startsWith("`") ? <code key={i} className="rounded-[4px] bg-black/6 px-1 py-px font-mono text-[0.9em] dark:bg-white/10">{part.replace(/`/g, "")}</code>
+                : <Fragment key={i}>{part}</Fragment>,
     );
 }
 

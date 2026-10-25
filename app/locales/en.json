@@ -91,7 +91,7 @@
     "give_it_a_prompt_and_a_time": "Give it a prompt and a time. Every day or every week, it runs the task with your connected apps — a digest of today's notes, a movie for Friday night.",
     "demo_chat": "Chat",
     "demo_connectors": "Connectors",
-    "demo_hint": "Try it: send a message, start a new chat, download a model, or add a scheduled task."
+    "demo_hint": "Try it: send a message, open a reply's tool calls to see what it did, download a model, or add a scheduled task."
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "Movies, shows and music. Beautifully organized",

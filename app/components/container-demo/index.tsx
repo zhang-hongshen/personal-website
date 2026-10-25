@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { Inspector, MAC, MacSidebar, MacWindow, Popover, SearchField, ShowSidebarButton, SidebarRow, TitleBar, ToolButton, Unavailable, useSidebar } from "~/components/mac-ui";
+import { Inspector, MAC, MacSidebar, MacWindow, Popover, SearchField, Segmented, ShowSidebarButton, SidebarRow, TitleBar, ToolButton, Unavailable, useSidebar } from "~/components/mac-ui";
 import { CAPSULE } from "~/components/mac-window";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
@@ -37,6 +37,7 @@ export function ContainerDemo({ className }: { className?: string }) {
     const [inspector, setInspector] = useState<boolean | null>(null);
     const [menu, setMenu] = useState<"new" | "pull" | "delete" | null>(null);
     const [pullRef, setPullRef] = useState("docker.io/library/node:22-alpine");
+    const [grid, setGrid] = useState(false);
     const [, redraw] = useState(0);
     const changed = useCallback(() => redraw((n) => n + 1), []);
 
@@ -177,6 +178,9 @@ export function ContainerDemo({ className }: { className?: string }) {
                             </div>
                         </Popover>
                     </div>
+                    {section === "images" && (
+                        <Segmented options={[{ value: "list", label: "List" }, { value: "grid", label: "Grid" }]} value={grid ? "grid" : "list"} onChange={(v) => setGrid(v === "grid")} />
+                    )}
                     {(section === "containers" || section === "images") && (
                         <>
                             <SearchField value={query} placeholder={section === "containers" ? "Search Containers" : "Search Images"} onChange={(v) => setQueries((q) => ({ ...q, [section]: v }))} className="w-40 max-sm:order-last max-sm:w-full" />
@@ -209,7 +213,7 @@ export function ContainerDemo({ className }: { className?: string }) {
                         {!containers.length && <Unavailable icon="shippingbox" title="No Containers">Create one from an image with +.</Unavailable>}
                     </div>
                 )}
-                {section === "images" && <ImagesView images={images} pulls={pulls} query={query} selected={selected.images} onSelect={select} />}
+                {section === "images" && <ImagesView images={images} pulls={pulls} query={query} grid={grid} selected={selected.images} onSelect={select} />}
                 {section === "networks" && <TableView items={networks} columns={networkColumns(containers)} selected={selected.networks} keyOf={(n) => n.name} onSelect={select} empty="No networks." />}
                 {section === "volumes" && <TableView items={volumes} columns={volumeColumns(containers)} selected={selected.volumes} keyOf={(v) => v.name} onSelect={select} empty="No volumes." />}
             </main>

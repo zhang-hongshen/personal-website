@@ -50,10 +50,11 @@ export function Navbar() {
                         <DropdownMenuContent
                             align="center"
                             collisionPadding={10}
-                            className="grid max-h-[var(--radix-dropdown-menu-content-available-height)] gap-x-1.5 overflow-y-auto min-[560px]:grid-cols-2"
+                            className="max-h-[var(--radix-dropdown-menu-content-available-height)] gap-x-1.5 overflow-y-auto min-[560px]:w-[520px] min-[560px]:columns-2"
                         >
+                            {/* Groups flow down two columns, so a small group doesn't leave a hole beside a big one. */}
                             {PRODUCT_GROUPS.map(({ category, products }) => (
-                                <DropdownMenuGroup key={category}>
+                                <DropdownMenuGroup key={category} className="break-inside-avoid">
                                     <DropdownMenuLabel>{t(`common.category.${category}`)}</DropdownMenuLabel>
                                     {products.map((p) => (
                                         <DropdownMenuItem key={p.id} asChild className={cn(pathname.startsWith(`/products/${p.id}`) && "bg-accent")}>
