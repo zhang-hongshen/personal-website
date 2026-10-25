@@ -88,7 +88,13 @@
     "example_cellar": "“Add this paper to my Reading list in Cellar”",
     "scheduled_tasks": "Scheduled Tasks",
     "runs_on_its_own_schedule": "Runs on its own schedule",
-    "give_it_a_prompt_and_a_time": "Give it a prompt and a time. Every day or every week, it runs the task with your connected apps — a digest of today's notes, a movie for Friday night."
+    "give_it_a_prompt_and_a_time": "Give it a prompt and a time. Every day or every week, it runs the task with your connected apps — a digest of today's notes, a movie for Friday night.",
+    "demo_chat": "Chat",
+    "demo_connectors": "Connectors",
+    "demo_download": "Download {name}",
+    "demo_install": "Install {name}",
+    "demo_uninstall": "Uninstall {name}",
+    "demo_hint": "Try it: switch pages from the sidebar, download a model, install a connector."
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "Movies, shows and music. Beautifully organized",

@@ -1,13 +1,12 @@
 import { useTranslation } from "react-i18next";
 
 import { Glyph } from "~/components/glyph";
+import { ModelCraftDemo } from "~/components/modelcraft-demo";
 import {
     DownloadButton, Eyebrow, FeatureGrid, Hero, ProductMeta, Section, SectionLead, SectionTitle, Shot, Split, Statement,
     type Feature,
 } from "~/components/sections";
 import { getProduct, type AccentHandle } from "~/lib/products";
-import chatLight from "~/assets/modelcraft/chat_light.webp";
-import chatDark from "~/assets/modelcraft/chat_dark.webp";
 import modelStoreLight from "~/assets/modelcraft/model_store_light.webp";
 import modelStoreDark from "~/assets/modelcraft/model_store_dark.webp";
 import connectorsLight from "~/assets/modelcraft/connectors_light.webp";
@@ -38,7 +37,7 @@ export default function ModelCraft() {
                 action={<DownloadButton repo="zhang-hongshen/ModelCraft" />}
                 note={t("modelcraft.apple_silicon_m1_or_later")}
             >
-                <Shot className="mt-16" light={chatLight} dark={chatDark} alt="ModelCraft conversation" width={2400} height={1374} eager />
+                <ModelCraftDemo className="mt-16" />
             </Hero>
 
             <Section>

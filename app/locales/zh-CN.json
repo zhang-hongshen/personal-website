@@ -88,7 +88,13 @@
     "example_cellar": "“把这篇论文加到 Cellar 的阅读清单里”",
     "scheduled_tasks": "定时任务",
     "runs_on_its_own_schedule": "到点，自己开工",
-    "give_it_a_prompt_and_a_time": "写下要做的事，定好时间。每天或每周，它都会结合已连接的 App 按时完成：汇总今天的笔记，替你挑一部周五晚上的电影。"
+    "give_it_a_prompt_and_a_time": "写下要做的事，定好时间。每天或每周，它都会结合已连接的 App 按时完成：汇总今天的笔记，替你挑一部周五晚上的电影。",
+    "demo_chat": "对话",
+    "demo_connectors": "连接器",
+    "demo_download": "下载 {name}",
+    "demo_install": "安装 {name}",
+    "demo_uninstall": "卸载 {name}",
+    "demo_hint": "试试看：点侧边栏切换页面，下载一个模型，安装一个连接器。"
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "电影、剧集与音乐，自成一库",
