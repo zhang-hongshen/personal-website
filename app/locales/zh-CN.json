@@ -94,7 +94,7 @@
     "demo_download": "下载 {name}",
     "demo_install": "安装 {name}",
     "demo_uninstall": "卸载 {name}",
-    "demo_hint": "试试看：点侧边栏切换页面，下载一个模型，安装一个连接器。"
+    "demo_hint": "试试看：发一条消息、开个新对话、下载一个模型，或者添加一个定时任务。"
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "电影、剧集与音乐，自成一库",
@@ -281,7 +281,8 @@
     "undo_everything": "一切皆可撤销",
     "edits_deletes_and_whole_imports": "编辑、删除，乃至整次导入，都能用 ⌘Z 撤回。",
     "yours_to_take": "数据随你带走",
-    "export_to_open_formats_whenever": "随时导出为开放格式，不被锁定。"
+    "export_to_open_formats_whenever": "随时导出为开放格式，不被锁定。",
+    "demo_hint": "试试看：在页面里打字，输入“/”换块类型，点 + 新建页面，或者在任务看板上拖动卡片。"
   },
   "quaero": {
     "meta": {

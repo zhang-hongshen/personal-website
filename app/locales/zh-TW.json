@@ -94,7 +94,7 @@
     "demo_download": "下載 {name}",
     "demo_install": "安裝 {name}",
     "demo_uninstall": "解除安裝 {name}",
-    "demo_hint": "試試看：點側邊欄切換頁面，下載一個模型，安裝一個連接器。"
+    "demo_hint": "試試看：傳一則訊息、開個新對話、下載一個模型，或者新增一個排程任務。"
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "電影、影集與音樂，自成一庫",
@@ -281,7 +281,8 @@
     "undo_everything": "一切皆可還原",
     "edits_deletes_and_whole_imports": "編輯、刪除，乃至整次匯入，都能用 ⌘Z 還原。",
     "yours_to_take": "資料隨你帶走",
-    "export_to_open_formats_whenever": "隨時匯出為開放格式，不被綁定。"
+    "export_to_open_formats_whenever": "隨時匯出為開放格式，不被綁定。",
+    "demo_hint": "試試看：在頁面裡打字，輸入「/」換區塊類型，點 + 新增頁面，或者在任務看板上拖曳卡片。"
   },
   "quaero": {
     "meta": {

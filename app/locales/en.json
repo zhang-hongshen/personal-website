@@ -94,7 +94,7 @@
     "demo_download": "Download {name}",
     "demo_install": "Install {name}",
     "demo_uninstall": "Uninstall {name}",
-    "demo_hint": "Try it: switch pages from the sidebar, download a model, install a connector."
+    "demo_hint": "Try it: send a message, start a new chat, download a model, or add a scheduled task."
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "Movies, shows and music. Beautifully organized",
@@ -281,7 +281,8 @@
     "undo_everything": "Undo everything",
     "edits_deletes_and_whole_imports": "Edits, deletes and whole imports each come back with ⌘Z.",
     "yours_to_take": "Yours to take",
-    "export_to_open_formats_whenever": "Export to open formats whenever you like. No lock-in."
+    "export_to_open_formats_whenever": "Export to open formats whenever you like. No lock-in.",
+    "demo_hint": "Try it: type in a page, press “/” for block types, add a page with +, or drag cards on the Tasks board."
   },
   "quaero": {
     "meta": {

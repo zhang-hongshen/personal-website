@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 
+import { CellarDemo } from "~/components/cellar-demo";
 import { Glyph } from "~/components/glyph";
 import {
     ComingSoonButton, Eyebrow, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Split, Statement, Tree,
@@ -46,7 +47,9 @@ export default function Cellar() {
                 tagline={t("cellar.notes_and_databases_that_stay")}
                 action={<ComingSoonButton label={t("cellar.coming_soon")} />}
                 note={t("cellar.requirements")}
-            />
+            >
+                <CellarDemo className="mt-16" />
+            </Hero>
 
             <Section>
                 <SectionTitle>{t("cellar.everything_is_a_block")}</SectionTitle>
