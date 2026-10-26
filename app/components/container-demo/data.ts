@@ -1,6 +1,8 @@
 // What the Container demo starts with: a few local images, containers made from them, networks and
 // volumes. Each container has its own small filesystem for the Files tab and the Terminal.
 
+import type { L } from "~/components/demo-text";
+
 export type Status = "new" | "starting" | "running" | "paused" | "stopping" | "stopped";
 export type Node = { name: string; dir?: Node[]; file?: string };
 export type Image = { ref: string; size: number; digest: string; created: string; ports: number[]; cmd: string; env: string[]; layers: number };
@@ -13,13 +15,13 @@ export type Container = {
 export type Network = { name: string; mode: "NAT"; subnet: string | null; builtIn?: boolean };
 export type Volume = { name: string; size: number; used: number };
 
-export const STATUS: Record<Status, { title: string; color: string }> = {
-    new: { title: "Created", color: "#8e8e93" },
-    starting: { title: "Starting", color: "#007aff" },
-    running: { title: "Running", color: "#34c759" },
-    paused: { title: "Paused", color: "#ffcc00" },
-    stopping: { title: "Stopping", color: "#007aff" },
-    stopped: { title: "Stopped", color: "#8e8e93" },
+export const STATUS: Record<Status, { title: L; color: string }> = {
+    new: { title: ["Created", "已创建", "已建立"], color: "#8e8e93" },
+    starting: { title: ["Starting", "正在启动", "正在啟動"], color: "#007aff" },
+    running: { title: ["Running", "运行中", "執行中"], color: "#34c759" },
+    paused: { title: ["Paused", "已暂停", "已暫停"], color: "#ffcc00" },
+    stopping: { title: ["Stopping", "正在停止", "正在停止"], color: "#007aff" },
+    stopped: { title: ["Stopped", "已停止", "已停止"], color: "#8e8e93" },
 };
 
 const GB = 1024 ** 3;

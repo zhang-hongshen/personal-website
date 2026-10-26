@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 
 import { cn } from "~/lib/utils";
+import { useText } from "./demo-text";
 import { CAPSULE, MAC_FONT, TOOL, TOOL_ITEM } from "./mac-window";
 import { SFSymbol, type SymbolName } from "./sf-symbol";
 
@@ -86,13 +87,14 @@ export type Sidebar = ReturnType<typeof useSidebar>;
 
 /** The sidebar column: window buttons and the toggle on top, then its content. */
 export function MacSidebar({ sidebar, width = 220, toolbar, children }: { sidebar: Sidebar; width?: number; toolbar?: ReactNode; children: ReactNode }) {
+    const label = useText()(["Hide Sidebar", "隐藏边栏", "隱藏側邊欄"]);
     return (
         <aside className={cn("flex shrink-0 flex-col", MAC.sidebar, sidebar.className)} style={{ width }}>
             <div className="flex h-[52px] shrink-0 items-center gap-2 px-4">
                 <TrafficLights />
                 <span className="ml-auto flex items-center gap-2">
                     {toolbar}
-                    <button type="button" aria-label="Hide Sidebar" title="Hide Sidebar" className={TOOL} onClick={sidebar.hide}>
+                    <button type="button" aria-label={label} title={label} className={TOOL} onClick={sidebar.hide}>
                         <SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" />
                     </button>
                 </span>
@@ -104,9 +106,10 @@ export function MacSidebar({ sidebar, width = 220, toolbar, children }: { sideba
 
 /** The button that brings the sidebar back, for the first toolbar of the window. */
 export function ShowSidebarButton({ sidebar }: { sidebar: Sidebar }) {
+    const label = useText()(["Show Sidebar", "显示边栏", "顯示側邊欄"]);
     if (sidebar.state === true) return null;
     return (
-        <button type="button" aria-label="Show Sidebar" title="Show Sidebar" className={cn(TOOL, sidebar.state === null && "sm:hidden")} onClick={sidebar.show}>
+        <button type="button" aria-label={label} title={label} className={cn(TOOL, sidebar.state === null && "sm:hidden")} onClick={sidebar.show}>
             <SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" />
         </button>
     );

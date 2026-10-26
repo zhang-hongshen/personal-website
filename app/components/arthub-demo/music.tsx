@@ -1,12 +1,13 @@
 import { useEffect, useRef } from "react";
 
+import { useText } from "~/components/demo-text";
 import { MAC, Unavailable } from "~/components/mac-ui";
 import { GLASS } from "~/components/mac-window";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { Artwork } from "./artwork";
 import { ALBUMS, TRACKS, duration, type Album, type Track } from "./library";
-import { ACCENT } from "./video";
+import { ACCENT, NoResults } from "./video";
 
 // Arthub's Music: songs, albums and artists, the floating now-playing bar and the lyrics, which follow
 // the song line by line the way an .lrc file next to it would time them.
@@ -44,10 +45,11 @@ export function MusicLibrary({ mode, search, now, controls, onAlbum }: {
     controls: MusicControls;
     onAlbum: (id: string) => void;
 }) {
+    const s = useText();
     const q = search.trim().toLowerCase();
     const tracks = TRACKS.filter((t) => !q || matches(t, q));
     const albums = ALBUMS.filter((a) => !q || a.songs.some((s) => matches({ ...s, album: a }, q)));
-    if (!tracks.length) return <Unavailable icon="magnifyingglass" title={`No Results for “${search}”`}>Check the spelling or try a new search.</Unavailable>;
+    if (!tracks.length) return <NoResults search={search} />;
 
     if (mode === "songs") return <SongTable tracks={tracks} now={now} onPlay={(t) => controls.play(t, tracks)} showAlbum />;
     if (mode === "albums") return <AlbumGrid albums={albums} onAlbum={onAlbum} />;
@@ -61,7 +63,7 @@ export function MusicLibrary({ mode, search, now, controls, onAlbum }: {
                         <Artwork art={own[0].art} className="size-12 shrink-0 rounded-full" />
                         <span className="flex flex-col leading-tight">
                             <span className="font-semibold">{artist}</span>
-                            <span className={cn("text-[12px]", MAC.muted)}>{own.length} {own.length === 1 ? "album" : "albums"}</span>
+                            <span className={cn("text-[12px]", MAC.muted)}>{s([`${own.length} ${own.length === 1 ? "album" : "albums"}`, `${own.length} 张专辑`, `${own.length} 張專輯`])}</span>
                         </span>
                     </button>
                 );
@@ -85,16 +87,17 @@ function AlbumGrid({ albums, onAlbum }: { albums: Album[]; onAlbum: (id: string)
 }
 
 function SongTable({ tracks, now, onPlay, showAlbum }: { tracks: Track[]; now: NowPlaying; onPlay: (t: Track) => void; showAlbum?: boolean }) {
+    const s = useText();
     return (
         <div className="min-h-0 flex-1 overflow-y-auto pb-24">
             <table className="w-full table-fixed border-collapse text-left">
                 <thead className={cn("sticky top-0 z-10 text-[11px]", MAC.window, MAC.muted)}>
                     <tr className={cn("border-b", MAC.line)}>
                         <th className="w-10 py-1.5 pl-4 font-normal">#</th>
-                        <th className="py-1.5 font-normal">Title</th>
-                        {showAlbum && <th className="hidden py-1.5 font-normal sm:table-cell">Artist</th>}
-                        {showAlbum && <th className="hidden py-1.5 font-normal md:table-cell">Album</th>}
-                        <th className="w-14 py-1.5 pr-4 text-right font-normal">Time</th>
+                        <th className="py-1.5 font-normal">{s(["Title", "标题", "標題"])}</th>
+                        {showAlbum && <th className="hidden py-1.5 font-normal sm:table-cell">{s(["Artist", "艺人", "藝人"])}</th>}
+                        {showAlbum && <th className="hidden py-1.5 font-normal md:table-cell">{s(["Album", "专辑", "專輯"])}</th>}
+                        <th className="w-14 py-1.5 pr-4 text-right font-normal">{s(["Time", "时长", "長度"])}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -103,7 +106,7 @@ function SongTable({ tracks, now, onPlay, showAlbum }: { tracks: Track[]; now: N
                         return (
                             <tr key={t.id} className={cn("group h-8 cursor-default", MAC.stripe, current && ACCENT.text)} onDoubleClick={() => onPlay(t)}>
                                 <td className="pl-4">
-                                    <button type="button" aria-label={`Play ${t.title}`} className="flex w-5 items-center justify-center" onClick={() => onPlay(t)}>
+                                    <button type="button" aria-label={s([`Play ${t.title}`, `播放“${t.title}”`, `播放「${t.title}」`])} className="flex w-5 items-center justify-center" onClick={() => onPlay(t)}>
                                         {current && now.playing ? (
                                             <SFSymbol name="speaker.wave.2.fill" className="size-3.5" />
                                         ) : (
@@ -128,8 +131,10 @@ function SongTable({ tracks, now, onPlay, showAlbum }: { tracks: Track[]; now: N
 }
 
 export function AlbumDetail({ album, now, controls }: { album: Album; now: NowPlaying; controls: MusicControls }) {
+    const s = useText();
     const tracks = TRACKS.filter((t) => t.album.id === album.id);
-    const total = tracks.reduce((s, t) => s + t.seconds, 0);
+    const total = tracks.reduce((n, t) => n + t.seconds, 0);
+    const minutes = Math.round(total / 60);
     return (
         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto pb-24">
             <div className="flex flex-col gap-4 px-5 pt-1 pb-4 sm:flex-row sm:items-end">
@@ -137,17 +142,17 @@ export function AlbumDetail({ album, now, controls }: { album: Album; now: NowPl
                 <div className="flex flex-col gap-1">
                     <h3 className="text-[24px] leading-tight font-bold">{album.title}</h3>
                     <p className={cn("text-[17px]", ACCENT.text)}>{album.artist}</p>
-                    <p className={cn("text-[12px]", MAC.muted)}>{album.year} · {tracks.length} songs, {Math.round(total / 60)} minutes · FLAC</p>
+                    <p className={cn("text-[12px]", MAC.muted)}>{album.year} · {s([`${tracks.length} songs, ${minutes} minutes`, `${tracks.length} 首歌曲，${minutes} 分钟`, `${tracks.length} 首歌曲，${minutes} 分鐘`])} · FLAC</p>
                     <div className="mt-2 flex gap-2">
                         <button type="button" className={cn("flex h-8 items-center gap-1.5 rounded-full px-4 text-[13px] font-semibold", ACCENT.bg)} onClick={() => controls.play(tracks[0], tracks)}>
-                            <SFSymbol name="play.fill" className="size-3" />Play
+                            <SFSymbol name="play.fill" className="size-3" />{s(["Play", "播放", "播放"])}
                         </button>
                         <button
                             type="button"
                             className={cn("flex h-8 items-center gap-1.5 rounded-full px-4 text-[13px] font-semibold", MAC.field, ACCENT.text)}
                             onClick={() => { controls.setShuffle(true); controls.play(tracks[Math.floor(Math.random() * tracks.length)], tracks); }}
                         >
-                            <SFSymbol name="shuffle" className="size-3.5" />Shuffle
+                            <SFSymbol name="shuffle" className="size-3.5" />{s(["Shuffle", "随机播放", "隨機播放"])}
                         </button>
                     </div>
                 </div>
@@ -159,21 +164,23 @@ export function AlbumDetail({ album, now, controls }: { album: Album; now: NowPl
 
 /** The floating now-playing bar, like Apple Music's. */
 export function MiniPlayer({ now, controls, lyrics, onLyrics }: { now: NowPlaying; controls: MusicControls; lyrics: boolean; onLyrics: () => void }) {
+    const s = useText();
     const t = now.track;
+    const repeat = { off: s(["Off", "关", "關"]), all: s(["All", "全部", "全部"]), one: s(["One", "单曲", "單曲"]) }[now.repeat];
     const icon = "flex items-center justify-center disabled:opacity-35";
     return (
         <div className="pointer-events-none absolute inset-x-3 bottom-3 z-20 flex justify-center">
             <div className={cn("pointer-events-auto flex w-full max-w-[720px] items-center gap-3 rounded-full py-1.5 pr-3 pl-4 sm:gap-4", GLASS)}>
                 <div className="flex shrink-0 items-center gap-3">
-                    <button type="button" aria-label="Shuffle" title="Shuffle" className={cn(icon, "max-sm:hidden", now.shuffle ? ACCENT.text : "opacity-60")} onClick={() => controls.setShuffle(!now.shuffle)}>
+                    <button type="button" aria-label={s(["Shuffle", "随机播放", "隨機播放"])} title={s(["Shuffle", "随机播放", "隨機播放"])} className={cn(icon, "max-sm:hidden", now.shuffle ? ACCENT.text : "opacity-60")} onClick={() => controls.setShuffle(!now.shuffle)}>
                         <SFSymbol name="shuffle" className="size-3.5" />
                     </button>
-                    <button type="button" aria-label="Previous" disabled={!t} className={icon} onClick={controls.previous}><SFSymbol name="backward.fill" className="h-3 w-5" /></button>
-                    <button type="button" aria-label={now.playing ? "Pause" : "Play"} className={cn(icon, "w-6")} onClick={controls.toggle}>
+                    <button type="button" aria-label={s(["Previous", "上一首", "上一首"])} disabled={!t} className={icon} onClick={controls.previous}><SFSymbol name="backward.fill" className="h-3 w-5" /></button>
+                    <button type="button" aria-label={now.playing ? s(["Pause", "暂停", "暫停"]) : s(["Play", "播放", "播放"])} className={cn(icon, "w-6")} onClick={controls.toggle}>
                         <SFSymbol name={now.playing ? "pause.fill" : "play.fill"} className="size-5" />
                     </button>
-                    <button type="button" aria-label="Next" disabled={!t} className={icon} onClick={controls.next}><SFSymbol name="forward.fill" className="h-3 w-5" /></button>
-                    <button type="button" aria-label="Repeat" title={`Repeat: ${now.repeat}`} className={cn(icon, "relative max-sm:hidden", now.repeat === "off" ? "opacity-60" : ACCENT.text)} onClick={controls.cycleRepeat}>
+                    <button type="button" aria-label={s(["Next", "下一首", "下一首"])} disabled={!t} className={icon} onClick={controls.next}><SFSymbol name="forward.fill" className="h-3 w-5" /></button>
+                    <button type="button" aria-label={s(["Repeat", "重复播放", "重複播放"])} title={s([`Repeat: ${repeat}`, `重复播放：${repeat}`, `重複播放：${repeat}`])} className={cn(icon, "relative max-sm:hidden", now.repeat === "off" ? "opacity-60" : ACCENT.text)} onClick={controls.cycleRepeat}>
                         <SFSymbol name="repeat" className="size-3.5" />
                         {now.repeat === "one" && <span className="absolute -top-1 -right-1.5 text-[8px] font-bold">1</span>}
                     </button>
@@ -182,13 +189,13 @@ export function MiniPlayer({ now, controls, lyrics, onLyrics }: { now: NowPlayin
                 <div className="flex min-w-0 flex-1 items-center gap-2.5">
                     {t ? <Artwork art={t.album.art} className="size-9 shrink-0 rounded-md" /> : <span className="flex size-9 shrink-0 items-center justify-center rounded-md bg-black/8 dark:bg-white/10"><SFSymbol name="music.note" className="size-4 opacity-50" /></span>}
                     <div className="flex min-w-0 flex-1 flex-col">
-                        <p className="truncate text-[12px] leading-tight font-semibold">{t?.title ?? "Not Playing"}</p>
-                        <p className={cn("truncate text-[11px] leading-tight", MAC.muted)}>{t ? `${t.album.artist} — ${t.album.title}` : "Choose a song to play"}</p>
+                        <p className="truncate text-[12px] leading-tight font-semibold">{t?.title ?? s(["Not Playing", "未在播放", "未在播放"])}</p>
+                        <p className={cn("truncate text-[11px] leading-tight", MAC.muted)}>{t ? `${t.album.artist} — ${t.album.title}` : s(["Choose a song to play", "选一首歌来播放", "選一首歌來播放"])}</p>
                         <div className="mt-1 flex items-center gap-2 text-[10px] tabular-nums">
                             <span className={cn("max-sm:hidden", MAC.muted)}>{duration(now.position)}</span>
                             <input
                                 type="range"
-                                aria-label="Playback Position"
+                                aria-label={s(["Playback Position", "播放进度", "播放進度"])}
                                 disabled={!t}
                                 min={0}
                                 max={t?.seconds ?? 1}
@@ -202,12 +209,12 @@ export function MiniPlayer({ now, controls, lyrics, onLyrics }: { now: NowPlayin
                 </div>
 
                 <div className="flex shrink-0 items-center gap-3">
-                    <button type="button" aria-label="Lyrics" title="Lyrics" aria-pressed={lyrics} className={cn(icon, lyrics ? ACCENT.text : "opacity-70")} onClick={onLyrics}>
+                    <button type="button" aria-label={s(["Lyrics", "歌词", "歌詞"])} title={s(["Lyrics", "歌词", "歌詞"])} aria-pressed={lyrics} className={cn(icon, lyrics ? ACCENT.text : "opacity-70")} onClick={onLyrics}>
                         <SFSymbol name="quote.bubble" className="size-4" />
                     </button>
                     <label className="flex items-center gap-1.5 max-md:hidden">
                         <SFSymbol name="speaker.wave.2.fill" className="size-3.5 opacity-60" />
-                        <input type="range" aria-label="Volume" min={0} max={1} step={0.01} value={now.volume} className="h-1 w-16 accent-current" onChange={(e) => controls.setVolume(Number(e.target.value))} />
+                        <input type="range" aria-label={s(["Volume", "音量", "音量"])} min={0} max={1} step={0.01} value={now.volume} className="h-1 w-16 accent-current" onChange={(e) => controls.setVolume(Number(e.target.value))} />
                     </label>
                 </div>
             </div>
@@ -217,6 +224,7 @@ export function MiniPlayer({ now, controls, lyrics, onLyrics }: { now: NowPlayin
 
 /** The lyrics of the song playing; the current line is lit and a click on a line jumps to it. */
 export function LyricsPanel({ now, controls }: { now: NowPlaying; controls: MusicControls }) {
+    const s = useText();
     const list = useRef<HTMLDivElement>(null);
     const lines = now.track?.lyrics ?? [];
     // The song repeats its lyrics after the last line, a verse at a time.
@@ -233,7 +241,7 @@ export function LyricsPanel({ now, controls }: { now: NowPlaying; controls: Musi
         if (box && el) box.scrollTo({ top: el.offsetTop - box.clientHeight / 2 + el.clientHeight / 2, behavior: "smooth" });
     }, [current]);
 
-    if (!now.track) return <Unavailable icon="quote.bubble" title="No Lyrics">Play a song to see its lyrics here.</Unavailable>;
+    if (!now.track) return <Unavailable icon="quote.bubble" title={s(["No Lyrics", "没有歌词", "沒有歌詞"])}>{s(["Play a song to see its lyrics here.", "播放一首歌，歌词会显示在这里。", "播放一首歌，歌詞會顯示在這裡。"])}</Unavailable>;
     return (
         <div ref={list} className="relative flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto px-6 pt-10 pb-40">
             {lines.map(([at, text], i) => (

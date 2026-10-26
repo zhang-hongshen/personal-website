@@ -2,18 +2,20 @@
 // produce for a melody (a scoop into each note, vibrato, a few notes sharp or flat), the notes found
 // in it, Auto Tune and hand edits applied on top, and the voice rendered back to audio.
 
+import type { L } from "~/components/demo-text";
+
 export const HOP = 0.01;
 export const SAMPLE_RATE = 44100;
 
-export type Recording = { id: string; name: string; format: string; tempo: number; melody: [number, number][]; errors: number[] };
+export type Recording = { id: string; name: L; format: L; tempo: number; melody: [number, number][]; errors: number[] };
 
 const C4 = 60, D4 = 62, E4 = 64, F4 = 65, G4 = 67, A4 = 69;
 
 export const RECORDINGS: Recording[] = [
     {
         id: "twinkle",
-        name: "Twinkle Twinkle.wav",
-        format: "44.1 kHz · Mono",
+        name: ["Twinkle Twinkle.wav", "小星星.wav", "小星星.wav"],
+        format: ["44.1 kHz · Mono", "44.1 kHz · 单声道", "44.1 kHz · 單聲道"],
         tempo: 0.5,
         // [MIDI pitch, beats]
         melody: [[C4, 1], [C4, 1], [G4, 1], [G4, 1], [A4, 1], [A4, 1], [G4, 2], [F4, 1], [F4, 1], [E4, 1], [E4, 1], [D4, 1], [D4, 1], [C4, 2]],
@@ -21,8 +23,8 @@ export const RECORDINGS: Recording[] = [
     },
     {
         id: "ode",
-        name: "Ode to Joy.m4a",
-        format: "48 kHz · Stereo",
+        name: ["Ode to Joy.m4a", "欢乐颂.m4a", "歡樂頌.m4a"],
+        format: ["48 kHz · Stereo", "48 kHz · 立体声", "48 kHz · 立體聲"],
         tempo: 0.42,
         melody: [[E4, 1], [E4, 1], [F4, 1], [G4, 1], [G4, 1], [F4, 1], [E4, 1], [D4, 1], [C4, 1], [C4, 1], [D4, 1], [E4, 1], [E4, 1.5], [D4, 0.5], [D4, 2]],
         errors: [-0.3, 0.12, 0.4, -0.2, 0.08, -0.38, 0.22, 0.34, -0.1, -0.45, 0.16, 0.05, -0.28, 0.4, -0.18],
@@ -63,10 +65,19 @@ export function makeTake(recording: Recording): Take {
 
 export type Style = "natural" | "balanced" | "robotic";
 
-export const STYLES: { id: Style; title: string; amount: number; flattening: number }[] = [
-    { id: "natural", title: "Natural", amount: 0.6, flattening: 0 },
-    { id: "balanced", title: "Balanced", amount: 1, flattening: 0 },
-    { id: "robotic", title: "Robotic", amount: 1, flattening: 1 },
+export const STYLES: { id: Style; title: L; summary: L; amount: number; flattening: number }[] = [
+    {
+        id: "natural", title: ["Natural", "自然", "自然"], amount: 0.6, flattening: 0,
+        summary: ["Gently nudges notes toward pitch. Your voice keeps its character.", "轻轻把音推向准确音高，保留嗓音特点。", "輕輕把音推向準確音高，保留嗓音特色。"],
+    },
+    {
+        id: "balanced", title: ["Balanced", "标准", "標準"], amount: 1, flattening: 0,
+        summary: ["Puts every held note on pitch and keeps your vibrato.", "每个长音都修到准确音高，保留颤音。", "每個長音都修到準確音高，保留顫音。"],
+    },
+    {
+        id: "robotic", title: ["Robotic", "电音", "電音"], amount: 1, flattening: 1,
+        summary: ["Snaps every note flat onto pitch for the classic electronic effect.", "把音高完全拉直，得到经典的电音效果。", "把音高完全拉直，得到經典的電音效果。"],
+    },
 ];
 
 /** Everything the user changed: Auto Tune's style (or off) and notes moved by hand, by note id. */

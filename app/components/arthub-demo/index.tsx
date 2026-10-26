@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useText, type L } from "~/components/demo-text";
 import { Inspector, MAC, MacSidebar, MacWindow, SearchField, Segmented, ShowSidebarButton, SidebarHeader, SidebarRow, Spinner, TitleBar, ToolButton, Unavailable, useSidebar } from "~/components/mac-ui";
 import { CAPSULE } from "~/components/mac-window";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
-import { ALBUMS, MOVIES, SHOWS, TRACKS, libraryFiles, type Episode, type Track } from "./library";
+import { ALBUMS, GENRES, MOVIES, SHOWS, TRACKS, libraryFiles, type Episode, type Genre, type Track } from "./library";
 import { AlbumDetail, LyricsPanel, MiniPlayer, MusicLibrary, type MusicControls, type MusicMode, type NowPlaying } from "./music";
 import { VideoPlayer } from "./player";
 import { SongPlayer } from "./synth";
@@ -15,18 +16,22 @@ import { ACCENT, GenreList, MovieDetail, MoviesHome, ShowDetail, ShowsGrid, type
 // page) with the now-playing bar and timed lyrics. What you watch is remembered until a reload.
 
 type Tab = "movies" | "shows" | "music" | "media" | "backup";
-type Route = { kind: "movie"; id: string } | { kind: "genre"; genre: string } | { kind: "show"; id: string } | { kind: "album"; id: string };
+type Route = { kind: "movie"; id: string } | { kind: "genre"; genre: Genre } | { kind: "show"; id: string } | { kind: "album"; id: string };
 type Playing = { title: string; subtitle?: string; key: string; art: (typeof MOVIES)[number]["art"]; seconds: number; subtitles: (typeof MOVIES)[number]["subtitles"] };
 
-const TABS: { id: Tab; label: string; icon: SymbolName }[] = [
-    { id: "movies", label: "Movies", icon: "film" },
-    { id: "shows", label: "TV Shows", icon: "tv" },
-    { id: "music", label: "Music", icon: "music.note" },
+const TABS: { id: Tab; label: L; icon: SymbolName }[] = [
+    { id: "movies", label: ["Movies", "电影", "電影"], icon: "film" },
+    { id: "shows", label: ["TV Shows", "电视剧", "電視節目"], icon: "tv" },
+    { id: "music", label: ["Music", "音乐", "音樂"], icon: "music.note" },
 ];
+const MEDIA: L = ["Media", "媒体", "媒體"];
+const BACKUP: L = ["Backup Drive", "备份硬盘", "備份磁碟"];
+const LYRICS: L = ["Lyrics", "歌词", "歌詞"];
 
 const SELECTED = "!bg-[#c2462a] dark:!bg-[#f26d45]";
 
 export function ArthubDemo({ className }: { className?: string }) {
+    const s = useText();
     const sidebar = useSidebar();
     const [tab, setTab] = useState<Tab>("movies");
     const [stacks, setStacks] = useState<Record<Tab, Route[]>>({ movies: [], shows: [], music: [], media: [], backup: [] });
@@ -125,12 +130,12 @@ export function ArthubDemo({ className }: { className?: string }) {
         const m = MOVIES.find((x) => x.id === id)!;
         const seconds = m.minutes * 60;
         const at = progress[id] ?? 0;
-        startVideo({ key: id, title: m.title, subtitle: `${m.year} · ${m.tags.join(" · ")}`, art: m.art, seconds, subtitles: m.subtitles }, at >= seconds - 5 ? 0 : at);
+        startVideo({ key: id, title: s(m.title), subtitle: `${m.year} · ${m.tags.join(" · ")}`, art: m.art, seconds, subtitles: m.subtitles }, at >= seconds - 5 ? 0 : at);
     };
     const playEpisode = (showId: string, e: Episode) => {
-        const s = SHOWS.find((x) => x.id === showId)!;
+        const show = SHOWS.find((x) => x.id === showId)!;
         const at = progress[e.id] ?? e.progress;
-        startVideo({ key: e.id, title: e.title, subtitle: `${s.title} · ${e.file.replace(".mkv", "")}`, art: s.art, seconds: e.minutes * 60, subtitles: s.subtitles }, at >= e.minutes * 60 - 5 ? 0 : at);
+        startVideo({ key: e.id, title: s(e.title), subtitle: `${s(show.title)} · ${e.file.replace(".mkv", "")}`, art: show.art, seconds: e.minutes * 60, subtitles: show.subtitles }, at >= e.minutes * 60 - 5 ? 0 : at);
     };
     const startVideo = (p: Playing, start: number) => {
         if (nowRef.current.playing) controls.toggle();
@@ -145,15 +150,17 @@ export function ArthubDemo({ className }: { className?: string }) {
     // ---- Title bar
     const show = route?.kind === "show" ? SHOWS.find((x) => x.id === route.id)! : null;
     const title = route
-        ? route.kind === "movie" ? MOVIES.find((m) => m.id === route.id)!.title
-            : route.kind === "genre" ? route.genre
-                : route.kind === "show" ? show!.title
+        ? route.kind === "movie" ? s(MOVIES.find((m) => m.id === route.id)!.title)
+            : route.kind === "genre" ? s(GENRES[route.genre])
+                : route.kind === "show" ? s(show!.title)
                     : ALBUMS.find((a) => a.id === route.id)!.title
-        : tab === "media" ? "Media" : tab === "backup" ? "Backup Drive" : TABS.find((t) => t.id === tab)!.label;
-    const subtitle = !route && tab === "media" ? `${libraryFiles().length} files · ~/Media` : undefined;
+        : s(tab === "media" ? MEDIA : tab === "backup" ? BACKUP : TABS.find((t) => t.id === tab)!.label);
+    const files = libraryFiles(s).length;
+    const subtitle = !route && tab === "media" ? s([`${files} files · ~/Media`, `${files} 个文件 · ~/Media`, `${files} 個檔案 · ~/Media`]) : undefined;
     const searchable = !route && (tab === "movies" || tab === "shows" || tab === "music");
+    const musicModes = [{ value: "songs" as const, label: s(["Songs", "歌曲", "歌曲"]) }, { value: "albums" as const, label: s(["Albums", "专辑", "專輯"]) }, { value: "artists" as const, label: s(["Artists", "艺人", "藝人"]) }];
     const backButton = route && (
-        <button type="button" aria-label="Back" title="Back" className={cn(CAPSULE, "w-8 justify-center")} onClick={back}>
+        <button type="button" aria-label={s(["Back", "返回", "返回"])} title={s(["Back", "返回", "返回"])} className={cn(CAPSULE, "w-8 justify-center")} onClick={back}>
             <SFSymbol name="chevron.left" className="size-3.5" />
         </button>
     );
@@ -163,13 +170,13 @@ export function ArthubDemo({ className }: { className?: string }) {
             <MacSidebar sidebar={sidebar}>
                 <p className="px-5 pt-1 pb-1 text-[26px] font-semibold">Arthub</p>
                 <nav className="flex flex-col gap-0.5 overflow-y-auto pb-3">
-                    <SidebarHeader>Home</SidebarHeader>
+                    <SidebarHeader>{s(["Home", "主页", "首頁"])}</SidebarHeader>
                     {TABS.map((t) => (
-                        <SidebarRow key={t.id} icon={t.icon} iconClass={ACCENT.text} label={t.label} selected={tab === t.id} className={tab === t.id ? SELECTED : undefined} onClick={() => open(t.id)} />
+                        <SidebarRow key={t.id} icon={t.icon} iconClass={ACCENT.text} label={s(t.label)} selected={tab === t.id} className={tab === t.id ? SELECTED : undefined} onClick={() => open(t.id)} />
                     ))}
-                    <SidebarHeader>Library</SidebarHeader>
-                    <SidebarRow icon="folder" iconClass={ACCENT.text} label="Media" selected={tab === "media"} className={tab === "media" ? SELECTED : undefined} onClick={() => open("media")} />
-                    <SidebarRow icon="externaldrive.badge.exclamationmark" iconClass={MAC.muted} label="Backup Drive" detail="Offline" selected={tab === "backup"} className={tab === "backup" ? SELECTED : undefined} onClick={() => open("backup")} />
+                    <SidebarHeader>{s(["Library", "资料库", "資料庫"])}</SidebarHeader>
+                    <SidebarRow icon="folder" iconClass={ACCENT.text} label={s(MEDIA)} selected={tab === "media"} className={tab === "media" ? SELECTED : undefined} onClick={() => open("media")} />
+                    <SidebarRow icon="externaldrive.badge.exclamationmark" iconClass={MAC.muted} label={s(BACKUP)} detail={s(["Offline", "离线", "離線"])} selected={tab === "backup"} className={tab === "backup" ? SELECTED : undefined} onClick={() => open("backup")} />
                 </nav>
             </MacSidebar>
 
@@ -177,22 +184,22 @@ export function ArthubDemo({ className }: { className?: string }) {
                 <TitleBar leading={<><ShowSidebarButton sidebar={sidebar} />{backButton}</>} title={title} subtitle={subtitle}>
                     {!route && tab === "music" && (
                         <Segmented
-                            options={[{ value: "songs", label: "Songs" }, { value: "albums", label: "Albums" }, { value: "artists", label: "Artists" }]}
+                            options={musicModes}
                             value={mode}
                             onChange={setMode}
                             className="max-lg:hidden"
                         />
                     )}
-                    {searchable && <SearchField value={search} placeholder="Search" onChange={setSearch} className="w-36 max-sm:hidden lg:w-44" />}
+                    {searchable && <SearchField value={search} placeholder={s(["Search", "搜索", "搜尋"])} onChange={setSearch} className="w-36 max-sm:hidden lg:w-44" />}
                     {(tab === "movies" || tab === "shows" || tab === "media") && (
-                        scanning ? <span className={cn(CAPSULE, "w-8 justify-center")}><Spinner className="size-4" label="Refreshing" /></span> : <ToolButton icon="arrow.clockwise" label="Refresh" onClick={scan} />
+                        scanning ? <span className={cn(CAPSULE, "w-8 justify-center")}><Spinner className="size-4" label={s(["Refreshing", "正在刷新", "正在重新整理"])} /></span> : <ToolButton icon="arrow.clockwise" label={s(["Refresh", "刷新", "重新整理"])} onClick={scan} />
                     )}
-                    {tab === "music" && <ToolButton icon="sidebar.right" label="Lyrics" active={lyrics} onClick={() => setLyrics((l) => !l)} />}
+                    {tab === "music" && <ToolButton icon="sidebar.right" label={s(LYRICS)} active={lyrics} onClick={() => setLyrics((l) => !l)} />}
                 </TitleBar>
 
                 {!route && tab === "music" && (
                     <div className="px-5 pb-2 lg:hidden">
-                        <Segmented options={[{ value: "songs", label: "Songs" }, { value: "albums", label: "Albums" }, { value: "artists", label: "Artists" }]} value={mode} onChange={setMode} className="w-full" />
+                        <Segmented options={musicModes} value={mode} onChange={setMode} className="w-full" />
                     </div>
                 )}
 
@@ -205,8 +212,12 @@ export function ArthubDemo({ className }: { className?: string }) {
                 {tab === "music" && route?.kind === "album" && <AlbumDetail album={ALBUMS.find((a) => a.id === route.id)!} now={now} controls={controls} />}
                 {tab === "media" && <FileList />}
                 {tab === "backup" && (
-                    <Unavailable icon="externaldrive.badge.exclamationmark" title="Backup Drive Is Offline">
-                        Its movies and songs stay in your library and play again as soon as the drive is connected.
+                    <Unavailable icon="externaldrive.badge.exclamationmark" title={s(["Backup Drive Is Offline", "备份硬盘已离线", "備份磁碟已離線"])}>
+                        {s([
+                            "Its movies and songs stay in your library and play again as soon as the drive is connected.",
+                            "上面的电影和歌曲仍保留在资料库中，硬盘一接上就能继续播放。",
+                            "上面的電影和歌曲仍保留在資料庫中，磁碟一接上就能繼續播放。",
+                        ])}
                     </Unavailable>
                 )}
                 {tab === "music" && <MiniPlayer now={now} controls={controls} lyrics={lyrics} onLyrics={() => setLyrics((l) => !l)} />}
@@ -214,8 +225,8 @@ export function ArthubDemo({ className }: { className?: string }) {
 
             {tab === "music" && (
                 <Inspector open={lyrics} width={300}>
-                    <TitleBar title="Lyrics" subtitle={now.track ? `${now.track.title} — ${now.track.album.artist}` : undefined}>
-                        <ToolButton icon="xmark" label="Close" onClick={() => setLyrics(false)} />
+                    <TitleBar title={s(LYRICS)} subtitle={now.track ? `${now.track.title} — ${now.track.album.artist}` : undefined}>
+                        <ToolButton icon="xmark" label={s(["Close", "关闭", "關閉"])} onClick={() => setLyrics(false)} />
                     </TitleBar>
                     <LyricsPanel now={now} controls={controls} />
                 </Inspector>
@@ -241,16 +252,17 @@ export function ArthubDemo({ className }: { className?: string }) {
 
 /** The library folder's files and what Arthub recognized each one as. */
 function FileList() {
-    const files = libraryFiles();
+    const s = useText();
+    const files = libraryFiles(s);
     const icon: Record<string, SymbolName> = { Movie: "film", Episode: "tv", Song: "music.note" };
     return (
         <div className="min-h-0 flex-1 overflow-auto">
             <table className="w-full min-w-[560px] table-fixed border-collapse text-left text-[12px]">
                 <thead className={cn("sticky top-0 z-10 text-[11px]", MAC.window, MAC.muted)}>
                     <tr className={cn("border-b", MAC.line)}>
-                        <th className="w-[46%] py-1.5 pl-4 font-normal">File</th>
-                        <th className="py-1.5 font-normal">Recognized As</th>
-                        <th className="w-28 py-1.5 pr-4 font-normal">Tags</th>
+                        <th className="w-[46%] py-1.5 pl-4 font-normal">{s(["File", "文件", "檔案"])}</th>
+                        <th className="py-1.5 font-normal">{s(["Recognized As", "识别为", "辨識為"])}</th>
+                        <th className="w-28 py-1.5 pr-4 font-normal">{s(["Tags", "标签", "標籤"])}</th>
                     </tr>
                 </thead>
                 <tbody>

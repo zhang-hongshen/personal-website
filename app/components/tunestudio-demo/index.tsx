@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
+import { useText, type L } from "~/components/demo-text";
 import { MAC, MacWindow, Popover, Spinner, ToolButton, TrafficLights } from "~/components/mac-ui";
 import { CAPSULE, TOOL, TOOL_ITEM } from "~/components/mac-window";
 import { SFSymbol } from "~/components/sf-symbol";
@@ -17,6 +18,7 @@ import {
 const NONE: Edits = { style: null, manual: {} };
 
 export function TuneStudioDemo({ className }: { className?: string }) {
+    const s = useText();
     const [recordingId, setRecordingId] = useState(RECORDINGS[0].id);
     const take = useMemo(() => makeTake(RECORDINGS.find((r) => r.id === recordingId)!), [recordingId]);
     const [history, setHistory] = useState<{ past: Edits[]; present: Edits; future: Edits[] }>({ past: [], present: NONE, future: [] });
@@ -28,7 +30,7 @@ export function TuneStudioDemo({ className }: { className?: string }) {
     const [pps, setPps] = useState(110);
     const [time, setTime] = useState(0);
     const [playing, setPlaying] = useState(false);
-    const [busy, setBusy] = useState<string | null>(null);
+    const [busy, setBusy] = useState<L | null>(null);
     const [menu, setMenu] = useState<"open" | "style" | "export" | null>(null);
     const closeMenu = useCallback(() => setMenu(null), []);
 
@@ -107,7 +109,7 @@ export function TuneStudioDemo({ className }: { className?: string }) {
             samples.current = renderVoice(take, correctedFrames(take, noteTargets(take, edits)));
             return;
         }
-        setBusy("Updating tuned audio…");
+        setBusy(["Updating tuned audio…", "正在更新修音后的音频…", "正在更新修音後的音訊…"]);
         const timer = setTimeout(() => {
             samples.current = renderVoice(take, correctedFrames(take, noteTargets(take, edits)));
             setBusy(null);
@@ -141,7 +143,7 @@ export function TuneStudioDemo({ className }: { className?: string }) {
         setMenu(null);
         if (id === recordingId) return;
         stop();
-        setBusy("Finding the melody…");
+        setBusy(["Finding the melody…", "正在识别旋律…", "正在辨識旋律…"]);
         setTimeout(() => {
             setRecordingId(id);
             setHistory({ past: [], present: NONE, future: [] });
@@ -157,13 +159,14 @@ export function TuneStudioDemo({ className }: { className?: string }) {
         const url = URL.createObjectURL(wav(data));
         const a = document.createElement("a");
         a.href = url;
-        a.download = `${take.recording.name.replace(/\.\w+$/, "")}${tuned ? " (Tuned)" : ""}.wav`;
+        a.download = `${s(take.recording.name).replace(/\.\w+$/, "")}${tuned ? s([" (Tuned)", "（已修音）", "（已修音）"]) : ""}.wav`;
         a.click();
         setTimeout(() => URL.revokeObjectURL(url), 1000);
     };
 
     const tuned = hasCorrection(edits);
-    const styleTitle = STYLES.find((s) => s.id === edits.style)?.title;
+    const style = STYLES.find((st) => st.id === edits.style);
+    const styleTitle = style && s(style.title);
 
     return (
         <MacWindow className={cn("flex-col", className)}>
@@ -178,48 +181,54 @@ export function TuneStudioDemo({ className }: { className?: string }) {
                 <header className="flex h-[52px] shrink-0 items-center gap-2 px-3">
                     <span className="px-1"><TrafficLights /></span>
                     <span className="relative">
-                        <ToolButton icon="folder" label="Open (⌘O)" onClick={() => setMenu(menu === "open" ? null : "open")} />
+                        <ToolButton icon="folder" label={s(["Open (⌘O)", "打开 (⌘O)", "開啟 (⌘O)"])} onClick={() => setMenu(menu === "open" ? null : "open")} />
                         <Popover open={menu === "open"} onClose={closeMenu} className="right-auto left-0 w-60">
-                            <p className={cn("px-2 pt-1 pb-1.5 text-[11px] font-semibold", MAC.muted)}>Recordings</p>
+                            <p className={cn("px-2 pt-1 pb-1.5 text-[11px] font-semibold", MAC.muted)}>{s(["Recordings", "录音", "錄音"])}</p>
                             {RECORDINGS.map((r) => (
                                 <button key={r.id} type="button" className={cn("flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left", MAC.hover)} onClick={() => open(r.id)}>
                                     <SFSymbol name="waveform" className={cn("size-4 shrink-0", MAC.accent)} />
                                     <span className="flex min-w-0 flex-1 flex-col leading-tight">
-                                        <span className="truncate">{r.name}</span>
-                                        <span className={cn("text-[11px]", MAC.muted)}>{r.format}</span>
+                                        <span className="truncate">{s(r.name)}</span>
+                                        <span className={cn("text-[11px]", MAC.muted)}>{s(r.format)}</span>
                                     </span>
                                     {r.id === recordingId && <SFSymbol name="checkmark" className="size-3 shrink-0" />}
                                 </button>
                             ))}
                         </Popover>
                     </span>
-                    <h4 className="mr-auto hidden min-w-0 truncate pl-1 text-[15px] font-semibold md:block">{take.recording.name}</h4>
+                    <h4 className="mr-auto hidden min-w-0 truncate pl-1 text-[15px] font-semibold md:block">{s(take.recording.name)}</h4>
 
                     <div className={cn(CAPSULE, "max-md:mr-auto")}>
-                        <button type="button" aria-label={playing ? "Pause" : "Play"} title={playing ? "Pause (Space)" : "Play (Space)"} className={TOOL_ITEM} onClick={togglePlay}>
+                        <button
+                            type="button"
+                            aria-label={playing ? s(["Pause", "暂停", "暫停"]) : s(["Play", "播放", "播放"])}
+                            title={playing ? s(["Pause (Space)", "暂停 (空格)", "暫停 (空白鍵)"]) : s(["Play (Space)", "播放 (空格)", "播放 (空白鍵)"])}
+                            className={TOOL_ITEM}
+                            onClick={togglePlay}
+                        >
                             <SFSymbol name={playing ? "pause.fill" : "play.fill"} className="size-3.5" />
                         </button>
                         <span className="relative flex items-center">
                             <button
                                 type="button"
                                 aria-pressed={!!edits.style}
-                                title={edits.style ? "Turn Auto Tune off" : "Tune the whole song in one click"}
+                                title={edits.style ? s(["Turn Auto Tune off", "关闭 Auto Tune", "關閉 Auto Tune"]) : s(["Tune the whole song in one click", "一键修整首歌", "一鍵修整首歌"])}
                                 className={cn("flex h-7 items-center gap-1.5 rounded-full pr-1.5 pl-2.5 whitespace-nowrap hover:bg-black/6 dark:hover:bg-white/10", edits.style && MAC.accent)}
                                 onClick={toggleAutoTune}
                             >
                                 <SFSymbol name={edits.style ? "wand.and.stars.inverse" : "wand.and.stars"} className="size-4" />
-                                <span className="text-[12px] font-medium">{edits.style ? "Auto Tune On" : "Auto Tune"}</span>
+                                <span className="text-[12px] font-medium">{edits.style ? s(["Auto Tune On", "Auto Tune 已开", "Auto Tune 已開"]) : "Auto Tune"}</span>
                             </button>
-                            <button type="button" aria-label="Auto Tune Style" className="flex h-7 w-5 items-center justify-center rounded-full hover:bg-black/6 dark:hover:bg-white/10" onClick={() => setMenu(menu === "style" ? null : "style")}>
+                            <button type="button" aria-label={s(["Auto Tune Style", "Auto Tune 风格", "Auto Tune 風格"])} className="flex h-7 w-5 items-center justify-center rounded-full hover:bg-black/6 dark:hover:bg-white/10" onClick={() => setMenu(menu === "style" ? null : "style")}>
                                 <SFSymbol name="chevron.down" className="size-2.5" />
                             </button>
                             <Popover open={menu === "style"} onClose={closeMenu} className="w-64">
-                                {STYLES.map((s) => (
-                                    <button key={s.id} type="button" className={cn("flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left", MAC.hover)} onClick={() => autoTune(s.id)}>
-                                        <span className="mt-0.5 w-3 shrink-0">{edits.style === s.id && <SFSymbol name="checkmark" className="size-3" />}</span>
+                                {STYLES.map((st) => (
+                                    <button key={st.id} type="button" className={cn("flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left", MAC.hover)} onClick={() => autoTune(st.id)}>
+                                        <span className="mt-0.5 w-3 shrink-0">{edits.style === st.id && <SFSymbol name="checkmark" className="size-3" />}</span>
                                         <span className="flex flex-col leading-tight">
-                                            <span className="font-medium">{s.title}</span>
-                                            <span className={cn("text-[11px]", MAC.muted)}>{STYLE_SUMMARY[s.id]}</span>
+                                            <span className="font-medium">{s(st.title)}</span>
+                                            <span className={cn("text-[11px]", MAC.muted)}>{s(st.summary)}</span>
                                         </span>
                                     </button>
                                 ))}
@@ -229,25 +238,25 @@ export function TuneStudioDemo({ className }: { className?: string }) {
 
                     <span className="flex-1 max-md:hidden" />
                     <div className={cn(CAPSULE, "px-0.5 max-sm:hidden")}>
-                        <ToolButton grouped icon="arrow.uturn.backward" label="Undo (⌘Z)" disabled={!history.past.length} onClick={undo} />
-                        <ToolButton grouped icon="arrow.uturn.forward" label="Redo (⇧⌘Z)" disabled={!history.future.length} onClick={redo} />
+                        <ToolButton grouped icon="arrow.uturn.backward" label={s(["Undo (⌘Z)", "撤销 (⌘Z)", "還原 (⌘Z)"])} disabled={!history.past.length} onClick={undo} />
+                        <ToolButton grouped icon="arrow.uturn.forward" label={s(["Redo (⇧⌘Z)", "重做 (⇧⌘Z)", "重做 (⇧⌘Z)"])} disabled={!history.future.length} onClick={redo} />
                     </div>
                     <div className={cn(CAPSULE, "px-0.5 max-sm:hidden")}>
-                        <ToolButton grouped icon="minus.magnifyingglass" label="Zoom Out" disabled={pps <= 50} onClick={() => setPps((p) => Math.max(p / 1.35, 50))} />
-                        <ToolButton grouped icon="plus.magnifyingglass" label="Zoom In" disabled={pps >= 400} onClick={() => setPps((p) => Math.min(p * 1.35, 400))} />
+                        <ToolButton grouped icon="minus.magnifyingglass" label={s(["Zoom Out", "缩小", "縮小"])} disabled={pps <= 50} onClick={() => setPps((p) => Math.max(p / 1.35, 50))} />
+                        <ToolButton grouped icon="plus.magnifyingglass" label={s(["Zoom In", "放大", "放大"])} disabled={pps >= 400} onClick={() => setPps((p) => Math.min(p * 1.35, 400))} />
                     </div>
                     <span className="relative">
-                        <button type="button" aria-label="Export" title="Export the tuned audio (⇧⌘E)" className={TOOL} onClick={() => setMenu(menu === "export" ? null : "export")}>
+                        <button type="button" aria-label={s(["Export", "导出", "輸出"])} title={s(["Export the tuned audio (⇧⌘E)", "导出修音后的音频 (⇧⌘E)", "輸出修音後的音訊 (⇧⌘E)"])} className={TOOL} onClick={() => setMenu(menu === "export" ? null : "export")}>
                             <SFSymbol name="square.and.arrow.up" className="size-4" />
                         </button>
                         <Popover open={menu === "export"} onClose={closeMenu} className="w-56">
                             <button type="button" disabled={!tuned || !!busy} className={cn("flex w-full flex-col rounded-md px-2 py-1.5 text-left disabled:opacity-40", MAC.hover)} onClick={() => exportAudio(true)}>
-                                <span>Export Tuned Audio…</span>
+                                <span>{s(["Export Tuned Audio…", "导出修音后的音频…", "輸出修音後的音訊…"])}</span>
                                 <span className={cn("text-[11px]", MAC.muted)}>WAV · {clock(take.duration)}</span>
                             </button>
                             <button type="button" className={cn("flex w-full flex-col rounded-md px-2 py-1.5 text-left", MAC.hover)} onClick={() => exportAudio(false)}>
-                                <span>Export Original…</span>
-                                <span className={cn("text-[11px]", MAC.muted)}>WAV, as sung</span>
+                                <span>{s(["Export Original…", "导出原始录音…", "輸出原始錄音…"])}</span>
+                                <span className={cn("text-[11px]", MAC.muted)}>{s(["WAV, as sung", "WAV，原唱", "WAV，原唱"])}</span>
                             </button>
                         </Popover>
                     </span>
@@ -273,21 +282,21 @@ export function TuneStudioDemo({ className }: { className?: string }) {
                 <footer className={cn("flex h-[34px] shrink-0 items-center gap-4 border-t px-4 text-[12px]", MAC.line, MAC.sidebar)}>
                     <span className="flex min-w-0 items-center gap-1.5">
                         <SFSymbol name="waveform" className={cn("size-3.5 shrink-0", MAC.muted)} />
-                        <span className="truncate font-medium">{take.recording.name}</span>
-                        <span className={cn("truncate max-sm:hidden", MAC.muted)}>{take.recording.format}</span>
+                        <span className="truncate font-medium">{s(take.recording.name)}</span>
+                        <span className={cn("truncate max-sm:hidden", MAC.muted)}>{s(take.recording.format)}</span>
                     </span>
                     <span className="flex-1" />
                     <span className="shrink-0 tabular-nums">
                         {clock(time)} <span className="opacity-40">/</span> <span className={MAC.muted}>{clock(take.duration)}</span>
                     </span>
                     <span className="flex-1" />
-                    <span className="flex shrink-0 items-center gap-1.5" title={busy ?? undefined}>
+                    <span className="flex shrink-0 items-center gap-1.5" title={busy ? s(busy) : undefined}>
                         {busy ? (
-                            <><Spinner className="size-3.5" /><span className={MAC.muted}>{busy}</span></>
+                            <><Spinner className="size-3.5" /><span className={MAC.muted}>{s(busy)}</span></>
                         ) : tuned ? (
-                            <><SFSymbol name="checkmark.circle.fill" className="size-3.5 text-[#28c840]" /><span className={MAC.muted}>{styleTitle && !Object.keys(edits.manual).length ? `Tuned audio ready · ${styleTitle}` : "Tuned audio ready"}</span></>
+                            <><SFSymbol name="checkmark.circle.fill" className="size-3.5 text-[#28c840]" /><span className={MAC.muted}>{s(["Tuned audio ready", "修音完成", "修音完成"])}{styleTitle && !Object.keys(edits.manual).length ? ` · ${styleTitle}` : ""}</span></>
                         ) : (
-                            <><SFSymbol name="circle" className={cn("size-3.5", MAC.muted)} /><span className={MAC.muted}>No changes yet</span></>
+                            <><SFSymbol name="circle" className={cn("size-3.5", MAC.muted)} /><span className={MAC.muted}>{s(["No changes yet", "尚未修改", "尚未修改"])}</span></>
                         )}
                     </span>
                 </footer>
@@ -295,9 +304,3 @@ export function TuneStudioDemo({ className }: { className?: string }) {
         </MacWindow>
     );
 }
-
-const STYLE_SUMMARY: Record<Style, string> = {
-    natural: "Gently nudges notes toward pitch. Your voice keeps its character.",
-    balanced: "Puts every held note on pitch and keeps your vibrato.",
-    robotic: "Snaps every note flat onto pitch for the classic electronic effect.",
-};

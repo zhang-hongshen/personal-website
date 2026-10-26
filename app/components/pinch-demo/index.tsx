@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
+import { useText, type L } from "~/components/demo-text";
 import { MAC, TrafficLights } from "~/components/mac-ui";
 import { MAC_FONT } from "~/components/mac-window";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
@@ -21,19 +22,21 @@ const C = {
     panDark: "#3a3b41",
 };
 
-type Thing = { id: string; name: string; detail: string; grams: number; icon: ReactNode };
+type Thing = { id: string; name: L; detail: L | string; grams: number; icon: ReactNode };
 
+const CLIP: L = ["0.46 g each", "每枚 0.46 g", "每個 0.46 g"];
 const THINGS: Thing[] = [
-    { id: "coin", name: "Coin", detail: "7.5 g", grams: 7.5, icon: <circle cx="12" cy="12" r="8" /> },
-    { id: "clips", name: "10 paper clips", detail: "0.46 g each", grams: 4.6, icon: <path d="M9 7v9a3 3 0 0 0 6 0V5a2 2 0 0 0-4 0v10" /> },
-    { id: "more", name: "28 more paper clips", detail: "0.46 g each", grams: 12.88, icon: <path d="M6 8v8a3 3 0 0 0 6 0V6a2 2 0 0 0-4 0v9M14 8v8a3 3 0 0 0 6 0V6a2 2 0 0 0-4 0v9" /> },
-    { id: "ring", name: "Ring", detail: "3.2 g", grams: 3.2, icon: <><circle cx="12" cy="14" r="6" /><path d="m10 6 2-3 2 3" /></> },
-    { id: "battery", name: "AA battery", detail: "23 g", grams: 23, icon: <><rect x="4" y="8" width="15" height="8" rx="1.5" /><path d="M21 11v2" /></> },
-    { id: "apple", name: "Apple", detail: "182 g", grams: 182, icon: <path d="M12 7c-2-1.5-7-1-7 5s3 9 5 9c1 0 1.4-.5 2-.5s1 .5 2 .5c2 0 5-3 5-9s-5-6.5-7-5zM12 7c0-2 1-3.5 3-4" /> },
-    { id: "brick", name: "Brick", detail: "2.3 kg", grams: 2300, icon: <><rect x="3" y="7" width="18" height="10" rx="1" /><path d="M3 12h18M9 7v5M15 12v5" /></> },
+    { id: "coin", name: ["Coin", "硬币", "硬幣"], detail: "7.5 g", grams: 7.5, icon: <circle cx="12" cy="12" r="8" /> },
+    { id: "clips", name: ["10 paper clips", "10 枚回形针", "10 個迴紋針"], detail: CLIP, grams: 4.6, icon: <path d="M9 7v9a3 3 0 0 0 6 0V5a2 2 0 0 0-4 0v10" /> },
+    { id: "more", name: ["28 more paper clips", "再加 28 枚回形针", "再加 28 個迴紋針"], detail: CLIP, grams: 12.88, icon: <path d="M6 8v8a3 3 0 0 0 6 0V6a2 2 0 0 0-4 0v9M14 8v8a3 3 0 0 0 6 0V6a2 2 0 0 0-4 0v9" /> },
+    { id: "ring", name: ["Ring", "戒指", "戒指"], detail: "3.2 g", grams: 3.2, icon: <><circle cx="12" cy="14" r="6" /><path d="m10 6 2-3 2 3" /></> },
+    { id: "battery", name: ["AA battery", "5 号电池", "三號電池"], detail: "23 g", grams: 23, icon: <><rect x="4" y="8" width="15" height="8" rx="1.5" /><path d="M21 11v2" /></> },
+    { id: "apple", name: ["Apple", "苹果", "蘋果"], detail: "182 g", grams: 182, icon: <path d="M12 7c-2-1.5-7-1-7 5s3 9 5 9c1 0 1.4-.5 2-.5s1 .5 2 .5c2 0 5-3 5-9s-5-6.5-7-5zM12 7c0-2 1-3.5 3-4" /> },
+    { id: "brick", name: ["Brick", "砖头", "磚頭"], detail: "2.3 kg", grams: 2300, icon: <><rect x="3" y="7" width="18" height="10" rx="1" /><path d="M3 12h18M9 7v5M15 12v5" /></> },
 ];
 
 export function PinchDemo({ className }: { className?: string }) {
+    const s = useText();
     const scale = useRef(new Scale()).current;
     const [, setFrame] = useState(0);
     const [unit, setUnit] = useState<Unit>("g");
@@ -73,16 +76,16 @@ export function PinchDemo({ className }: { className?: string }) {
                 <div className="flex flex-col gap-5 px-4 pt-11 pb-6 sm:px-6">
                     <Readout scale={scale} unit={unit} />
                     <div className="flex justify-center gap-2">
-                        <Key label="Tare" shortcut="⌘T" onClick={() => scale.tare()}>
+                        <Key label={s(["Tare", "去皮", "扣重"])} shortcut="⌘T" onClick={() => scale.tare()}>
                             <span className="text-[15px] tracking-tight">→0←</span>
                         </Key>
-                        <Key label="Hold" shortcut="⌘L" lit={scale.isHolding} disabled={!scale.isHolding && !scale.canHold} onClick={() => scale.toggleHold()}>
+                        <Key label={s(["Hold", "锁定", "鎖定"])} shortcut="⌘L" lit={scale.isHolding} disabled={!scale.isHolding && !scale.canHold} onClick={() => scale.toggleHold()}>
                             <Symbol name="lock" />
                         </Key>
-                        <Key label="Counting Mode" shortcut="⌘U" lit={scale.mode === "count"} onClick={() => scale.toggleCounting()}>
+                        <Key label={s(["Counting Mode", "计数模式", "計數模式"])} shortcut="⌘U" lit={scale.mode === "count"} onClick={() => scale.toggleCounting()}>
                             <Symbol name="number" />
                         </Key>
-                        <Key label="Calibrate" shortcut="⌘K" onClick={() => setCalibrating(true)}>
+                        <Key label={s(["Calibrate", "校准", "校正"])} shortcut="⌘K" onClick={() => setCalibrating(true)}>
                             <Symbol name="scalemass" />
                         </Key>
                     </div>
@@ -108,6 +111,7 @@ function Symbol({ name }: { name: SymbolName }) {
 }
 
 function Readout({ scale, unit }: { scale: Scale; unit: Unit }) {
+    const s = useText();
     const counting = scale.mode === "count";
     const showsWeight = scale.isHolding || scale.canHold;
     const text = scale.isOverloaded && !scale.isHolding
@@ -118,30 +122,32 @@ function Readout({ scale, unit }: { scale: Scale; unit: Unit }) {
     const message = scale.isHolding
         ? null
         : !scale.hasContact
-            ? "Place a finger on the trackpad"
+            ? s(["Place a finger on the trackpad", "把手指放在触控板上", "把手指放在軌跡板上"])
             : scale.isOverloaded
-                ? "Over capacity — lighten the load"
-                : scale.needsSample ? `Tare, add ${SAMPLE_PIECES} pieces, then press Tare again` : null;
+                ? s(["Over capacity — lighten the load", "超出量程，请减轻重量", "超出秤量，請減輕重量"])
+                : scale.needsSample
+                    ? s([`Tare, add ${SAMPLE_PIECES} pieces, then press Tare again`, `按去皮，放上 ${SAMPLE_PIECES} 个，再按一次去皮`, `按扣重，放上 ${SAMPLE_PIECES} 個，再按一次扣重`])
+                    : null;
 
     return (
         <div
             role="img"
-            aria-label={`Weight ${showsWeight ? `${text} ${counting ? "pieces" : unit}` : ""}`}
+            aria-label={`${s(["Weight", "重量", "重量"])} ${showsWeight ? `${text} ${counting ? s(["pieces", "个", "個"]) : unit}` : ""}`}
             className={cn("relative overflow-hidden rounded-[22px] px-5 py-4 shadow-[inset_0_2px_5px_rgb(0_0_0/0.35)] ring-1 ring-black/20 dark:ring-white/5", C.readout)}
         >
             <span className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-white/18 to-transparent" />
             <div className="flex h-4 items-center gap-3.5 text-[11px] font-semibold">
                 <span className={cn("flex items-center gap-1 transition-opacity duration-200", showsWeight && scale.isStable && !scale.isHolding ? "opacity-100" : "opacity-0")}>
-                    <i className="size-[7px] rounded-full bg-[#28c840]" />Stable
+                    <i className="size-[7px] rounded-full bg-[#28c840]" />{s(["Stable", "稳定", "穩定"])}
                 </span>
-                {scale.isHolding && <span>Hold</span>}
-                {scale.isTared && <span>Net</span>}
+                {scale.isHolding && <span>{s(["Hold", "锁定", "鎖定"])}</span>}
+                {scale.isTared && <span>{s(["Net", "净重", "淨重"])}</span>}
                 <span className="flex-1" />
-                {!scale.isCalibrated && <span className="opacity-60">Not calibrated</span>}
+                {!scale.isCalibrated && <span className="opacity-60">{s(["Not calibrated", "未校准", "未校正"])}</span>}
             </div>
             <div className="mt-1.5 flex items-end justify-end gap-2.5">
                 <SevenSegment text={text} className="h-[clamp(48px,14vw,72px)]" />
-                <span className="w-11 text-[24px] leading-none font-semibold">{counting ? "pcs" : unitInfo(unit).id}</span>
+                <span className="w-11 text-[24px] leading-none font-semibold">{counting ? s(["pcs", "个", "個"]) : unitInfo(unit).id}</span>
             </div>
             <p className="mt-1.5 h-5 text-center text-[13px] opacity-70">{message}</p>
         </div>
@@ -182,13 +188,14 @@ function Key({ label, shortcut, lit, disabled, onClick, children }: {
 
 /** The weighing pan, shaped like a trackpad. It doesn't show where fingers are; it sinks and darkens with the load. */
 function Pan({ press, onClick }: { press: number; onClick: () => void }) {
+    const s = useText();
     const shade = (base: string, by: number) => `color-mix(in srgb, ${base}, black ${(by * 100).toFixed(1)}%)`;
     const surface = (base: string) => `linear-gradient(to bottom right, ${shade(base, 0.08 * press)}, ${shade(base, 0.06 + 0.08 * press)})`;
     return (
         <div className={cn("rounded-[21px] p-[3px] shadow-[inset_0_1px_1.5px_rgb(0_0_0/0.35),0_1px_0_rgb(255_255_255/0.5)] dark:shadow-[inset_0_1px_1.5px_rgb(0_0_0/0.35),0_1px_0_rgb(255_255_255/0.08)]", C.panEdge)}>
             <button
                 type="button"
-                aria-label={press ? "Lift your finger" : "Rest a finger on the trackpad"}
+                aria-label={press ? s(["Lift your finger", "抬起手指", "抬起手指"]) : s(["Rest a finger on the trackpad", "把手指搭在触控板上", "把手指搭在軌跡板上"])}
                 aria-pressed={press > 0}
                 className="block aspect-[1.6] w-full rounded-[18px] [background:var(--pan)] transition-[transform,box-shadow] duration-150 ease-out dark:[background:var(--pan-dark)]"
                 style={{
@@ -204,6 +211,7 @@ function Pan({ press, onClick }: { press: number; onClick: () => void }) {
 }
 
 function Calibration({ scale, unit, onClose }: { scale: Scale; unit: Unit; onClose: () => void }) {
+    const s = useText();
     const [baseline, setBaseline] = useState<number | null>(null);
     const [known, setKnown] = useState("");
     const [failed, setFailed] = useState(false);
@@ -217,29 +225,29 @@ function Calibration({ scale, unit, onClose }: { scale: Scale; unit: Unit; onClo
     };
 
     const status = failed
-        ? { icon: "exclamationmark.triangle" as const, text: "The reading barely changed. Make sure the object rests on your finger.", className: "text-[#ff9500]" }
+        ? { icon: "exclamationmark.triangle" as const, text: s(["The reading barely changed. Make sure the object rests on your finger.", "读数几乎没有变化。请确认物件放在手指上。", "讀數幾乎沒有變化。請確認物件放在手指上。"]), className: "text-[#ff9500]" }
         : baseline !== null && scale.hasContact && !scale.isStable
-            ? { icon: "hourglass" as const, text: "Waiting for a stable reading…", className: MAC.muted }
+            ? { icon: "hourglass" as const, text: s(["Waiting for a stable reading…", "正在等待读数稳定…", "正在等待讀數穩定…"]), className: MAC.muted }
             : baseline !== null && !scale.hasContact
-                ? { icon: "hand.point.up.left" as const, text: "Place a finger on the trackpad", className: MAC.muted }
+                ? { icon: "hand.point.up.left" as const, text: s(["Place a finger on the trackpad", "把手指放在触控板上", "把手指放在軌跡板上"]), className: MAC.muted }
                 : null;
 
     return (
         <div className="absolute inset-0 z-10 flex items-start justify-center bg-black/10 px-3 pt-3 dark:bg-black/30">
-            <div role="dialog" aria-label="Calibrate" className={cn("flex w-full max-w-[420px] flex-col gap-4 rounded-2xl p-5 shadow-[0_12px_40px_rgb(0_0_0/0.3)] motion-safe:animate-in motion-safe:slide-in-from-top-4", MAC.window)}>
-                <h4 className="text-[20px] font-semibold">Calibrate</h4>
+            <div role="dialog" aria-label={s(["Calibrate", "校准", "校正"])} className={cn("flex w-full max-w-[420px] flex-col gap-4 rounded-2xl p-5 shadow-[0_12px_40px_rgb(0_0_0/0.3)] motion-safe:animate-in motion-safe:slide-in-from-top-4", MAC.window)}>
+                <h4 className="text-[20px] font-semibold">{s(["Calibrate", "校准", "校正"])}</h4>
                 <Step number={1} done={baseline !== null}>
-                    <p>Rest a finger lightly on the trackpad, then press Set Zero.</p>
-                    <PushButton disabled={!scale.hasContact} onClick={() => { setBaseline(scale.rawPressure); setFailed(false); }}>Set Zero</PushButton>
+                    <p>{s(["Rest a finger lightly on the trackpad, then press Set Zero.", "一根手指轻轻搭在触控板上，然后按“设为零点”。", "一根手指輕輕搭在軌跡板上，然後按「設為零點」。"])}</p>
+                    <PushButton disabled={!scale.hasContact} onClick={() => { setBaseline(scale.rawPressure); setFailed(false); }}>{s(["Set Zero", "设为零点", "設為零點"])}</PushButton>
                 </Step>
                 <Step number={2} done={false} disabled={baseline === null}>
-                    <p>Place an object of known weight on your finger and enter its weight. For example, a coin from the desk weighs 7.5 g.</p>
+                    <p>{s(["Place an object of known weight on your finger and enter its weight. For example, a coin from the desk weighs 7.5 g.", "把一个已知重量的物件放在手指上，输入它的重量。比如桌上的硬币重 7.5 g。", "把一個已知重量的物件放在手指上，輸入它的重量。例如桌上的硬幣重 7.5 g。"])}</p>
                     <label className="flex items-center gap-2">
                         <input
                             inputMode="decimal"
                             value={known}
-                            placeholder="Known weight"
-                            aria-label="Known weight"
+                            placeholder={s(["Known weight", "已知重量", "已知重量"])}
+                            aria-label={s(["Known weight", "已知重量", "已知重量"])}
                             disabled={baseline === null}
                             className={cn("h-6 w-[120px] border border-black/15 px-1.5 dark:border-white/15", MAC.field, "rounded-[5px] bg-white dark:bg-white/5")}
                             onChange={(e) => setKnown(e.target.value)}
@@ -254,10 +262,10 @@ function Calibration({ scale, unit, onClose }: { scale: Scale; unit: Unit; onClo
                     </p>
                 )}
                 <div className="flex gap-2">
-                    {scale.isCalibrated && <PushButton onClick={() => { scale.resetCalibration(); onClose(); }}>Reset Calibration</PushButton>}
+                    {scale.isCalibrated && <PushButton onClick={() => { scale.resetCalibration(); onClose(); }}>{s(["Reset Calibration", "重置校准", "重設校正"])}</PushButton>}
                     <span className="flex-1" />
-                    <PushButton onClick={onClose}>Cancel</PushButton>
-                    <PushButton primary disabled={!canCalibrate} onClick={calibrate}>Calibrate</PushButton>
+                    <PushButton onClick={onClose}>{s(["Cancel", "取消", "取消"])}</PushButton>
+                    <PushButton primary disabled={!canCalibrate} onClick={calibrate}>{s(["Calibrate", "校准", "校正"])}</PushButton>
                 </div>
             </div>
         </div>
@@ -298,32 +306,33 @@ function Desk({ finger, placed, unit, onFinger, onThing, onUnit }: {
     onThing: (id: string) => void;
     onUnit: (unit: Unit) => void;
 }) {
+    const s = useText();
     const row = "flex h-10 w-full items-center gap-3 rounded-xl px-3 text-left transition-colors";
     const on = "bg-[#ff6b4a]/14 text-foreground ring-1 ring-[#ff6b4a]/50";
     return (
         <aside className="w-full max-w-[440px] rounded-[18px] border border-border bg-card p-3 text-left text-[13px] lg:w-[260px]">
-            <p className="px-3 pt-1 pb-2 text-[11px] font-semibold tracking-wide text-faint uppercase">On the trackpad</p>
+            <p className="px-3 pt-1 pb-2 text-[11px] font-semibold tracking-wide text-faint uppercase">{s(["On the trackpad", "放到触控板上", "放到軌跡板上"])}</p>
             <button type="button" aria-pressed={finger} className={cn(row, finger ? on : "hover:bg-muted")} onClick={onFinger}>
                 <svg viewBox="0 0 24 24" className="size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden>
                     <path d="M9 11V5a2 2 0 0 1 4 0v6M13 10.5V9a2 2 0 0 1 4 0v4c0 4-2.5 8-6.5 8S5 18 5 15v-2a2 2 0 0 1 4 0" />
                 </svg>
-                <span className="flex-1">{finger ? "Finger resting" : "Rest a finger"}</span>
+                <span className="flex-1">{finger ? s(["Finger resting", "手指已放上", "手指已放上"]) : s(["Rest a finger", "放上手指", "放上手指"])}</span>
             </button>
             <div className="mt-1 grid grid-cols-2 gap-1 lg:grid-cols-1">
                 {THINGS.map((t) => (
                     <button key={t.id} type="button" aria-pressed={placed.includes(t.id)} className={cn(row, "h-11", placed.includes(t.id) ? on : "hover:bg-muted")} onClick={() => onThing(t.id)}>
                         <svg viewBox="0 0 24 24" className="size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>{t.icon}</svg>
                         <span className="flex min-w-0 flex-col leading-tight">
-                            <span className="truncate">{t.name}</span>
-                            <span className="truncate text-[11px] text-faint">{t.detail}</span>
+                            <span className="truncate">{s(t.name)}</span>
+                            <span className="truncate text-[11px] text-faint">{s(t.detail)}</span>
                         </span>
                     </button>
                 ))}
             </div>
             <label className="mt-3 flex items-center gap-2 border-t border-border px-3 pt-3">
-                <span className="flex-1 text-faint">Unit</span>
+                <span className="flex-1 text-faint">{s(["Unit", "单位", "單位"])}</span>
                 <select value={unit} className="rounded-md border border-border bg-background px-2 py-1" onChange={(e) => onUnit(e.target.value as Unit)}>
-                    {UNITS.map((u) => <option key={u.id} value={u.id}>{u.name}</option>)}
+                    {UNITS.map((u) => <option key={u.id} value={u.id}>{s(u.name)}</option>)}
                 </select>
             </label>
         </aside>

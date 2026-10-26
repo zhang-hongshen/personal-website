@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useLang, useText, type L } from "~/components/demo-text";
 import { Popover } from "~/components/mac-ui";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
@@ -10,8 +11,8 @@ import { duration, type Art, type Subtitle } from "./library";
 // behind the subtitles, which are timed as they would be from an .srt next to the file.
 
 type Language = "off" | "en" | "zh";
-const LANGUAGES: { id: Language; label: string }[] = [
-    { id: "off", label: "Off" },
+const LANGUAGES: { id: Language; label: L | string }[] = [
+    { id: "off", label: ["Off", "关闭", "關閉"] },
     { id: "en", label: "English" },
     { id: "zh", label: "简体中文" },
 ];
@@ -29,11 +30,13 @@ export function VideoPlayer({ title, subtitle, art, seconds, start, subtitles, o
     /** Called with the position the viewer stopped at. */
     onClose: (position: number) => void;
 }) {
+    const s = useText();
+    const lang = useLang();
     const [position, setPosition] = useState(start);
     const [playing, setPlaying] = useState(true);
     const [speed, setSpeed] = useState(1);
     // Picked automatically from the page's language, as the app picks it from the system's.
-    const [language, setLanguage] = useState<Language>(() => (typeof navigator !== "undefined" && navigator.language.startsWith("zh") ? "zh" : "en"));
+    const [language, setLanguage] = useState<Language>(lang === "en" ? "en" : "zh");
     const [menu, setMenu] = useState<"subtitles" | "speed" | null>(null);
     const [controls, setControls] = useState(true);
     const idle = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -108,7 +111,7 @@ export function VideoPlayer({ title, subtitle, art, seconds, start, subtitles, o
 
             <div className={cn("pointer-events-none absolute inset-0 transition-opacity duration-300", shown ? "opacity-100" : "opacity-0")}>
                 <div className="pointer-events-auto absolute inset-x-0 top-0 flex items-center gap-3 bg-linear-to-b from-black/60 to-transparent px-4 pt-4 pb-10">
-                    <button type="button" aria-label="Back" className="flex size-8 items-center justify-center rounded-full bg-white/15 backdrop-blur-md hover:bg-white/25" onClick={() => onClose(position)}>
+                    <button type="button" aria-label={s(["Back", "返回", "返回"])} className="flex size-8 items-center justify-center rounded-full bg-white/15 backdrop-blur-md hover:bg-white/25" onClick={() => onClose(position)}>
                         <SFSymbol name="chevron.left" className="size-3.5" />
                     </button>
                     <div className="min-w-0 leading-tight">
@@ -122,7 +125,7 @@ export function VideoPlayer({ title, subtitle, art, seconds, start, subtitles, o
                         <span>{duration(position)}</span>
                         <input
                             type="range"
-                            aria-label="Playback Position"
+                            aria-label={s(["Playback Position", "播放进度", "播放進度"])}
                             min={0}
                             max={seconds}
                             step={1}
@@ -135,35 +138,35 @@ export function VideoPlayer({ title, subtitle, art, seconds, start, subtitles, o
                     <div className="mt-2 flex items-center">
                         <span className="flex-1" />
                         <div className="flex items-center gap-5">
-                            <button type="button" aria-label="Skip Back 15 Seconds" title="Skip Back 15 Seconds" onClick={() => skip(-15)}>
+                            <button type="button" aria-label={s(["Skip Back 15 Seconds", "后退 15 秒", "倒轉 15 秒"])} title={s(["Skip Back 15 Seconds", "后退 15 秒", "倒轉 15 秒"])} onClick={() => skip(-15)}>
                                 <SFSymbol name="gobackward.15" className="size-5" />
                             </button>
-                            <button type="button" aria-label={playing ? "Pause" : "Play"} onClick={() => setPlaying((p) => !p)}>
+                            <button type="button" aria-label={playing ? s(["Pause", "暂停", "暫停"]) : s(["Play", "播放", "播放"])} onClick={() => setPlaying((p) => !p)}>
                                 <SFSymbol name={playing ? "pause.fill" : "play.fill"} className="size-6" />
                             </button>
-                            <button type="button" aria-label="Skip Forward 15 Seconds" title="Skip Forward 15 Seconds" onClick={() => skip(15)}>
+                            <button type="button" aria-label={s(["Skip Forward 15 Seconds", "快进 15 秒", "快轉 15 秒"])} title={s(["Skip Forward 15 Seconds", "快进 15 秒", "快轉 15 秒"])} onClick={() => skip(15)}>
                                 <SFSymbol name="goforward.15" className="size-5" />
                             </button>
                         </div>
                         <div className="flex flex-1 items-center justify-end gap-3">
                             <span className="relative">
-                                <button type="button" aria-label="Playback Speed" title="Playback Speed" className="rounded-md px-1.5 text-[12px] font-semibold tabular-nums hover:bg-white/15" onClick={() => setMenu(menu === "speed" ? null : "speed")}>
+                                <button type="button" aria-label={s(["Playback Speed", "播放速度", "播放速度"])} title={s(["Playback Speed", "播放速度", "播放速度"])} className="rounded-md px-1.5 text-[12px] font-semibold tabular-nums hover:bg-white/15" onClick={() => setMenu(menu === "speed" ? null : "speed")}>
                                     {speed}×
                                 </button>
                                 <Popover open={menu === "speed"} onClose={closeMenu} className="top-auto bottom-8 w-28 border-white/15 bg-[#2a2a2a]/95 text-white">
-                                    {SPEEDS.map((s) => (
-                                        <MenuItem key={s} checked={s === speed} onClick={() => { setSpeed(s); setMenu(null); }}>{s === 1 ? "Normal" : `${s}×`}</MenuItem>
+                                    {SPEEDS.map((x) => (
+                                        <MenuItem key={x} checked={x === speed} onClick={() => { setSpeed(x); setMenu(null); }}>{x === 1 ? s(["Normal", "正常", "正常"]) : `${x}×`}</MenuItem>
                                     ))}
                                 </Popover>
                             </span>
                             <span className="relative">
-                                <button type="button" aria-label="Subtitles" title="Subtitles" className={cn("rounded-md p-0.5 hover:bg-white/15", language === "off" && "opacity-60")} onClick={() => setMenu(menu === "subtitles" ? null : "subtitles")}>
+                                <button type="button" aria-label={s(["Subtitles", "字幕", "字幕"])} title={s(["Subtitles", "字幕", "字幕"])} className={cn("rounded-md p-0.5 hover:bg-white/15", language === "off" && "opacity-60")} onClick={() => setMenu(menu === "subtitles" ? null : "subtitles")}>
                                     <SFSymbol name="captions.bubble" className="size-5" />
                                 </button>
                                 <Popover open={menu === "subtitles"} onClose={closeMenu} className="top-auto bottom-8 w-36 border-white/15 bg-[#2a2a2a]/95 text-white">
-                                    <p className="px-2 pt-1 pb-1 text-[11px] font-semibold text-white/60">Subtitles</p>
+                                    <p className="px-2 pt-1 pb-1 text-[11px] font-semibold text-white/60">{s(["Subtitles", "字幕", "字幕"])}</p>
                                     {LANGUAGES.map((l) => (
-                                        <MenuItem key={l.id} checked={l.id === language} onClick={() => { setLanguage(l.id); setMenu(null); }}>{l.label}</MenuItem>
+                                        <MenuItem key={l.id} checked={l.id === language} onClick={() => { setLanguage(l.id); setMenu(null); }}>{s(l.label)}</MenuItem>
                                     ))}
                                 </Popover>
                             </span>

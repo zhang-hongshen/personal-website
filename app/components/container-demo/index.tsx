@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { useText, type L } from "~/components/demo-text";
 import { Inspector, MAC, MacSidebar, MacWindow, Popover, SearchField, Segmented, ShowSidebarButton, SidebarRow, TitleBar, ToolButton, Unavailable, useSidebar } from "~/components/mac-ui";
 import { CAPSULE } from "~/components/mac-window";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
-import { IMAGES, PULLABLE, bytes, initial, newContainer, repoName, runningLog, shortRef, startLogs, type Container, type Image, type Network, type Volume } from "./data";
+import { IMAGES, PULLABLE, STATUS, bytes, initial, newContainer, repoName, runningLog, shortRef, startLogs, type Container, type Image, type Network, type Volume } from "./data";
 import { ContainerInspector, StatusBadge } from "./inspector";
 import { ImageDetail, ImagesView, TableView, networkColumns, volumeColumns, type Pull } from "./views";
 
@@ -13,11 +14,11 @@ import { ImageDetail, ImagesView, TableView, networkColumns, volumeColumns, type
 // volumes. Nothing runs for real: it all lives in the page, and a reload starts over.
 
 type Section = "containers" | "images" | "networks" | "volumes";
-const SECTIONS: { id: Section; title: string; icon: SymbolName }[] = [
-    { id: "containers", title: "Containers", icon: "shippingbox" },
-    { id: "images", title: "Images", icon: "square.stack.3d.up" },
-    { id: "networks", title: "Networks", icon: "network" },
-    { id: "volumes", title: "Volumes", icon: "externaldrive" },
+const SECTIONS: { id: Section; title: L; icon: SymbolName }[] = [
+    { id: "containers", title: ["Containers", "容器", "容器"], icon: "shippingbox" },
+    { id: "images", title: ["Images", "镜像", "映像檔"], icon: "square.stack.3d.up" },
+    { id: "networks", title: ["Networks", "网络", "網路"], icon: "network" },
+    { id: "volumes", title: ["Volumes", "卷", "卷宗"], icon: "externaldrive" },
 ];
 
 /** The demo's clock starts at a fixed time, so prerendered HTML is the same on every build. */
@@ -26,6 +27,7 @@ const PRESET_NETWORK: Network = { name: "frontend", mode: "NAT", subnet: "192.16
 const PRESET_VOLUME: Volume = { name: "uploads", size: 20 * 1024 ** 3, used: 0 };
 
 export function ContainerDemo({ className }: { className?: string }) {
+    const t = useText();
     const sidebar = useSidebar();
     const [section, setSection] = useState<Section>("containers");
     const [state, setState] = useState(() => initial(START));
@@ -127,28 +129,28 @@ export function ContainerDemo({ className }: { className?: string }) {
         <MacWindow className={className}>
             <MacSidebar sidebar={sidebar} width={200}>
                 <nav className="mt-1 flex flex-col gap-0.5">
-                    {SECTIONS.map((s) => <SidebarRow key={s.id} icon={s.icon} label={s.title} selected={s.id === section} onClick={() => open(s.id)} />)}
+                    {SECTIONS.map((s) => <SidebarRow key={s.id} icon={s.icon} label={t(s.title)} selected={s.id === section} onClick={() => open(s.id)} />)}
                 </nav>
             </MacSidebar>
 
             <main className="flex min-w-0 flex-1 flex-col">
-                <TitleBar leading={<ShowSidebarButton sidebar={sidebar} />} title={SECTIONS.find((s) => s.id === section)!.title} className="flex-wrap gap-y-2 max-sm:h-auto max-sm:py-2">
+                <TitleBar leading={<ShowSidebarButton sidebar={sidebar} />} title={t(SECTIONS.find((s) => s.id === section)!.title)} className="flex-wrap gap-y-2 max-sm:h-auto max-sm:py-2">
                     <div className={cn(CAPSULE, "relative gap-0.5 px-0.5")}>
                         {section === "containers" && (
                             <>
-                                <ToolButton grouped icon="plus" label="New Container" active={menu === "new"} onClick={() => setMenu((m) => (m === "new" ? null : "new"))} />
-                                <ToolButton grouped icon="play.fill" label="Start" disabled={!container || busy || container.status === "running" || container.status === "paused"} onClick={() => container && transition(container, "starting", "running", 1400)} />
-                                <ToolButton grouped icon={container?.status === "paused" ? "play.circle" : "pause.fill"} label={container?.status === "paused" ? "Resume" : "Pause"} disabled={!container || (container.status !== "running" && container.status !== "paused")} onClick={() => { if (container) { container.status = container.status === "paused" ? "running" : "paused"; changed(); } }} />
-                                <ToolButton grouped icon="stop.fill" label="Stop" disabled={!container || busy || (container.status !== "running" && container.status !== "paused")} onClick={() => container && transition(container, "stopping", "stopped", 1100)} />
+                                <ToolButton grouped icon="plus" label={t(["New Container", "新建容器", "新增容器"])} active={menu === "new"} onClick={() => setMenu((m) => (m === "new" ? null : "new"))} />
+                                <ToolButton grouped icon="play.fill" label={t(["Start", "启动", "啟動"])} disabled={!container || busy || container.status === "running" || container.status === "paused"} onClick={() => container && transition(container, "starting", "running", 1400)} />
+                                <ToolButton grouped icon={container?.status === "paused" ? "play.circle" : "pause.fill"} label={container?.status === "paused" ? t(["Resume", "继续", "繼續"]) : t(["Pause", "暂停", "暫停"])} disabled={!container || (container.status !== "running" && container.status !== "paused")} onClick={() => { if (container) { container.status = container.status === "paused" ? "running" : "paused"; changed(); } }} />
+                                <ToolButton grouped icon="stop.fill" label={t(["Stop", "停止", "停止"])} disabled={!container || busy || (container.status !== "running" && container.status !== "paused")} onClick={() => container && transition(container, "stopping", "stopped", 1100)} />
                             </>
                         )}
-                        {section === "images" && <ToolButton grouped icon="square.and.arrow.down" label="Pull Image" active={menu === "pull"} onClick={() => setMenu((m) => (m === "pull" ? null : "pull"))} />}
-                        {section === "networks" && <ToolButton grouped icon="plus" label="New Network" disabled={networks.some((n) => n.name === PRESET_NETWORK.name)} onClick={() => { setState((s) => ({ ...s, networks: [...s.networks, PRESET_NETWORK] })); setSelected((s) => ({ ...s, networks: PRESET_NETWORK.name })); }} />}
-                        {section === "volumes" && <ToolButton grouped icon="plus" label="New Volume" disabled={volumes.some((v) => v.name === PRESET_VOLUME.name)} onClick={() => { setState((s) => ({ ...s, volumes: [...s.volumes, PRESET_VOLUME] })); setSelected((s) => ({ ...s, volumes: PRESET_VOLUME.name })); }} />}
-                        <ToolButton grouped icon="trash" label="Delete" disabled={!deleteName || busy} active={menu === "delete"} onClick={() => setMenu((m) => (m === "delete" ? null : "delete"))} />
+                        {section === "images" && <ToolButton grouped icon="square.and.arrow.down" label={t(["Pull Image", "拉取镜像", "拉取映像檔"])} active={menu === "pull"} onClick={() => setMenu((m) => (m === "pull" ? null : "pull"))} />}
+                        {section === "networks" && <ToolButton grouped icon="plus" label={t(["New Network", "新建网络", "新增網路"])} disabled={networks.some((n) => n.name === PRESET_NETWORK.name)} onClick={() => { setState((s) => ({ ...s, networks: [...s.networks, PRESET_NETWORK] })); setSelected((s) => ({ ...s, networks: PRESET_NETWORK.name })); }} />}
+                        {section === "volumes" && <ToolButton grouped icon="plus" label={t(["New Volume", "新建卷", "新增卷宗"])} disabled={volumes.some((v) => v.name === PRESET_VOLUME.name)} onClick={() => { setState((s) => ({ ...s, volumes: [...s.volumes, PRESET_VOLUME] })); setSelected((s) => ({ ...s, volumes: PRESET_VOLUME.name })); }} />}
+                        <ToolButton grouped icon="trash" label={t(["Delete", "删除", "刪除"])} disabled={!deleteName || busy} active={menu === "delete"} onClick={() => setMenu((m) => (m === "delete" ? null : "delete"))} />
 
                         <Popover open={menu === "new"} onClose={() => setMenu(null)} className="left-0 right-auto w-64">
-                            <p className={cn("px-2 pt-1 pb-1.5 text-[11px] font-semibold", MAC.muted)}>New Container from Image</p>
+                            <p className={cn("px-2 pt-1 pb-1.5 text-[11px] font-semibold", MAC.muted)}>{t(["New Container from Image", "从镜像新建容器", "從映像檔新增容器"])}</p>
                             {images.map((i) => (
                                 <button key={i.ref} type="button" className="flex w-full items-center justify-between gap-2 rounded-md px-2 py-1.5 text-left hover:bg-[#007aff] hover:text-white" onClick={() => create(i)}>
                                     <span className="truncate font-mono">{shortRef(i.ref)}</span>
@@ -157,34 +159,38 @@ export function ContainerDemo({ className }: { className?: string }) {
                             ))}
                         </Popover>
                         <Popover open={menu === "pull"} onClose={() => setMenu(null)} className="left-0 right-auto w-72 p-3">
-                            <p className="font-semibold">Pull Image</p>
+                            <p className="font-semibold">{t(["Pull Image", "拉取镜像", "拉取映像檔"])}</p>
                             <form className="mt-2 flex gap-2" onSubmit={(e) => { e.preventDefault(); pull(); }}>
-                                <input aria-label="Image reference" value={pullRef} className={cn("h-7 min-w-0 flex-1 px-2 font-mono", MAC.field)} onChange={(e) => setPullRef(e.target.value)} />
-                                <button type="submit" className={cn("h-7 shrink-0 rounded-md px-3 font-medium", MAC.accentBg)}>Pull</button>
+                                <input aria-label={t(["Image reference", "镜像引用", "映像檔參照"])} value={pullRef} className={cn("h-7 min-w-0 flex-1 px-2 font-mono", MAC.field)} onChange={(e) => setPullRef(e.target.value)} />
+                                <button type="submit" className={cn("h-7 shrink-0 rounded-md px-3 font-medium", MAC.accentBg)}>{t(["Pull", "拉取", "拉取"])}</button>
                             </form>
-                            <p className={cn("mt-2 text-[11px]", MAC.muted)}>Available here:</p>
+                            <p className={cn("mt-2 text-[11px]", MAC.muted)}>{t(["Available here:", "这里可以拉取：", "這裡可以拉取："])}</p>
                             {Object.keys(PULLABLE).map((r) => (
                                 <button key={r} type="button" className={cn("block w-full truncate rounded-md px-1.5 py-0.5 text-left font-mono text-[11px]", MAC.hover, images.some((i) => i.ref === r) && "line-through opacity-50")} onClick={() => setPullRef(r)}>{r}</button>
                             ))}
                         </Popover>
                         <Popover open={menu === "delete"} onClose={() => setMenu(null)} className="w-64 p-3">
-                            <p className="font-semibold">Delete “{deleteName}”?</p>
+                            <p className="font-semibold">{t([`Delete “${deleteName}”?`, `删除“${deleteName}”？`, `刪除「${deleteName}」？`])}</p>
                             <p className={cn("mt-1", MAC.muted)}>
-                                {section === "containers" ? "The container stops and its root filesystem is removed. Mounted folders and volumes are kept." : section === "volumes" ? "All data in the volume is removed. This action cannot be undone." : "This action cannot be undone."}
+                                {section === "containers"
+                                    ? t(["The container stops and its root filesystem is removed. Mounted folders and volumes are kept.", "容器会停止，根文件系统会被删除。挂载的文件夹和卷会保留。", "容器會停止，根檔案系統會被刪除。掛載的資料夾和卷宗會保留。"])
+                                    : section === "volumes"
+                                        ? t(["All data in the volume is removed. This action cannot be undone.", "卷中的所有数据都会被删除。此操作无法撤销。", "卷宗中的所有資料都會被刪除。此動作無法還原。"])
+                                        : t(["This action cannot be undone.", "此操作无法撤销。", "此動作無法還原。"])}
                             </p>
                             <div className="mt-3 flex justify-end gap-2">
-                                <button type="button" className={cn("h-7 rounded-md px-3", MAC.field)} onClick={() => setMenu(null)}>Cancel</button>
-                                <button type="button" className="h-7 rounded-md bg-[#ff3b30] px-3 font-medium text-white" onClick={remove}>Delete</button>
+                                <button type="button" className={cn("h-7 rounded-md px-3", MAC.field)} onClick={() => setMenu(null)}>{t(["Cancel", "取消", "取消"])}</button>
+                                <button type="button" className="h-7 rounded-md bg-[#ff3b30] px-3 font-medium text-white" onClick={remove}>{t(["Delete", "删除", "刪除"])}</button>
                             </div>
                         </Popover>
                     </div>
                     {section === "images" && (
-                        <Segmented options={[{ value: "list", label: "List" }, { value: "grid", label: "Grid" }]} value={grid ? "grid" : "list"} onChange={(v) => setGrid(v === "grid")} />
+                        <Segmented options={[{ value: "list", label: t(["List", "列表", "列表"]) }, { value: "grid", label: t(["Grid", "网格", "格狀"]) }]} value={grid ? "grid" : "list"} onChange={(v) => setGrid(v === "grid")} />
                     )}
                     {(section === "containers" || section === "images") && (
                         <>
-                            <SearchField value={query} placeholder={section === "containers" ? "Search Containers" : "Search Images"} onChange={(v) => setQueries((q) => ({ ...q, [section]: v }))} className="w-40 max-sm:order-last max-sm:w-full" />
-                            <ToolButton icon="sidebar.right" label={inspector === false ? "Show Inspector" : "Hide Inspector"} onClick={() => setInspector((i) => !(i ?? matchMedia("(min-width: 768px)").matches))} className="h-3.5 w-[18px]" />
+                            <SearchField value={query} placeholder={section === "containers" ? t(["Search Containers", "搜索容器", "搜尋容器"]) : t(["Search Images", "搜索镜像", "搜尋映像檔"])} onChange={(v) => setQueries((q) => ({ ...q, [section]: v }))} className="w-40 max-sm:order-last max-sm:w-full" />
+                            <ToolButton icon="sidebar.right" label={inspector === false ? t(["Show Inspector", "显示检查器", "顯示檢閱器"]) : t(["Hide Inspector", "隐藏检查器", "隱藏檢閱器"])} onClick={() => setInspector((i) => !(i ?? matchMedia("(min-width: 768px)").matches))} className="h-3.5 w-[18px]" />
                         </>
                     )}
                 </TitleBar>
@@ -200,7 +206,7 @@ export function ContainerDemo({ className }: { className?: string }) {
                                     <span className="min-w-0 flex-1">
                                         <span className="flex items-center gap-2">
                                             <span className="truncate font-semibold">{c.name}</span>
-                                            <span className="ml-auto">{isSelected ? <span className="rounded-full bg-white/20 px-[7px] py-[3px] text-[11px] font-medium">{c.status === "new" ? "Created" : c.status[0].toUpperCase() + c.status.slice(1)}</span> : <StatusBadge status={c.status} />}</span>
+                                            <span className="ml-auto">{isSelected ? <span className="rounded-full bg-white/20 px-[7px] py-[3px] text-[11px] font-medium">{t(STATUS[c.status].title)}</span> : <StatusBadge status={c.status} />}</span>
                                         </span>
                                         <span className={cn("mt-0.5 flex gap-2 text-[11px]", isSelected ? "text-white/75" : MAC.muted)}>
                                             <span className="truncate">{shortRef(c.image)}</span>
@@ -210,17 +216,21 @@ export function ContainerDemo({ className }: { className?: string }) {
                                 </button>
                             );
                         })}
-                        {!containers.length && <Unavailable icon="shippingbox" title="No Containers">Create one from an image with +.</Unavailable>}
+                        {!containers.length && <Unavailable icon="shippingbox" title={t(["No Containers", "没有容器", "沒有容器"])}>{t(["Create one from an image with +.", "点 + 从镜像新建一个。", "按 + 從映像檔新增一個。"])}</Unavailable>}
                     </div>
                 )}
                 {section === "images" && <ImagesView images={images} pulls={pulls} query={query} grid={grid} selected={selected.images} onSelect={select} />}
-                {section === "networks" && <TableView items={networks} columns={networkColumns(containers)} selected={selected.networks} keyOf={(n) => n.name} onSelect={select} empty="No networks." />}
-                {section === "volumes" && <TableView items={volumes} columns={volumeColumns(containers)} selected={selected.volumes} keyOf={(v) => v.name} onSelect={select} empty="No volumes." />}
+                {section === "networks" && <TableView items={networks} columns={networkColumns(containers, t)} selected={selected.networks} keyOf={(n) => n.name} onSelect={select} empty={["No networks.", "没有网络。", "沒有網路。"]} />}
+                {section === "volumes" && <TableView items={volumes} columns={volumeColumns(containers, t)} selected={selected.volumes} keyOf={(v) => v.name} onSelect={select} empty={["No volumes.", "没有卷。", "沒有卷宗。"]} />}
             </main>
 
             <Inspector open={inspector !== false && (section === "containers" || section === "images")} width={340} className={inspector === null ? "max-md:hidden" : undefined}>
-                {section === "containers" && (container ? <ContainerInspector key={container.id} container={container} onChange={changed} /> : <Unavailable icon="shippingbox" title="No Container Selected" />)}
-                {section === "images" && (image ? <ImageDetail image={image} used={containers.filter((c) => c.image === image.ref).length} /> : <Unavailable icon="square.stack.3d.up" title="No Image Selected">{bytes(images.reduce((n, i) => n + i.size, 0))} in {images.length} images</Unavailable>)}
+                {section === "containers" && (container ? <ContainerInspector key={container.id} container={container} onChange={changed} /> : <Unavailable icon="shippingbox" title={t(["No Container Selected", "未选择容器", "未選擇容器"])} />)}
+                {section === "images" && (image ? <ImageDetail image={image} used={containers.filter((c) => c.image === image.ref).length} /> : <Unavailable icon="square.stack.3d.up" title={t(["No Image Selected", "未选择镜像", "未選擇映像檔"])}>{t([
+                    `${bytes(images.reduce((n, i) => n + i.size, 0))} in ${images.length} images`,
+                    `${images.length} 个镜像，共 ${bytes(images.reduce((n, i) => n + i.size, 0))}`,
+                    `${images.length} 個映像檔，共 ${bytes(images.reduce((n, i) => n + i.size, 0))}`,
+                ])}</Unavailable>)}
             </Inspector>
         </MacWindow>
     );

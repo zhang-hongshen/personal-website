@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 
+import { useText } from "~/components/demo-text";
 import { MAC } from "~/components/mac-ui";
 import { cn } from "~/lib/utils";
 import { clock, frequency, isBlackKey, noteName, HOP, type Take, type noteTargets } from "./take";
@@ -28,6 +29,7 @@ export function Editor({ take, frames, targets, selected, pps, time, playing, on
     onReset: (id: number) => void;
     onTranspose: (id: number, semitones: number) => void;
 }) {
+    const s = useText();
     const scroller = useRef<HTMLDivElement>(null);
     const [height, setHeight] = useState(360);
     const [hover, setHover] = useState<{ x: number; y: number; frame: number } | null>(null);
@@ -103,7 +105,7 @@ export function Editor({ take, frames, targets, selected, pps, time, playing, on
         <div
             ref={scroller}
             tabIndex={0}
-            aria-label="Pitch editor"
+            aria-label={s(["Pitch editor", "音高编辑器", "音高編輯器"])}
             className={cn("relative min-h-0 flex-1 overflow-x-auto overflow-y-hidden rounded-[10px] border shadow-[0_2px_6px_rgb(0_0_0/0.06)] outline-none focus-visible:ring-2 focus-visible:ring-[#007aff]/50", MAC.line, MAC.window)}
             onKeyDown={(e) => {
                 if (selected === null) return;
@@ -148,7 +150,7 @@ export function Editor({ take, frames, targets, selected, pps, time, playing, on
                         onPointerDown={(e) => { e.currentTarget.setPointerCapture(e.pointerId); onSeek(pointerTime(e, e.currentTarget)); }}
                         onPointerMove={(e) => e.buttons && onSeek(pointerTime(e, e.currentTarget))}
                     >
-                        <title>Click to move the playhead</title>
+                        <title>{s(["Click to move the playhead", "点按以移动播放头", "按一下以移動播放頭"])}</title>
                         {Array.from({ length: Math.floor(take.duration * 2) + 1 }, (_, i) => {
                             const x = (i / 2) * pps;
                             const whole = i % 2 === 0;
@@ -200,7 +202,7 @@ export function Editor({ take, frames, targets, selected, pps, time, playing, on
                             const radius = Math.min(6, h * 0.35, w * 0.25);
                             return (
                                 <g key={n.id} className="cursor-ns-resize" onPointerDown={(e) => startDrag(e, n.id)} onPointerMove={moveDrag} onPointerUp={endDrag}>
-                                    <title>{`${noteName(t.center)} — drag up or down, Delete to reset`}</title>
+                                    <title>{`${noteName(t.center)} — ${s(["drag up or down, Delete to reset", "上下拖动，按 Delete 还原", "上下拖移，按 Delete 還原"])}`}</title>
                                     <rect x={x} y={top - 4} width={w} height={h + 8} fill="transparent" />
                                     <rect x={x} y={top} width={w} height={h} rx={radius} fill={color} fillOpacity={isSelected ? 0.45 : 0.24} stroke={color} strokeOpacity={isSelected ? 1 : 0.55} />
                                     {isSelected && <rect x={x - 2.5} y={top - 2.5} width={w + 5} height={h + 5} rx={radius + 2.5} fill="none" strokeWidth={1.5} className="stroke-[#007aff] dark:stroke-[#0a84ff]" strokeOpacity={0.9} />}
@@ -229,7 +231,7 @@ export function Editor({ take, frames, targets, selected, pps, time, playing, on
                         >
                             <span className={cn("text-[11px] tabular-nums", MAC.muted)}>{clock(hovered.frame * HOP, 2)}</span>
                             <span className="text-[15px] font-semibold">{noteName(hoverPitch)}</span>
-                            {cents !== 0 && <span className={cn("text-[11px] tabular-nums", MAC.muted)}>{cents > 0 ? `+${cents}` : `−${-cents}`} cents</span>}
+                            {cents !== 0 && <span className={cn("text-[11px] tabular-nums", MAC.muted)}>{cents > 0 ? `+${cents}` : `−${-cents}`} {s(["cents", "音分", "音分"])}</span>}
                             <span className={cn("text-[11px]", MAC.muted)}>{frequency(hoverPitch).toFixed(1)} Hz</span>
                         </div>
                     )}

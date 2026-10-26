@@ -1,19 +1,35 @@
 // The library in the Arthub demo: made-up movies, shows and albums, each with drawn artwork, the
-// files they were recognized from, subtitles and lyrics.
+// files they were recognized from, subtitles and lyrics. Titles and overviews come in the visitor's
+// language, as the app's metadata would; file names, songs and lyrics stay as they are.
+
+import type { L } from "~/components/demo-text";
 
 export type Motif = "aurora" | "moon" | "sun" | "rings" | "glass" | "city" | "kites" | "waves" | "map" | "notes" | "bloom" | "tide" | "desk" | "leaf";
 export type Art = { from: string; to: string; motif: Motif };
 
 export type Subtitle = { en: string; zh: string };
 
+export type Genre = "drama" | "thriller" | "comedy" | "music" | "mystery" | "adventure" | "romance" | "scifi" | "family";
+export const GENRES: Record<Genre, L> = {
+    drama: ["Drama", "剧情", "劇情"],
+    thriller: ["Thriller", "惊悚", "驚悚"],
+    comedy: ["Comedy", "喜剧", "喜劇"],
+    music: ["Music", "音乐", "音樂"],
+    mystery: ["Mystery", "悬疑", "懸疑"],
+    adventure: ["Adventure", "冒险", "冒險"],
+    romance: ["Romance", "爱情", "愛情"],
+    scifi: ["Sci-Fi", "科幻", "科幻"],
+    family: ["Family", "家庭", "家庭"],
+};
+
 export type Movie = {
     id: string;
-    title: string;
+    title: L;
     year: number;
     minutes: number;
     rating: number;
-    genres: string[];
-    overview: string;
+    genres: Genre[];
+    overview: L;
     cast: string[];
     art: Art;
     file: string;
@@ -26,8 +42,12 @@ export type Movie = {
 
 export const MOVIES: Movie[] = [
     {
-        id: "northern", title: "Northern Lights Hotel", year: 2023, minutes: 118, rating: 7.8, genres: ["Drama"],
-        overview: "On the last night of the season, the staff of a hotel at the edge of the Arctic Circle wait for the lights — and for a guest who booked the same room every winter for forty years.",
+        id: "northern", title: ["Northern Lights Hotel", "北极光旅馆", "北極光旅館"], year: 2023, minutes: 118, rating: 7.8, genres: ["drama"],
+        overview: [
+            "On the last night of the season, the staff of a hotel at the edge of the Arctic Circle wait for the lights — and for a guest who booked the same room every winter for forty years.",
+            "季末的最后一夜，北极圈边上一家旅馆的员工在等极光，也在等一位四十年来每个冬天都订同一间房的客人。",
+            "季末的最後一夜，北極圈邊上一家旅館的員工在等極光，也在等一位四十年來每個冬天都訂同一間房的客人。",
+        ],
         cast: ["Ingrid Hale", "Tomas Reyes", "June Park", "Ola Berg"],
         art: { from: "#0b1d3a", to: "#1f6f6b", motif: "aurora" },
         file: "Northern Lights Hotel (2023) 2160p HDR.mkv", tags: ["4K", "HDR", "5.1"], added: 1, progress: 2412,
@@ -41,8 +61,12 @@ export const MOVIES: Movie[] = [
         ],
     },
     {
-        id: "ferry", title: "The Last Ferry", year: 2021, minutes: 104, rating: 7.2, genres: ["Thriller"],
-        overview: "A night crossing, a storm that closes the harbor behind them, and eleven passengers who each have a reason not to reach the other side.",
+        id: "ferry", title: ["The Last Ferry", "末班渡轮", "末班渡輪"], year: 2021, minutes: 104, rating: 7.2, genres: ["thriller"],
+        overview: [
+            "A night crossing, a storm that closes the harbor behind them, and eleven passengers who each have a reason not to reach the other side.",
+            "一次夜航，一场在身后封住港口的风暴，还有十一位乘客，每个人都有不想抵达对岸的理由。",
+            "一次夜航，一場在身後封住港口的風暴，還有十一位乘客，每個人都有不想抵達對岸的理由。",
+        ],
         cast: ["Marcus Dey", "Lena Fischer", "Ibrahim Sola"],
         art: { from: "#0d1424", to: "#3a4a6b", motif: "moon" },
         file: "The.Last.Ferry.2021.1080p.BluRay.x264.mkv", tags: ["1080p", "Stereo"], added: 4, progress: 0,
@@ -56,8 +80,12 @@ export const MOVIES: Movie[] = [
         ],
     },
     {
-        id: "orchestra", title: "Paper Moon Orchestra", year: 2024, minutes: 96, rating: 8.1, genres: ["Comedy", "Music"],
-        overview: "A school band with nine members, six instruments and one week to learn a symphony decides the only way through is to play it on whatever they can find.",
+        id: "orchestra", title: ["Paper Moon Orchestra", "纸月亮乐团", "紙月亮樂團"], year: 2024, minutes: 96, rating: 8.1, genres: ["comedy", "music"],
+        overview: [
+            "A school band with nine members, six instruments and one week to learn a symphony decides the only way through is to play it on whatever they can find.",
+            "一支九个人、六件乐器的校乐队，要在一周内学会一首交响曲，于是决定手边找到什么就用什么来演奏。",
+            "一支九個人、六件樂器的校樂隊，要在一週內學會一首交響曲，於是決定手邊找到什麼就用什麼來演奏。",
+        ],
         cast: ["Rosa Lin", "Dev Kapoor", "Sam O'Neill", "Ana Ruiz"],
         art: { from: "#f2b84b", to: "#d9534f", motif: "notes" },
         file: "Paper Moon Orchestra (2024).mp4", tags: ["1080p", "Stereo"], added: 0, progress: 0,
@@ -71,8 +99,12 @@ export const MOVIES: Movie[] = [
         ],
     },
     {
-        id: "glasshouse", title: "Glasshouse", year: 2022, minutes: 111, rating: 6.9, genres: ["Mystery"],
-        overview: "A botanist inherits a greenhouse that is always one degree warmer than it should be, and a key to a door nobody can find.",
+        id: "glasshouse", title: ["Glasshouse", "玻璃温室", "玻璃溫室"], year: 2022, minutes: 111, rating: 6.9, genres: ["mystery"],
+        overview: [
+            "A botanist inherits a greenhouse that is always one degree warmer than it should be, and a key to a door nobody can find.",
+            "一位植物学家继承了一座总比应有的温度高一度的温室，还有一把谁也找不到对应那扇门的钥匙。",
+            "一位植物學家繼承了一座總比應有的溫度高一度的溫室，還有一把誰也找不到對應那扇門的鑰匙。",
+        ],
         cast: ["Nora Quinn", "Felix Adeyemi"],
         art: { from: "#1d3b2a", to: "#7fb77e", motif: "glass" },
         file: "Glasshouse.2022.2160p.WEB-DL.DDP5.1.mkv", tags: ["4K", "5.1"], added: 6, progress: 0,
@@ -86,8 +118,12 @@ export const MOVIES: Movie[] = [
         ],
     },
     {
-        id: "salt", title: "Salt & Ember", year: 2020, minutes: 127, rating: 7.5, genres: ["Adventure"],
-        overview: "Two rival caravans cross a salt desert in a race to the coast, until a sandstorm leaves them with one map, one camel and each other.",
+        id: "salt", title: ["Salt & Ember", "盐与余烬", "鹽與餘燼"], year: 2020, minutes: 127, rating: 7.5, genres: ["adventure"],
+        overview: [
+            "Two rival caravans cross a salt desert in a race to the coast, until a sandstorm leaves them with one map, one camel and each other.",
+            "两支互不相让的商队穿越盐漠，比谁先到海岸，直到一场沙暴让他们只剩一张地图、一头骆驼和彼此。",
+            "兩支互不相讓的商隊穿越鹽漠，比誰先到海岸，直到一場沙暴讓他們只剩一張地圖、一頭駱駝和彼此。",
+        ],
         cast: ["Yusuf Amari", "Clara Voss", "Kenji Mori"],
         art: { from: "#f0a35e", to: "#8c3b2a", motif: "sun" },
         file: "Salt and Ember (2020) [1080p].mkv", tags: ["1080p", "5.1"], added: 8, progress: 5320,
@@ -101,8 +137,12 @@ export const MOVIES: Movie[] = [
         ],
     },
     {
-        id: "hours", title: "Small Hours", year: 2023, minutes: 89, rating: 7.0, genres: ["Romance"],
-        overview: "Two night-shift workers keep missing each other at the same all-night diner, so they start leaving notes in the jukebox.",
+        id: "hours", title: ["Small Hours", "凌晨时分", "凌晨時分"], year: 2023, minutes: 89, rating: 7.0, genres: ["romance"],
+        overview: [
+            "Two night-shift workers keep missing each other at the same all-night diner, so they start leaving notes in the jukebox.",
+            "两个上夜班的人总在同一家通宵餐馆错过彼此，于是开始在点唱机里给对方留纸条。",
+            "兩個上夜班的人總在同一家通宵餐館錯過彼此，於是開始在點唱機裡給對方留紙條。",
+        ],
         cast: ["Mei Tanaka", "Elliot Brooks"],
         art: { from: "#2a1840", to: "#d94f8a", motif: "city" },
         file: "Small Hours 2023 720p.mp4", tags: ["720p", "Stereo"], added: 2, progress: 0,
@@ -116,8 +156,12 @@ export const MOVIES: Movie[] = [
         ],
     },
     {
-        id: "orbit", title: "Orbit of Echoes", year: 2025, minutes: 142, rating: 8.4, genres: ["Sci-Fi"],
-        overview: "The only crew member awake on a slow ship to a ringed world begins hearing messages from the mission control that hasn't been built yet.",
+        id: "orbit", title: ["Orbit of Echoes", "回声轨道", "回聲軌道"], year: 2025, minutes: 142, rating: 8.4, genres: ["scifi"],
+        overview: [
+            "The only crew member awake on a slow ship to a ringed world begins hearing messages from the mission control that hasn't been built yet.",
+            "一艘飞船缓缓驶向一颗有光环的行星，船上唯一醒着的船员开始收到一座尚未建成的任务控制中心发来的讯息。",
+            "一艘太空船緩緩駛向一顆有光環的行星，船上唯一醒著的船員開始收到一座尚未建成的任務控制中心發來的訊息。",
+        ],
         cast: ["Ada Okafor", "Lucas Brandt", "Hana Seo"],
         art: { from: "#0a0a1f", to: "#5b3fa8", motif: "rings" },
         file: "Orbit.of.Echoes.2025.IMAX.2160p.DV.HDR10.mkv", tags: ["4K", "Dolby Vision", "Atmos"], added: 3, progress: 0,
@@ -131,8 +175,12 @@ export const MOVIES: Movie[] = [
         ],
     },
     {
-        id: "kite", title: "Kite Season", year: 2019, minutes: 93, rating: 7.3, genres: ["Family"],
-        overview: "A girl and her grandfather build a kite for the village contest from the pages of his old flight logbook.",
+        id: "kite", title: ["Kite Season", "风筝季", "風箏季"], year: 2019, minutes: 93, rating: 7.3, genres: ["family"],
+        overview: [
+            "A girl and her grandfather build a kite for the village contest from the pages of his old flight logbook.",
+            "女孩和爷爷用他旧飞行日志的纸页，为村里的比赛扎了一只风筝。",
+            "女孩和爺爺用他舊飛行日誌的紙頁，為村裡的比賽紮了一隻風箏。",
+        ],
         cast: ["Lily Chen", "Arthur Wells"],
         art: { from: "#7ec8e3", to: "#f7d794", motif: "kites" },
         file: "Kite Season (2019).m4v", tags: ["1080p", "Stereo"], added: 9, progress: 0,
@@ -146,8 +194,12 @@ export const MOVIES: Movie[] = [
         ],
     },
     {
-        id: "tidewater", title: "Tidewater", year: 2024, minutes: 108, rating: 7.6, genres: ["Drama"],
-        overview: "Three sisters return to the island where they grew up to decide what to do with a house the sea is slowly taking back.",
+        id: "tidewater", title: ["Tidewater", "潮水", "潮水"], year: 2024, minutes: 108, rating: 7.6, genres: ["drama"],
+        overview: [
+            "Three sisters return to the island where they grew up to decide what to do with a house the sea is slowly taking back.",
+            "三姐妹回到长大的小岛，要决定那栋正被大海一点点收回的房子该怎么办。",
+            "三姊妹回到長大的小島，要決定那棟正被大海一點點收回的房子該怎麼辦。",
+        ],
         cast: ["Ruth Ellis", "Maya Grant", "Isla Moreau"],
         art: { from: "#16324f", to: "#8fb9c9", motif: "waves" },
         file: "Tidewater.2024.1080p.WEBRip.mkv", tags: ["1080p", "5.1"], added: 5, progress: 0,
@@ -161,8 +213,12 @@ export const MOVIES: Movie[] = [
         ],
     },
     {
-        id: "cartographer", title: "Cartographer", year: 2018, minutes: 121, rating: 7.9, genres: ["Adventure"],
-        overview: "A mapmaker hired to chart a river that changes course every spring finds that the river has been drawing her.",
+        id: "cartographer", title: ["Cartographer", "制图师", "製圖師"], year: 2018, minutes: 121, rating: 7.9, genres: ["adventure"],
+        overview: [
+            "A mapmaker hired to chart a river that changes course every spring finds that the river has been drawing her.",
+            "一位制图师受雇绘制一条每年春天都会改道的河，却发现这条河一直在描绘她。",
+            "一位製圖師受雇繪製一條每年春天都會改道的河，卻發現這條河一直在描繪她。",
+        ],
         cast: ["Elena Duarte", "Ravi Menon"],
         art: { from: "#3b2f1e", to: "#c9a86a", motif: "map" },
         file: "Cartographer (2018) 1080p.mkv", tags: ["1080p", "Stereo"], added: 7, progress: 0,
@@ -177,11 +233,11 @@ export const MOVIES: Movie[] = [
     },
 ];
 
-export type Episode = { id: string; number: number; title: string; minutes: number; progress: number; file: string };
+export type Episode = { id: string; number: number; title: L; minutes: number; progress: number; file: string };
 export type Season = { number: number; episodes: Episode[] };
-export type Show = { id: string; title: string; years: string; overview: string; art: Art; seasons: Season[]; subtitles: Subtitle[] };
+export type Show = { id: string; title: L; years: string; overview: L; art: Art; seasons: Season[]; subtitles: Subtitle[] };
 
-function season(show: string, number: number, titles: string[], minutes: number, watched = 0): Season {
+function season(show: string, number: number, titles: L[], minutes: number, watched = 0): Season {
     return {
         number,
         episodes: titles.map((title, i) => {
@@ -193,11 +249,21 @@ function season(show: string, number: number, titles: string[], minutes: number,
 
 export const SHOWS: Show[] = [
     {
-        id: "harbor", title: "Harbor Lights", years: "2022–2024", art: { from: "#102a43", to: "#f0b429", motif: "tide" },
-        overview: "A small fishing town, its lighthouse keeper and the harbor master who has never once left, through two long winters.",
+        id: "harbor", title: ["Harbor Lights", "港湾灯火", "港灣燈火"], years: "2022–2024", art: { from: "#102a43", to: "#f0b429", motif: "tide" },
+        overview: [
+            "A small fishing town, its lighthouse keeper and the harbor master who has never once left, through two long winters.",
+            "一座小渔镇、镇上的灯塔看守人，和一次也没离开过的港务长，一起度过两个漫长的冬天。",
+            "一座小漁鎮、鎮上的燈塔看守人，和一次也沒離開過的港務長，一起度過兩個漫長的冬天。",
+        ],
         seasons: [
-            season("harbor", 1, ["The Keeper", "Fog Bell", "Low Water", "The Regatta", "Nets", "First Ice"], 48, 6),
-            season("harbor", 2, ["Thaw", "The Inspector", "Salt Road", "Wreckers", "Lantern", "Spring Tide"], 51, 2),
+            season("harbor", 1, [
+                ["The Keeper", "看守人", "看守人"], ["Fog Bell", "雾钟", "霧鐘"], ["Low Water", "低潮", "低潮"],
+                ["The Regatta", "帆船赛", "帆船賽"], ["Nets", "渔网", "漁網"], ["First Ice", "初冰", "初冰"],
+            ], 48, 6),
+            season("harbor", 2, [
+                ["Thaw", "解冻", "解凍"], ["The Inspector", "督察", "督察"], ["Salt Road", "盐路", "鹽路"],
+                ["Wreckers", "拾荒者", "拾荒者"], ["Lantern", "提灯", "提燈"], ["Spring Tide", "大潮", "大潮"],
+            ], 51, 2),
         ],
         subtitles: [
             { en: "The light's been late three nights running.", zh: "灯已经连着三晚亮晚了。" },
@@ -207,9 +273,16 @@ export const SHOWS: Show[] = [
         ],
     },
     {
-        id: "desk", title: "The Night Desk", years: "2025", art: { from: "#1b1b1b", to: "#c0392b", motif: "desk" },
-        overview: "The overnight newsroom of a city paper, where every story breaks after the editors have gone home.",
-        seasons: [season("desk", 1, ["Deadline", "Late Edition", "The Source", "Stop the Press", "Retraction", "Morning"], 44, 1)],
+        id: "desk", title: ["The Night Desk", "夜班编辑部", "夜班編輯部"], years: "2025", art: { from: "#1b1b1b", to: "#c0392b", motif: "desk" },
+        overview: [
+            "The overnight newsroom of a city paper, where every story breaks after the editors have gone home.",
+            "一家城市报社的通宵编辑部，每条大新闻都在编辑们下班后才爆出来。",
+            "一家城市報社的通宵編輯部，每條大新聞都在編輯們下班後才爆出來。",
+        ],
+        seasons: [season("desk", 1, [
+            ["Deadline", "截稿", "截稿"], ["Late Edition", "晚间版", "晚間版"], ["The Source", "消息来源", "消息來源"],
+            ["Stop the Press", "停机改版", "停機改版"], ["Retraction", "更正", "更正"], ["Morning", "清晨", "清晨"],
+        ], 44, 1)],
         subtitles: [
             { en: "We go to print in forty minutes.", zh: "四十分钟后付印。" },
             { en: "Who's the source? Two sources, or it doesn't run.", zh: "消息来源是谁？没有两个来源就不能发。" },
@@ -218,12 +291,16 @@ export const SHOWS: Show[] = [
         ],
     },
     {
-        id: "field", title: "Field Notes", years: "2019–2023", art: { from: "#2d4a22", to: "#c5d86d", motif: "leaf" },
-        overview: "A naturalist spends a year in one meadow, one forest and one coast, and films everything that lives there.",
+        id: "field", title: ["Field Notes", "野外笔记", "野外筆記"], years: "2019–2023", art: { from: "#2d4a22", to: "#c5d86d", motif: "leaf" },
+        overview: [
+            "A naturalist spends a year in one meadow, one forest and one coast, and films everything that lives there.",
+            "一位博物学家在一片草地、一片森林和一段海岸各待上一年，拍下那里生活的一切。",
+            "一位博物學家在一片草地、一片森林和一段海岸各待上一年，拍下那裡生活的一切。",
+        ],
         seasons: [
-            season("field", 1, ["The Meadow in Spring", "Pollinators", "High Summer", "Seed"], 52, 4),
-            season("field", 2, ["Old Wood", "Canopy", "Fungi", "Deep Winter"], 52, 4),
-            season("field", 3, ["Rock Pools", "The Gull Colony", "Kelp", "Storm Season"], 53, 0),
+            season("field", 1, [["The Meadow in Spring", "春天的草地", "春天的草地"], ["Pollinators", "传粉者", "傳粉者"], ["High Summer", "盛夏", "盛夏"], ["Seed", "种子", "種子"]], 52, 4),
+            season("field", 2, [["Old Wood", "古林", "古林"], ["Canopy", "林冠", "林冠"], ["Fungi", "真菌", "真菌"], ["Deep Winter", "隆冬", "隆冬"]], 52, 4),
+            season("field", 3, [["Rock Pools", "潮池", "潮池"], ["The Gull Colony", "海鸥群", "海鷗群"], ["Kelp", "海藻林", "海藻林"], ["Storm Season", "风暴季", "風暴季"]], 53, 0),
         ],
         subtitles: [
             { en: "At dawn, the meadow is louder than the city.", zh: "清晨的草地比城市还要吵。" },
@@ -287,25 +364,26 @@ export function duration(seconds: number) {
     return h ? `${h}:${String(m).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}` : `${m}:${String(s % 60).padStart(2, "0")}`;
 }
 
-export function runtime(minutes: number) {
-    return minutes >= 60 ? `${Math.floor(minutes / 60)}h ${minutes % 60}m` : `${minutes}m`;
+export function runtime(minutes: number, s: (l: L) => string) {
+    const [h, m] = [Math.floor(minutes / 60), minutes % 60];
+    return h ? s([`${h}h ${m}m`, `${h} 小时 ${m} 分钟`, `${h} 小時 ${m} 分鐘`]) : s([`${m}m`, `${m} 分钟`, `${m} 分鐘`]);
 }
 
 /** The files in the library folder, as Arthub recognized them. */
-export function libraryFiles() {
+export function libraryFiles(s: (l: L) => string) {
     return [
-        ...MOVIES.map((m) => ({ path: `Movies/${m.file}`, kind: "Movie" as const, match: `${m.title} (${m.year})`, tags: m.tags })),
-        ...SHOWS.flatMap((s) => s.seasons.flatMap((season) => season.episodes.slice(0, 2).map((e) => ({
-            path: `TV Shows/${s.title}/Season ${String(season.number).padStart(2, "0")}/${s.title} ${e.file}`,
+        ...MOVIES.map((m) => ({ path: `Movies/${m.file}`, kind: "Movie" as const, match: `${s(m.title)} (${m.year})`, tags: m.tags })),
+        ...SHOWS.flatMap((show) => show.seasons.flatMap((season) => season.episodes.slice(0, 2).map((e) => ({
+            path: `TV Shows/${show.title[0]}/Season ${String(season.number).padStart(2, "0")}/${show.title[0]} ${e.file}`,
             kind: "Episode" as const,
-            match: `${s.title} · ${e.file.replace(".mkv", "")} · ${e.title}`,
+            match: `${s(show.title)} · ${e.file.replace(".mkv", "")} · ${s(e.title)}`,
             tags: ["1080p"],
         })))),
-        ...ALBUMS.flatMap((a) => a.songs.slice(0, 2).map((s, i) => ({
-            path: `Music/${a.artist}/${a.title} (${a.year})/${String(i + 1).padStart(2, "0")} ${s.title}.flac`,
+        ...ALBUMS.flatMap((a) => a.songs.slice(0, 2).map((song, i) => ({
+            path: `Music/${a.artist}/${a.title} (${a.year})/${String(i + 1).padStart(2, "0")} ${song.title}.flac`,
             kind: "Song" as const,
-            match: `${s.title} — ${a.artist}`,
-            tags: ["FLAC", "Lyrics"],
+            match: `${song.title} — ${a.artist}`,
+            tags: ["FLAC", s(["Lyrics", "歌词", "歌詞"])],
         }))),
     ];
 }

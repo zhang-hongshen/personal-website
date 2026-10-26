@@ -2,6 +2,8 @@
 // whatever objects lie on it. The trackpad's pressure isn't quite grams, so readings are a little low
 // until the scale is calibrated with an object of known weight.
 
+import type { L } from "~/components/demo-text";
+
 export const CAPACITY_GRAMS = 1000;
 export const SAMPLE_PIECES = 10;
 
@@ -17,12 +19,12 @@ const FINGER_GRAMS = 54;
 
 export type Unit = "g" | "oz" | "ct" | "ozt" | "gr";
 
-export const UNITS: { id: Unit; name: string; grams: number; digits: number }[] = [
-    { id: "g", name: "Grams", grams: 1, digits: 1 },
-    { id: "oz", name: "Ounces", grams: 28.349523125, digits: 2 },
-    { id: "ct", name: "Carats", grams: 0.2, digits: 1 },
-    { id: "ozt", name: "Troy Ounces", grams: 31.1034768, digits: 3 },
-    { id: "gr", name: "Grains", grams: 0.06479891, digits: 0 },
+export const UNITS: { id: Unit; name: L; grams: number; digits: number }[] = [
+    { id: "g", name: ["Grams", "克", "公克"], grams: 1, digits: 1 },
+    { id: "oz", name: ["Ounces", "盎司", "盎司"], grams: 28.349523125, digits: 2 },
+    { id: "ct", name: ["Carats", "克拉", "克拉"], grams: 0.2, digits: 1 },
+    { id: "ozt", name: ["Troy Ounces", "金衡盎司", "金衡盎司"], grams: 31.1034768, digits: 3 },
+    { id: "gr", name: ["Grains", "格令", "格令"], grams: 0.06479891, digits: 0 },
 ];
 
 export function unitInfo(unit: Unit) {

@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
 
+import { useText } from "~/components/demo-text";
 import { MAC, Popover, SearchField, ToolButton } from "~/components/mac-ui";
 import { CAPSULE } from "~/components/mac-window";
 import { SFSymbol } from "~/components/sf-symbol";
@@ -10,8 +11,9 @@ import { TYPES, glob, remaining, type Entry, type KeyType } from "./data";
 // or a flat list. The tree splits names on ":".
 
 export function TypeBadge({ type, className }: { type: KeyType; className?: string }) {
+    const s = useText();
     return (
-        <span className={cn("inline-block w-10 shrink-0 rounded-[4px] py-px text-center font-mono text-[9.5px] font-bold text-white", className)} style={{ background: TYPES[type].color }} aria-label={TYPES[type].name}>
+        <span className={cn("inline-block w-10 shrink-0 rounded-[4px] py-px text-center font-mono text-[9.5px] font-bold text-white", className)} style={{ background: TYPES[type].color }} aria-label={s(TYPES[type].name)}>
             {TYPES[type].short}
         </span>
     );
@@ -49,6 +51,7 @@ export function KeyBrowser({ db, selected, now, type, asTree, onType, onAsTree, 
     now: number | null;
     onSelect: (key: string) => void;
 }) {
+    const s = useText();
     const [pattern, setPattern] = useState("");
     const [collapsed, setCollapsed] = useState<string[]>([]);
     const [picking, setPicking] = useState(false);
@@ -72,7 +75,7 @@ export function KeyBrowser({ db, selected, now, type, asTree, onType, onAsTree, 
                 <TypeBadge type={e.data.type} />
                 <span className="min-w-0 flex-1 truncate font-mono text-[12px]">{label}</span>
                 {e.expiresAt !== null && now !== null && (
-                    <span className={cn("shrink-0 text-[11px] tabular-nums", isSelected ? "text-white/80" : MAC.muted)}>{remaining(e.expiresAt, now)}</span>
+                    <span className={cn("shrink-0 text-[11px] tabular-nums", isSelected ? "text-white/80" : MAC.muted)}>{remaining(e.expiresAt, now, s)}</span>
                 )}
             </button>
         );
@@ -102,15 +105,15 @@ export function KeyBrowser({ db, selected, now, type, asTree, onType, onAsTree, 
     return (
         <div className="flex min-h-0 flex-1 flex-col">
             <div className="flex items-center gap-1.5 px-3 pb-2">
-                <SearchField value={pattern} placeholder="Filter keys, e.g. user:*" onChange={setPattern} className="min-w-0 flex-1" />
+                <SearchField value={pattern} placeholder={s(["Filter keys, e.g. user:*", "筛选 Key，例如 user:*", "篩選 Key，例如 user:*"])} onChange={setPattern} className="min-w-0 flex-1" />
                 <div className={cn(CAPSULE, "relative gap-0.5 px-0.5")}>
-                    <ToolButton grouped icon="line.3.horizontal.decrease.circle" label="Type" active={type !== "all" || picking} onClick={() => setPicking((p) => !p)} />
-                    <ToolButton grouped icon={asTree ? "list.bullet.indent" : "list.bullet"} label={asTree ? "View as List" : "View as Folders"} onClick={() => onAsTree(!asTree)} className="size-3.5" />
+                    <ToolButton grouped icon="line.3.horizontal.decrease.circle" label={s(["Type", "类型", "類型"])} active={type !== "all" || picking} onClick={() => setPicking((p) => !p)} />
+                    <ToolButton grouped icon={asTree ? "list.bullet.indent" : "list.bullet"} label={asTree ? s(["View as List", "以列表显示", "以列表顯示"]) : s(["View as Folders", "以文件夹显示", "以資料夾顯示"])} onClick={() => onAsTree(!asTree)} className="size-3.5" />
                     <Popover open={picking} onClose={() => setPicking(false)} className="w-40">
                         {(["all", ...Object.keys(TYPES)] as (KeyType | "all")[]).map((t) => (
                             <button key={t} type="button" className="flex w-full items-center gap-2 rounded-md px-2 py-1 text-left hover:bg-[#007aff] hover:text-white" onClick={() => { onType(t); setPicking(false); }}>
                                 <SFSymbol name="checkmark" className={cn("size-2.5", t !== type && "invisible")} />
-                                {t === "all" ? "All Types" : TYPES[t].name}
+                                {t === "all" ? s(["All Types", "全部类型", "全部類型"]) : s(TYPES[t].name)}
                             </button>
                         ))}
                     </Popover>
@@ -118,9 +121,11 @@ export function KeyBrowser({ db, selected, now, type, asTree, onType, onAsTree, 
             </div>
             <div className="flex min-h-0 flex-1 flex-col gap-px overflow-y-auto pb-3">
                 {asTree ? [...root.folders.flatMap((f) => folder(f, 0)), ...root.keys.map((k) => row(k, k, 0))] : keys.map((k) => row(k, k, 0))}
-                {!keys.length && <p className={cn("px-5 py-6 text-center text-[12px]", MAC.muted)}>{Object.keys(db).length ? "No keys match." : "This database is empty."}</p>}
+                {!keys.length && <p className={cn("px-5 py-6 text-center text-[12px]", MAC.muted)}>{Object.keys(db).length ? s(["No keys match.", "没有匹配的 Key。", "沒有符合的 Key。"]) : s(["This database is empty.", "这个数据库是空的。", "這個資料庫是空的。"])}</p>}
             </div>
-            <p className={cn("border-t px-4 py-1.5 text-[11px]", MAC.line, MAC.muted)}>{keys.length} of {Object.keys(db).length} keys</p>
+            <p className={cn("border-t px-4 py-1.5 text-[11px]", MAC.line, MAC.muted)}>
+                {s([`${keys.length} of ${Object.keys(db).length} keys`, `${keys.length} / ${Object.keys(db).length} 个 Key`, `${keys.length} / ${Object.keys(db).length} 個 Key`])}
+            </p>
         </div>
     );
 }

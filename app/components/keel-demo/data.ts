@@ -1,6 +1,8 @@
 // What the Keel demo connects to: a local Redis and a Valkey server, each a keyspace held in the page.
 // Keys with a TTL really expire while the page is open, as they would on the server.
 
+import { pick, type L, type Text } from "~/components/demo-text";
+
 export type KeyType = "string" | "hash" | "list" | "set" | "zset" | "stream";
 export type StreamEntry = { id: string; fields: [string, string][] };
 export type Data =
@@ -13,16 +15,16 @@ export type Data =
 export type Entry = { data: Data; /** Milliseconds since the epoch, or null for no expiry. */ expiresAt: number | null };
 /** Sixteen numbered databases of keys. */
 export type Keyspace = Record<string, Entry>[];
-export type Server = { id: string; name: string; address: string; color: string; product: string; version: string; keyspace: Keyspace };
+export type Server = { id: string; name: L | string; address: string; color: string; product: string; version: string; keyspace: Keyspace };
 
 /** The app's badge for each type: short name and color (KeyTypeViews.swift). */
-export const TYPES: Record<KeyType, { name: string; short: string; color: string }> = {
-    string: { name: "String", short: "STR", color: "#007aff" },
-    hash: { name: "Hash", short: "HASH", color: "#af52de" },
-    list: { name: "List", short: "LIST", color: "#34c759" },
-    set: { name: "Set", short: "SET", color: "#ff9500" },
-    zset: { name: "Sorted Set", short: "ZSET", color: "#ff2d55" },
-    stream: { name: "Stream", short: "XSTR", color: "#30b0c7" },
+export const TYPES: Record<KeyType, { name: L; short: string; color: string }> = {
+    string: { name: ["String", "字符串", "字串"], short: "STR", color: "#007aff" },
+    hash: { name: ["Hash", "哈希", "雜湊"], short: "HASH", color: "#af52de" },
+    list: { name: ["List", "列表", "列表"], short: "LIST", color: "#34c759" },
+    set: { name: ["Set", "集合", "集合"], short: "SET", color: "#ff9500" },
+    zset: { name: ["Sorted Set", "有序集合", "有序集合"], short: "ZSET", color: "#ff2d55" },
+    stream: { name: ["Stream", "流", "串流"], short: "XSTR", color: "#30b0c7" },
 };
 
 const s = (value: string, ttl?: number): Entry => ({ data: { type: "string", value }, expiresAt: ttl ? Date.now() + ttl * 1000 : null });
@@ -81,8 +83,8 @@ function valkey(): Keyspace {
 
 export function servers(): Server[] {
     return [
-        { id: "local", name: "Local Redis", address: "localhost:6379", color: "#ff3b30", product: "Redis", version: "7.4.1", keyspace: local() },
-        { id: "valkey", name: "Staging Cache", address: "cache.staging.internal:6379", color: "#34c759", product: "Valkey", version: "8.0.2", keyspace: valkey() },
+        { id: "local", name: ["Local Redis", "本地 Redis", "本機 Redis"], address: "localhost:6379", color: "#ff3b30", product: "Redis", version: "7.4.1", keyspace: local() },
+        { id: "valkey", name: ["Staging Cache", "预发布缓存", "預備環境快取"], address: "cache.staging.internal:6379", color: "#34c759", product: "Valkey", version: "8.0.2", keyspace: valkey() },
     ];
 }
 
@@ -109,13 +111,15 @@ export function sizeOf(data: Data): number {
     return data.type === "string" ? data.value.length : data.value.length;
 }
 
+const UNITS: [L, number][] = [[["d", "天", "天"], 86400], [["h", "时", "時"], 3600], [["m", "分", "分"], 60], [["s", "秒", "秒"], 1]];
+
 /** Remaining time as the app shows it: two units at most, e.g. "29m 41s". */
-export function remaining(expiresAt: number, now: number): string {
+export function remaining(expiresAt: number, now: number, t: Text = pick("en")): string {
     let s = Math.max(0, Math.ceil((expiresAt - now) / 1000));
     const parts: string[] = [];
-    for (const [unit, size] of [["d", 86400], ["h", 3600], ["m", 60], ["s", 1]] as const) {
-        if (s >= size || (unit === "s" && !parts.length)) {
-            parts.push(`${Math.floor(s / size)}${unit}`);
+    for (const [unit, size] of UNITS) {
+        if (s >= size || (size === 1 && !parts.length)) {
+            parts.push(`${Math.floor(s / size)}${t(unit)}`);
             s %= size;
         }
     }
