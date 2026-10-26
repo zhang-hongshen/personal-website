@@ -29,7 +29,7 @@ export type DesktopApi = {
 };
 
 const DOCK: AppKey[] = ["Finder", "modelcraft", "container", "quaero", "keel", "cellar", "arthub"];
-const FOLDERS: FolderId[] = ["applications", "desktop", "documents", "downloads", "music"];
+const FOLDERS: FolderId[] = ["desktop", "documents", "downloads", "applications", "music", "movies", "pictures"];
 
 const appLabel = (app: AppKey): L | string => (app === "modelcraft" ? "ModelCraft" : app === "Finder" ? ["Finder", "访达", "Finder"] : CONNECTOR_NAME[app]);
 
