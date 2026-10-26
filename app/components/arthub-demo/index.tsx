@@ -4,6 +4,7 @@ import { useText, type L } from "~/components/demo-text";
 import { Inspector, MAC, MacSidebar, MacWindow, SearchField, Segmented, ShowSidebarButton, SidebarHeader, SidebarRow, Spinner, TitleBar, ToolButton, Unavailable, useSidebar } from "~/components/mac-ui";
 import { CAPSULE } from "~/components/mac-window";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
+import { useTour, type Tour } from "~/components/tour";
 import { cn } from "~/lib/utils";
 import { ALBUMS, GENRES, MOVIES, SHOWS, TRACKS, libraryFiles, type Episode, type Genre, type Track } from "./library";
 import { AlbumDetail, LyricsPanel, MiniPlayer, MusicLibrary, type MusicControls, type MusicMode, type NowPlaying } from "./music";
@@ -16,6 +17,8 @@ import { ACCENT, GenreList, MovieDetail, MoviesHome, ShowDetail, ShowsGrid, type
 // page) with the now-playing bar and timed lyrics. What you watch is remembered until a reload.
 
 type Tab = "movies" | "shows" | "music" | "media" | "backup";
+/** The parts of the app a tour walks through; the library covers both folders in the sidebar. */
+export type ArthubStop = "movies" | "shows" | "music" | "library";
 type Route = { kind: "movie"; id: string } | { kind: "genre"; genre: Genre } | { kind: "show"; id: string } | { kind: "album"; id: string };
 type Playing = { title: string; subtitle?: string; key: string; art: (typeof MOVIES)[number]["art"]; seconds: number; subtitles: (typeof MOVIES)[number]["subtitles"] };
 
@@ -30,7 +33,7 @@ const LYRICS: L = ["Lyrics", "歌词", "歌詞"];
 
 const SELECTED = "!bg-[#c2462a] dark:!bg-[#f26d45]";
 
-export function ArthubDemo({ className }: { className?: string }) {
+export function ArthubDemo({ className, tour }: { className?: string; tour?: Tour<ArthubStop> }) {
     const s = useText();
     const sidebar = useSidebar();
     const [tab, setTab] = useState<Tab>("movies");
@@ -51,6 +54,7 @@ export function ArthubDemo({ className }: { className?: string }) {
         setSearch("");
         sidebar.done();
     };
+    useTour(tour, tab === "media" || tab === "backup" ? "library" : tab, (stop) => open(stop === "library" ? "media" : stop));
 
     // ---- Music
     const engine = useRef<SongPlayer | null>(null);

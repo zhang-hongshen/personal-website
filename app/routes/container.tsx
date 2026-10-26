@@ -1,23 +1,21 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { ContainerDemo } from "~/components/container-demo";
-import { Glyph } from "~/components/glyph";
+import { ContainerDemo, type ContainerStop } from "~/components/container-demo";
 import {
-    ComingSoonButton, Eyebrow, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Split, Statement,
-    type Feature,
+    ComingSoonButton, Eyebrow, Hero, Points, ProductMeta, Section, Split, Statement,
 } from "~/components/sections";
+import { FeatureTour, type TourStop } from "~/components/tour";
 import { getProduct, type AccentHandle } from "~/lib/products";
 import { cn } from "~/lib/utils";
 
 export const handle: AccentHandle = { accent: getProduct("container").accent };
 
-const FEATURES: Feature[] = [
-    { icon: <Glyph><path d="M12 15V3m0 12-5-5m5 5 5-5M5 21h14" /></Glyph>, title: "container.images", body: "container.pull_list_search_and_delete" },
-    { icon: <Glyph><path d="m12 2 9 5v10l-9 5-9-5V7z" /><path d="m3 7 9 5 9-5M12 12v10" /></Glyph>, title: "container.containers", body: "container.create_start_stop_inspect" },
-    { icon: <Glyph><path d="M5 12h14M13 6l6 6-6 6" /></Glyph>, title: "container.published_ports", body: "container.ports_the_image_exposes" },
-    { icon: <Glyph><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></Glyph>, title: "container.host_folders", body: "container.mount_folders_from_your_mac" },
-    { icon: <Glyph><circle cx="12" cy="5" r="2" /><circle cx="5" cy="19" r="2" /><circle cx="19" cy="19" r="2" /><path d="M12 7v5M12 12l-6 5.5M12 12l6 5.5" /></Glyph>, title: "container.networks", body: "container.join_containers_to_networks" },
-    { icon: <Glyph><path d="M12 2 4 6v6c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6z" /></Glyph>, title: "container.isolated_by_design", body: "container.each_container_stays_apart" },
+const STOPS: TourStop<ContainerStop>[] = [
+    { id: "containers", title: "container.demo_containers_title", body: "container.demo_containers_body" },
+    { id: "images", title: "container.demo_images_title", body: "container.demo_images_body" },
+    { id: "networks", title: "container.demo_networks_title", body: "container.demo_networks_body" },
+    { id: "volumes", title: "container.demo_volumes_title", body: "container.demo_volumes_body" },
 ];
 
 const SETUP = [
@@ -41,6 +39,7 @@ const STEPS = [
 
 export default function Container() {
     const { t } = useTranslation();
+    const [stop, setStop] = useState<ContainerStop>("containers");
     return (
         <main className="pb-12">
             <ProductMeta id="container" />
@@ -51,15 +50,10 @@ export default function Container() {
                 action={<ComingSoonButton label={t("container.coming_soon")} />}
                 note={t("container.requirements")}
             >
-                <ContainerDemo className="mt-16" />
-                <p className="mt-5 text-center text-[13px] text-faint">{t("container.demo_hint")}</p>
+                <FeatureTour className="mt-16" stops={STOPS} stop={stop} onStop={setStop}>
+                    <ContainerDemo tour={{ stop, onStop: setStop }} />
+                </FeatureTour>
             </Hero>
-
-            <Section>
-                <SectionTitle>{t("container.containers_made_simple")}</SectionTitle>
-                <SectionLead>{t("container.pull_an_image_create_a")}</SectionLead>
-                <FeatureGrid features={FEATURES} />
-            </Section>
 
             <Section className="pt-6">
                 <Split>

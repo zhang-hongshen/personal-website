@@ -4,6 +4,7 @@ import { useText, type L } from "~/components/demo-text";
 import { Inspector, MAC, MacSidebar, MacWindow, Popover, Segmented, ShowSidebarButton, SidebarHeader, SidebarRow, TitleBar, ToolButton, Unavailable, useSidebar } from "~/components/mac-ui";
 import { CAPSULE } from "~/components/mac-window";
 import { SFSymbol } from "~/components/sf-symbol";
+import { useTour, type Tour } from "~/components/tour";
 import { cn } from "~/lib/utils";
 import { KeyBrowser } from "./browser";
 import { Console, type Line } from "./console";
@@ -21,7 +22,10 @@ const EXPIRY: [L, number | null][] = [
     [["1 Hour", "1 小时", "1 小時"], 3600], [["1 Day", "1 天", "1 天"], 86400],
 ];
 
-export function KeelDemo({ className }: { className?: string }) {
+/** The parts of the app a tour walks through: the key browser, Insights and the command console. */
+export type KeelStop = "browse" | "insights" | "console";
+
+export function KeelDemo({ className, tour }: { className?: string; tour?: Tour<KeelStop> }) {
     const t = useText();
     const sidebar = useSidebar();
     const [servers, setServers] = useState<Server[]>(initialServers);
@@ -70,6 +74,10 @@ export function KeelDemo({ className }: { className?: string }) {
         setMenu(null);
         setShowDetail(true);
     };
+    useTour(tour, consoleOpen ? "console" : mode, (stop) => {
+        setConsoleOpen(stop === "console");
+        if (stop !== "console") setMode(stop);
+    });
     const addServer = () => {
         const added = newServer();
         if (!servers.some((s) => s.id === added.id)) setServers((ss) => [...ss, added]);

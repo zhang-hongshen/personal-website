@@ -4,6 +4,7 @@ import { useText, type L } from "~/components/demo-text";
 import { Inspector, MAC, MacSidebar, MacWindow, Popover, SearchField, Segmented, ShowSidebarButton, SidebarRow, TitleBar, ToolButton, Unavailable, useSidebar } from "~/components/mac-ui";
 import { CAPSULE } from "~/components/mac-window";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
+import { useTour, type Tour } from "~/components/tour";
 import { cn } from "~/lib/utils";
 import { IMAGES, PULLABLE, STATUS, bytes, initial, newContainer, repoName, runningLog, shortRef, startLogs, type Container, type Image, type Network, type Volume } from "./data";
 import { ContainerInspector, StatusBadge } from "./inspector";
@@ -14,6 +15,7 @@ import { ImageDetail, ImagesView, TableView, networkColumns, volumeColumns, type
 // volumes. Nothing runs for real: it all lives in the page, and a reload starts over.
 
 type Section = "containers" | "images" | "networks" | "volumes";
+export type ContainerStop = Section;
 const SECTIONS: { id: Section; title: L; icon: SymbolName }[] = [
     { id: "containers", title: ["Containers", "容器", "容器"], icon: "shippingbox" },
     { id: "images", title: ["Images", "镜像", "映像檔"], icon: "square.stack.3d.up" },
@@ -26,7 +28,7 @@ const START = new Date("2026-10-25T10:00:00Z");
 const PRESET_NETWORK: Network = { name: "frontend", mode: "NAT", subnet: "192.168.80.0/24" };
 const PRESET_VOLUME: Volume = { name: "uploads", size: 20 * 1024 ** 3, used: 0 };
 
-export function ContainerDemo({ className }: { className?: string }) {
+export function ContainerDemo({ className, tour }: { className?: string; tour?: Tour<ContainerStop> }) {
     const t = useText();
     const sidebar = useSidebar();
     const [section, setSection] = useState<Section>("containers");
@@ -76,6 +78,7 @@ export function ContainerDemo({ className }: { className?: string }) {
 
     const select = (id: string) => setSelected((s) => ({ ...s, [section]: id }));
     const open = (id: Section) => { setSection(id); setMenu(null); sidebar.done(); };
+    useTour(tour, section, open);
 
     /** Moves a container through a transition (Starting, Stopping) to its final state. */
     const transition = (c: Container, through: Container["status"], to: Container["status"], ms: number) => {

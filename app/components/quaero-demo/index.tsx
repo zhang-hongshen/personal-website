@@ -4,6 +4,7 @@ import { useText, type L } from "~/components/demo-text";
 import { Inspector, MAC, MacSidebar, MacWindow, SearchField, ShowSidebarButton, SidebarHeader, SidebarRow, Spinner, TitleBar, ToolButton, Unavailable, useSidebar } from "~/components/mac-ui";
 import { CAPSULE } from "~/components/mac-window";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
+import { useTour, type Tour } from "~/components/tour";
 import { cn } from "~/lib/utils";
 import { CONNECTIONS, KIND_NAME, NEW_CONNECTION, SAMPLE_SQL, createStatement, isVectorDB, type Connection, type Kind, type Table, type Value } from "./data";
 import { runRequest, similarRequest } from "./rest";
@@ -42,8 +43,10 @@ const TABLE_INFO: L = ["Table Info", "表信息", "表格資訊"];
 const NO_TABLE: L = ["No Table Selected", "未选择表", "未選擇表格"];
 
 type Condition = { column: string; op: string; value: string };
+/** The parts of the app a tour walks through: SQL tables, the console beside them, and vector collections. */
+export type QuaeroStop = "sql" | "console" | "vector";
 
-export function QuaeroDemo({ className }: { className?: string }) {
+export function QuaeroDemo({ className, tour }: { className?: string; tour?: Tour<QuaeroStop> }) {
     const s = useText();
     const sidebar = useSidebar();
     const [connections, setConnections] = useState<Connection[]>(() => structuredClone(CONNECTIONS));
@@ -113,6 +116,12 @@ export function QuaeroDemo({ className }: { className?: string }) {
         setTables((t) => ({ ...t, [connectionId]: name }));
         setLoading(true);
     };
+    useTour(tour, inspector === "console" ? "console" : isVectorDB(connection.kind) ? "vector" : "sql", (stop) => {
+        if (stop === "console") return setInspector("console");
+        setInspector((i) => (i === "console" ? null : i));
+        if (stop === "vector" && !isVectorDB(connection.kind)) openConnection("vectors");
+        if (stop === "sql" && isVectorDB(connection.kind)) openConnection("shop");
+    });
     const addConnection = () => {
         if (connections.some((c) => c.id === NEW_CONNECTION.id)) return openConnection(NEW_CONNECTION.id);
         setConnections((cs) => [...cs, structuredClone(NEW_CONNECTION)]);

@@ -1,25 +1,19 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { Glyph } from "~/components/glyph";
-import { QuaeroDemo } from "~/components/quaero-demo";
+import { QuaeroDemo, type QuaeroStop } from "~/components/quaero-demo";
 import {
-    ComingSoonButton, Eyebrow, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Split, Statement, Tree,
-    type Feature,
+    ComingSoonButton, Eyebrow, Hero, Points, ProductMeta, Section, Split, Statement, Tree,
 } from "~/components/sections";
+import { FeatureTour, type TourStop } from "~/components/tour";
 import { getProduct, type AccentHandle } from "~/lib/products";
 
 export const handle: AccentHandle = { accent: getProduct("quaero").accent };
 
-const FEATURES: Feature[] = [
-    { icon: <Glyph><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7" /><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7" /></Glyph>, title: "quaero.connections", body: "quaero.save_connections_to_sql_and" },
-    { icon: <Glyph><ellipse cx="12" cy="5" rx="8" ry="3" /><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3" /></Glyph>, title: "quaero.schema_browser", body: "quaero.databases_tables_views_and_collections" },
-    { icon: <Glyph><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M3 15h18M9 3v18" /></Glyph>, title: "quaero.table_content", body: "quaero.browse_rows_and_edit_cells" },
-    { icon: <Glyph><path d="M22 3H2l8 9.5V19l4 2v-8.5z" /></Glyph>, title: "quaero.filters", body: "quaero.combine_conditions_with_match_all" },
-    { icon: <Glyph><polyline points="4 17 10 11 4 5" /><line x1="12" y1="19" x2="20" y2="19" /></Glyph>, title: "quaero.console", body: "quaero.run_sql_or_send_rest_requests" },
-    { icon: <Glyph><path d="M12 21V9m0 0-5 5m5-5 5 5M5 3h14" /></Glyph>, title: "quaero.export", body: "quaero.save_rows_as_csv_or" },
-    { icon: <Glyph><circle cx="5" cy="6" r="1.5" /><circle cx="12" cy="6" r="1.5" /><circle cx="19" cy="6" r="1.5" /><circle cx="5" cy="12" r="1.5" /><circle cx="12" cy="12" r="1.5" /><circle cx="19" cy="12" r="1.5" /><circle cx="5" cy="18" r="1.5" /><circle cx="12" cy="18" r="1.5" /><circle cx="19" cy="18" r="1.5" /></Glyph>, title: "quaero.vector_databases", body: "quaero.browse_qdrant_and_milvus_collections" },
-    { icon: <Glyph><rect x="2" y="9" width="20" height="6" rx="1" /><path d="M6 9v6M10 9v6M14 9v6M18 9v6" /></Glyph>, title: "quaero.vectors_you_can_read", body: "quaero.embeddings_show_as_a_color" },
-    { icon: <Glyph><circle cx="12" cy="12" r="2" /><circle cx="12" cy="12" r="6" strokeDasharray="2 2.5" /><circle cx="12" cy="12" r="10" strokeDasharray="2 3" /></Glyph>, title: "quaero.find_similar_rows", body: "quaero.right_click_a_vector_to" },
+const STOPS: TourStop<QuaeroStop>[] = [
+    { id: "sql", title: "quaero.demo_sql_title", body: "quaero.demo_sql_body" },
+    { id: "console", title: "quaero.sql_next_to_your_rows", body: "quaero.demo_console_body" },
+    { id: "vector", title: "quaero.demo_vector_title", body: "quaero.demo_vector_body" },
 ];
 
 const POINTS = [
@@ -56,6 +50,7 @@ b07d33a1   0.903   Pushing Portra 400 two stops
 
 export default function Quaero() {
     const { t } = useTranslation();
+    const [stop, setStop] = useState<QuaeroStop>("sql");
     return (
         <main className="pb-12">
             <ProductMeta id="quaero" />
@@ -66,15 +61,10 @@ export default function Quaero() {
                 action={<ComingSoonButton label={t("quaero.coming_soon")} />}
                 note={t("quaero.requirements")}
             >
-                <QuaeroDemo className="mt-16" />
-                <p className="mt-5 text-center text-[13px] text-faint">{t("quaero.demo_hint")}</p>
+                <FeatureTour className="mt-16" stops={STOPS} stop={stop} onStop={setStop}>
+                    <QuaeroDemo tour={{ stop, onStop: setStop }} />
+                </FeatureTour>
             </Hero>
-
-            <Section>
-                <SectionTitle>{t("quaero.your_databases_at_a_glance")}</SectionTitle>
-                <SectionLead>{t("quaero.connect_browse_query_and_export")}</SectionLead>
-                <FeatureGrid features={FEATURES} />
-            </Section>
 
             <Section className="pt-6">
                 <Split>

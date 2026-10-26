@@ -1,22 +1,20 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { ArthubDemo } from "~/components/arthub-demo";
-import { Glyph } from "~/components/glyph";
+import { ArthubDemo, type ArthubStop } from "~/components/arthub-demo";
 import {
-    DownloadButton, Eyebrow, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Split, Statement, Tree,
-    type Feature,
+    DownloadButton, Eyebrow, Hero, Points, ProductMeta, Section, Split, Statement, Tree,
 } from "~/components/sections";
+import { FeatureTour, type TourStop } from "~/components/tour";
 import { getProduct, type AccentHandle } from "~/lib/products";
 
 export const handle: AccentHandle = { accent: getProduct("arthub").accent };
 
-const FEATURES: Feature[] = [
-    { icon: <Glyph><rect x="2" y="2" width="20" height="20" rx="2.18" /><path d="M7 2v20M17 2v20M2 12h20M2 7h5M2 17h5M17 17h5M17 7h5" /></Glyph>, title: "arthub.movies", body: "arthub.posters_cast_ratings_and_trailers" },
-    { icon: <Glyph><rect x="2" y="7" width="20" height="15" rx="2" /><path d="m17 2-5 5-5-5" /></Glyph>, title: "arthub.tv_shows", body: "arthub.organized_by_season_and_episode" },
-    { icon: <Glyph><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></Glyph>, title: "arthub.music", body: "arthub.albums_artists_and_artwork_with" },
-    { icon: <Glyph><rect x="2" y="5" width="20" height="14" rx="2" /><path d="M7 15h4M15 15h2M7 11h2M13 11h4" /></Glyph>, title: "arthub.subtitles", body: "arthub.loaded_automatically_with_the_language" },
-    { icon: <Glyph><circle cx="12" cy="12" r="10" /><path d="m10 8 6 4-6 4z" /></Glyph>, title: "arthub.playback", body: "arthub.playback_speed_resume_media_keys" },
-    { icon: <Glyph><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></Glyph>, title: "arthub.search", body: "arthub.instant_search_across_titles_artists" },
+const STOPS: TourStop<ArthubStop>[] = [
+    { id: "movies", title: "arthub.demo_movies_title", body: "arthub.demo_movies_body" },
+    { id: "shows", title: "arthub.demo_shows_title", body: "arthub.demo_shows_body" },
+    { id: "music", title: "arthub.demo_music_title", body: "arthub.demo_music_body" },
+    { id: "library", title: "arthub.add_a_folder_arthub_does", body: "arthub.demo_library_body" },
 ];
 
 const POINTS = [
@@ -44,6 +42,7 @@ Music/
 
 export default function Arthub() {
     const { t } = useTranslation();
+    const [stop, setStop] = useState<ArthubStop>("movies");
     return (
         <main className="pb-12">
             <ProductMeta id="arthub" />
@@ -54,15 +53,10 @@ export default function Arthub() {
                 action={<DownloadButton repo="zhang-hongshen/Arthub" />}
                 note={t("arthub.apple_silicon_m1_or_later")}
             >
-                <ArthubDemo className="mt-16" />
-                <p className="mt-5 text-center text-[13px] text-faint">{t("arthub.demo_hint")}</p>
+                <FeatureTour className="mt-16" stops={STOPS} stop={stop} onStop={setStop}>
+                    <ArthubDemo tour={{ stop, onStop: setStop }} />
+                </FeatureTour>
             </Hero>
-
-            <Section>
-                <SectionTitle>{t("arthub.add_a_folder_arthub_does")}</SectionTitle>
-                <SectionLead>{t("arthub.files_stay_where_they_are")}</SectionLead>
-                <FeatureGrid features={FEATURES} />
-            </Section>
 
             <Section className="pt-6">
                 <Split>
