@@ -68,7 +68,7 @@ function Clock() {
     }, []);
     if (!now) return null;
     const text = new Intl.DateTimeFormat(locale(lang), { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(now);
-    return <span className="tabular-nums">{text}</span>;
+    return <span className="whitespace-nowrap tabular-nums">{text}</span>;
 }
 
 export function MenuBar({ menus, wifi, brightness, volume, onWifi, onBrightness, onVolume, onSpotlight }: {
@@ -153,9 +153,9 @@ export function MenuBar({ menus, wifi, brightness, volume, onWifi, onBrightness,
 
     return (
         <div ref={bar} className="absolute inset-x-0 top-0 z-[70] flex h-7 items-center gap-0.5 bg-white/25 px-1.5 text-[13px] text-[#1d1d1f] backdrop-blur-xl select-none dark:bg-black/20 dark:text-white/90">
-            {menus.map((m, i) => (
+            {menus.map((m) => (
                 <Fragment key={m.id}>
-                    {title(m.id, m.title, list(m.items), { bold: m.bold, aria: m.aria, className: i > 1 ? "hidden sm:flex" : undefined })}
+                    {title(m.id, m.title, list(m.items), { bold: m.bold, aria: m.aria })}
                 </Fragment>
             ))}
 
@@ -174,13 +174,13 @@ export function MenuBar({ menus, wifi, brightness, volume, onWifi, onBrightness,
                         </>
                     )}
                 </div>
-            ), { align: "right", aria: "Wi-Fi", className: "hidden sm:flex" })}
+            ), { align: "right", aria: "Wi-Fi" })}
             {title("battery", <BatteryIcon className="h-[11px] w-[23px]" />, (
                 <div className={cn(PANEL, "w-[220px] p-3")}>
                     <p className="flex items-center justify-between font-semibold">{s(["Battery", "电池", "電池"])}<span className="font-normal opacity-60">87%</span></p>
                     <p className="mt-1 text-[12px] opacity-60">{s(["Power Source: Battery", "电源：电池", "電源：電池"])}</p>
                 </div>
-            ), { align: "right", aria: s(["Battery", "电池", "電池"]), className: "hidden sm:flex" })}
+            ), { align: "right", aria: s(["Battery", "电池", "電池"]) })}
             {title("control", <ControlCenterIcon className="h-[13px] w-[15px]" />, (
                 <div className={cn(PANEL, "grid w-[280px] gap-2 p-2.5")}>
                     <div className="grid grid-cols-2 gap-2">

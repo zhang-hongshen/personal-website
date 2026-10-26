@@ -66,7 +66,9 @@ export function ModelCraftDemo({ className }: { className?: string }) {
 export function ModelCraftDesktop({ className }: { className?: string }) {
     const [view, setView] = useState<View>("chat");
     return (
-        <div className={cn("text-left xl:-mx-20", className)}>
+        // Below the desktop's minimum width plus the page's side padding (1008), it scrolls sideways rather than
+        // squeezing; only then, so the scroll box doesn't clip its shadow on wider screens.
+        <div className={cn("text-left max-[1008px]:-mx-6 max-[1008px]:overflow-x-auto max-[1008px]:overscroll-x-contain max-[1008px]:px-6 max-[1008px]:pb-6 xl:-mx-20", className)}>
             <Desktop>
                 {(desktop) => (
                     <ModelCraftWindow

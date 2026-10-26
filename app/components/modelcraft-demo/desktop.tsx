@@ -64,6 +64,9 @@ function AppIcon({ app, className }: { app: AppKey; className?: string }) {
     return <ProductIcon id={app} className={className} width={48} height={48} />;
 }
 
+/** The width the desktop never shrinks below; narrower screens scroll it sideways instead. */
+export const DESKTOP_MIN_WIDTH = 960;
+
 /** The desktop, started again from scratch by Restart. */
 export function Desktop({ className, children }: { className?: string; /** The ModelCraft window. */ children: (api: DesktopApi) => ReactNode }) {
     const [boot, setBoot] = useState(0);
@@ -79,8 +82,8 @@ export function Desktop({ className, children }: { className?: string; /** The M
 
     return (
         <div
-            className={cn("@container relative h-[min(760px,88vh)] w-full overflow-hidden rounded-[18px] border border-black/12 shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)] dark:border-white/12", className)}
-            style={{ fontFamily: MAC_FONT }}
+            className={cn("@container relative h-[min(760px,88vh)] w-full shrink-0 overflow-hidden rounded-[18px] border border-black/12 shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)] dark:border-white/12", className)}
+            style={{ fontFamily: MAC_FONT, minWidth: DESKTOP_MIN_WIDTH }}
         >
             <Session key={boot} onRestart={() => setRestarting(true)}>{children}</Session>
             {restarting && (
@@ -200,11 +203,11 @@ function Session({ onRestart, children }: { onRestart: () => void; children: (ap
                 onSpotlight={() => setSpotlight(true)}
             />
 
-            {frame("modelcraft", "inset-x-2 sm:right-[14%] sm:left-[2%]", 36, children(api.current))}
+            {frame("modelcraft", "right-[14%] left-[2%]", 36, children(api.current))}
             {opened.map((app, i) =>
                 frame(
                     app,
-                    "inset-x-2 sm:right-[2%] sm:left-[14%]",
+                    "right-[2%] left-[14%]",
                     48 + (i % 4) * 16,
                     <Suspense fallback={<Loading app={app} />}>
                         {app === "Finder" ? <FinderWindow goTo={finderAt} onOpenApp={(a) => launch(a as AppKey)} /> : app === "modelcraft" ? null : <Demo app={app} />}
