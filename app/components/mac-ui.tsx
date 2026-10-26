@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 
 import { cn } from "~/lib/utils";
 import { CAPSULE, MAC_FONT, TOOL, TOOL_ITEM } from "./mac-window";
@@ -35,12 +35,29 @@ export function MacWindow({ className, children }: { className?: string; childre
     );
 }
 
+/** What a window's close and minimize buttons do, when the window sits on a desktop that handles them. */
+export const WindowControls = createContext<{ close: () => void; minimize: () => void } | null>(null);
+
 export function TrafficLights() {
+    const controls = useContext(WindowControls);
+    if (!controls) {
+        return (
+            <span className="flex gap-2" aria-hidden>
+                <i className="size-3 rounded-full bg-[#ff5f57]" />
+                <i className="size-3 rounded-full bg-[#febc2e]" />
+                <i className="size-3 rounded-full bg-[#28c840]" />
+            </span>
+        );
+    }
     return (
-        <span className="flex gap-2" aria-hidden>
-            <i className="size-3 rounded-full bg-[#ff5f57]" />
-            <i className="size-3 rounded-full bg-[#febc2e]" />
-            <i className="size-3 rounded-full bg-[#28c840]" />
+        <span className="group/lights flex gap-2">
+            <button type="button" aria-label="Close" title="Close" className="flex size-3 items-center justify-center rounded-full bg-[#ff5f57] text-[9px] leading-none text-black/60" onClick={controls.close}>
+                <span className="opacity-0 group-hover/lights:opacity-100">×</span>
+            </button>
+            <button type="button" aria-label="Minimize" title="Minimize" className="flex size-3 items-center justify-center rounded-full bg-[#febc2e] text-[9px] leading-none text-black/60" onClick={controls.minimize}>
+                <span className="opacity-0 group-hover/lights:opacity-100">−</span>
+            </button>
+            <i aria-hidden className="size-3 rounded-full bg-[#28c840]" />
         </span>
     );
 }

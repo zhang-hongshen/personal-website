@@ -90,13 +90,7 @@
     "runs_on_its_own_schedule": "Runs on its own schedule",
     "give_it_a_prompt_and_a_time": "Give it a prompt and a time. Every day or every week, it runs the task with your connected apps — a digest of today's notes, a movie for Friday night.",
     "demo_chat_title": "Ask, and it works your apps",
-    "demo_chat_body": "Replies come from the model on your Mac. Watch the Dock: each app ModelCraft uses bounces and opens a window with what it did. Click an icon to open it again.",
-    "demo_connectors_title": "Connect the apps you use",
-    "demo_connectors_body": "Container, Quaero, Keel, Cellar, Arthub, Pinch and TuneStudio. Once installed, ModelCraft can start a container, query a database and file the result in Cellar — several apps in a single reply.",
-    "demo_store_title": "Choose your model",
-    "demo_store_body": "Popular open models, ready to download. Switch between them right from the chat.",
-    "demo_tasks_title": "Let it run on schedule",
-    "demo_tasks_body": "A prompt and a time. It runs on its own with your connected apps and leaves the result in Recents."
+    "demo_chat_body": "Replies come from the model on your Mac. Open a reply's tool calls to see which apps it used and what each one sent back."
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "Movies, shows and music. Beautifully organized",

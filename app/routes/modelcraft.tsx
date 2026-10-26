@@ -1,18 +1,12 @@
 import { useTranslation } from "react-i18next";
 
 import { Glyph } from "~/components/glyph";
-import { ModelCraftDemo } from "~/components/modelcraft-demo";
+import { ModelCraftDemo, ModelCraftDesktop } from "~/components/modelcraft-demo";
 import {
-    DownloadButton, Eyebrow, FeatureGrid, Hero, ProductMeta, Section, SectionLead, SectionTitle, Shot, Split, Statement,
+    DownloadButton, FeatureGrid, Hero, ProductMeta, Section, SectionLead, SectionTitle, Statement,
     type Feature,
 } from "~/components/sections";
 import { getProduct, type AccentHandle } from "~/lib/products";
-import modelStoreLight from "~/assets/modelcraft/model_store_light.webp";
-import modelStoreDark from "~/assets/modelcraft/model_store_dark.webp";
-import connectorsLight from "~/assets/modelcraft/connectors_light.webp";
-import connectorsDark from "~/assets/modelcraft/connectors_dark.webp";
-import scheduledTasksLight from "~/assets/modelcraft/scheduled_tasks_light.webp";
-import scheduledTasksDark from "~/assets/modelcraft/scheduled_tasks_dark.webp";
 
 export const handle: AccentHandle = { accent: getProduct("modelcraft").accent };
 
@@ -37,7 +31,7 @@ export default function ModelCraft() {
                 action={<DownloadButton repo="zhang-hongshen/ModelCraft" />}
                 note={t("modelcraft.apple_silicon_m1_or_later")}
             >
-                <ModelCraftDemo className="mt-16" />
+                <ModelCraftDesktop className="mt-16" />
             </Hero>
 
             <Section>
@@ -47,42 +41,7 @@ export default function ModelCraft() {
             </Section>
 
             <Section className="pt-6">
-                <Split reverse>
-                    <div>
-                        <Eyebrow>{t("modelcraft.model_store")}</Eyebrow>
-                        <h3>{t("modelcraft.pick_a_model_download_in")}</h3>
-                        <p>{t("modelcraft.browse_popular_open_models_downloads")}</p>
-                    </div>
-                    <Shot light={modelStoreLight} dark={modelStoreDark} alt="ModelCraft Model Store" width={2400} height={1374} />
-                </Split>
-            </Section>
-
-            <Section className="pt-0">
-                <Split>
-                    <div>
-                        <Eyebrow>{t("modelcraft.integrations")}</Eyebrow>
-                        <h3>{t("modelcraft.works_your_other_apps_for")}</h3>
-                        <p>{t("modelcraft.modelcraft_connects_to_arthub_and")}</p>
-                        <ul>
-                            <li>{t("modelcraft.example_arthub")}</li>
-                            <li>{t("modelcraft.example_keel")}</li>
-                            <li>{t("modelcraft.example_tunestudio")}</li>
-                            <li>{t("modelcraft.example_cellar")}</li>
-                        </ul>
-                    </div>
-                    <Shot light={connectorsLight} dark={connectorsDark} alt="ModelCraft Connectors" width={2400} height={1374} />
-                </Split>
-            </Section>
-
-            <Section className="pt-0">
-                <Split reverse>
-                    <div>
-                        <Eyebrow>{t("modelcraft.scheduled_tasks")}</Eyebrow>
-                        <h3>{t("modelcraft.runs_on_its_own_schedule")}</h3>
-                        <p>{t("modelcraft.give_it_a_prompt_and_a_time")}</p>
-                    </div>
-                    <Shot light={scheduledTasksLight} dark={scheduledTasksDark} alt="ModelCraft Scheduled Tasks" width={2400} height={1374} />
-                </Split>
+                <ModelCraftDemo />
             </Section>
 
             <Statement eyebrow="modelcraft.privacy" title="modelcraft.data_stays_on_the_device" body="modelcraft.conversations_are_processed_on_device" />

@@ -1,199 +1,34 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
-import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
-import { ChatView, type Pending } from "./chat";
-import { CHATS, replyTo, type Chat, type Tool } from "./conversations";
+import type { View } from "./data";
 import { Desktop, appOf, type AppKey } from "./desktop";
-import { CONNECTORS, DEFAULT_MODEL, MODELS, PRESET_TASKS, TASKS, type View } from "./data";
-import { Sidebar } from "./sidebar";
-import { ConnectorsView, DownloadedView, StoreView, type Download } from "./store";
-import { TasksView } from "./tasks";
-import { MAIN, TEXT, TOOL } from "./ui";
+import { FinderWindow, type FolderId, type Item } from "./finder";
+import { ModelCraftWindow } from "./window";
 
-// A ModelCraft window drawn in HTML that works like the app, within limits: chat with prepared
-// replies, the Model Store with downloads, Connectors, Downloaded Models and Scheduled Tasks. Nothing
-// leaves the page, and a reload starts over. It sits on a Mac desktop whose Dock shows the apps a
-// reply uses as it uses them (desktop.tsx). Beside it, a few words on each part of the app follow
-// what the window shows, and picking one opens that part.
+// ModelCraft on the page twice: on a Mac desktop at the top, where the apps it uses open beside it, and
+// further down on its own, beside a few words on each part of the app.
 
 /** What the text beside the window explains, one entry per part of the app; picking one opens it. */
 const FEATURES: { view: View; title: string; body: string }[] = [
     { view: "chat", title: "modelcraft.demo_chat_title", body: "modelcraft.demo_chat_body" },
-    { view: "connectors", title: "modelcraft.demo_connectors_title", body: "modelcraft.demo_connectors_body" },
-    { view: "store", title: "modelcraft.demo_store_title", body: "modelcraft.demo_store_body" },
-    { view: "tasks", title: "modelcraft.demo_tasks_title", body: "modelcraft.demo_tasks_body" },
+    { view: "connectors", title: "modelcraft.works_your_other_apps_for", body: "modelcraft.modelcraft_connects_to_arthub_and" },
+    { view: "store", title: "modelcraft.pick_a_model_download_in", body: "modelcraft.browse_popular_open_models_downloads" },
+    { view: "tasks", title: "modelcraft.runs_on_its_own_schedule", body: "modelcraft.give_it_a_prompt_and_a_time" },
 ];
 
-const DOWNLOAD_MS = 2400;
-const THINK_MS = 700;
-const TOOL_MS = 900;
-const RUN_MS = 1600;
-/** How long the app windows a reply opened stay up after it finishes. */
-const LINGER_MS = 4000;
+const FRAME = "rounded-[18px] border-black/12 shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)] dark:border-white/12";
 
+/** The window beside its features: picking a feature opens that part, and going somewhere in the window picks its feature. */
 export function ModelCraftDemo({ className }: { className?: string }) {
     const { t } = useTranslation();
     const [view, setView] = useState<View>("chat");
-    const [chatId, setChatId] = useState<string | null>(CHATS[0].id);
-    const [touched, setTouched] = useState(false);
-    const [chats, setChats] = useState<Chat[]>(CHATS);
-    const [pending, setPending] = useState<Pending | null>(null);
-    const [model, setModel] = useState(DEFAULT_MODEL);
-    // Downloads by model name; `downloaded` keeps the finished ones in order.
-    const [downloads, setDownloads] = useState<Record<string, Download>>({});
-    const [downloaded, setDownloaded] = useState<string[]>([DEFAULT_MODEL]);
-    const [installed, setInstalled] = useState(() => Object.fromEntries(CONNECTORS.map((c) => [c.name, c.installed])));
-    const [tasks, setTasks] = useState(TASKS);
-    const [running, setRunning] = useState<string[]>([]);
-    // The conversation each task's latest run made, by task id.
-    const [runs, setRuns] = useState<Record<string, string>>({});
-    // The desktop: app windows (frontmost last; `auto` ones were opened by a reply and close after it),
-    // what each app last did, which apps have run, and the icon bouncing in the Dock.
-    const [windows, setWindows] = useState<{ app: AppKey; auto: boolean }[]>([]);
-    const [lastCall, setLastCall] = useState<Partial<Record<AppKey, Tool>>>({});
-    const [used, setUsed] = useState<AppKey[]>([]);
-    const [bounce, setBounce] = useState<{ app: AppKey; n: number } | null>(null);
-    // Shown or hidden by the toggle; null until then, which shows it on wide screens only.
-    const [sidebar, setSidebar] = useState<boolean | null>(null);
-
-    const downloading = Object.values(downloads).some((d) => d.progress < 1 && !d.stopped);
-    useEffect(() => {
-        if (!downloading) return;
-        let last = performance.now();
-        let frame = requestAnimationFrame(function tick(now) {
-            const step = (now - last) / DOWNLOAD_MS;
-            last = now;
-            setDownloads((ds) => {
-                const next = { ...ds };
-                for (const [name, d] of Object.entries(ds)) {
-                    if (d.stopped || d.progress >= 1) continue;
-                    next[name] = { ...d, progress: Math.min(1, d.progress + step) };
-                    if (next[name].progress === 1) setDownloaded((list) => (list.includes(name) ? list : [...list, name]));
-                }
-                return next;
-            });
-            frame = requestAnimationFrame(tick);
-        });
-        return () => cancelAnimationFrame(frame);
-    }, [downloading]);
-
-    // Moves a reply through thinking, using a connector and typing, then files it in its conversation.
-    useEffect(() => {
-        if (!pending) return;
-        const { phase, message, shown, chatId: id } = pending;
-        if (phase === "typing" && shown >= message.text.length) {
-            setChats((cs) => cs.map((c) => (c.id === id ? { ...c, messages: [...c.messages, message] } : c)));
-            setPending(null);
-            return;
-        }
-        const timer = setTimeout(() => setPending((p) => p && (
-            phase === "thinking" ? { ...p, phase: message.tools ? "tool" : "typing" }
-                : phase === "tool" ? (p.step < message.tools!.length - 1 ? { ...p, step: p.step + 1 } : { ...p, phase: "typing" })
-                    : { ...p, shown: p.shown + 3 }
-        )), phase === "thinking" ? THINK_MS : phase === "tool" ? TOOL_MS : 16);
-        return () => clearTimeout(timer);
-    }, [pending]);
-
-    // Each tool call brings its app forward: the icon bounces and its window opens with the result.
-    const call = pending?.phase === "tool" ? pending.message.tools?.[pending.step] : undefined;
-    useEffect(() => {
-        if (!call) return;
-        const app = appOf(call);
-        setLastCall((l) => ({ ...l, [app]: call }));
-        setUsed((u) => (u.includes(app) ? u : [...u, app]));
-        setBounce((b) => ({ app, n: (b?.n ?? 0) + 1 }));
-        setWindows((ws) => [...ws.filter((w) => w.app !== app), { app, auto: true }].slice(-3));
-    }, [call]);
-
-    // Once the reply is written, the windows it opened close again.
-    const autoOpen = windows.some((w) => w.auto);
-    useEffect(() => {
-        if (pending || !autoOpen) return;
-        const timer = setTimeout(() => setWindows((ws) => ws.filter((w) => !w.auto)), LINGER_MS);
-        return () => clearTimeout(timer);
-    }, [pending, autoOpen]);
-
-    // ModelCraft's icon puts the other windows away; another app's opens or closes its window.
-    const dock = (app: AppKey) => {
-        setTouched(true);
-        if (app === "modelcraft") return setWindows([]);
-        setWindows((ws) => (ws.some((w) => w.app === app) ? ws.filter((w) => w.app !== app) : [...ws, { app, auto: false }].slice(-3)));
-    };
-
-    const go = (v: View, id: string | null = chatId) => {
-        setTouched(true);
-        setChatId(id);
-        setView(v);
-        // On a narrow screen the sidebar covers the window, so going somewhere puts it away.
-        if (!matchMedia("(min-width: 640px)").matches) setSidebar(null);
-    };
-    const open = (v: View) => go(v, v === "chat" && chatId === null && chats.length ? chats[0].id : chatId);
-
-    const send = (text: string) => {
-        if (pending) return;
-        setTouched(true);
-        let id = chatId;
-        if (id === null) {
-            id = `chat-${Date.now()}`;
-            const chat: Chat = { id, title: text.length > 40 ? `${text.slice(0, 38)}…` : text, messages: [] };
-            setChats((cs) => [chat, ...cs]);
-            setChatId(id);
-        }
-        const target = id;
-        setChats((cs) => cs.map((c) => (c.id === target ? { ...c, messages: [...c.messages, { role: "user", text }] } : c)));
-        setPending({ chatId: target, message: replyTo(text, installed), phase: "thinking", step: 0, shown: 0 });
-    };
-
-    const download = (name: string) => {
-        setTouched(true);
-        setDownloads((ds) => ({ ...ds, [name]: ds[name] ? { ...ds[name], stopped: !ds[name].stopped } : { progress: 0, stopped: false } }));
-    };
-    const deleteModel = (name: string) => {
-        setDownloaded((list) => list.filter((m) => m !== name));
-        setDownloads(({ [name]: _, ...rest }) => rest);
-        if (model === name) setModel(DEFAULT_MODEL);
-    };
-
-    const toggleConnector = useCallback((name: string) => {
-        setTouched(true);
-        setInstalled((s) => ({ ...s, [name]: !s[name] }));
-    }, []);
-
-    const runTask = (id: string) => {
-        setTouched(true);
-        const task = tasks.find((x) => x.id === id);
-        if (!task || running.includes(id)) return;
-        setRunning((r) => [...r, id]);
-        const reply = replyTo(task.prompt, installed);
-        setTimeout(() => {
-            const chat: Chat = { id: `run-${id}-${Date.now()}`, title: task.title, messages: [{ role: "user", text: task.prompt }, reply] };
-            setChats((cs) => [chat, ...cs]);
-            setRuns((r) => ({ ...r, [id]: chat.id }));
-            setRunning((r) => r.filter((x) => x !== id));
-        }, RUN_MS);
-    };
-
-    const nextPreset = PRESET_TASKS.find((p) => !tasks.some((x) => x.id === p.id));
-    const chat = view === "chat" && chatId ? chats.find((c) => c.id === chatId) ?? null : null;
-    const sidebarButton = sidebar !== true && (
-        <button
-            type="button"
-            aria-label="Show Sidebar"
-            title="Show Sidebar"
-            className={cn(TOOL, sidebar === null && "sm:hidden")}
-            onClick={() => setSidebar(true)}
-        >
-            <SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" />
-        </button>
-    );
-
     // Downloaded Models is part of the Model Store.
     const feature = view === "downloaded" ? "store" : view;
 
     return (
-        <div className={cn("grid items-center gap-8 text-left lg:grid-cols-[minmax(0,300px)_minmax(0,1fr)] lg:gap-12 xl:-mx-20", className)}>
+        <div className={cn("grid items-center gap-8 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)] lg:gap-12", className)}>
             <ul className="flex flex-col gap-1">
                 {FEATURES.map((f) => {
                     const active = f.view === feature;
@@ -206,7 +41,7 @@ export function ModelCraftDemo({ className }: { className?: string }) {
                                     "w-full py-2 text-left text-[clamp(19px,2.2vw,22px)] leading-tight font-semibold tracking-[-0.015em] transition-colors",
                                     active ? "text-primary" : "text-muted-foreground hover:text-foreground",
                                 )}
-                                onClick={() => open(f.view)}
+                                onClick={() => setView(f.view)}
                             >
                                 {t(f.title)}
                             </button>
@@ -219,76 +54,62 @@ export function ModelCraftDemo({ className }: { className?: string }) {
                     );
                 })}
             </ul>
+            <ModelCraftWindow className={cn("h-[min(640px,80vh)]", FRAME)} view={view} onView={setView} />
+        </div>
+    );
+}
 
+/**
+ * ModelCraft on a Mac desktop with Finder and the apps it connects to in the Dock. Each opens as a window
+ * running its own demo; when a reply uses one, its icon bounces and its window comes forward until the
+ * answer is written.
+ */
+export function ModelCraftDesktop({ className }: { className?: string }) {
+    const [view, setView] = useState<View>("chat");
+    // Windows opened so far (they keep their state when closed) and the ones showing, back to front.
+    const [opened, setOpened] = useState<AppKey[]>([]);
+    const [order, setOrder] = useState<AppKey[]>(["modelcraft"]);
+    const [bounce, setBounce] = useState<{ app: AppKey; n: number } | null>(null);
+    // Files replies have made, and the one Finder should show.
+    const [made, setMade] = useState<Partial<Record<FolderId, Item[]>>>({});
+    const [reveal, setReveal] = useState<{ folder: FolderId; name: string; n: number } | null>(null);
+
+    const raise = (app: AppKey) => {
+        setOpened((o) => (app === "modelcraft" || o.includes(app) ? o : [...o, app]));
+        setOrder((o) => (o[o.length - 1] === app ? o : [...o.filter((x) => x !== app), app]));
+    };
+    const close = (app: AppKey) => setOrder((o) => o.filter((x) => x !== app));
+    const launch = (app: AppKey) => {
+        if (!order.includes(app)) setBounce((b) => ({ app, n: (b?.n ?? 0) + 1 }));
+        raise(app);
+    };
+    // Clicking the frontmost app's icon puts its window away, as minimizing would; any other brings it forward.
+    const dock = (app: AppKey) => (app !== "modelcraft" && order[order.length - 1] === app ? close(app) : launch(app));
+
+    const called = (tool: Parameters<typeof appOf>[0]) => {
+        const app = appOf(tool);
+        if (!app) return;
+        setBounce((b) => ({ app, n: (b?.n ?? 0) + 1 }));
+        raise(app);
+        if (tool.kind === "file") setReveal((r) => ({ folder: "takes", name: tool.name, n: (r?.n ?? 0) + 1 }));
+        if (tool.kind === "connector" && tool.app === "tunestudio") {
+            const name = "chorus-take-3 (tuned).wav";
+            setMade((m) => (m.takes?.some((f) => f.name === name) ? m : { ...m, takes: [...(m.takes ?? []), { kind: "file", icon: "waveform", name, date: "Just now", size: "21.3 MB" }] }));
+        }
+    };
+
+    return (
+        <div className={cn("text-left xl:-mx-20", className)}>
             <Desktop
-                windows={windows.map((w) => ({ app: w.app, tool: lastCall[w.app] ?? null }))}
-                running={["modelcraft", ...used]}
+                modelcraft={<ModelCraftWindow className="h-full rounded-[12px] border-black/15 shadow-[0_20px_60px_-15px_rgb(0_0_0/0.45)] dark:border-white/15" view={view} onView={setView} onCall={called} onWriting={() => raise("modelcraft")} />}
+                finder={<FinderWindow extra={made} reveal={reveal} onOpenApp={(app) => launch(app as AppKey)} />}
+                opened={opened}
+                order={order}
                 bouncing={bounce}
+                onRaise={raise}
+                onClose={close}
                 onDock={dock}
-            >
-                <div className="relative flex h-full w-full overflow-hidden rounded-[12px] border border-black/15 text-left shadow-[0_20px_60px_-15px_rgb(0_0_0/0.45)] dark:border-white/15">
-                    <Sidebar
-                        view={view}
-                        chatId={chatId}
-                        chats={chats}
-                        hint={!touched}
-                        className={cn(
-                            "absolute inset-y-0 left-0 z-30 transition-transform duration-200 sm:static",
-                            sidebar === null ? "-translate-x-full sm:translate-x-0" : sidebar ? "translate-x-0 shadow-xl sm:shadow-none" : "-translate-x-full sm:hidden",
-                        )}
-                        onOpen={open}
-                        onOpenChat={(id) => go("chat", id)}
-                        onNewChat={() => go("chat", null)}
-                        onHide={() => setSidebar(false)}
-                    />
-
-                    <main className={cn("relative min-w-0 flex-1 select-text", MAIN, TEXT)}>
-                        {view === "chat" && (
-                            <ChatView
-                                chat={chat}
-                                pending={pending}
-                                model={model}
-                                models={downloaded}
-                                focus={touched}
-                                sidebarButton={sidebarButton}
-                                onSend={send}
-                                onPickModel={setModel}
-                                onNewChat={() => go("chat", null)}
-                            />
-                        )}
-                        {view === "store" && <StoreView downloads={downloads} sidebarButton={sidebarButton} onDownload={download} />}
-                        {view === "downloaded" && (
-                            <DownloadedView
-                                models={downloaded.map((name) => MODELS.find((m) => m.name === name)!)}
-                                current={model}
-                                sidebarButton={sidebarButton}
-                                onPick={(name) => {
-                                    setModel(name);
-                                    go("chat", chatId ?? chats[0]?.id ?? null);
-                                }}
-                                onDelete={deleteModel}
-                            />
-                        )}
-                        {view === "connectors" && <ConnectorsView installed={installed} sidebarButton={sidebarButton} onToggle={toggleConnector} />}
-                        {view === "tasks" && (
-                            <TasksView
-                                tasks={tasks}
-                                canAdd={nextPreset !== undefined}
-                                running={running}
-                                ran={Object.keys(runs)}
-                                sidebarButton={sidebarButton}
-                                onAdd={() => {
-                                    setTouched(true);
-                                    if (nextPreset) setTasks((ts) => [...ts, nextPreset]);
-                                }}
-                                onToggle={(id) => setTasks((ts) => ts.map((x) => (x.id === id ? { ...x, enabled: !x.enabled } : x)))}
-                                onRun={runTask}
-                                onOpenRun={(id) => go("chat", runs[id])}
-                            />
-                        )}
-                    </main>
-                </div>
-            </Desktop>
+            />
         </div>
     );
 }

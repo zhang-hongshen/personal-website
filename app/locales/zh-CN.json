@@ -90,13 +90,7 @@
     "runs_on_its_own_schedule": "到点，自己开工",
     "give_it_a_prompt_and_a_time": "写下要做的事，定好时间。每天或每周，它都会结合已连接的 App 按时完成：汇总今天的笔记，替你挑一部周五晚上的电影。",
     "demo_chat_title": "说一句，它替你操作 App",
-    "demo_chat_body": "回复由你 Mac 上的模型生成。留意 Dock：ModelCraft 用到哪个 App，它的图标就会跳动，并弹出窗口显示做了什么。点图标可以再次打开。",
-    "demo_connectors_title": "连上你常用的 App",
-    "demo_connectors_body": "Container、Quaero、Keel、Cellar、Arthub、Pinch 和 TuneStudio。装好之后，ModelCraft 可以替你启动容器、查询数据库，再把结果存进 Cellar，一次回复就能串起好几个 App。",
-    "demo_store_title": "选一个模型",
-    "demo_store_body": "热门开源模型，下载即用。在对话里随时切换。",
-    "demo_tasks_title": "到点，自己开工",
-    "demo_tasks_body": "一句提示，一个时间。到点结合已连接的 App 自动运行，结果留在最近对话里。"
+    "demo_chat_body": "回复由你 Mac 上的模型生成。展开回复里的工具调用，看看它用了哪些 App、每一步拿到了什么。"
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "电影、剧集与音乐，自成一库",

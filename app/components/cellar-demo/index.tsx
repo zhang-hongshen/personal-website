@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
+import { TrafficLights } from "~/components/mac-ui";
 import { CAPSULE, MAC_FONT, TOOL_ITEM } from "~/components/mac-window";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
@@ -16,7 +17,7 @@ const VARS = {
     "--cellar-accent": "#0a7aff",
 } as CSSProperties;
 
-export function CellarDemo({ className }: { className?: string }) {
+export function CellarDemo({ className, embedded }: { className?: string; /** In a window on another demo's desktop: filling it, without the hint. */ embedded?: boolean }) {
     const { t, i18n } = useTranslation();
     const lang = (["en", "zh-CN", "zh-TW"].includes(i18n.language) ? i18n.language : "en") as Lang;
     const s = strings(lang);
@@ -73,8 +74,9 @@ export function CellarDemo({ className }: { className?: string }) {
             <div
                 style={VARS}
                 className={cn(
-                    "relative flex h-[min(620px,78vh)] w-full overflow-hidden rounded-[18px] border border-black/12 text-left text-[#1d1d1f] shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)] [--cellar-line:rgb(0_0_0/0.07)] [--cellar-muted:#86868b] [--cellar-window:#ffffff]",
+                    "relative flex w-full overflow-hidden rounded-[18px] border border-black/12 text-left text-[#1d1d1f] shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)] [--cellar-line:rgb(0_0_0/0.07)] [--cellar-muted:#86868b] [--cellar-window:#ffffff]",
                     "dark:border-white/12 dark:text-[#ececec] dark:[--cellar-accent:#0a84ff] dark:[--cellar-line:rgb(255_255_255/0.08)] dark:[--cellar-muted:#98989d] dark:[--cellar-window:#1f1f1f]",
+                    embedded ? "h-full rounded-[12px]" : "h-[min(620px,78vh)]",
                 )}
             >
                 {/* Sidebar: a column of its own on wide screens, over the page on narrow ones. */}
@@ -86,11 +88,7 @@ export function CellarDemo({ className }: { className?: string }) {
                     style={{ fontFamily: MAC_FONT }}
                 >
                     <div className="flex h-[52px] shrink-0 items-center px-4">
-                        <span className="flex gap-2" aria-hidden>
-                            <i className="size-3 rounded-full bg-[#ff5f57]" />
-                            <i className="size-3 rounded-full bg-[#febc2e]" />
-                            <i className="size-3 rounded-full bg-[#28c840]" />
-                        </span>
+                        <TrafficLights />
                         <span className={cn(CAPSULE, "ml-auto gap-0.5 px-0.5")}>
                             <IconButton label={s.newPage} onClick={newPage} hint={!edited.current}><SFSymbol name="plus" className="size-3.5" /></IconButton>
                             <IconButton label={s.hidePanel} onClick={() => setSidebar(false)}><SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" /></IconButton>
@@ -208,7 +206,7 @@ export function CellarDemo({ className }: { className?: string }) {
                     </div>
                 </main>
             </div>
-            <p className="mt-5 text-center text-[13px] text-faint">{t("cellar.demo_hint")}</p>
+            {!embedded && <p className="mt-5 text-center text-[13px] text-faint">{t("cellar.demo_hint")}</p>}
         </div>
     );
 }
