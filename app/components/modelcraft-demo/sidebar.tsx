@@ -1,4 +1,5 @@
 import { useText, type L } from "~/components/demo-text";
+import { TrafficLights } from "~/components/mac-ui";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import type { Chat } from "./conversations";
@@ -35,11 +36,7 @@ export function Sidebar({ view, chatId, chats, hint, className, onOpen, onOpenCh
     return (
         <aside className={cn("flex w-[220px] shrink-0 flex-col text-[13px]", SIDEBAR, TEXT, className)}>
             <div className="flex h-[52px] shrink-0 items-center px-4">
-                <span className="flex gap-2" aria-hidden>
-                    <i className="size-3 rounded-full bg-[#ff5f57]" />
-                    <i className="size-3 rounded-full bg-[#febc2e]" />
-                    <i className="size-3 rounded-full bg-[#28c840]" />
-                </span>
+                <TrafficLights />
                 <button type="button" aria-label={s(["Hide Sidebar", "隐藏边栏", "隱藏側邊欄"])} title={s(["Hide Sidebar", "隐藏边栏", "隱藏側邊欄"])} className={cn("ml-auto", TOOL)} onClick={onHide}>
                     <SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" />
                 </button>

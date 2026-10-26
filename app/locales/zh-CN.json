@@ -77,7 +77,7 @@
     "conversations_are_processed_on_device": "对话全程在本地处理，仅在下载模型或访问网页时联网。",
     "integrations": "联动",
     "works_your_other_apps_for": "替你操作其他 App",
-    "modelcraft_connects_to_arthub_and": "ModelCraft 可与 Arthub、Cellar、Container、Keel、Pinch、Quaero、TuneStudio 联动，直接替你动手：说想看哪部电影，它就开始播放；问起某个 Key，它就去 Redis 里查。更多 App 将陆续支持。",
+    "modelcraft_connects_to_arthub_and": "ModelCraft 可与 Arthub、Cellar、Container、Keel、Quaero 联动，直接替你动手：说想看哪部电影，它就开始播放；问起某个 Key，它就去 Redis 里查。更多 App 将陆续支持。",
     "example_arthub": "“在 Arthub 里播放我在追的剧的下一集”",
     "example_keel": "“Keel 里哪些 Key 最占内存？”",
     "meta": {

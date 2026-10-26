@@ -36,8 +36,8 @@ export function MacWindow({ className, children }: { className?: string; childre
     );
 }
 
-/** What a window's close and minimize buttons do, when the window sits on a desktop that handles them. */
-export const WindowControls = createContext<{ close: () => void; minimize: () => void } | null>(null);
+/** What a window's close, minimize and zoom buttons do, when the window sits on a desktop that handles them. */
+export const WindowControls = createContext<{ close: () => void; minimize: () => void; zoom?: () => void } | null>(null);
 
 export function TrafficLights() {
     const s = useText();
@@ -59,7 +59,13 @@ export function TrafficLights() {
             <button type="button" aria-label={s(["Minimize", "最小化", "縮到最小"])} title={s(["Minimize", "最小化", "縮到最小"])} className="flex size-3 items-center justify-center rounded-full bg-[#febc2e] text-[9px] leading-none text-black/60" onClick={controls.minimize}>
                 <span className="opacity-0 group-hover/lights:opacity-100">−</span>
             </button>
-            <i aria-hidden className="size-3 rounded-full bg-[#28c840]" />
+            {controls.zoom ? (
+                <button type="button" aria-label={s(["Zoom", "缩放", "縮放"])} title={s(["Zoom", "缩放", "縮放"])} className="flex size-3 items-center justify-center rounded-full bg-[#28c840] text-[8px] leading-none text-black/60" onClick={controls.zoom}>
+                    <span className="opacity-0 group-hover/lights:opacity-100">⤢</span>
+                </button>
+            ) : (
+                <i aria-hidden className="size-3 rounded-full bg-[#28c840]" />
+            )}
         </span>
     );
 }

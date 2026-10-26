@@ -5,9 +5,9 @@ import type { SymbolName } from "~/components/sf-symbol";
 // them) and what it answers. Typed prompts are matched to a scenario by keywords; replies follow the
 // language of the prompt. Tool requests and results stay as the apps sent them.
 
-export type ConnectorId = "arthub" | "cellar" | "container" | "keel" | "pinch" | "quaero" | "tunestudio";
+export type ConnectorId = "arthub" | "cellar" | "container" | "keel" | "quaero";
 export const CONNECTOR_NAME: Record<ConnectorId, string> = {
-    arthub: "Arthub", cellar: "Cellar", container: "Container", keel: "Keel", pinch: "Pinch", quaero: "Quaero", tunestudio: "TuneStudio",
+    arthub: "Arthub", cellar: "Cellar", container: "Container", keel: "Keel", quaero: "Quaero",
 };
 
 /** The Mac's own apps a reply can use. */
@@ -128,36 +128,6 @@ const SCENARIOS: Scenario[] = [
         ],
     },
     {
-        id: "weigh-letter", title: ["Weigh a Letter", "称一封信", "秤一封信"],
-        prompt: [
-            "Weigh the letter on my trackpad with Pinch, tell me if one stamp is enough, and remind me to post it tomorrow.",
-            "用 Pinch 称一下触控板上的信，告诉我贴一张邮票够不够，明天提醒我寄出去。",
-            "用 Pinch 秤一下軌跡板上的信，告訴我貼一張郵票夠不夠，明天提醒我寄出去。",
-        ],
-        match: /pinch|weigh|weight|trackpad|stamp|postage|称重|称一下|重量|邮票|秤|郵票/,
-        tools: [
-            {
-                kind: "connector", app: "pinch", name: "read_weight",
-                args: json({ unit: "g", wait_until_stable: true }),
-                result: json({ weight: 17.8, unit: "g", stable: true, tared: true }),
-            },
-            {
-                kind: "native", app: "Reminders", icon: "checklist",
-                running: ["Adding a reminder", "正在添加提醒", "正在加入提醒"], done: ["Added a reminder", "已添加提醒", "已加入提醒"],
-                card: [
-                    [["Reminder", "提醒", "提醒"], ["Post the letter", "寄信", "寄信"]],
-                    [["Due", "截止", "到期"], ["Tomorrow, 09:00", "明天 09:00", "明天 09:00"]],
-                    [LIST, PERSONAL],
-                ],
-            },
-        ],
-        reply: [
-            "The letter weighs **17.8 g**, under the usual 20 g limit for a standard letter, so one standard stamp is enough. I added **Post the letter** to Reminders for tomorrow at 9:00.",
-            "这封信重 **17.8 克**，低于普通信件常见的 20 克上限，贴一张普通邮票就够了。已经在提醒事项里添加了 **寄信**，明天 9:00 提醒你。",
-            "這封信重 **17.8 公克**，低於一般信件常見的 20 公克上限，貼一張普通郵票就夠了。已經在提醒事項裡加入 **寄信**，明天 9:00 提醒你。",
-        ],
-    },
-    {
         id: "release-notes", title: ["Release Notes from GitHub", "GitHub 上的发布说明", "GitHub 上的發佈說明"],
         prompt: [
             "Read the latest ModelCraft release on GitHub and save the release notes as a page in Cellar.",
@@ -168,7 +138,7 @@ const SCENARIOS: Scenario[] = [
         tools: [
             {
                 kind: "fetch", url: "https://github.com/zhang-hongshen/ModelCraft/releases/latest", title: "Release 0.9.0 · zhang-hongshen/ModelCraft",
-                excerpt: "• Scheduled tasks run prompts every day or week\n• Connectors for Keel and TuneStudio\n• Long conversations stay fast with context compaction\n• Fixed: model downloads resuming from zero",
+                excerpt: "• Scheduled tasks run prompts every day or week\n• Connectors for Container and Quaero\n• Long conversations stay fast with context compaction\n• Fixed: model downloads resuming from zero",
             },
             {
                 kind: "connector", app: "cellar", name: "create_page",
@@ -177,38 +147,9 @@ const SCENARIOS: Scenario[] = [
             },
         ],
         reply: [
-            "Saved **ModelCraft 0.9.0 release notes** under Projects in Cellar. The release has three headline changes:\n- **Scheduled tasks** that run a prompt every day or week\n- **Connectors** for Keel and TuneStudio\n- **Faster long conversations** thanks to context compaction\nIt also fixes downloads that restarted from zero after a pause.",
-            "已经在 Cellar 的 Projects 下面保存了 **ModelCraft 0.9.0 发布说明**。这个版本主要有三点：\n- **定时任务**：每天或每周自动运行一个提示\n- 新增 Keel 和 TuneStudio 的 **连接器**\n- 上下文压缩让 **长对话更快**\n另外修复了暂停后下载从头开始的问题。",
-            "已經在 Cellar 的 Projects 下面儲存了 **ModelCraft 0.9.0 發佈說明**。這個版本主要有三點：\n- **排程任務**：每天或每週自動執行一個提示\n- 新增 Keel 和 TuneStudio 的 **連接器**\n- 上下文壓縮讓 **長對話更快**\n另外修正了暫停後下載從頭開始的問題。",
-        ],
-    },
-    {
-        id: "tune-chorus", title: ["Tune the Chorus Take", "给副歌修音", "幫副歌修音"],
-        prompt: [
-            "Tune the chorus in ~/Music/Takes/chorus-take-3.wav with TuneStudio and keep the original.",
-            "用 TuneStudio 给 ~/Music/Takes/chorus-take-3.wav 的副歌修音，保留原文件。",
-            "用 TuneStudio 幫 ~/Music/Takes/chorus-take-3.wav 的副歌修音，保留原始檔案。",
-        ],
-        match: /tunestudio|pitch|vocal|sing|chorus|音准|人声|唱|副歌|音準|人聲/,
-        tools: [
-            {
-                kind: "file", name: "chorus-take-3.wav",
-                card: [
-                    [["Duration", "时长", "長度"], "3:42"],
-                    [["Format", "格式", "格式"], ["WAV · 48 kHz · mono", "WAV · 48 kHz · 单声道", "WAV · 48 kHz · 單聲道"]],
-                    [["Size", "大小", "大小"], "21.3 MB"],
-                ],
-            },
-            {
-                kind: "connector", app: "tunestudio", name: "correct_pitch",
-                args: json({ file: "~/Music/Takes/chorus-take-3.wav", key: "A minor", strength: 0.7, keep_original: true }),
-                result: json({ notes_corrected: 3, largest_shift_cents: -31, output: "~/Music/Takes/chorus-take-3 (tuned).wav" }),
-            },
-        ],
-        reply: [
-            "Done. Three notes in the chorus were flat by up to 31 cents; TuneStudio pulled them onto A minor at 70% strength so the voice still sounds natural. The tuned take is **chorus-take-3 (tuned).wav**, next to the original.",
-            "好了。副歌里有三个音最多偏低 31 音分，TuneStudio 以 70% 的强度把它们拉回 A 小调，听起来仍然自然。修正后的文件是 **chorus-take-3 (tuned).wav**，就放在原文件旁边。",
-            "好了。副歌裡有三個音最多偏低 31 音分，TuneStudio 以 70% 的強度把它們拉回 A 小調，聽起來仍然自然。修正後的檔案是 **chorus-take-3 (tuned).wav**，就放在原始檔案旁邊。",
+            "Saved **ModelCraft 0.9.0 release notes** under Projects in Cellar. The release has three headline changes:\n- **Scheduled tasks** that run a prompt every day or week\n- **Connectors** for Container and Quaero\n- **Faster long conversations** thanks to context compaction\nIt also fixes downloads that restarted from zero after a pause.",
+            "已经在 Cellar 的 Projects 下面保存了 **ModelCraft 0.9.0 发布说明**。这个版本主要有三点：\n- **定时任务**：每天或每周自动运行一个提示\n- 新增 Container 和 Quaero 的 **连接器**\n- 上下文压缩让 **长对话更快**\n另外修复了暂停后下载从头开始的问题。",
+            "已經在 Cellar 的 Projects 下面儲存了 **ModelCraft 0.9.0 發佈說明**。這個版本主要有三點：\n- **排程任務**：每天或每週自動執行一個提示\n- 新增 Container 和 Quaero 的 **連接器**\n- 上下文壓縮讓 **長對話更快**\n另外修正了暫停後下載從頭開始的問題。",
         ],
     },
     {
@@ -369,7 +310,7 @@ export const SUGGESTIONS: L[] = [
     ["Start my dev stack in Container", "在 Container 里启动我的开发环境", "在 Container 裡啟動我的開發環境"],
     ["Find our top customers with Quaero", "用 Quaero 找出我们的大客户", "用 Quaero 找出我們的大客戶"],
     ["Pick a movie for tonight from Arthub", "从 Arthub 里挑一部今晚看的电影", "從 Arthub 裡挑一部今晚看的電影"],
-    ["Weigh a letter with Pinch", "用 Pinch 称一封信", "用 Pinch 秤一封信"],
+    ["Why is my API slow? Check Redis with Keel", "API 为什么慢？用 Keel 查一下 Redis", "API 為什麼慢？用 Keel 查一下 Redis"],
 ];
 
 /** General answers for prompts no scenario covers. */

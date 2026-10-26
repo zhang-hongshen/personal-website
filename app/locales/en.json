@@ -77,7 +77,7 @@
     "conversations_are_processed_on_device": "Conversations are processed locally. The network is used only to download models or browse the web.",
     "integrations": "Integrations",
     "works_your_other_apps_for": "Works your other apps for you",
-    "modelcraft_connects_to_arthub_and": "ModelCraft connects to Arthub, Cellar, Container, Keel, Pinch, Quaero and TuneStudio and acts on your behalf. Ask for a film and it starts playing; ask about a key and it looks it up in Redis. More apps will follow.",
+    "modelcraft_connects_to_arthub_and": "ModelCraft connects to Arthub, Cellar, Container, Keel and Quaero and acts on your behalf. Ask for a film and it starts playing; ask about a key and it looks it up in Redis. More apps will follow.",
     "example_arthub": "“Play the next episode of my show in Arthub”",
     "example_keel": "“Which keys in Keel use the most memory?”",
     "meta": {

@@ -7,14 +7,14 @@ import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 
 // A Finder window on the ModelCraft demo's desktop: a few folders of a made-up home folder, with the
-// apps in Applications. Opening an app opens its demo; files ModelCraft makes show up where it saved them.
+// apps in Applications. Opening an app opens its demo.
 
 export type FolderId = "applications" | "desktop" | "documents" | "downloads" | "music" | "takes";
 export type Item = { name: L | string; date: L | string; size: string } & ({ kind: "app"; app: string } | { kind: "folder"; to: FolderId } | { kind: "file"; icon: SymbolName });
 
-const APPS = ["arthub", "cellar", "container", "keel", "modelcraft", "pinch", "quaero", "tunestudio"];
+const APPS = ["arthub", "cellar", "container", "keel", "modelcraft", "quaero"];
 const APP_NAME: Record<string, string> = {
-    arthub: "Arthub", cellar: "Cellar", container: "Container", keel: "Keel", modelcraft: "ModelCraft", pinch: "Pinch", quaero: "Quaero", tunestudio: "TuneStudio",
+    arthub: "Arthub", cellar: "Cellar", container: "Container", keel: "Keel", modelcraft: "ModelCraft", quaero: "Quaero",
 };
 
 const TODAY = (time: string): L => [`Today, ${time}`, `今天 ${time}`, `今天 ${time}`];
@@ -23,7 +23,7 @@ const OCTOBER = (day: number): L => [`${day} Oct 2026`, `2026年10月${day}日`,
 const FOLDERS: Record<FolderId, { title: L; icon: SymbolName; items: Item[] }> = {
     applications: {
         title: ["Applications", "应用程序", "應用程式"], icon: "square.grid.2x2",
-        items: APPS.map((app, i) => ({ kind: "app", app, name: APP_NAME[app], date: OCTOBER(12 + i), size: ["38.2 MB", "21.7 MB", "14.9 MB", "9.8 MB", "52.4 MB", "6.1 MB", "12.3 MB", "27.5 MB"][i] })),
+        items: APPS.map((app, i) => ({ kind: "app", app, name: APP_NAME[app], date: OCTOBER(12 + i), size: ["38.2 MB", "21.7 MB", "14.9 MB", "9.8 MB", "52.4 MB", "12.3 MB"][i] })),
     },
     desktop: {
         title: ["Desktop", "桌面", "桌面"], icon: "internaldrive",
@@ -62,11 +62,11 @@ const FOLDERS: Record<FolderId, { title: L; icon: SymbolName; items: Item[] }> =
 
 const SIDEBAR: FolderId[] = ["applications", "desktop", "documents", "downloads", "music"];
 
-export function FinderWindow({ extra, reveal, onOpenApp }: {
-    /** Files that ModelCraft has made since the page loaded, by folder. */
-    extra: Partial<Record<FolderId, Item[]>>;
-    /** A file to show and select, with a count that changes each time it should be shown again. */
-    reveal: { folder: FolderId; name: string; n: number } | null;
+export const folderTitle = (id: FolderId) => FOLDERS[id].title;
+
+export function FinderWindow({ goTo, onOpenApp }: {
+    /** A folder to show, with a count that changes each time it should be shown again. */
+    goTo: { folder: FolderId; n: number } | null;
     onOpenApp: (app: string) => void;
 }) {
     const s = useText();
@@ -75,13 +75,13 @@ export function FinderWindow({ extra, reveal, onOpenApp }: {
     const [path, setPath] = useState<FolderId[]>(["applications"]);
     const [selected, setSelected] = useState<string | null>(null);
     const folder = path[path.length - 1];
-    const items = [...FOLDERS[folder].items, ...(extra[folder] ?? [])];
+    const items = FOLDERS[folder].items;
 
     useEffect(() => {
-        if (!reveal) return;
-        setPath(reveal.folder === "takes" ? ["music", "takes"] : [reveal.folder]);
-        setSelected(reveal.name);
-    }, [reveal]);
+        if (!goTo) return;
+        setPath(goTo.folder === "takes" ? ["music", "takes"] : [goTo.folder]);
+        setSelected(null);
+    }, [goTo]);
 
     const go = (to: FolderId, from: FolderId[] = []) => {
         setPath([...from, to]);

@@ -234,6 +234,8 @@
     80% { transform: translateY(-10%); }
 }
 @media (prefers-reduced-motion: reduce) { .dock-bounce { animation: none; } }
+/* The progress bar under the Apple logo while the ModelCraft demo's Mac restarts. */
+@keyframes boot { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 @keyframes ring-orbit { to { stroke-dashoffset: -48; } }
 @keyframes ring-flow { from { stroke-dashoffset: 14; } to { stroke-dashoffset: -86; } }

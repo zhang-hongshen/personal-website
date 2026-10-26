@@ -37,8 +37,6 @@ export const CONNECTORS: { id: string; name: string; summary: L; installed: bool
     { id: "container", name: "Container", summary: ["Start, stop, and inspect the Linux containers on your Mac.", "启动、停止和查看 Mac 上的 Linux 容器。", "啟動、停止和檢查 Mac 上的 Linux 容器。"], installed: true },
     { id: "keel", name: "Keel", summary: ["Browse and edit the keys in your Redis databases.", "浏览和编辑 Redis 数据库里的 Key。", "瀏覽和編輯 Redis 資料庫裡的 Key。"], installed: true },
     { id: "quaero", name: "Quaero", summary: ["Query your SQL and vector databases and read the results.", "查询 SQL 和向量数据库，并读取结果。", "查詢 SQL 和向量資料庫，並讀取結果。"], installed: true },
-    { id: "pinch", name: "Pinch", summary: ["Weigh light objects on your trackpad.", "在触控板上称轻小物件。", "在軌跡板上秤輕小物件。"], installed: false },
-    { id: "tunestudio", name: "TuneStudio", summary: ["Put sung vocals on pitch and export the corrected audio.", "把人声修到准确音高，并导出修正后的音频。", "把人聲修到準確音高，並輸出修正後的音訊。"], installed: false },
 ];
 
 export type Task = { id: string; title: L; schedule: L; prompt: L; next: L; enabled: boolean };
