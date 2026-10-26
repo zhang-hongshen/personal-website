@@ -40,6 +40,7 @@ export function MacWindow({ className, children }: { className?: string; childre
 export const WindowControls = createContext<{ close: () => void; minimize: () => void } | null>(null);
 
 export function TrafficLights() {
+    const s = useText();
     const controls = useContext(WindowControls);
     if (!controls) {
         return (
@@ -52,10 +53,10 @@ export function TrafficLights() {
     }
     return (
         <span className="group/lights flex gap-2">
-            <button type="button" aria-label="Close" title="Close" className="flex size-3 items-center justify-center rounded-full bg-[#ff5f57] text-[9px] leading-none text-black/60" onClick={controls.close}>
+            <button type="button" aria-label={s(["Close", "关闭", "關閉"])} title={s(["Close", "关闭", "關閉"])} className="flex size-3 items-center justify-center rounded-full bg-[#ff5f57] text-[9px] leading-none text-black/60" onClick={controls.close}>
                 <span className="opacity-0 group-hover/lights:opacity-100">×</span>
             </button>
-            <button type="button" aria-label="Minimize" title="Minimize" className="flex size-3 items-center justify-center rounded-full bg-[#febc2e] text-[9px] leading-none text-black/60" onClick={controls.minimize}>
+            <button type="button" aria-label={s(["Minimize", "最小化", "縮到最小"])} title={s(["Minimize", "最小化", "縮到最小"])} className="flex size-3 items-center justify-center rounded-full bg-[#febc2e] text-[9px] leading-none text-black/60" onClick={controls.minimize}>
                 <span className="opacity-0 group-hover/lights:opacity-100">−</span>
             </button>
             <i aria-hidden className="size-3 rounded-full bg-[#28c840]" />

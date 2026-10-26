@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { useText, type L } from "~/components/demo-text";
 import { MAC, MacSidebar, MacWindow, ShowSidebarButton, SidebarHeader, SidebarRow, TitleBar, ToolButton, useSidebar } from "~/components/mac-ui";
 import { ProductIcon } from "~/components/product-icon";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
@@ -9,49 +10,52 @@ import { cn } from "~/lib/utils";
 // apps in Applications. Opening an app opens its demo; files ModelCraft makes show up where it saved them.
 
 export type FolderId = "applications" | "desktop" | "documents" | "downloads" | "music" | "takes";
-export type Item = { name: string; date: string; size: string } & ({ kind: "app"; app: string } | { kind: "folder"; to: FolderId } | { kind: "file"; icon: SymbolName });
+export type Item = { name: L | string; date: L | string; size: string } & ({ kind: "app"; app: string } | { kind: "folder"; to: FolderId } | { kind: "file"; icon: SymbolName });
 
 const APPS = ["arthub", "cellar", "container", "keel", "modelcraft", "pinch", "quaero", "tunestudio"];
 const APP_NAME: Record<string, string> = {
     arthub: "Arthub", cellar: "Cellar", container: "Container", keel: "Keel", modelcraft: "ModelCraft", pinch: "Pinch", quaero: "Quaero", tunestudio: "TuneStudio",
 };
 
-const FOLDERS: Record<FolderId, { title: string; icon: SymbolName; items: Item[] }> = {
+const TODAY = (time: string): L => [`Today, ${time}`, `今天 ${time}`, `今天 ${time}`];
+const OCTOBER = (day: number): L => [`${day} Oct 2026`, `2026年10月${day}日`, `2026年10月${day}日`];
+
+const FOLDERS: Record<FolderId, { title: L; icon: SymbolName; items: Item[] }> = {
     applications: {
-        title: "Applications", icon: "square.grid.2x2",
-        items: APPS.map((app, i) => ({ kind: "app", app, name: APP_NAME[app], date: `${12 + i} Oct 2026`, size: ["38.2 MB", "21.7 MB", "14.9 MB", "9.8 MB", "52.4 MB", "6.1 MB", "12.3 MB", "27.5 MB"][i] })),
+        title: ["Applications", "应用程序", "應用程式"], icon: "square.grid.2x2",
+        items: APPS.map((app, i) => ({ kind: "app", app, name: APP_NAME[app], date: OCTOBER(12 + i), size: ["38.2 MB", "21.7 MB", "14.9 MB", "9.8 MB", "52.4 MB", "6.1 MB", "12.3 MB", "27.5 MB"][i] })),
     },
     desktop: {
-        title: "Desktop", icon: "internaldrive",
+        title: ["Desktop", "桌面", "桌面"], icon: "internaldrive",
         items: [
-            { kind: "file", icon: "doc.text", name: "Lumen 2.0 launch plan.pdf", date: "Today, 09:42", size: "1.2 MB" },
-            { kind: "file", icon: "doc", name: "Screenshot 2026-10-24 at 21.14.png", date: "24 Oct 2026", size: "842 KB" },
+            { kind: "file", icon: "doc.text", name: ["Lumen 2.0 launch plan.pdf", "Lumen 2.0 发布计划.pdf", "Lumen 2.0 發布計畫.pdf"], date: TODAY("09:42"), size: "1.2 MB" },
+            { kind: "file", icon: "doc", name: ["Screenshot 2026-10-24 at 21.14.png", "截屏2026-10-24 21.14.png", "截圖 2026-10-24 21.14.png"], date: OCTOBER(24), size: "842 KB" },
         ],
     },
     documents: {
-        title: "Documents", icon: "doc",
+        title: ["Documents", "文稿", "文件"], icon: "doc",
         items: [
-            { kind: "file", icon: "doc.text", name: "Kyoto trip.pdf", date: "Today, 16:03", size: "3.4 MB" },
-            { kind: "file", icon: "doc.text", name: "Sync engine design.pdf", date: "Today, 11:15", size: "615 KB" },
-            { kind: "file", icon: "tablecells", name: "Preset pricing.csv", date: "22 Oct 2026", size: "4 KB" },
+            { kind: "file", icon: "doc.text", name: ["Kyoto trip.pdf", "京都旅行.pdf", "京都旅行.pdf"], date: TODAY("16:03"), size: "3.4 MB" },
+            { kind: "file", icon: "doc.text", name: ["Sync engine design.pdf", "同步引擎设计.pdf", "同步引擎設計.pdf"], date: TODAY("11:15"), size: "615 KB" },
+            { kind: "file", icon: "tablecells", name: ["Preset pricing.csv", "预设定价.csv", "預設定價.csv"], date: OCTOBER(22), size: "4 KB" },
         ],
     },
     downloads: {
-        title: "Downloads", icon: "arrow.down.circle",
+        title: ["Downloads", "下载", "下載項目"], icon: "arrow.down.circle",
         items: [
-            { kind: "file", icon: "externaldrive", name: "ModelCraft-0.9.0.dmg", date: "20 Oct 2026", size: "48.9 MB" },
-            { kind: "file", icon: "doc.text", name: "Klara and the Sun.epub", date: "3 Oct 2026", size: "1.8 MB" },
+            { kind: "file", icon: "externaldrive", name: "ModelCraft-0.9.0.dmg", date: OCTOBER(20), size: "48.9 MB" },
+            { kind: "file", icon: "doc.text", name: ["Klara and the Sun.epub", "克拉拉与太阳.epub", "克拉拉與太陽.epub"], date: OCTOBER(3), size: "1.8 MB" },
         ],
     },
     music: {
-        title: "Music", icon: "waveform",
-        items: [{ kind: "folder", to: "takes", name: "Takes", date: "Today, 10:20", size: "--" }],
+        title: ["Music", "音乐", "音樂"], icon: "waveform",
+        items: [{ kind: "folder", to: "takes", name: "Takes", date: TODAY("10:20"), size: "--" }],
     },
     takes: {
-        title: "Takes", icon: "folder",
+        title: ["Takes", "Takes", "Takes"], icon: "folder",
         items: [
-            { kind: "file", icon: "waveform", name: "chorus-take-3.wav", date: "Today, 10:20", size: "21.3 MB" },
-            { kind: "file", icon: "waveform", name: "verse-take-1.wav", date: "Yesterday, 22:47", size: "18.6 MB" },
+            { kind: "file", icon: "waveform", name: "chorus-take-3.wav", date: TODAY("10:20"), size: "21.3 MB" },
+            { kind: "file", icon: "waveform", name: "verse-take-1.wav", date: ["Yesterday, 22:47", "昨天 22:47", "昨天 22:47"], size: "18.6 MB" },
         ],
     },
 };
@@ -65,6 +69,7 @@ export function FinderWindow({ extra, reveal, onOpenApp }: {
     reveal: { folder: FolderId; name: string; n: number } | null;
     onOpenApp: (app: string) => void;
 }) {
+    const s = useText();
     const sidebar = useSidebar();
     // Folders visited, the current one last.
     const [path, setPath] = useState<FolderId[]>(["applications"]);
@@ -91,10 +96,10 @@ export function FinderWindow({ extra, reveal, onOpenApp }: {
     return (
         <MacWindow className="h-full rounded-[12px]">
             <MacSidebar sidebar={sidebar} width={180}>
-                <SidebarHeader>Favorites</SidebarHeader>
+                <SidebarHeader>{s(["Favorites", "个人收藏", "喜好項目"])}</SidebarHeader>
                 <nav className="flex flex-col gap-0.5">
                     {SIDEBAR.map((id) => (
-                        <SidebarRow key={id} icon={FOLDERS[id].icon} label={FOLDERS[id].title} selected={path[0] === id} onClick={() => go(id)} />
+                        <SidebarRow key={id} icon={FOLDERS[id].icon} label={s(FOLDERS[id].title)} selected={path[0] === id} onClick={() => go(id)} />
                     ))}
                 </nav>
             </MacSidebar>
@@ -104,32 +109,33 @@ export function FinderWindow({ extra, reveal, onOpenApp }: {
                     leading={
                         <>
                             <ShowSidebarButton sidebar={sidebar} />
-                            <ToolButton icon="chevron.left" label="Back" disabled={path.length < 2} onClick={() => setPath((p) => p.slice(0, -1))} />
+                            <ToolButton icon="chevron.left" label={s(["Back", "返回", "返回"])} disabled={path.length < 2} onClick={() => setPath((p) => p.slice(0, -1))} />
                         </>
                     }
-                    title={FOLDERS[folder].title}
-                    subtitle={`${items.length} items`}
+                    title={s(FOLDERS[folder].title)}
+                    subtitle={s([`${items.length} items`, `${items.length} 项`, `${items.length} 個項目`])}
                 />
                 <div className="min-h-0 flex-1 overflow-y-auto px-2 pb-2" onClick={() => setSelected(null)}>
                     <table className="w-full table-fixed">
                         <thead>
                             <tr className={cn("text-left text-[11px]", MAC.muted)}>
-                                <th className="px-2 py-1 font-normal">Name</th>
-                                <th className="hidden w-[140px] px-2 py-1 font-normal sm:table-cell">Date Modified</th>
-                                <th className="w-[72px] px-2 py-1 text-right font-normal">Size</th>
+                                <th className="px-2 py-1 font-normal">{s(["Name", "名称", "名稱"])}</th>
+                                <th className="hidden w-[140px] px-2 py-1 font-normal sm:table-cell">{s(["Date Modified", "修改日期", "修改日期"])}</th>
+                                <th className="w-[72px] px-2 py-1 text-right font-normal">{s(["Size", "大小", "大小"])}</th>
                             </tr>
                         </thead>
                         <tbody>
                             {items.map((item) => {
-                                const on = selected === item.name;
+                                const name = s(item.name);
+                                const on = selected === name;
                                 return (
                                     <tr
-                                        key={item.name}
+                                        key={name}
                                         aria-selected={on}
                                         className={cn("cursor-default", on ? MAC.selected : MAC.stripe)}
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            setSelected(item.name);
+                                            setSelected(name);
                                         }}
                                         onDoubleClick={() => open(item)}
                                     >
@@ -140,17 +146,17 @@ export function FinderWindow({ extra, reveal, onOpenApp }: {
                                                 ) : (
                                                     <SFSymbol name={item.kind === "folder" ? "folder" : item.icon} className={cn("size-4 shrink-0", !on && (item.kind === "folder" ? "text-[#1e9bf0]" : MAC.muted))} />
                                                 )}
-                                                <span className="truncate">{item.name}</span>
+                                                <span className="truncate">{name}</span>
                                             </span>
                                         </td>
-                                        <td className={cn("hidden truncate px-2 py-1 sm:table-cell", !on && MAC.muted)}>{item.date}</td>
+                                        <td className={cn("hidden truncate px-2 py-1 sm:table-cell", !on && MAC.muted)}>{s(item.date)}</td>
                                         <td className={cn("rounded-r-md px-2 py-1 text-right", !on && MAC.muted)}>{item.size}</td>
                                     </tr>
                                 );
                             })}
                         </tbody>
                     </table>
-                    {folder === "applications" && <p className={cn("mt-3 px-2 text-[11px]", MAC.muted)}>Double-click an app to open it.</p>}
+                    {folder === "applications" && <p className={cn("mt-3 px-2 text-[11px]", MAC.muted)}>{s(["Double-click an app to open it.", "连按一个 App 来打开它。", "按兩下 App 來打開它。"])}</p>}
                 </div>
             </main>
         </MacWindow>

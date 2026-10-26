@@ -1,13 +1,16 @@
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router";
 
+import { useLang, useText, type L } from "~/components/demo-text";
 import { ProductIcon } from "~/components/product-icon";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
-import { CONNECTOR_NAME, SUGGESTIONS, groupTitle, toolLabel, type Chat, type Message, type Tool } from "./conversations";
+import { CONNECTOR_NAME, NATIVE_NAME, SUGGESTIONS, groupTitle, toolLabel, type Chat, type Message, type Tool } from "./conversations";
 import { ACCENT, ACCENT_BG, BAR, BODY, BUBBLE, CAPSULE, CARD, FAINT, MUTED, SMALL, TEXT, TITLE, TOOL_ITEM } from "./ui";
 
 /** A reply on its way: thinking, then running its tool calls one `step` at a time, then typing out `shown` characters. */
+const NEW_CHAT: L = ["New Chat", "新对话", "新對話"];
+
 export type Pending = { chatId: string; message: Message; phase: "thinking" | "tool" | "typing"; step: number; shown: number };
 
 export function ChatView({ chat, pending, model, models, focus, sidebarButton, onSend, onPickModel, onNewChat }: {
@@ -23,6 +26,7 @@ export function ChatView({ chat, pending, model, models, focus, sidebarButton, o
     onPickModel: (name: string) => void;
     onNewChat: () => void;
 }) {
+    const s = useText();
     const scroller = useRef<HTMLDivElement>(null);
     const reply = pending && chat && pending.chatId === chat.id ? pending : null;
 
@@ -39,9 +43,9 @@ export function ChatView({ chat, pending, model, models, focus, sidebarButton, o
         <div className="flex h-full flex-col">
             <header className={BAR}>
                 {sidebarButton}
-                <h4 className={cn("min-w-0 flex-1 truncate", TITLE)}>{chat?.title ?? "New Chat"}</h4>
+                <h4 className={cn("min-w-0 flex-1 truncate", TITLE)}>{chat ? s(chat.title) : s(NEW_CHAT)}</h4>
                 <div className={cn(CAPSULE, "gap-1 px-1")}>
-                    <button type="button" aria-label="New Chat" title="New Chat" className={TOOL_ITEM} onClick={onNewChat}>
+                    <button type="button" aria-label={s(NEW_CHAT)} title={s(NEW_CHAT)} className={TOOL_ITEM} onClick={onNewChat}>
                         <SFSymbol name="square.and.pencil" className="size-4" />
                     </button>
                     <span className="flex size-7 items-center justify-center"><SFSymbol name="ellipsis" className="w-4" /></span>
@@ -50,18 +54,18 @@ export function ChatView({ chat, pending, model, models, focus, sidebarButton, o
 
             {chat === null ? (
                 <div className="flex flex-1 flex-col items-center justify-center px-6 pb-16">
-                    <h3 className="mb-6 text-center text-[26px] font-bold tracking-[-0.01em]">How can I help you today?</h3>
+                    <h3 className="mb-6 text-center text-[26px] font-bold tracking-[-0.01em]">{s(["How can I help you today?", "今天想让我帮你做什么？", "今天想讓我幫你做什麼？"])}</h3>
                     <div className="w-full max-w-[640px]">{composer}</div>
                     <div className="mt-4 flex max-w-[640px] flex-wrap justify-center gap-2">
-                        {SUGGESTIONS.map((s) => (
+                        {SUGGESTIONS.map((suggestion) => (
                             <button
-                                key={s}
+                                key={suggestion[0]}
                                 type="button"
                                 disabled={pending !== null}
                                 className={cn("rounded-full border border-black/8 px-3 py-1.5 transition-colors hover:border-[#b4581f]/50 dark:border-white/10", CARD, SMALL, MUTED)}
-                                onClick={() => onSend(s)}
+                                onClick={() => onSend(s(suggestion))}
                             >
-                                {s}
+                                {s(suggestion)}
                             </button>
                         ))}
                     </div>
@@ -80,15 +84,16 @@ export function ChatView({ chat, pending, model, models, focus, sidebarButton, o
 }
 
 function MessageView({ message, phase, step, shown }: { message: Message; phase?: Pending["phase"]; step?: number; shown?: number }) {
+    const s = useText();
     if (message.role === "user") {
         return (
             <div className="mb-6 flex justify-end">
-                <p className={cn("max-w-[80%] rounded-2xl px-3.5 py-2.5 whitespace-pre-wrap", BUBBLE)}>{message.text}</p>
+                <p className={cn("max-w-[80%] rounded-2xl px-3.5 py-2.5 whitespace-pre-wrap", BUBBLE)}>{s(message.text)}</p>
             </div>
         );
     }
-    if (phase === "thinking") return <p className={cn("mb-6 motion-safe:animate-pulse", MUTED)}>Thinking…</p>;
-    const text = shown === undefined ? message.text : message.text.slice(0, shown);
+    if (phase === "thinking") return <p className={cn("mb-6 motion-safe:animate-pulse", MUTED)}>{s(["Thinking…", "正在思考…", "正在思考…"])}</p>;
+    const text = shown === undefined ? s(message.text) : s(message.text).slice(0, shown);
     return (
         <div className="mb-6">
             {message.tools && <ToolGroup tools={message.tools} running={phase === "tool" ? step ?? 0 : undefined} />}
@@ -99,6 +104,8 @@ function MessageView({ message, phase, step, shown }: { message: Message; phase?
 
 /** A reply's tool calls (ToolCallGroupView): a summary that opens to one row per call. */
 function ToolGroup({ tools, running }: { tools: Tool[]; /** The call in progress, while the reply is still working. */ running?: number }) {
+    const s = useText();
+    const lang = useLang();
     const [open, setOpen] = useState(false);
     const shown = running === undefined ? tools : tools.slice(0, running + 1);
     return (
@@ -106,7 +113,7 @@ function ToolGroup({ tools, running }: { tools: Tool[]; /** The call in progress
             <button type="button" aria-expanded={open} className={cn("flex items-center gap-1.5 text-left font-medium hover:text-[#1c1c1c] dark:hover:text-[#f2f3f0]", MUTED)} onClick={() => setOpen((o) => !o)}>
                 <SFSymbol name="chevron.right" className={cn("size-2.5 shrink-0 transition-transform", open && "rotate-90")} />
                 <span className={running !== undefined ? "motion-safe:animate-pulse" : undefined}>
-                    {running !== undefined ? `${toolLabel(tools[running], true)}…` : groupTitle(tools)}
+                    {running !== undefined ? `${toolLabel(tools[running], true, s)}…` : groupTitle(tools, lang)}
                 </span>
                 {running === undefined && <AppIcons tools={tools} />}
             </button>
@@ -121,18 +128,22 @@ function ToolGroup({ tools, running }: { tools: Tool[]; /** The call in progress
 
 /** The apps a reply used, each once, in the order it first used them. */
 function AppIcons({ tools }: { tools: Tool[] }) {
+    const s = useText();
     const apps = new Map<string, ReactNode>();
+    const names = new Map<string, string>();
     for (const t of tools) {
         if (t.kind === "connector" && !apps.has(t.app)) {
+            names.set(t.app, CONNECTOR_NAME[t.app]);
             apps.set(t.app, <ProductIcon id={t.app} className="size-4" width={16} height={16} />);
         } else if (t.kind === "native" && !apps.has(t.app)) {
+            names.set(t.app, s(NATIVE_NAME[t.app]));
             apps.set(t.app, <span className={cn("flex size-4 items-center justify-center rounded-[4px] bg-black/6 dark:bg-white/10", TEXT)}><SFSymbol name={t.icon} className="size-2.5" /></span>);
         }
     }
     if (apps.size === 0) return null;
     return (
-        <span className="ml-0.5 flex items-center gap-0.5" aria-label={[...apps.keys()].map((a) => CONNECTOR_NAME[a as keyof typeof CONNECTOR_NAME] ?? a).join(", ")}>
-            {[...apps].map(([app, icon]) => <span key={app} title={CONNECTOR_NAME[app as keyof typeof CONNECTOR_NAME] ?? app}>{icon}</span>)}
+        <span className="ml-0.5 flex items-center gap-0.5" aria-label={[...names.values()].join(s([", ", "、", "、"]))}>
+            {[...apps].map(([app, icon]) => <span key={app} title={names.get(app)}>{icon}</span>)}
         </span>
     );
 }
@@ -141,6 +152,7 @@ const NATIVE_ICON: Record<Tool["kind"], SymbolName> = { connector: "app.connecte
 
 /** One call: its icon and what it did, opening to what it sent and got back. */
 function ToolRow({ tool, running }: { tool: Tool; running: boolean }) {
+    const s = useText();
     const [open, setOpen] = useState(false);
     return (
         <div className={SMALL}>
@@ -150,7 +162,7 @@ function ToolRow({ tool, running }: { tool: Tool; running: boolean }) {
                 ) : (
                     <SFSymbol name={tool.kind === "native" ? tool.icon : NATIVE_ICON[tool.kind]} className="size-3.5 shrink-0" />
                 )}
-                <span className={running ? "motion-safe:animate-pulse" : undefined}>{toolLabel(tool, running)}</span>
+                <span className={running ? "motion-safe:animate-pulse" : undefined}>{toolLabel(tool, running, s)}</span>
                 {!running && <SFSymbol name="chevron.down" className={cn("size-2 shrink-0 transition-transform", !open && "-rotate-90")} />}
             </button>
             {open && !running && <div className="mt-2 motion-safe:animate-in motion-safe:fade-in">{<ToolDetail tool={tool} />}</div>}
@@ -159,6 +171,7 @@ function ToolRow({ tool, running }: { tool: Tool; running: boolean }) {
 }
 
 function ToolDetail({ tool }: { tool: Tool }) {
+    const s = useText();
     const block = cn("max-h-48 overflow-auto rounded-lg border border-black/8 p-2.5 font-mono text-[11px] leading-[1.5] whitespace-pre-wrap select-text dark:border-white/10", CARD);
     switch (tool.kind) {
         case "connector":
@@ -167,12 +180,12 @@ function ToolDetail({ tool }: { tool: Tool }) {
                     <p className={cn("flex items-center gap-2 text-[11px]", FAINT)}>
                         <span className="min-w-0 flex-1 truncate">{CONNECTOR_NAME[tool.app]} · {tool.name}</span>
                         <Link to={`/products/${tool.app}/`} className={cn("flex shrink-0 items-center gap-0.5 hover:underline", ACCENT)}>
-                            Open {CONNECTOR_NAME[tool.app]}
+                            {s([`Open ${CONNECTOR_NAME[tool.app]}`, `打开 ${CONNECTOR_NAME[tool.app]}`, `開啟 ${CONNECTOR_NAME[tool.app]}`])}
                             <SFSymbol name="chevron.right" className="size-2" />
                         </Link>
                     </p>
                     <pre className={block}>{tool.args}</pre>
-                    <p className={cn("text-[11px]", FAINT)}>Result</p>
+                    <p className={cn("text-[11px]", FAINT)}>{s(["Result", "结果", "結果"])}</p>
                     <pre className={block}>{tool.result}</pre>
                 </div>
             );
@@ -180,7 +193,7 @@ function ToolDetail({ tool }: { tool: Tool }) {
         case "file":
             return (
                 <dl className={cn("grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 rounded-lg border border-black/8 p-2.5 dark:border-white/10", CARD)}>
-                    {tool.card.map(([k, v]) => [<dt key={`${k}:k`} className={FAINT}>{k}</dt>, <dd key={`${k}:v`} className="select-text">{v}</dd>])}
+                    {tool.card.map(([k, v]) => [<dt key={`${k[0]}:k`} className={FAINT}>{s(k)}</dt>, <dd key={`${k[0]}:v`} className="select-text">{s(v)}</dd>])}
                 </dl>
             );
         case "command":
@@ -244,6 +257,7 @@ function Composer({ model, models, busy, autoFocus, onSend, onPickModel }: {
     onSend: (text: string) => void;
     onPickModel: (name: string) => void;
 }) {
+    const s = useText();
     const [text, setText] = useState("");
     const [picking, setPicking] = useState(false);
     const field = useRef<HTMLTextAreaElement>(null);
@@ -265,8 +279,8 @@ function Composer({ model, models, busy, autoFocus, onSend, onPickModel }: {
                 ref={field}
                 rows={2}
                 value={text}
-                placeholder="Type Anything"
-                aria-label="Message"
+                placeholder={s(["Type Anything", "输入任何内容", "輸入任何內容"])}
+                aria-label={s(["Message", "消息", "訊息"])}
                 className={cn("block w-full resize-none bg-transparent outline-none placeholder:text-[#a8a6a4] dark:placeholder:text-[#77757a]", BODY, TEXT)}
                 onChange={(e) => setText(e.target.value)}
                 onKeyDown={(e) => {
@@ -285,7 +299,7 @@ function Composer({ model, models, busy, autoFocus, onSend, onPickModel }: {
                     </button>
                     {picking && (
                         <div className={cn("absolute right-0 bottom-7 z-10 min-w-[240px] rounded-xl p-1 shadow-[0_8px_30px_rgb(0_0_0/0.18)] motion-safe:animate-in motion-safe:fade-in", CARD, SMALL)}>
-                            <p className={cn("px-2.5 py-1.5", FAINT)}>Downloaded Models</p>
+                            <p className={cn("px-2.5 py-1.5", FAINT)}>{s(["Downloaded Models", "已下载的模型", "已下載的模型"])}</p>
                             {models.map((m) => (
                                 <button
                                     key={m}
@@ -300,13 +314,13 @@ function Composer({ model, models, busy, autoFocus, onSend, onPickModel }: {
                                     {m}
                                 </button>
                             ))}
-                            {models.length === 1 && <p className={cn("px-2.5 py-1.5", FAINT)}>Download more in the Model Store.</p>}
+                            {models.length === 1 && <p className={cn("px-2.5 py-1.5", FAINT)}>{s(["Download more in the Model Store.", "可以在模型商店下载更多模型。", "可以在模型商店下載更多模型。"])}</p>}
                         </div>
                     )}
                 </div>
                 <button
                     type="button"
-                    aria-label={text.trim() ? "Send" : "Voice"}
+                    aria-label={text.trim() ? s(["Send", "发送", "傳送"]) : s(["Voice", "语音", "語音"])}
                     className={cn("flex size-7 shrink-0 items-center justify-center rounded-full transition-opacity", ACCENT_BG, busy && "opacity-50")}
                     onClick={send}
                 >

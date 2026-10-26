@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useLang, useText } from "~/components/demo-text";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { ChatView, type Pending } from "./chat";
@@ -29,6 +30,8 @@ export function ModelCraftWindow({ className, view, onView, onCall, onWriting }:
     /** A reply that used tools has started writing its answer. */
     onWriting?: () => void;
 }) {
+    const s = useText();
+    const lang = useLang();
     const [chatId, setChatId] = useState<string | null>(CHATS[0].id);
     const [touched, setTouched] = useState(false);
     const [chats, setChats] = useState<Chat[]>(CHATS);
@@ -116,7 +119,7 @@ export function ModelCraftWindow({ className, view, onView, onCall, onWriting }:
         }
         const target = id;
         setChats((cs) => cs.map((c) => (c.id === target ? { ...c, messages: [...c.messages, { role: "user", text }] } : c)));
-        setPending({ chatId: target, message: replyTo(text, installed), phase: "thinking", step: 0, shown: 0 });
+        setPending({ chatId: target, message: replyTo(text, installed, lang), phase: "thinking", step: 0, shown: 0 });
     };
 
     const download = (name: string) => {
@@ -139,9 +142,9 @@ export function ModelCraftWindow({ className, view, onView, onCall, onWriting }:
         const task = tasks.find((x) => x.id === id);
         if (!task || running.includes(id)) return;
         setRunning((r) => [...r, id]);
-        const reply = replyTo(task.prompt, installed);
+        const reply = replyTo(s(task.prompt), installed, lang);
         setTimeout(() => {
-            const chat: Chat = { id: `run-${id}-${Date.now()}`, title: task.title, messages: [{ role: "user", text: task.prompt }, reply] };
+            const chat: Chat = { id: `run-${id}-${Date.now()}`, title: task.title, messages: [{ role: "user", text: s(task.prompt) }, reply] };
             setChats((cs) => [chat, ...cs]);
             setRuns((r) => ({ ...r, [id]: chat.id }));
             setRunning((r) => r.filter((x) => x !== id));
@@ -153,8 +156,8 @@ export function ModelCraftWindow({ className, view, onView, onCall, onWriting }:
     const sidebarButton = sidebar !== true && (
         <button
             type="button"
-            aria-label="Show Sidebar"
-            title="Show Sidebar"
+            aria-label={s(["Show Sidebar", "显示边栏", "顯示側邊欄"])}
+            title={s(["Show Sidebar", "显示边栏", "顯示側邊欄"])}
             className={cn(TOOL, sidebar === null && "sm:hidden")}
             onClick={() => setSidebar(true)}
         >

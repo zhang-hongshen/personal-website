@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ReactNode } from "react";
 
+import { useText } from "~/components/demo-text";
 import { Spinner } from "~/components/mac-ui";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
@@ -20,6 +21,7 @@ export function TasksView({ tasks, canAdd, running, ran, sidebarButton, onAdd, o
     onRun: (id: string) => void;
     onOpenRun: (id: string) => void;
 }) {
+    const s = useText();
     const list = useRef<HTMLDivElement>(null);
     const count = useRef(tasks.length);
 
@@ -33,13 +35,13 @@ export function TasksView({ tasks, canAdd, running, ran, sidebarButton, onAdd, o
         <div className="flex h-full flex-col">
             <header className={BAR}>
                 {sidebarButton}
-                <h4 className={cn("flex-1", TITLE)}>Scheduled Tasks</h4>
+                <h4 className={cn("flex-1", TITLE)}>{s(["Scheduled Tasks", "定时任务", "排程任務"])}</h4>
                 <div className={cn(CAPSULE, "gap-1 px-1")}>
                     <span className="flex size-7 items-center justify-center"><SFSymbol name="calendar.badge.clock" className="size-4" /></span>
                     <button
                         type="button"
-                        aria-label="New Task"
-                        title="New Task"
+                        aria-label={s(["New Task", "新建任务", "新增任務"])}
+                        title={s(["New Task", "新建任务", "新增任務"])}
                         disabled={!canAdd}
                         className={TOOL_ITEM}
                         onClick={onAdd}
@@ -58,15 +60,15 @@ export function TasksView({ tasks, canAdd, running, ran, sidebarButton, onAdd, o
                     return (
                         <article key={task.id} className={cn("flex shrink-0 flex-wrap gap-x-4 gap-y-3 rounded-xl p-4 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2", CARD)}>
                             <div className="min-w-[220px] flex-1">
-                                <h5 className={TITLE}>{task.title}</h5>
-                                <p className={cn("mt-0.5", SMALL, MUTED)}>{task.schedule}</p>
-                                <p className={cn("mt-2", BODY)}>{task.prompt}</p>
+                                <h5 className={TITLE}>{s(task.title)}</h5>
+                                <p className={cn("mt-0.5", SMALL, MUTED)}>{s(task.schedule)}</p>
+                                <p className={cn("mt-2", BODY)}>{s(task.prompt)}</p>
                                 <p className={cn("mt-2 flex flex-wrap items-center gap-x-2", SMALL, MUTED)}>
                                     <SFSymbol name="clock" className="size-3" />
-                                    {task.enabled ? task.next : "Paused"}
+                                    {task.enabled ? s(task.next) : s(["Paused", "已暂停", "已暫停"])}
                                     {ran.includes(task.id) && (
                                         <button type="button" className={cn("underline-offset-2 hover:underline", ACCENT)} onClick={() => onOpenRun(task.id)}>
-                                            · Last run just now — open
+                                            {s(["· Last run just now — open", "· 刚刚运行过，打开看看", "· 剛剛執行過，打開看看"])}
                                         </button>
                                     )}
                                 </p>
@@ -79,13 +81,13 @@ export function TasksView({ tasks, canAdd, running, ran, sidebarButton, onAdd, o
                                     onClick={() => onRun(task.id)}
                                 >
                                     {isRunning && <Spinner className="size-3.5" />}
-                                    {isRunning ? "Running" : "Run Now"}
+                                    {isRunning ? s(["Running", "正在运行", "正在執行"]) : s(["Run Now", "立即运行", "立即執行"])}
                                 </button>
                                 <button
                                     type="button"
                                     role="switch"
                                     aria-checked={task.enabled}
-                                    aria-label={`${task.title} enabled`}
+                                    aria-label={s([`${task.title[0]} enabled`, `启用“${task.title[1]}”`, `啟用「${task.title[2]}」`])}
                                     className={cn("relative h-7 w-[52px] shrink-0 rounded-full transition-colors", task.enabled ? ACCENT_BG : "bg-black/15 dark:bg-white/15")}
                                     onClick={() => onToggle(task.id)}
                                 >

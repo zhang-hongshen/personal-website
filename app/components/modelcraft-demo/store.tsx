@@ -1,11 +1,12 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "react-router";
 
+import { useText } from "~/components/demo-text";
 import { Spinner } from "~/components/mac-ui";
 import { ProductIcon } from "~/components/product-icon";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
-import { CONNECTORS, DEFAULT_MODEL, MODELS, type Category, type Model } from "./data";
+import { CATEGORY_NAME, CONNECTORS, DEFAULT_MODEL, MODELS, type Category, type Model } from "./data";
 import { ACCENT, ACCENT_BG, BAR, CAPSULE, CARD, FAINT, LINE, MUTED, SMALL, TEXT, TITLE, TOOL } from "./ui";
 
 /** The icon the app shows while a model's organization avatar loads; avatars aren't fetched here. */
@@ -20,6 +21,7 @@ export function StoreView({ downloads, sidebarButton, onDownload }: {
     /** Starts, stops or resumes a download. */
     onDownload: (name: string) => void;
 }) {
+    const s = useText();
     const [category, setCategory] = useState<Category>("Text");
     const [grid, setGrid] = useState(true);
     const [query, setQuery] = useState("");
@@ -37,7 +39,7 @@ export function StoreView({ downloads, sidebarButton, onDownload }: {
         <div className="flex h-full flex-col">
             <header className={cn(BAR, "flex-wrap gap-y-2")}>
                 {sidebarButton}
-                <h4 className={cn("mr-auto", TITLE)}>Model Store</h4>
+                <h4 className={cn("mr-auto", TITLE)}>{s(["Model Store", "模型商店", "模型商店"])}</h4>
                 <div className={cn(CAPSULE, "p-0.5 text-[13px]")}>
                     {(["Text", "Vision", "Omni"] as Category[]).map((c) => (
                         <button
@@ -49,20 +51,24 @@ export function StoreView({ downloads, sidebarButton, onDownload }: {
                                 setLoading(true);
                             }}
                         >
-                            {c}
+                            {s(CATEGORY_NAME[c])}
                         </button>
                     ))}
                 </div>
-                <button type="button" aria-label={grid ? "as List" : "as Grid"} title={grid ? "as List" : "as Grid"} className={cn(CAPSULE, "gap-1 px-2.5")} onClick={() => setGrid((g) => !g)}>
+                <button
+                    type="button"
+                    aria-label={grid ? s(["as List", "以列表显示", "以列表顯示"]) : s(["as Grid", "以网格显示", "以格狀顯示"])}
+                    title={grid ? s(["as List", "以列表显示", "以列表顯示"]) : s(["as Grid", "以网格显示", "以格狀顯示"])}
+                    className={cn(CAPSULE, "gap-1 px-2.5")} onClick={() => setGrid((g) => !g)}>
                     <SFSymbol name={grid ? "square.grid.2x2" : "list.bullet"} className="size-4" />
                     <SFSymbol name="chevron.down" className="size-2" />
                 </button>
-                <button type="button" aria-label="Refresh" title="Refresh" className={TOOL} onClick={() => setLoading(true)}>
+                <button type="button" aria-label={s(["Refresh", "刷新", "重新整理"])} title={s(["Refresh", "刷新", "重新整理"])} className={TOOL} onClick={() => setLoading(true)}>
                     {loading ? <Spinner className="size-4" /> : <SFSymbol name="arrow.triangle.2.circlepath" className="size-4" />}
                 </button>
                 <label className={cn(CAPSULE, "w-48 gap-1.5 px-3 text-[13px] max-sm:w-full")}>
                     <SFSymbol name="magnifyingglass" className="size-3.5 shrink-0 opacity-70" />
-                    <input value={query} placeholder="Search" aria-label="Search models" className={cn("min-w-0 flex-1 bg-transparent outline-none placeholder:text-current", TEXT)} onChange={(e) => setQuery(e.target.value)} />
+                    <input value={query} placeholder={s(["Search", "搜索", "搜尋"])} aria-label={s(["Search models", "搜索模型", "搜尋模型"])} className={cn("min-w-0 flex-1 bg-transparent outline-none placeholder:text-current", TEXT)} onChange={(e) => setQuery(e.target.value)} />
                 </label>
             </header>
 
@@ -70,7 +76,7 @@ export function StoreView({ downloads, sidebarButton, onDownload }: {
                 {loading
                     ? Array.from({ length: 8 }, (_, i) => <div key={i} className={cn("rounded-xl bg-black/5 dark:bg-white/6", grid ? "h-[132px]" : "h-[68px]")} />)
                     : models.map((m) => <ModelCard key={m.name} model={m} grid={grid} download={downloads[m.name]} onDownload={() => onDownload(m.name)} />)}
-                {!loading && models.length === 0 && <p className={cn("col-span-full py-10 text-center text-[13px]", MUTED)}>No models match “{query}”.</p>}
+                {!loading && models.length === 0 && <p className={cn("col-span-full py-10 text-center text-[13px]", MUTED)}>{s([`No models match “${query}”.`, `没有匹配“${query}”的模型。`, `沒有符合「${query}」的模型。`])}</p>}
             </div>
         </div>
     );
@@ -116,15 +122,16 @@ function ModelCard({ model, grid, download, onDownload }: { model: Model; grid: 
 
 /** Download, a progress ring that stops or resumes it, or the green check of a downloaded model. */
 function DownloadButton({ name, download, onClick }: { name: string; download?: Download; onClick: () => void }) {
+    const s = useText();
     if (name === DEFAULT_MODEL || download?.progress === 1) return <DoneMark />;
     if (!download) {
         return (
-            <button type="button" aria-label={`Download ${name}`} title="Download" className={cn("flex size-7 items-center justify-center rounded-full bg-black/5 hover:bg-black/10 dark:bg-white/8 dark:hover:bg-white/14", ACCENT)} onClick={onClick}>
+            <button type="button" aria-label={s([`Download ${name}`, `下载 ${name}`, `下載 ${name}`])} title={s(["Download", "下载", "下載"])} className={cn("flex size-7 items-center justify-center rounded-full bg-black/5 hover:bg-black/10 dark:bg-white/8 dark:hover:bg-white/14", ACCENT)} onClick={onClick}>
                 <SFSymbol name="arrow.down" className="size-3" />
             </button>
         );
     }
-    const label = download.stopped ? "Resume Download" : "Stop Download";
+    const label = download.stopped ? s(["Resume Download", "继续下载", "繼續下載"]) : s(["Stop Download", "停止下载", "停止下載"]);
     return (
         <button type="button" aria-label={`${label} ${name}`} title={label} className={cn("relative flex size-7 items-center justify-center", ACCENT)} onClick={onClick}>
             <svg viewBox="0 0 24 24" className="absolute inset-0.5 -rotate-90">
@@ -138,7 +145,8 @@ function DownloadButton({ name, download, onClick }: { name: string; download?: 
 
 /** The green check the app shows on a downloaded model. */
 function DoneMark() {
-    return <SFSymbol name="checkmark.circle.fill" aria-label="Downloaded" className="size-5 text-[#34c759] motion-safe:animate-in motion-safe:zoom-in-50 dark:text-[#30d158]" />;
+    const s = useText();
+    return <SFSymbol name="checkmark.circle.fill" aria-label={s(["Downloaded", "已下载", "已下載"])} className="size-5 text-[#34c759] motion-safe:animate-in motion-safe:zoom-in-50 dark:text-[#30d158]" />;
 }
 
 export function ConnectorsView({ installed, sidebarButton, onToggle }: {
@@ -146,6 +154,7 @@ export function ConnectorsView({ installed, sidebarButton, onToggle }: {
     sidebarButton: ReactNode;
     onToggle: (name: string) => void;
 }) {
+    const s = useText();
     const [installing, setInstalling] = useState<string | null>(null);
     useEffect(() => {
         if (!installing) return;
@@ -160,7 +169,7 @@ export function ConnectorsView({ installed, sidebarButton, onToggle }: {
         <div className="flex h-full flex-col">
             <header className={BAR}>
                 {sidebarButton}
-                <h4 className={TITLE}>Connectors</h4>
+                <h4 className={TITLE}>{s(["Connectors", "连接器", "連接器"])}</h4>
             </header>
             <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-3 pb-4">
                 {CONNECTORS.map((c) => (
@@ -170,17 +179,17 @@ export function ConnectorsView({ installed, sidebarButton, onToggle }: {
                             <h5 className="text-[17px] font-semibold" style={{ fontFamily: "ui-rounded, -apple-system, system-ui, sans-serif" }}>
                                 <Link to={`/products/${c.id}/`} className="hover:underline">{c.name}</Link>
                             </h5>
-                            <p className={cn("text-[13px]", MUTED)}>{c.summary}</p>
+                            <p className={cn("text-[13px]", MUTED)}>{s(c.summary)}</p>
                         </div>
                         {installing === c.name ? (
-                            <Spinner className={cn("size-4", MUTED)} label="Installing" />
+                            <Spinner className={cn("size-4", MUTED)} label={s(["Installing", "正在安装", "正在安裝"])} />
                         ) : installed[c.name] ? (
                             <button type="button" className="h-7 shrink-0 rounded-md bg-black/5 px-3 text-[13px] text-[#d6382c] hover:bg-black/8 dark:bg-white/8 dark:text-[#ff6961]" onClick={() => onToggle(c.name)}>
-                                Uninstall
+                                {s(["Uninstall", "卸载", "解除安裝"])}
                             </button>
                         ) : (
                             <button type="button" className={cn("h-7 shrink-0 rounded-md px-3 text-[13px] font-medium", ACCENT_BG)} onClick={() => setInstalling(c.name)}>
-                                Install
+                                {s(["Install", "安装", "安裝"])}
                             </button>
                         )}
                     </article>
@@ -198,11 +207,12 @@ export function DownloadedView({ models, current, sidebarButton, onPick, onDelet
     onPick: (name: string) => void;
     onDelete: (name: string) => void;
 }) {
+    const s = useText();
     return (
         <div className="flex h-full flex-col">
             <header className={BAR}>
                 {sidebarButton}
-                <h4 className={TITLE}>Downloaded Models</h4>
+                <h4 className={TITLE}>{s(["Downloaded Models", "已下载的模型", "已下載的模型"])}</h4>
             </header>
             <div className={cn("mx-3 mb-4 min-h-0 overflow-y-auto rounded-xl", CARD)}>
                 {models.map((m, i) => (
@@ -210,22 +220,22 @@ export function DownloadedView({ models, current, sidebarButton, onPick, onDelet
                         <SFSymbol name="shippingbox" className={cn("size-5 shrink-0", ACCENT)} />
                         <div className="min-w-0 flex-1">
                             <p className="truncate text-[13px] font-semibold">{m.name}</p>
-                            <p className={cn(SMALL, MUTED)}>{m.size} · {m.category}</p>
+                            <p className={cn(SMALL, MUTED)}>{m.size} · {s(CATEGORY_NAME[m.category])}</p>
                         </div>
                         {m.name === current ? (
-                            <span className={cn("rounded-full px-2.5 py-0.5 text-[12px]", ACCENT_BG)}>In use</span>
+                            <span className={cn("rounded-full px-2.5 py-0.5 text-[12px]", ACCENT_BG)}>{s(["In use", "使用中", "使用中"])}</span>
                         ) : (
-                            <button type="button" className={cn("text-[13px] hover:underline", ACCENT)} onClick={() => onPick(m.name)}>Use in Chat</button>
+                            <button type="button" className={cn("text-[13px] hover:underline", ACCENT)} onClick={() => onPick(m.name)}>{s(["Use in Chat", "在对话中使用", "在對話中使用"])}</button>
                         )}
                         {m.name !== DEFAULT_MODEL && (
-                            <button type="button" aria-label={`Delete ${m.name}`} title="Delete" className={cn("rounded-md p-1 hover:bg-black/5 dark:hover:bg-white/8", FAINT)} onClick={() => onDelete(m.name)}>
+                            <button type="button" aria-label={s([`Delete ${m.name}`, `删除 ${m.name}`, `刪除 ${m.name}`])} title={s(["Delete", "删除", "刪除"])} className={cn("rounded-md p-1 hover:bg-black/5 dark:hover:bg-white/8", FAINT)} onClick={() => onDelete(m.name)}>
                                 <SFSymbol name="trash" className="size-4" />
                             </button>
                         )}
                     </div>
                 ))}
             </div>
-            <p className={cn("px-5 text-[12px]", MUTED)}>Models you download in the Model Store show up here.</p>
+            <p className={cn("px-5 text-[12px]", MUTED)}>{s(["Models you download in the Model Store show up here.", "在模型商店下载的模型会显示在这里。", "在模型商店下載的模型會顯示在這裡。"])}</p>
         </div>
     );
 }

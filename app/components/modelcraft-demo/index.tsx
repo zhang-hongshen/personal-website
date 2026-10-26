@@ -94,7 +94,7 @@ export function ModelCraftDesktop({ className }: { className?: string }) {
         if (tool.kind === "file") setReveal((r) => ({ folder: "takes", name: tool.name, n: (r?.n ?? 0) + 1 }));
         if (tool.kind === "connector" && tool.app === "tunestudio") {
             const name = "chorus-take-3 (tuned).wav";
-            setMade((m) => (m.takes?.some((f) => f.name === name) ? m : { ...m, takes: [...(m.takes ?? []), { kind: "file", icon: "waveform", name, date: "Just now", size: "21.3 MB" }] }));
+            setMade((m) => (m.takes?.some((f) => f.name === name) ? m : { ...m, takes: [...(m.takes ?? []), { kind: "file", icon: "waveform", name, date: ["Just now", "刚刚", "剛剛"], size: "21.3 MB" }] }));
         }
     };
 

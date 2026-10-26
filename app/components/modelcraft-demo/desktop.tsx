@@ -1,6 +1,7 @@
 import { lazy, Suspense, type ReactNode } from "react";
 
 import finderIcon from "~/assets/macos/finder.png";
+import { useText, type L } from "~/components/demo-text";
 import { Spinner, WindowControls } from "~/components/mac-ui";
 import { MAC_FONT } from "~/components/mac-window";
 import { ProductIcon } from "~/components/product-icon";
@@ -116,28 +117,33 @@ export function Desktop({ modelcraft, finder, opened, order, bouncing, onRaise, 
 }
 
 function Loading({ app }: { app: AppKey }) {
+    const s = useText();
     return (
         <div className={cn("flex items-center justify-center bg-white/85 backdrop-blur-xl dark:bg-[#1e1e1e]/85", WINDOW)}>
             <AppIcon app={app} className="size-12" />
-            <Spinner className="ml-3 size-4 text-[#86868b]" label={`Opening ${appName(app)}`} />
+            <Spinner className="ml-3 size-4 text-[#86868b]" label={s([`Opening ${appName(app)}`, `正在打开 ${appName(app)}`, `正在開啟 ${appName(app)}`])} />
         </div>
     );
 }
 
+const MENUS: L[] = [["File", "文件", "檔案"], ["Edit", "编辑", "編輯"], ["View", "显示", "顯示方式"], ["Window", "窗口", "視窗"], ["Help", "帮助", "輔助說明"]];
+
 function MenuBar({ app }: { app: string }) {
+    const s = useText();
     return (
         <div className="absolute inset-x-0 top-0 z-[60] flex h-7 items-center gap-4 px-3 text-[13px] text-[#1d1d1f] select-none dark:text-white/90">
             <b className="font-semibold">{app}</b>
-            {["File", "Edit", "View", "Window", "Help"].map((m) => <span key={m} className="hidden sm:inline">{m}</span>)}
-            <span className="ml-auto tabular-nums">Mon 26 Oct 9:41</span>
+            {MENUS.map((m) => <span key={m[0]} className="hidden sm:inline">{s(m)}</span>)}
+            <span className="ml-auto tabular-nums">{s(["Mon 26 Oct 9:41", "10月26日 周一 9:41", "10月26日 週一 上午9:41"])}</span>
         </div>
     );
 }
 
 /** The Dock in macOS 27's Liquid Glass: one row of same-size icons on a glass shelf, a dot under each running app. */
 function Dock({ running, bouncing, onDock }: { running: AppKey[]; bouncing: { app: AppKey; n: number } | null; onDock: (app: AppKey) => void }) {
+    const s = useText();
     return (
-        <nav aria-label="Dock" className="absolute inset-x-0 bottom-[clamp(4px,0.8cqw,8px)] z-[60] flex justify-center select-none">
+        <nav aria-label={s(["Dock", "程序坞", "Dock"])} className="absolute inset-x-0 bottom-[clamp(4px,0.8cqw,8px)] z-[60] flex justify-center select-none">
             <div className="flex items-end gap-[clamp(3px,0.6cqw,6px)] rounded-[clamp(16px,2.4cqw,24px)] border border-white/50 bg-white/25 px-[clamp(5px,0.8cqw,8px)] pt-[clamp(5px,0.8cqw,8px)] shadow-[inset_0_1px_1px_rgb(255_255_255/0.6),inset_0_-1px_1px_rgb(255_255_255/0.15),0_12px_32px_rgb(0_0_0/0.18)] backdrop-blur-2xl backdrop-saturate-150 dark:border-white/15 dark:bg-white/8 dark:shadow-[inset_0_1px_1px_rgb(255_255_255/0.2),0_12px_32px_rgb(0_0_0/0.4)]">
                 {DOCK.map((app) => (
                     <button key={app} type="button" aria-label={appName(app)} className="group relative flex flex-col items-center" onClick={() => onDock(app)}>
