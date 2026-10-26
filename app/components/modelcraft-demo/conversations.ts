@@ -25,10 +25,31 @@ export type Tool =
     | { kind: "native"; app: NativeApp; icon: SymbolName; running: L; done: L; card: Card }
     | { kind: "command"; command: string; output: string }
     | { kind: "fetch"; url: string; title: string; excerpt: string }
-    | { kind: "file"; name: string; card: Card };
+    | { kind: "file"; name: string; card: Card }
+    | { kind: "edit"; path: string; diff: string }
+    | { kind: "image"; prompt: string; art: Art; size: string; saved: string }
+    | { kind: "video"; prompt: string; art: Art; size: string; seconds: number; saved: string };
+
+/** The pictures the image and video tools make, drawn in media.tsx. */
+export type Art = "night-city";
+
+/** A file the visitor attached, with what the page could read from it without sending it anywhere. */
+export type Attachment = {
+    name: string;
+    size: number;
+    type: string;
+    /** For an image: a URL of the file for showing it, and its size in pixels. */
+    url?: string;
+    width?: number;
+    height?: number;
+    /** For a text file: how long it is and its first line. */
+    lines?: number;
+    words?: number;
+    first?: string;
+};
 
 /** Prepared text comes in every language; what the visitor types stays as typed. */
-export type Message = { role: "user" | "assistant"; text: L | string; tools?: Tool[] };
+export type Message = { role: "user" | "assistant"; text: L | string; tools?: Tool[]; attachments?: Attachment[] };
 export type Chat = { id: string; title: L | string; messages: Message[] };
 
 type Scenario = {
@@ -53,6 +74,90 @@ const PERSONAL: L = ["Personal", "个人", "個人"];
 const UPDATE_CALENDAR = { running: ["Updating Calendar", "正在更新日历", "正在更新行事曆"] as L, done: ["Updated Calendar", "已更新日历", "已更新行事曆"] as L };
 
 const SCENARIOS: Scenario[] = [
+    {
+        id: "fix-test", title: ["Fix the Failing Test", "修复失败的测试", "修正失敗的測試"],
+        prompt: [
+            "Run the tests in ~/Code/lumen-api and fix whatever fails.",
+            "在 ~/Code/lumen-api 里跑一下测试，把失败的修好。",
+            "在 ~/Code/lumen-api 裡跑一下測試，把失敗的修好。",
+        ],
+        match: /\btests?\b|\bfail|\bbugs?\b|\bfix|测试|修复|修好|測試|修正|錯誤|错误/,
+        tools: [
+            {
+                kind: "command", command: "cd ~/Code/lumen-api && npm test",
+                output: " PASS  src/sessions.test.ts\n FAIL  src/pricing.test.ts\n  ● presetPrice › applies the bundle discount once\n\n    Expected: 15.98\n    Received: 11.98\n\n      at src/pricing.test.ts:27:44\n\nTests:  1 failed, 23 passed, 24 total",
+            },
+            {
+                kind: "edit", path: "~/Code/lumen-api/src/pricing.ts",
+                diff: "@@ -18,7 +18,7 @@ export function presetPrice(items: Preset[], bundle: boolean) {\n   const subtotal = items.reduce((sum, p) => sum + p.price, 0);\n-  const discount = bundle ? items.length * 4 : 0;\n+  const discount = bundle ? 4 : 0;\n   return Math.max(0, subtotal - discount);\n }",
+            },
+            { kind: "command", command: "npm test", output: " PASS  src/sessions.test.ts\n PASS  src/pricing.test.ts\n\nTests:  24 passed, 24 total\nTime:   1.84 s" },
+        ],
+        reply: [
+            "One test was failing: **presetPrice › applies the bundle discount once**. The bundle discount was taken once per preset (`items.length * 4`) rather than once per order, so two $9.99 presets came to $11.98 instead of $15.98.\n- Changed it to a flat $4 in `src/pricing.ts`\n- Ran the suite again: all 24 tests pass",
+            "有一个测试没过：**presetPrice › applies the bundle discount once**。套装折扣按预设个数扣了多次（`items.length * 4`），而不是每单扣一次，所以两个 $9.99 的预设算成了 $11.98，应该是 $15.98。\n- 已在 `src/pricing.ts` 里改成固定减 $4\n- 重新跑了一遍：24 个测试全部通过",
+            "有一個測試沒過：**presetPrice › applies the bundle discount once**。套裝折扣按預設個數扣了多次（`items.length * 4`），而不是每筆訂單扣一次，所以兩個 $9.99 的預設算成了 $11.98，應該是 $15.98。\n- 已在 `src/pricing.ts` 裡改成固定減 $4\n- 重新跑了一遍：24 個測試全部通過",
+        ],
+    },
+    {
+        id: "night-city-video", title: ["Night City Loop", "Night City 循环视频", "Night City 循環影片"],
+        prompt: [
+            "Turn the Night City cover into a 6-second looping video for the store page.",
+            "把 Night City 的封面做成一段 6 秒的循环视频，放在商店页面上。",
+            "把 Night City 的封面做成一段 6 秒的循環影片，放在商店頁面上。",
+        ],
+        match: /\bvideo|\banimat|\bclip\b|\bloop|视频|动画|動畫|影片/,
+        tools: [
+            {
+                kind: "video", art: "night-city", size: "1080 × 1080", seconds: 6, saved: "~/Movies/ModelCraft/night-city-loop.mp4",
+                prompt: "The Night City cover, slowly alive: rain falling, neon signs flickering, a car's lights passing on the wet street. Seamless 6-second loop.",
+            },
+        ],
+        reply: [
+            "Here's a 6-second loop of the cover: the rain keeps falling, the signs flicker and a car passes on the wet street, and the last frame meets the first so it loops cleanly. It's 1080 × 1080, saved as **night-city-loop.mp4** in Movies › ModelCraft.",
+            "做好了一段 6 秒的循环视频：雨一直在下，招牌闪烁，一辆车从湿漉漉的街上驶过，最后一帧和第一帧接得上，可以无缝循环。尺寸 1080 × 1080，已保存为 影片 › ModelCraft 里的 **night-city-loop.mp4**。",
+            "做好了一段 6 秒的循環影片：雨一直在下，招牌閃爍，一輛車從濕漉漉的街上駛過，最後一格和第一格接得上，可以無縫循環。尺寸 1080 × 1080，已儲存為 影片 › ModelCraft 裡的 **night-city-loop.mp4**。",
+        ],
+    },
+    {
+        id: "night-city-cover", title: ["Night City Cover", "Night City 封面", "Night City 封面"],
+        prompt: [
+            "Make a cover image for the Night City Looks preset: a rainy street at night, purple and teal neon.",
+            "给 Night City Looks 预设做一张封面：雨夜的街道，紫色和青色的霓虹灯。",
+            "幫 Night City Looks 預設做一張封面：雨夜的街道，紫色和青色的霓虹燈。",
+        ],
+        match: /\bimage|\bpicture|\bcover\b|\bposter|\bdraw\b|illustrat|图片|图像|封面|海报|画|圖片|圖像|海報|畫/,
+        tools: [
+            {
+                kind: "image", art: "night-city", size: "1024 × 1024", saved: "~/Pictures/ModelCraft/night-city-cover.png",
+                prompt: "A rain-soaked city street at night, purple and teal neon signs reflected on wet asphalt, tall buildings fading into mist, cinematic, square cover.",
+            },
+        ],
+        reply: [
+            "Here's a cover for **Night City Looks**: a rainy street with purple and teal neon reflected on the asphalt, square for the store. It's saved as **night-city-cover.png** in Pictures › ModelCraft. Want a version with the preset's name on it, or a short looping video of it?",
+            "**Night City Looks** 的封面做好了：雨夜街道，紫色和青色的霓虹倒映在路面上，正方形适合商店。已保存为 图片 › ModelCraft 里的 **night-city-cover.png**。要不要加上预设名称，或者做成一段循环小视频？",
+            "**Night City Looks** 的封面做好了：雨夜街道，紫色和青色的霓虹倒映在路面上，正方形適合商店。已儲存為 圖片 › ModelCraft 裡的 **night-city-cover.png**。要不要加上預設名稱，或者做成一段循環小影片？",
+        ],
+    },
+    {
+        id: "tidy-downloads", title: ["Tidy Up Downloads", "整理下载文件夹", "整理下載項目"],
+        prompt: [
+            "Tidy up my Downloads folder: put installers and documents into folders of their own.",
+            "整理一下我的下载文件夹：把安装包和文档分别放进各自的文件夹。",
+            "整理一下我的下載項目：把安裝檔和文件分別放進各自的檔案夾。",
+        ],
+        match: /\bdownloads\b|\btidy|clean ?up|organi[sz]e|整理|下载|下載/,
+        tools: [
+            { kind: "command", command: "ls ~/Downloads", output: "Klara and the Sun.epub\nKyoto ryokan booking.pdf\nModelCraft-0.9.0.dmg\nQuaero-1.0.dmg\ninvoice-1042.pdf\nScreenshot 2026-10-24 at 21.14.png" },
+            { kind: "command", command: "cd ~/Downloads && mkdir -p Installers Documents && mv *.dmg Installers/ && mv *.pdf *.epub Documents/", output: "" },
+            { kind: "command", command: "ls ~/Downloads ~/Downloads/*/", output: "Documents\nInstallers\nScreenshot 2026-10-24 at 21.14.png\n\n/Users/maya/Downloads/Documents/:\nKlara and the Sun.epub\nKyoto ryokan booking.pdf\ninvoice-1042.pdf\n\n/Users/maya/Downloads/Installers/:\nModelCraft-0.9.0.dmg\nQuaero-1.0.dmg" },
+        ],
+        reply: [
+            "Downloads is tidy:\n- **Installers**: ModelCraft-0.9.0.dmg and Quaero-1.0.dmg\n- **Documents**: the ryokan booking, invoice 1042 and *Klara and the Sun*\nI left the screenshot where it was. Nothing was deleted, so the installers are there if you need them again.",
+            "下载文件夹整理好了：\n- **Installers**：ModelCraft-0.9.0.dmg 和 Quaero-1.0.dmg\n- **Documents**：旅馆预订单、1042 号发票和《克拉拉与太阳》\n截图我留在了原处。没有删除任何文件，安装包需要时还在。",
+            "下載項目整理好了：\n- **Installers**：ModelCraft-0.9.0.dmg 和 Quaero-1.0.dmg\n- **Documents**：旅館訂房單、1042 號發票和《克拉拉與太陽》\n截圖我留在原處。沒有刪除任何檔案，安裝檔需要時還在。",
+        ],
+    },
     {
         id: "dev-stack", title: ["Start the Dev Stack", "启动开发环境", "啟動開發環境"],
         prompt: [
@@ -303,14 +408,15 @@ const SCENARIOS: Scenario[] = [
 const chatOf = (s: Scenario): Chat => ({ id: s.id, title: s.title, messages: [{ role: "user", text: s.prompt }, { role: "assistant", text: s.reply, tools: s.tools }] });
 
 /** The Recents the window opens with, newest first. */
-export const CHATS: Chat[] = ["dev-stack", "daily-notes", "top-customers", "movie-night", "slow-api", "release-notes", "weekly-sync"].map((id) => chatOf(SCENARIOS.find((s) => s.id === id)!));
+export const CHATS: Chat[] = ["dev-stack", "night-city-cover", "fix-test", "daily-notes", "top-customers", "tidy-downloads", "movie-night", "slow-api", "release-notes", "weekly-sync"].map((id) => chatOf(SCENARIOS.find((s) => s.id === id)!));
 
 /** Prompts offered under an empty New Chat. */
 export const SUGGESTIONS: L[] = [
     ["Start my dev stack in Container", "在 Container 里启动我的开发环境", "在 Container 裡啟動我的開發環境"],
+    ["Run the tests in lumen-api and fix what fails", "跑一下 lumen-api 的测试，把失败的修好", "跑一下 lumen-api 的測試，把失敗的修好"],
+    ["Turn the Night City cover into a looping video", "把 Night City 封面做成循环视频", "把 Night City 封面做成循環影片"],
     ["Find our top customers with Quaero", "用 Quaero 找出我们的大客户", "用 Quaero 找出我們的大客戶"],
-    ["Pick a movie for tonight from Arthub", "从 Arthub 里挑一部今晚看的电影", "從 Arthub 裡挑一部今晚看的電影"],
-    ["Why is my API slow? Check Redis with Keel", "API 为什么慢？用 Keel 查一下 Redis", "API 為什麼慢？用 Keel 查一下 Redis"],
+    ["Tidy up my Downloads folder", "整理一下我的下载文件夹", "整理一下我的下載項目"],
 ];
 
 /** General answers for prompts no scenario covers. */
@@ -338,8 +444,9 @@ const CJK = /[㐀-鿿]/;
  * The scripted answer to a prompt: its scenario's tool calls and reply, or why a connector is missing.
  * A prompt in Chinese gets a Chinese reply, in the script of `lang` when that is Chinese.
  */
-export function replyTo(prompt: string, installed: Record<string, boolean>, lang: Lang): Message {
-    const s = pick(CJK.test(prompt) ? (lang === "zh-TW" ? "zh-TW" : "zh-CN") : "en");
+export function replyTo(prompt: string, installed: Record<string, boolean>, lang: Lang, files: Attachment[] = []): Message {
+    const s = pick(CJK.test(prompt) || (!prompt && lang !== "en") ? (lang === "zh-TW" ? "zh-TW" : "zh-CN") : "en");
+    if (files.length) return replyToFiles(files, s);
     const p = prompt.toLowerCase();
     if (/^(hi|hello|hey)\b|你好|嗨/.test(p)) {
         return {
@@ -371,6 +478,38 @@ export function replyTo(prompt: string, installed: Record<string, boolean>, lang
     return { role: "assistant", text: s(scenario.reply), tools: scenario.tools };
 }
 
+const bytes = (n: number) => (n >= 1024 ** 2 ? `${(n / 1024 ** 2).toFixed(1)} MB` : n >= 1024 ? `${Math.round(n / 1024)} KB` : `${n} B`);
+const extension = (name: string) => (name.includes(".") ? name.split(".").pop()!.toUpperCase() : "");
+
+/** Reads each attached file (what the page found in it) and says what it is, then asks what to do with it. */
+function replyToFiles(files: Attachment[], s: Text): Message {
+    const tools: Tool[] = files.map((f) => ({
+        kind: "file",
+        name: f.name,
+        card: [
+            [["Kind", "种类", "種類"], f.type || extension(f.name) || "—"],
+            [["Size", "大小", "大小"], bytes(f.size)],
+            ...(f.width ? [[["Dimensions", "尺寸", "尺寸"], `${f.width} × ${f.height}`] as Card[number]] : []),
+            ...(f.lines !== undefined ? [[["Lines", "行数", "行數"], String(f.lines)] as Card[number], [["Words", "字数", "字數"], String(f.words)] as Card[number]] : []),
+        ],
+    }));
+    const lines = files.map((f) => {
+        const size = bytes(f.size);
+        if (f.width) return s([`- **${f.name}** is a ${f.width} × ${f.height} ${extension(f.name) || "image"} (${size}).`, `- **${f.name}** 是一张 ${f.width} × ${f.height} 的 ${extension(f.name) || "图片"}（${size}）。`, `- **${f.name}** 是一張 ${f.width} × ${f.height} 的 ${extension(f.name) || "圖片"}（${size}）。`]);
+        if (f.lines !== undefined) {
+            const opens = f.first ? s([` It opens with “${f.first}”.`, `开头是“${f.first}”。`, `開頭是「${f.first}」。`]) : "";
+            return s([`- **${f.name}** has ${f.lines} lines and ${f.words} words.${opens}`, `- **${f.name}** 共 ${f.lines} 行、${f.words} 个词。${opens}`, `- **${f.name}** 共 ${f.lines} 行、${f.words} 個詞。${opens}`]);
+        }
+        return s([`- **${f.name}** is a ${extension(f.name) || "file"} of ${size}.`, `- **${f.name}** 是一个 ${size} 的 ${extension(f.name) || "文件"}。`, `- **${f.name}** 是一個 ${size} 的 ${extension(f.name) || "檔案"}。`]);
+    });
+    const text = [
+        s([files.length > 1 ? "I've read the files. They stay on this Mac:" : "I've read the file. It stays on this Mac:", "文件我已经读过了，它们只留在这台 Mac 上：", "檔案我已經讀過了，它們只留在這台 Mac 上："]),
+        ...lines,
+        s(["What would you like me to do with them: summarize, rename, or file them away in Cellar?", "想让我怎么处理：总结一下、重命名，还是存进 Cellar？", "想讓我怎麼處理：總結一下、重新命名，還是存進 Cellar？"]),
+    ].join("\n");
+    return { role: "assistant", text, tools };
+}
+
 /** How a tool call reads in its row, while it runs and once it's done (ToolCall.localizedDescription). */
 export function toolLabel(tool: Tool, running: boolean, s: Text): string {
     switch (tool.kind) {
@@ -385,6 +524,12 @@ export function toolLabel(tool: Tool, running: boolean, s: Text): string {
             return running ? s([`Fetching ${host}`, `正在获取 ${host}`, `正在擷取 ${host}`]) : s([`Fetched ${host}`, `已获取 ${host}`, `已擷取 ${host}`]);
         }
         case "file": return running ? s([`Reading ${tool.name}`, `正在读取 ${tool.name}`, `正在讀取 ${tool.name}`]) : s([`Read ${tool.name}`, `已读取 ${tool.name}`, `已讀取 ${tool.name}`]);
+        case "edit": {
+            const name = tool.path.split("/").pop();
+            return running ? s([`Editing ${name}`, `正在编辑 ${name}`, `正在編輯 ${name}`]) : s([`Edited ${name}`, `已编辑 ${name}`, `已編輯 ${name}`]);
+        }
+        case "image": return running ? s(["Generating an image", "正在生成图片", "正在生成圖片"]) : s(["Generated an image", "已生成图片", "已生成圖片"]);
+        case "video": return running ? s(["Generating a video", "正在生成视频", "正在生成影片"]) : s(["Generated a video", "已生成视频", "已生成影片"]);
     }
 }
 
@@ -393,6 +538,9 @@ const PHRASE: Record<string, [one: L, many: L]> = {
     command: [["Ran a command", "运行了一条命令", "執行了一個指令"], ["Ran commands", "运行了多条命令", "執行了多個指令"]],
     fetch: [["Fetched a web page", "获取了一个网页", "擷取了一個網頁"], ["Fetched web pages", "获取了多个网页", "擷取了多個網頁"]],
     file: [["Read a file", "读取了一个文件", "讀取了一個檔案"], ["Read files", "读取了多个文件", "讀取了多個檔案"]],
+    edit: [["Edited a file", "编辑了一个文件", "編輯了一個檔案"], ["Edited files", "编辑了多个文件", "編輯了多個檔案"]],
+    image: [["Generated an image", "生成了一张图片", "生成了一張圖片"], ["Generated images", "生成了多张图片", "生成了多張圖片"]],
+    video: [["Generated a video", "生成了一段视频", "生成了一段影片"], ["Generated videos", "生成了多段视频", "生成了多段影片"]],
 };
 
 /** A finished group's title: one phrase per kind of work, in the order it first happened (ToolCallGroupSummary). */
@@ -402,7 +550,12 @@ export function groupTitle(tools: Tool[], lang: Lang): string {
     const seen = new Map<string, Set<string>>();
     for (const t of tools) {
         const [activity, occurrence] =
-            t.kind === "connector" ? ["app", t.app] : t.kind === "native" ? ["app", t.app] : t.kind === "command" ? ["command", t.command] : t.kind === "fetch" ? ["fetch", t.url] : ["file", t.name];
+            t.kind === "connector" || t.kind === "native" ? ["app", t.app]
+                : t.kind === "command" ? ["command", t.command]
+                    : t.kind === "fetch" ? ["fetch", t.url]
+                        : t.kind === "file" ? ["file", t.name]
+                            : t.kind === "edit" ? ["edit", t.path]
+                                : [t.kind, t.prompt];
         if (!seen.has(activity)) { order.push(activity); seen.set(activity, new Set()); }
         seen.get(activity)!.add(occurrence);
     }

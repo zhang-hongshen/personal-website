@@ -4,7 +4,7 @@ import { useLang, useText } from "~/components/demo-text";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { ChatView, type Pending } from "./chat";
-import { CHATS, replyTo, type Chat, type Tool } from "./conversations";
+import { CHATS, replyTo, type Attachment, type Chat, type Message, type Tool } from "./conversations";
 import { CONNECTORS, DEFAULT_MODEL, MODELS, PRESET_TASKS, TASKS, type View } from "./data";
 import { Sidebar } from "./sidebar";
 import { ConnectorsView, DownloadedView, StoreView, type Download } from "./store";
@@ -107,19 +107,21 @@ export function ModelCraftWindow({ className, view, onView, onCall, onWriting }:
     };
     const open = (v: View) => go(v, v === "chat" && chatId === null && chats.length ? chats[0].id : chatId);
 
-    const send = (text: string) => {
+    const send = (text: string, files: Attachment[] = []) => {
         if (pending) return;
         setTouched(true);
         let id = chatId;
         if (id === null) {
             id = `chat-${Date.now()}`;
-            const chat: Chat = { id, title: text.length > 40 ? `${text.slice(0, 38)}…` : text, messages: [] };
+            const title = text || files.map((f) => f.name).join(", ");
+            const chat: Chat = { id, title: title.length > 40 ? `${title.slice(0, 38)}…` : title, messages: [] };
             setChats((cs) => [chat, ...cs]);
             setChatId(id);
         }
         const target = id;
-        setChats((cs) => cs.map((c) => (c.id === target ? { ...c, messages: [...c.messages, { role: "user", text }] } : c)));
-        setPending({ chatId: target, message: replyTo(text, installed, lang), phase: "thinking", step: 0, shown: 0 });
+        const message: Message = { role: "user", text, ...(files.length ? { attachments: files } : {}) };
+        setChats((cs) => cs.map((c) => (c.id === target ? { ...c, messages: [...c.messages, message] } : c)));
+        setPending({ chatId: target, message: replyTo(text, installed, lang, files), phase: "thinking", step: 0, shown: 0 });
     };
 
     const download = (name: string) => {

@@ -15,7 +15,8 @@ import { AppleLogo, MenuBar, Spotlight, type Menu, type MenuItem } from "./menub
 
 // The Mac around the ModelCraft window: a wallpaper, the menu bar and a Dock with Finder,
 // ModelCraft and the apps it connects to. Each app opens as a window running its own full demo; windows
-// drag by their title bar, zoom, minimize and close, and the menus, Spotlight and Control Center work.
+// drag by their title bar, resize from their edges, zoom, minimize and close, and the menus, Spotlight
+// and Control Center work.
 
 /** An app on the desktop: Finder, ModelCraft, or a connector's product id. */
 export type AppKey = ConnectorId | "modelcraft" | "Finder";
@@ -98,7 +99,8 @@ export function Desktop({ className, children }: { className?: string; /** The M
     );
 }
 
-type Place = { dx: number; dy: number; zoomed: boolean };
+/** Where a window has been moved (from its usual spot) and, once resized, its size. */
+type Place = { dx: number; dy: number; zoomed: boolean; width?: number; height?: number };
 type Found = { app?: AppKey; folder?: FolderId };
 type Dialog = { kind: "mac" } | { kind: "app"; app: AppKey };
 
@@ -166,7 +168,7 @@ function Session({ onRestart, children }: { onRestart: () => void; children: (ap
             hidden={!order.includes(app)}
             place={places[app] ?? { dx: 0, dy: 0, zoomed: false }}
             onRaise={() => raise(app)}
-            onMove={(dx, dy) => setPlaces((p) => ({ ...p, [app]: { zoomed: false, ...p[app], dx, dy } }))}
+            onPlace={(change) => setPlaces((p) => ({ ...p, [app]: { dx: 0, dy: 0, zoomed: false, ...p[app], ...change } }))}
             onZoom={() => zoom(app)}
         >
             <WindowControls.Provider value={controls(app)}>{content}</WindowControls.Provider>
@@ -357,8 +359,25 @@ function menuBar({ s, active, name, front, order, opened, actions: a }: {
     return menus;
 }
 
-/** A window on the desktop, dragged by its title bar (the top 52 points) and zoomed by double-clicking it. */
-function Frame({ app, desk, label, className, top, z, hidden, place, onRaise, onMove, onZoom, children }: {
+/** The edges and corners a window resizes from, with their cursors. */
+const EDGES = [
+    ["n", "-top-1 inset-x-3 h-2 cursor-ns-resize"],
+    ["s", "-bottom-1 inset-x-3 h-2 cursor-ns-resize"],
+    ["e", "-right-1 inset-y-3 w-2 cursor-ew-resize"],
+    ["w", "-left-1 inset-y-3 w-2 cursor-ew-resize"],
+    ["ne", "-top-1 -right-1 size-4 cursor-nesw-resize"],
+    ["sw", "-bottom-1 -left-1 size-4 cursor-nesw-resize"],
+    ["nw", "-top-1 -left-1 size-4 cursor-nwse-resize"],
+    ["se", "-bottom-1 -right-1 size-4 cursor-nwse-resize"],
+] as const;
+const MIN_WIDTH = 420;
+const MIN_HEIGHT = 280;
+
+/**
+ * A window on the desktop: dragged by its title bar (the top 52 points), zoomed by double-clicking it, and
+ * resized from any edge or corner, never smaller than MIN_WIDTH × MIN_HEIGHT or past the desktop's edges.
+ */
+function Frame({ app, desk, label, className, top, z, hidden, place, onRaise, onPlace, onZoom, children }: {
     app: AppKey;
     desk: RefObject<HTMLDivElement | null>;
     label: string;
@@ -368,13 +387,14 @@ function Frame({ app, desk, label, className, top, z, hidden, place, onRaise, on
     hidden: boolean;
     place: Place;
     onRaise: () => void;
-    onMove: (dx: number, dy: number) => void;
+    onPlace: (change: Partial<Place>) => void;
     onZoom: () => void;
     children: ReactNode;
 }) {
     const el = useRef<HTMLDivElement>(null);
     const drag = useRef<{ x: number; y: number; dx: number; dy: number; min: [number, number]; max: [number, number] } | null>(null);
     const [dragging, setDragging] = useState(false);
+    const resize = useRef<{ edge: string; x: number; y: number; width: number; height: number; dx: number; dy: number; room: { left: number; top: number; right: number; bottom: number } } | null>(null);
 
     const inTitleBar = (e: { clientY: number; target: EventTarget }) => {
         const r = el.current!.getBoundingClientRect();
@@ -393,7 +413,11 @@ function Frame({ app, desk, label, className, top, z, hidden, place, onRaise, on
                 !dragging && "transition-[top,left,right,bottom] duration-200",
                 dragging && "select-none",
             )}
-            style={place.zoomed ? { zIndex: z, top: 28, left: 0, right: 0, bottom: 0 } : { zIndex: z, top, transform: `translate(${place.dx}px, ${place.dy}px)` }}
+            style={place.zoomed ? { zIndex: z, top: 28, left: 0, right: 0, bottom: 0 } : {
+                zIndex: z, top, transform: `translate(${place.dx}px, ${place.dy}px)`,
+                ...(place.width ? { width: place.width, right: "auto" } : {}),
+                ...(place.height ? { height: place.height, bottom: "auto" } : {}),
+            }}
             onPointerDownCapture={onRaise}
             onPointerDown={(e) => {
                 if (e.button !== 0 || place.zoomed || !inTitleBar(e)) return;
@@ -413,7 +437,7 @@ function Frame({ app, desk, label, className, top, z, hidden, place, onRaise, on
                 const g = drag.current;
                 if (!g) return;
                 const clamp = (v: number, i: 0 | 1) => Math.min(g.max[i], Math.max(g.min[i], v));
-                onMove(clamp(g.dx + e.clientX - g.x, 0), clamp(g.dy + e.clientY - g.y, 1));
+                onPlace({ dx: clamp(g.dx + e.clientX - g.x, 0), dy: clamp(g.dy + e.clientY - g.y, 1) });
             }}
             onPointerUp={() => {
                 drag.current = null;
@@ -426,6 +450,53 @@ function Frame({ app, desk, label, className, top, z, hidden, place, onRaise, on
             onDoubleClick={(e) => inTitleBar(e) && onZoom()}
         >
             {children}
+            {!place.zoomed && EDGES.map(([edge, position]) => (
+                <span
+                    key={edge}
+                    aria-hidden
+                    className={cn("absolute z-20 touch-none", position)}
+                    onPointerDown={(e) => {
+                        if (e.button !== 0) return;
+                        e.stopPropagation();
+                        e.preventDefault();
+                        const r = el.current!.getBoundingClientRect();
+                        const d = desk.current!.getBoundingClientRect();
+                        resize.current = {
+                            edge, x: e.clientX, y: e.clientY, width: r.width, height: r.height, dx: place.dx, dy: place.dy,
+                            room: { left: r.left - d.left, top: r.top - d.top - 28, right: d.right - r.right, bottom: d.bottom - r.bottom },
+                        };
+                        e.currentTarget.setPointerCapture(e.pointerId);
+                        setDragging(true);
+                    }}
+                    onPointerMove={(e) => {
+                        const g = resize.current;
+                        if (!g) return;
+                        const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
+                        const change: Partial<Place> = { width: g.width, height: g.height };
+                        if (g.edge.includes("e")) change.width = clamp(g.width + e.clientX - g.x, MIN_WIDTH, g.width + g.room.right);
+                        if (g.edge.includes("w")) {
+                            const by = clamp(e.clientX - g.x, -g.room.left, g.width - MIN_WIDTH);
+                            change.width = g.width - by;
+                            change.dx = g.dx + by;
+                        }
+                        if (g.edge.includes("s")) change.height = clamp(g.height + e.clientY - g.y, MIN_HEIGHT, g.height + g.room.bottom);
+                        if (g.edge.includes("n")) {
+                            const by = clamp(e.clientY - g.y, -g.room.top, g.height - MIN_HEIGHT);
+                            change.height = g.height - by;
+                            change.dy = g.dy + by;
+                        }
+                        onPlace(change);
+                    }}
+                    onPointerUp={() => {
+                        resize.current = null;
+                        setDragging(false);
+                    }}
+                    onPointerCancel={() => {
+                        resize.current = null;
+                        setDragging(false);
+                    }}
+                />
+            ))}
         </div>
     );
 }

@@ -5,7 +5,8 @@ import { useLang, useText, type L } from "~/components/demo-text";
 import { ProductIcon } from "~/components/product-icon";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
-import { CONNECTOR_NAME, NATIVE_NAME, SUGGESTIONS, groupTitle, toolLabel, type Chat, type Message, type Tool } from "./conversations";
+import { CONNECTOR_NAME, NATIVE_NAME, SUGGESTIONS, groupTitle, toolLabel, type Attachment, type Chat, type Message, type Tool } from "./conversations";
+import { GeneratedImage, GeneratedVideo } from "./media";
 import { ACCENT, ACCENT_BG, BAR, BODY, BUBBLE, CAPSULE, CARD, FAINT, MUTED, SMALL, TEXT, TITLE, TOOL_ITEM } from "./ui";
 
 /** A reply on its way: thinking, then running its tool calls one `step` at a time, then typing out `shown` characters. */
@@ -22,7 +23,7 @@ export function ChatView({ chat, pending, model, models, focus, sidebarButton, o
     /** Puts the cursor in the message field; off until the visitor uses the window, so loading the page doesn't. */
     focus: boolean;
     sidebarButton: ReactNode;
-    onSend: (text: string) => void;
+    onSend: (text: string, files?: Attachment[]) => void;
     onPickModel: (name: string) => void;
     onNewChat: () => void;
 }) {
@@ -87,16 +88,28 @@ function MessageView({ message, phase, step, shown }: { message: Message; phase?
     const s = useText();
     if (message.role === "user") {
         return (
-            <div className="mb-6 flex justify-end">
-                <p className={cn("max-w-[80%] rounded-2xl px-3.5 py-2.5 whitespace-pre-wrap", BUBBLE)}>{s(message.text)}</p>
+            <div className="mb-6 flex flex-col items-end gap-1.5">
+                {message.attachments && (
+                    <div className="flex max-w-[80%] flex-wrap justify-end gap-1.5">
+                        {message.attachments.map((f, i) => f.url
+                            ? <img key={i} src={f.url} alt={f.name} className="max-h-32 max-w-[200px] rounded-xl object-cover shadow-sm" />
+                            : <FileChip key={i} file={f} />)}
+                    </div>
+                )}
+                {s(message.text) && <p className={cn("max-w-[80%] rounded-2xl px-3.5 py-2.5 whitespace-pre-wrap", BUBBLE)}>{s(message.text)}</p>}
             </div>
         );
     }
     if (phase === "thinking") return <p className={cn("mb-6 motion-safe:animate-pulse", MUTED)}>{s(["Thinking…", "正在思考…", "正在思考…"])}</p>;
     const text = shown === undefined ? s(message.text) : s(message.text).slice(0, shown);
+    // What the image and video tools made shows in the reply as soon as each call is done.
+    const made = (message.tools ?? []).slice(0, phase === "tool" ? step ?? 0 : undefined).filter((t) => t.kind === "image" || t.kind === "video");
     return (
         <div className="mb-6">
             {message.tools && <ToolGroup tools={message.tools} running={phase === "tool" ? step ?? 0 : undefined} />}
+            {made.map((t, i) => t.kind === "image"
+                ? <GeneratedImage key={i} art={t.art} size={t.size} saved={t.saved} />
+                : t.kind === "video" && <GeneratedVideo key={i} art={t.art} size={t.size} seconds={t.seconds} saved={t.saved} />)}
             {phase !== "tool" && <Rich text={text} />}
         </div>
     );
@@ -148,7 +161,10 @@ function AppIcons({ tools }: { tools: Tool[] }) {
     );
 }
 
-const NATIVE_ICON: Record<Tool["kind"], SymbolName> = { connector: "app.connected.to.app.below.fill", native: "calendar", command: "terminal", fetch: "network", file: "doc.text.magnifyingglass" };
+const NATIVE_ICON: Record<Tool["kind"], SymbolName> = {
+    connector: "app.connected.to.app.below.fill", native: "calendar", command: "terminal", fetch: "network", file: "doc.text.magnifyingglass",
+    edit: "square.and.pencil", image: "sparkles", video: "film",
+};
 
 /** One call: its icon and what it did, opening to what it sent and got back. */
 function ToolRow({ tool, running }: { tool: Tool; running: boolean }) {
@@ -204,7 +220,7 @@ function ToolDetail({ tool }: { tool: Tool }) {
                     </div>
                     <div className="px-2.5 pb-2.5 select-text">
                         <p><span className="font-bold text-[#e8915a]">&gt;</span> {tool.command}</p>
-                        <pre className="mt-1 whitespace-pre-wrap text-white/60">{tool.output}</pre>
+                        {tool.output && <pre className="mt-1 whitespace-pre-wrap text-white/60">{tool.output}</pre>}
                     </div>
                 </div>
             );
@@ -215,6 +231,36 @@ function ToolDetail({ tool }: { tool: Tool }) {
                     <p className={cn("truncate text-[11px]", ACCENT)}>{tool.url}</p>
                     <p className={cn("mt-1.5 whitespace-pre-wrap", MUTED)}>{tool.excerpt}</p>
                 </div>
+            );
+        case "edit":
+            return (
+                <div className="flex flex-col gap-1.5">
+                    <p className={cn("truncate font-mono text-[11px]", FAINT)}>{tool.path}</p>
+                    <pre className={cn(block, "p-0 py-1.5")}>
+                        {tool.diff.split("\n").map((line, i) => (
+                            <span
+                                key={i}
+                                className={cn(
+                                    "block px-2.5",
+                                    line.startsWith("+") && "bg-[#34c759]/15 text-[#1a7f37] dark:text-[#6fdc8c]",
+                                    line.startsWith("-") && "bg-[#ff3b30]/12 text-[#c4271d] dark:text-[#ff8a80]",
+                                    line.startsWith("@@") && FAINT,
+                                )}
+                            >
+                                {line || " "}
+                            </span>
+                        ))}
+                    </pre>
+                </div>
+            );
+        case "image":
+        case "video":
+            return (
+                <dl className={cn("grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 rounded-lg border border-black/8 p-2.5 dark:border-white/10", CARD)}>
+                    <dt className={FAINT}>{s(["Prompt", "提示词", "提示詞"])}</dt><dd className="select-text">{tool.prompt}</dd>
+                    <dt className={FAINT}>{s(["Size", "尺寸", "尺寸"])}</dt><dd>{tool.size}{tool.kind === "video" && ` · ${tool.seconds} s`}</dd>
+                    <dt className={FAINT}>{s(["Saved to", "保存到", "儲存到"])}</dt><dd className="font-mono text-[11px] select-text">{tool.saved}</dd>
+                </dl>
             );
     }
 }
@@ -249,32 +295,114 @@ function inline(text: string): ReactNode {
     );
 }
 
+const TEXT_FILE = /^text\/|json|xml|javascript|typescript/;
+const TEXT_NAME = /\.(md|markdown|txt|csv|tsv|json|ya?ml|toml|ini|log|swift|ts|tsx|js|jsx|py|rb|go|rs|java|c|h|cpp|sh|sql|html|css)$/i;
+
+/** What the page can tell about a file without sending it anywhere: an image's size, a text file's length. */
+async function readFile(file: File): Promise<Attachment> {
+    const base = { name: file.name, size: file.size, type: file.type };
+    if (file.type.startsWith("image/")) {
+        const url = URL.createObjectURL(file);
+        const img = new Image();
+        img.src = url;
+        try {
+            await img.decode();
+            return { ...base, url, width: img.naturalWidth, height: img.naturalHeight };
+        } catch {
+            return { ...base, url };
+        }
+    }
+    if ((TEXT_FILE.test(file.type) || TEXT_NAME.test(file.name)) && file.size < 2 * 1024 * 1024) {
+        const text = await file.text();
+        const first = text.split("\n").map((l) => l.trim()).find(Boolean) ?? "";
+        return { ...base, lines: text.split("\n").length, words: text.split(/\s+/).filter(Boolean).length, first: first.length > 60 ? `${first.slice(0, 58)}…` : first };
+    }
+    return base;
+}
+
+function FileChip({ file, onRemove }: { file: Attachment; onRemove?: () => void }) {
+    const s = useText();
+    const kb = file.size >= 1024 ** 2 ? `${(file.size / 1024 ** 2).toFixed(1)} MB` : `${Math.max(1, Math.round(file.size / 1024))} KB`;
+    return (
+        <span className={cn("relative flex max-w-[220px] items-center gap-2 rounded-xl border border-black/8 py-1.5 pr-3 pl-2 dark:border-white/10", CARD, SMALL)}>
+            {file.url ? (
+                <img src={file.url} alt="" className="size-8 shrink-0 rounded-md object-cover" />
+            ) : (
+                <span className={cn("flex size-8 shrink-0 items-center justify-center rounded-md bg-[#b4581f]/12", ACCENT)}><SFSymbol name="doc.text" className="size-4" /></span>
+            )}
+            <span className="min-w-0 leading-tight">
+                <span className="block truncate font-medium">{file.name}</span>
+                <span className={cn("block", FAINT)}>{kb}</span>
+            </span>
+            {onRemove && (
+                <button type="button" aria-label={s([`Remove ${file.name}`, `移除 ${file.name}`, `移除 ${file.name}`])} className="absolute -top-1.5 -right-1.5 flex size-4 items-center justify-center rounded-full bg-[#6d6d6d] text-white" onClick={onRemove}>
+                    <SFSymbol name="xmark" className="size-2" />
+                </button>
+            )}
+        </span>
+    );
+}
+
 function Composer({ model, models, busy, autoFocus, onSend, onPickModel }: {
     model: string;
     models: string[];
     busy: boolean;
     autoFocus: boolean;
-    onSend: (text: string) => void;
+    onSend: (text: string, files?: Attachment[]) => void;
     onPickModel: (name: string) => void;
 }) {
     const s = useText();
     const [text, setText] = useState("");
+    const [files, setFiles] = useState<Attachment[]>([]);
+    const [reading, setReading] = useState(0);
+    const [dropping, setDropping] = useState(false);
     const [picking, setPicking] = useState(false);
     const field = useRef<HTMLTextAreaElement>(null);
+    const picker = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (autoFocus) field.current?.focus({ preventScroll: true });
     }, [autoFocus]);
 
+    const attach = async (list: FileList | null) => {
+        if (!list?.length) return;
+        const chosen = [...list];
+        setReading((n) => n + chosen.length);
+        const read = await Promise.all(chosen.map(readFile));
+        setFiles((f) => [...f, ...read]);
+        setReading((n) => n - chosen.length);
+        field.current?.focus({ preventScroll: true });
+    };
+
+    const ready = (text.trim() || files.length) && !reading;
     const send = () => {
-        const value = text.trim();
-        if (!value || busy) return;
-        onSend(value);
+        if (!ready || busy) return;
+        onSend(text.trim(), files);
         setText("");
+        setFiles([]);
     };
 
     return (
-        <div className={cn("rounded-2xl px-3.5 pt-3 pb-2.5 shadow-[0_1px_3px_rgb(0_0_0/0.06)]", CARD)}>
+        <div
+            className={cn("rounded-2xl px-3.5 pt-3 pb-2.5 shadow-[0_1px_3px_rgb(0_0_0/0.06)] transition-shadow", CARD, dropping && "ring-2 ring-[#b4581f]/60")}
+            onDragOver={(e) => {
+                if (!e.dataTransfer.types.includes("Files")) return;
+                e.preventDefault();
+                setDropping(true);
+            }}
+            onDragLeave={() => setDropping(false)}
+            onDrop={(e) => {
+                e.preventDefault();
+                setDropping(false);
+                attach(e.dataTransfer.files);
+            }}
+        >
+            {(files.length > 0 || reading > 0) && (
+                <div className="mb-2 flex flex-wrap gap-2 pt-1">
+                    {files.map((f, i) => <FileChip key={`${f.name}-${i}`} file={f} onRemove={() => setFiles((all) => all.filter((_, j) => j !== i))} />)}
+                    {reading > 0 && <span className={cn("self-center motion-safe:animate-pulse", SMALL, FAINT)}>{s(["Reading…", "正在读取…", "正在讀取…"])}</span>}
+                </div>
+            )}
             <textarea
                 ref={field}
                 rows={2}
@@ -290,8 +418,20 @@ function Composer({ model, models, busy, autoFocus, onSend, onPickModel }: {
                     }
                 }}
             />
+            <input
+                ref={picker}
+                type="file"
+                multiple
+                hidden
+                onChange={(e) => {
+                    attach(e.target.files);
+                    e.target.value = "";
+                }}
+            />
             <div className="flex items-center gap-3">
-                <SFSymbol name="plus" className={cn("size-3.5", MUTED)} />
+                <button type="button" aria-label={s(["Attach Files", "添加文件", "加入檔案"])} title={s(["Attach Files", "添加文件", "加入檔案"])} className={cn("-ml-1 flex size-6 items-center justify-center rounded-full hover:bg-black/6 dark:hover:bg-white/10", MUTED)} onClick={() => picker.current?.click()}>
+                    <SFSymbol name="plus" className="size-3.5" />
+                </button>
                 <div className="relative ml-auto min-w-0">
                     <button type="button" className={cn("flex max-w-full items-center gap-1 text-[13px]", ACCENT)} onClick={() => setPicking((p) => !p)}>
                         <SFSymbol name="chevron.down" className="size-2.5 shrink-0" />
@@ -320,11 +460,11 @@ function Composer({ model, models, busy, autoFocus, onSend, onPickModel }: {
                 </div>
                 <button
                     type="button"
-                    aria-label={text.trim() ? s(["Send", "发送", "傳送"]) : s(["Voice", "语音", "語音"])}
+                    aria-label={ready ? s(["Send", "发送", "傳送"]) : s(["Voice", "语音", "語音"])}
                     className={cn("flex size-7 shrink-0 items-center justify-center rounded-full transition-opacity", ACCENT_BG, busy && "opacity-50")}
                     onClick={send}
                 >
-                    {text.trim() ? <SFSymbol name="arrow.up" className="size-3.5" /> : <SFSymbol name="waveform" className="size-3.5" />}
+                    {ready ? <SFSymbol name="arrow.up" className="size-3.5" /> : <SFSymbol name="waveform" className="size-3.5" />}
                 </button>
             </div>
         </div>
