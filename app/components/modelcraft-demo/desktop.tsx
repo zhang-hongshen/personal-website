@@ -13,7 +13,7 @@ import { CONNECTORS } from "./data";
 import { FinderWindow, folderTitle, type FolderId } from "./finder";
 import { AppleLogo, MenuBar, Spotlight, type Menu, type MenuItem } from "./menubar";
 
-// The Mac around the ModelCraft window: a wallpaper with a few icons, the menu bar and a Dock with Finder,
+// The Mac around the ModelCraft window: a wallpaper, the menu bar and a Dock with Finder,
 // ModelCraft and the apps it connects to. Each app opens as a window running its own full demo; windows
 // drag by their title bar, zoom, minimize and close, and the menus, Spotlight and Control Center work.
 
@@ -108,7 +108,6 @@ function Session({ onRestart, children }: { onRestart: () => void; children: (ap
     const [places, setPlaces] = useState<Partial<Record<AppKey, Place>>>({});
     const [bounce, setBounce] = useState<{ app: AppKey; n: number } | null>(null);
     const [finderAt, setFinderAt] = useState<{ folder: FolderId; n: number } | null>(null);
-    const [selectedIcon, setSelectedIcon] = useState<string | null>(null);
     const [spotlight, setSpotlight] = useState(false);
     const [dialog, setDialog] = useState<Dialog | null>(null);
     const [screen, setScreen] = useState<"on" | "sleep" | "locked">("on");
@@ -188,8 +187,7 @@ function Session({ onRestart, children }: { onRestart: () => void; children: (ap
                 }
             }}
         >
-            <Wallpaper onClick={() => setSelectedIcon(null)} />
-            <DesktopIcons selected={selectedIcon} onSelect={setSelectedIcon} onOpen={openFolder} />
+            <Wallpaper />
 
             <MenuBar
                 menus={menus}
@@ -429,9 +427,9 @@ function Frame({ app, desk, label, className, top, z, hidden, place, onRaise, on
     );
 }
 
-function Wallpaper({ onClick }: { onClick: () => void }) {
+function Wallpaper() {
     return (
-        <div aria-hidden className="absolute inset-0" onClick={onClick}>
+        <div aria-hidden className="absolute inset-0">
             <div
                 className="absolute inset-0 bg-[#f6d9bf] dark:hidden"
                 style={{ backgroundImage: "radial-gradient(120% 90% at 0% 0%, rgb(255 190 140 / 0.9), transparent 60%), radial-gradient(90% 80% at 100% 10%, rgb(214 150 220 / 0.55), transparent 60%), radial-gradient(120% 90% at 60% 110%, rgb(224 120 70 / 0.75), transparent 60%)" }}
@@ -451,57 +449,6 @@ function FolderIcon({ className }: { className?: string }) {
             <rect x="4" y="13" width="56" height="35" rx="4" fill="#79c3fb" />
             <rect x="4" y="13" width="56" height="2" fill="#a8d8ff" />
         </svg>
-    );
-}
-
-function DriveIcon({ className }: { className?: string }) {
-    return (
-        <svg viewBox="0 0 64 52" aria-hidden className={className}>
-            <rect x="4" y="12" width="56" height="30" rx="5" fill="#d9d9de" stroke="#a3a3aa" />
-            <rect x="4" y="12" width="56" height="10" rx="5" fill="#ececf0" />
-            <circle cx="52" cy="34" r="2" fill="#34c759" />
-            <rect x="12" y="32" width="24" height="3" rx="1.5" fill="#a3a3aa" />
-        </svg>
-    );
-}
-
-function PdfIcon({ className }: { className?: string }) {
-    return (
-        <svg viewBox="0 0 64 52" aria-hidden className={className}>
-            <path d="M18 2h20l10 10v38H18z" fill="#fff" stroke="#c7c7cc" />
-            <path d="M38 2v10h10" fill="#ececf0" stroke="#c7c7cc" />
-            <rect x="21" y="30" width="24" height="10" rx="2" fill="#e5484d" />
-            <text x="33" y="38" textAnchor="middle" fontSize="8" fontWeight="700" fill="#fff" fontFamily="-apple-system, sans-serif">PDF</text>
-        </svg>
-    );
-}
-
-/** Icons on the wallpaper: click to select, double-click to open in Finder. */
-function DesktopIcons({ selected, onSelect, onOpen }: { selected: string | null; onSelect: (id: string | null) => void; onOpen: (folder: FolderId) => void }) {
-    const s = useText();
-    const icons: { id: string; label: L; icon: ReactNode; folder: FolderId }[] = [
-        { id: "hd", label: ["Macintosh HD", "Macintosh HD", "Macintosh HD"], icon: <DriveIcon className="size-12" />, folder: "applications" },
-        { id: "documents", label: folderTitle("documents"), icon: <FolderIcon className="size-12" />, folder: "documents" },
-        { id: "plan", label: ["Lumen 2.0 launch plan.pdf", "Lumen 2.0 发布计划.pdf", "Lumen 2.0 發佈計畫.pdf"], icon: <PdfIcon className="size-12" />, folder: "desktop" },
-    ];
-    return (
-        <div className="absolute top-10 right-3 z-[1] hidden w-[92px] flex-col gap-3 sm:flex">
-            {icons.map((icon) => (
-                <button
-                    key={icon.id}
-                    type="button"
-                    aria-pressed={selected === icon.id}
-                    className="flex flex-col items-center gap-0.5 text-center"
-                    onClick={() => onSelect(icon.id)}
-                    onDoubleClick={() => onOpen(icon.folder)}
-                >
-                    <span className={cn("rounded-md p-1", selected === icon.id && "bg-black/15 dark:bg-white/20")}>{icon.icon}</span>
-                    <span className={cn("line-clamp-2 rounded px-1 text-[11px] leading-tight font-medium text-[#1d1d1f] [text-shadow:0_1px_2px_rgb(255_255_255/0.5)] dark:text-white dark:[text-shadow:0_1px_2px_rgb(0_0_0/0.6)]", selected === icon.id && "bg-[#0a82ff] text-white [text-shadow:none]")}>
-                        {s(icon.label)}
-                    </span>
-                </button>
-            ))}
-        </div>
     );
 }
 
