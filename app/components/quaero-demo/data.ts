@@ -1,14 +1,23 @@
-// What the Quaero demo connects to: a PostgreSQL shop, a MySQL analytics database and a SQLite file,
-// each a few small tables held in the page.
+import { embedding } from "./vector";
 
-export type Kind = "postgresql" | "mysql" | "sqlite";
+// What the Quaero demo connects to: a PostgreSQL shop (with a pgvector column), a MySQL analytics
+// database, a SQLite file, and the vector databases Qdrant and Milvus, each a few small tables or
+// collections held in the page. Vectors are 48-dimensional and grouped by topic, so similar items
+// really are near each other.
+
+export type Kind = "postgresql" | "mysql" | "sqlite" | "qdrant" | "milvus";
 export type Value = string | number | boolean | null;
 export type Column = { name: string; type: string; nullable: boolean; default?: string; key?: boolean; comment?: string };
-export type Table = { name: string; kind: "table" | "view"; comment?: string; columns: Column[]; rows: Value[][] };
+export type Table = { name: string; kind: "table" | "view" | "collection"; comment?: string; columns: Column[]; rows: Value[][]; /** A collection's configuration, shown where SQL tables show CREATE. */ config?: unknown; /** CREATE INDEX statements, appended to CREATE. */ indexes?: string[] };
 export type Database = { name: string; tables: Table[] };
 export type Connection = { id: string; name: string; kind: Kind; summary: string; databases: Database[] };
 
-export const KIND_NAME: Record<Kind, string> = { postgresql: "PostgreSQL", mysql: "MySQL", sqlite: "SQLite" };
+export const KIND_NAME: Record<Kind, string> = { postgresql: "PostgreSQL", mysql: "MySQL", sqlite: "SQLite", qdrant: "Qdrant", milvus: "Milvus" };
+
+/** Vector databases take REST requests in the console instead of SQL. */
+export const isVectorDB = (kind: Kind) => kind === "qdrant" || kind === "milvus";
+
+const DIMS = 48;
 
 const col = (name: string, type: string, extra: Partial<Column> = {}): Column => ({ name, type, nullable: false, ...extra });
 
@@ -40,14 +49,18 @@ const products: Table = {
         col("name", "text"),
         col("price", "numeric(8,2)"),
         col("in_stock", "boolean", { default: "true" }),
+        col("embedding", `vector(${DIMS})`, { nullable: true, comment: "Description embedding" }),
     ],
     rows: [
-        [1, "Film Presets Pack", 4.99, true],
-        [2, "Portrait Presets", 2.99, true],
-        [3, "Night City Looks", 9.99, true],
-        [4, "Black & White Classics", 2.99, false],
-        [5, "Pro Bundle", 19.99, true],
+        [1, "Film Presets Pack", 4.99, true, embedding(0, 1, DIMS)],
+        [2, "Portrait Presets", 2.99, true, embedding(4, 2, DIMS)],
+        [3, "Night City Looks", 9.99, true, embedding(5, 3, DIMS)],
+        [4, "Black & White Classics", 2.99, false, embedding(0, 4, DIMS)],
+        [5, "Pro Bundle", 19.99, true, embedding(0, 5, DIMS)],
+        [6, "Neon Nights", 4.99, true, embedding(5, 6, DIMS)],
+        [7, "Soft Skin Tones", 2.99, true, embedding(4, 7, DIMS)],
     ],
+    indexes: ["CREATE INDEX products_embedding_idx ON public.products USING hnsw (embedding vector_cosine_ops);"],
 };
 
 const orders: Table = {
@@ -121,6 +134,69 @@ const tags: Table = {
     rows: [[1, "home"], [3, "travel"], [3, "japan"], [4, "people"]],
 };
 
+const ARTICLES: [string, number, string, string, number][] = [
+    ["Shooting film at night", 5, "en", "2026-09-14", 4810],
+    ["Night street photography", 5, "en", "2026-08-02", 3922],
+    ["霓虹与长曝光", 5, "zh", "2026-07-21", 2150],
+    ["Pushing Portra 400 two stops", 0, "en", "2026-10-03", 6120],
+    ["Developing black and white at home", 0, "en", "2026-06-18", 2875],
+    ["Choosing a 35mm lens", 0, "en", "2026-05-09", 5304],
+    ["Five days in Kyoto on foot", 1, "en", "2026-10-11", 7012],
+    ["清晨的伏见稻荷", 1, "zh", "2026-09-27", 3388],
+    ["A rail pass guide for Japan", 1, "en", "2026-04-30", 4471],
+    ["Miso ramen at home", 2, "en", "2026-08-25", 2961],
+    ["The best bakeries in Lyon", 2, "en", "2026-03-15", 1840],
+    ["大阪的街头小吃", 2, "zh", "2026-07-04", 2607],
+];
+const ids = ["a91f2c0e", "c4e8a9f2", "e9f8a7b6", "b07d33a1", "d1a2b3c4", "f30c9e17", "1b6d0a42", "5e7f2c88", "8a3d4f10", "2c9b7e55", "7d4e1a93", "9f0c6b21"];
+
+const articles: Table = {
+    name: "articles", kind: "collection",
+    columns: [
+        col("id", "uuid", { key: true }),
+        col("vector", `vector(${DIMS}, Cosine)`),
+        col("lang", "keyword", { nullable: true, comment: "Indexed" }),
+        col("published", "datetime", { nullable: true }),
+        col("title", "text", { nullable: true, comment: "Indexed" }),
+        col("views", "integer", { nullable: true }),
+    ],
+    rows: ARTICLES.map(([title, topic, lang, published, views], i) => [ids[i], embedding(topic, 100 + i, DIMS), lang, published, title, views]),
+    config: {
+        params: { vectors: { size: DIMS, distance: "Cosine" }, shard_number: 1, replication_factor: 1, on_disk_payload: true },
+        hnsw_config: { m: 16, ef_construct: 100, full_scan_threshold: 10000 },
+        optimizer_config: { indexing_threshold: 20000, flush_interval_sec: 5 },
+        payload_schema: { lang: { data_type: "keyword" }, title: { data_type: "text" } },
+    },
+};
+
+const IMAGES: [string, number, number, number][] = [
+    ["Neon sign above a ramen bar", 5, 1600, 1067], ["Rainy crossing at night", 5, 1920, 1280], ["Taxi lights on a wet street", 5, 1600, 1200],
+    ["Contact sheet of a portrait session", 0, 2400, 1800], ["Film canisters on a desk", 0, 1600, 1600],
+    ["Torii gates in morning light", 1, 1280, 1920], ["Bamboo grove path", 1, 1280, 1920], ["Shinkansen at the platform", 1, 1920, 1080],
+    ["Croissants cooling on a rack", 2, 1600, 1067], ["Takoyaki stall in Dotonbori", 2, 1920, 1280],
+];
+const images: Table = {
+    name: "images", kind: "collection", comment: "Photo search",
+    columns: [
+        col("id", "Int64", { key: true }),
+        col("embedding", `FloatVector(${DIMS}, COSINE)`, { comment: "CLIP image embedding" }),
+        col("caption", "VarChar(256)", { nullable: true }),
+        col("width", "Int32"),
+        col("height", "Int32"),
+    ],
+    rows: IMAGES.map(([caption, topic, w, h], i) => [460_000_001 + i, embedding(topic, 200 + i, DIMS), caption, w, h]),
+    config: {
+        collectionName: "images", description: "Photo search", autoId: false, consistencyLevel: "Bounded", load: "LoadStateLoaded",
+        fields: [
+            { name: "id", type: "Int64", primaryKey: true },
+            { name: "embedding", type: "FloatVector", params: [{ key: "dim", value: String(DIMS) }] },
+            { name: "caption", type: "VarChar", params: [{ key: "max_length", value: "256" }] },
+            { name: "width", type: "Int32" }, { name: "height", type: "Int32" },
+        ],
+        indexes: [{ fieldName: "embedding", indexName: "embedding_hnsw", metricType: "COSINE" }],
+    },
+};
+
 export const CONNECTIONS: Connection[] = [
     {
         id: "shop", name: "shop", kind: "postgresql", summary: "postgres@localhost:5432",
@@ -133,6 +209,14 @@ export const CONNECTIONS: Connection[] = [
     {
         id: "notes", name: "notes.sqlite", kind: "sqlite", summary: "notes.sqlite",
         databases: [{ name: "main", tables: [notes, tags] }],
+    },
+    {
+        id: "vectors", name: "vectors", kind: "qdrant", summary: "localhost:6333",
+        databases: [{ name: "localhost:6333", tables: [articles] }],
+    },
+    {
+        id: "search", name: "search", kind: "milvus", summary: "root@localhost:19530",
+        databases: [{ name: "default", tables: [images] }, { name: "staging", tables: [] }],
     },
 ];
 
@@ -147,10 +231,13 @@ export const SAMPLE_SQL: Record<Kind, string> = {
     postgresql: "SELECT status, count(*), sum(total)\nFROM orders\nGROUP BY status\nORDER BY count DESC;",
     mysql: "SELECT name, count(*) AS events\nFROM events\nGROUP BY name\nORDER BY events DESC;",
     sqlite: "SELECT title FROM notes WHERE pinned = 1;",
+    qdrant: "// A request line, then an optional JSON body\nPOST /collections/articles/points/scroll\n{\"limit\": 5, \"filter\": {\"must\": [{\"key\": \"lang\", \"match\": {\"value\": \"en\"}}]}}",
+    milvus: "POST /v2/vectordb/entities/query\n{\"collectionName\": \"images\", \"filter\": \"width >= 1600\", \"limit\": 10, \"outputFields\": [\"id\", \"caption\", \"width\"]}",
 };
 
 /** The CREATE statement the Table Info inspector shows, built from the columns as each database prints it. */
 export function createStatement(kind: Kind, table: Table): string {
+    if (table.config) return JSON.stringify(table.config, null, 2);
     if (table.kind === "view") return `CREATE VIEW ${table.name} AS\n  SELECT customer_id, count(*) AS orders, sum(total) AS revenue\n  FROM orders WHERE status = 'paid'\n  GROUP BY customer_id;`;
     const q = (n: string) => (kind === "mysql" ? `\`${n}\`` : n);
     const lines = table.columns.map((c) => {
@@ -162,5 +249,6 @@ export function createStatement(kind: Kind, table: Table): string {
     if (key.length) lines.push(`  ${kind === "postgresql" ? `CONSTRAINT ${table.name.split(".").pop()}_pkey ` : ""}PRIMARY KEY (${key.join(", ")})`);
     const tail = kind === "mysql" ? ` ENGINE=InnoDB DEFAULT CHARSET=utf8mb4${table.comment ? ` COMMENT='${table.comment}'` : ""};` : ";";
     const comment = kind === "postgresql" && table.comment ? `\n\nCOMMENT ON TABLE ${table.name} IS '${table.comment}';` : "";
-    return `CREATE TABLE ${q(table.name)} (\n${lines.join(",\n")}\n)${tail}${comment}`;
+    const indexes = table.indexes?.length ? `\n\n${table.indexes.join("\n")}` : "";
+    return `CREATE TABLE ${q(table.name)} (\n${lines.join(",\n")}\n)${tail}${indexes}${comment}`;
 }

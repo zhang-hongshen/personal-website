@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react";
 
-import { MAC, SearchField } from "~/components/mac-ui";
+import { MAC, Popover, SearchField, ToolButton } from "~/components/mac-ui";
+import { CAPSULE } from "~/components/mac-window";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { TYPES, glob, remaining, type Entry, type KeyType } from "./data";
@@ -36,11 +37,13 @@ function tree(keys: string[]): Folder {
     return root;
 }
 
-export function KeyBrowser({ db, selected, now, type, asTree, onSelect }: {
+export function KeyBrowser({ db, selected, now, type, asTree, onType, onAsTree, onSelect }: {
     db: Record<string, Entry>;
-    /** The toolbar's type filter and view, as folders or a flat list. */
+    /** The type filter and the view, as folders or a flat list, beside the search field. */
     type: KeyType | "all";
     asTree: boolean;
+    onType: (type: KeyType | "all") => void;
+    onAsTree: (asTree: boolean) => void;
     selected: string | null;
     /** The current time once the page runs, for TTLs; null while prerendering. */
     now: number | null;
@@ -48,6 +51,7 @@ export function KeyBrowser({ db, selected, now, type, asTree, onSelect }: {
 }) {
     const [pattern, setPattern] = useState("");
     const [collapsed, setCollapsed] = useState<string[]>([]);
+    const [picking, setPicking] = useState(false);
 
     const keys = Object.keys(db)
         .filter((k) => (type === "all" || db[k].data.type === type) && (!pattern.trim() || glob(pattern.includes("*") || pattern.includes("?") ? pattern.trim() : `*${pattern.trim()}*`, k)))
@@ -98,7 +102,19 @@ export function KeyBrowser({ db, selected, now, type, asTree, onSelect }: {
     return (
         <div className="flex min-h-0 flex-1 flex-col">
             <div className="flex items-center gap-1.5 px-3 pb-2">
-                <SearchField value={pattern} placeholder="Filter keys, e.g. user:*" onChange={setPattern} className="w-full" />
+                <SearchField value={pattern} placeholder="Filter keys, e.g. user:*" onChange={setPattern} className="min-w-0 flex-1" />
+                <div className={cn(CAPSULE, "relative gap-0.5 px-0.5")}>
+                    <ToolButton grouped icon="line.3.horizontal.decrease.circle" label="Type" active={type !== "all" || picking} onClick={() => setPicking((p) => !p)} />
+                    <ToolButton grouped icon={asTree ? "list.bullet.indent" : "list.bullet"} label={asTree ? "View as List" : "View as Folders"} onClick={() => onAsTree(!asTree)} className="size-3.5" />
+                    <Popover open={picking} onClose={() => setPicking(false)} className="w-40">
+                        {(["all", ...Object.keys(TYPES)] as (KeyType | "all")[]).map((t) => (
+                            <button key={t} type="button" className="flex w-full items-center gap-2 rounded-md px-2 py-1 text-left hover:bg-[#007aff] hover:text-white" onClick={() => { onType(t); setPicking(false); }}>
+                                <SFSymbol name="checkmark" className={cn("size-2.5", t !== type && "invisible")} />
+                                {t === "all" ? "All Types" : TYPES[t].name}
+                            </button>
+                        ))}
+                    </Popover>
+                </div>
             </div>
             <div className="flex min-h-0 flex-1 flex-col gap-px overflow-y-auto pb-3">
                 {asTree ? [...root.folders.flatMap((f) => folder(f, 0)), ...root.keys.map((k) => row(k, k, 0))] : keys.map((k) => row(k, k, 0))}

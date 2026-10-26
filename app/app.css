@@ -225,6 +225,16 @@
     stroke-dasharray: 14 86;
     animation: ring-flow 2.7s linear infinite;
 }
+/* A Dock icon bouncing while its app is being used (ModelCraft demo). */
+.dock-bounce { animation: dock-bounce 0.7s ease-out 2; }
+@keyframes dock-bounce {
+    0%, 100% { transform: translateY(0); }
+    35% { transform: translateY(-38%); }
+    65% { transform: translateY(0); }
+    80% { transform: translateY(-10%); }
+}
+@media (prefers-reduced-motion: reduce) { .dock-bounce { animation: none; } }
+
 @keyframes ring-orbit { to { stroke-dashoffset: -48; } }
 @keyframes ring-flow { from { stroke-dashoffset: 14; } to { stroke-dashoffset: -86; } }
 

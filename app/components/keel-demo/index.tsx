@@ -6,7 +6,7 @@ import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { KeyBrowser } from "./browser";
 import { Console, type Line } from "./console";
-import { TYPES, newServer, servers as initialServers, type KeyType, type Server } from "./data";
+import { newServer, servers as initialServers, type KeyType, type Server } from "./data";
 import { InsightsPage, PAGES, type Page } from "./insights";
 import { expire } from "./redis";
 import { TTLBar, ValueEditor, keySubtitle } from "./value";
@@ -24,12 +24,13 @@ export function KeelDemo({ className }: { className?: string }) {
     const [dbs, setDbs] = useState<Record<string, number>>({});
     const [keys, setKeys] = useState<Record<string, string | null>>({ local: "user:1001" });
     const [mode, setMode] = useState<"browse" | "insights">("browse");
+    // The Browse tab's type filter and view, kept while Insights is shown.
     const [type, setType] = useState<KeyType | "all">("all");
     const [asTree, setAsTree] = useState(true);
     const [page, setPage] = useState<Page>("overview");
     const [consoleOpen, setConsoleOpen] = useState(false);
     const [lines, setLines] = useState<Record<string, Line[]>>({});
-    const [menu, setMenu] = useState<"expiry" | "delete" | "type" | null>(null);
+    const [menu, setMenu] = useState<"expiry" | "delete" | null>(null);
     // Narrow screens show the key list or the detail, not both.
     const [showDetail, setShowDetail] = useState(false);
     // The clock for TTLs, null until the page runs so prerendered HTML doesn't depend on the build time.
@@ -111,29 +112,13 @@ export function KeelDemo({ className }: { className?: string }) {
                     >
                         {server.keyspace.map((d, i) => <option key={i} value={i}>db{i}{Object.keys(d).length ? ` · ${Object.keys(d).length}` : ""}</option>)}
                     </select>
-                    <div className={cn(CAPSULE, "relative gap-0.5 px-0.5")}>
-                        {mode === "browse" && (
-                            <>
-                                <ToolButton grouped icon="line.3.horizontal.decrease.circle" label="Type" active={type !== "all" || menu === "type"} onClick={() => setMenu((m) => (m === "type" ? null : "type"))} />
-                                <ToolButton grouped icon={asTree ? "list.bullet.indent" : "list.bullet"} label={asTree ? "View as List" : "View as Folders"} onClick={() => setAsTree((v) => !v)} className="size-3.5" />
-                            </>
-                        )}
-                        <span className="md:hidden">{consoleButton}</span>
-                        <Popover open={menu === "type"} onClose={() => setMenu(null)} className="w-40">
-                            {(["all", ...Object.keys(TYPES)] as (KeyType | "all")[]).map((t) => (
-                                <button key={t} type="button" className="flex w-full items-center gap-2 rounded-md px-2 py-1 text-left hover:bg-[#007aff] hover:text-white" onClick={() => { setType(t); setMenu(null); }}>
-                                    <SFSymbol name="checkmark" className={cn("size-2.5", t !== type && "invisible")} />
-                                    {t === "all" ? "All Types" : TYPES[t].name}
-                                </button>
-                            ))}
-                        </Popover>
-                    </div>
+                    <span className="md:hidden"><div className={cn(CAPSULE, "px-0.5")}>{consoleButton}</div></span>
                 </TitleBar>
                 <div className="px-3 pb-2">
                     <Segmented options={[{ value: "browse", label: "Browse" }, { value: "insights", label: "Insights" }]} value={mode} onChange={setMode} className="w-full" />
                 </div>
                 {mode === "browse" ? (
-                    <KeyBrowser db={db} selected={keyName} now={now} type={type} asTree={asTree} onSelect={selectKey} />
+                    <KeyBrowser db={db} selected={keyName} now={now} type={type} asTree={asTree} onType={setType} onAsTree={setAsTree} onSelect={selectKey} />
                 ) : (
                     <nav className="flex flex-col gap-0.5 overflow-y-auto pb-3">
                         {PAGES.map((group) => (

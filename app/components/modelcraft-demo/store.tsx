@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { Link } from "react-router";
 
 import { Spinner } from "~/components/mac-ui";
 import { ProductIcon } from "~/components/product-icon";
@@ -166,7 +167,9 @@ export function ConnectorsView({ installed, sidebarButton, onToggle }: {
                     <article key={c.name} className={cn("flex items-center gap-3 rounded-xl p-4", CARD)}>
                         <ProductIcon id={c.id} className="size-11 shrink-0" width={44} height={44} />
                         <div className="min-w-0 flex-1">
-                            <h5 className="text-[17px] font-semibold" style={{ fontFamily: "ui-rounded, -apple-system, system-ui, sans-serif" }}>{c.name}</h5>
+                            <h5 className="text-[17px] font-semibold" style={{ fontFamily: "ui-rounded, -apple-system, system-ui, sans-serif" }}>
+                                <Link to={`/products/${c.id}/`} className="hover:underline">{c.name}</Link>
+                            </h5>
                             <p className={cn("text-[13px]", MUTED)}>{c.summary}</p>
                         </div>
                         {installing === c.name ? (

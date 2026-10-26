@@ -46,10 +46,10 @@
     "run_linux_containers_on_your_mac": "Run Linux containers on your Mac. Pick an image, set ports and folders, and it's running in seconds.",
     "notes_and_databases": "Notes and databases",
     "pages_tables_and_databases_that": "Notes, tables and databases, all kept locally. Write, organize and find anything — even offline.",
-    "sql_client": "SQL client",
-    "a_native_sql_client_for": "A native SQL client for MySQL, PostgreSQL and SQLite. Quick to open and smooth to use — browse tables, edit rows and run queries.",
     "trackpad_scale": "Trackpad scale",
-    "weigh_light_objects_on_your": "Weigh light objects on your MacBook's trackpad. Tare, hold, count pieces and calibrate — like a real scale."
+    "weigh_light_objects_on_your": "Weigh light objects on your MacBook's trackpad. Tare, hold, count pieces and calibrate — like a real scale.",
+    "database_client": "Database client",
+    "a_native_client_for_sql_and": "A native client for SQL and vector databases: MySQL, PostgreSQL, SQLite, Qdrant and Milvus. Browse tables and collections, edit rows, run queries and find similar vectors."
   },
   "modelcraft": {
     "ai_that_runs_entirely_on": "AI that runs entirely locally",
@@ -77,7 +77,7 @@
     "conversations_are_processed_on_device": "Conversations are processed locally. The network is used only to download models or browse the web.",
     "integrations": "Integrations",
     "works_your_other_apps_for": "Works your other apps for you",
-    "modelcraft_connects_to_arthub_and": "ModelCraft connects to Arthub, Cellar, Keel and TuneStudio and acts on your behalf. Ask for a film and it starts playing; ask about a key and it looks it up in Redis. More apps will follow.",
+    "modelcraft_connects_to_arthub_and": "ModelCraft connects to Arthub, Cellar, Container, Keel, Pinch, Quaero and TuneStudio and acts on your behalf. Ask for a film and it starts playing; ask about a key and it looks it up in Redis. More apps will follow.",
     "example_arthub": "“Play the next episode of my show in Arthub”",
     "example_keel": "“Which keys in Keel use the most memory?”",
     "meta": {
@@ -89,9 +89,14 @@
     "scheduled_tasks": "Scheduled Tasks",
     "runs_on_its_own_schedule": "Runs on its own schedule",
     "give_it_a_prompt_and_a_time": "Give it a prompt and a time. Every day or every week, it runs the task with your connected apps — a digest of today's notes, a movie for Friday night.",
-    "demo_chat": "Chat",
-    "demo_connectors": "Connectors",
-    "demo_hint": "Try it: send a message, open a reply's tool calls to see what it did, download a model, or add a scheduled task."
+    "demo_chat_title": "Ask, and it works your apps",
+    "demo_chat_body": "Replies come from the model on your Mac. Watch the Dock: each app ModelCraft uses bounces and opens a window with what it did. Click an icon to open it again.",
+    "demo_connectors_title": "Connect the apps you use",
+    "demo_connectors_body": "Container, Quaero, Keel, Cellar, Arthub, Pinch and TuneStudio. Once installed, ModelCraft can start a container, query a database and file the result in Cellar — several apps in a single reply.",
+    "demo_store_title": "Choose your model",
+    "demo_store_body": "Popular open models, ready to download. Switch between them right from the chat.",
+    "demo_tasks_title": "Let it run on schedule",
+    "demo_tasks_body": "A prompt and a time. It runs on its own with your connected apps and leaves the result in Recents."
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "Movies, shows and music. Beautifully organized",
@@ -126,7 +131,8 @@
     "meta": {
       "title": "Arthub",
       "description": "Arthub turns folders of movies, TV shows and music into a library, with artwork, cast, synced lyrics and subtitles."
-    }
+    },
+    "demo_hint": "Try it: open a movie and play it with subtitles, browse a show’s seasons, or play an album and follow along with its lyrics."
   },
   "keel": {
     "a_native_redis_client": "A native Redis client. Fast, fluid, instant",
@@ -203,7 +209,8 @@
     "meta": {
       "title": "TuneStudio",
       "description": "TuneStudio puts your singing on pitch — Auto Tune in one click, or adjust every note by hand."
-    }
+    },
+    "demo_hint": "Try it: press Play to hear the take, turn on Auto Tune or pick a style, drag a note up or down, and play it again. Hover the curve to read each pitch."
   },
   "container": {
     "meta": {
@@ -286,23 +293,19 @@
   "quaero": {
     "meta": {
       "title": "Quaero",
-      "description": "Quaero is a fast, native SQL client for MySQL, PostgreSQL and SQLite."
+      "description": "Quaero is a fast, native client for SQL and vector databases: MySQL, PostgreSQL, SQLite, Qdrant and Milvus."
     },
-    "a_native_sql_client": "A fast, native SQL client for MySQL, PostgreSQL and SQLite",
     "coming_soon": "Coming Soon",
     "requirements": "macOS 15 or later",
     "your_databases_at_a_glance": "Your databases at a glance",
     "connect_browse_query_and_export": "Connect, browse, query and export — native, quick to open and smooth to use.",
     "connections": "Connections",
-    "save_connections_to_mysql_postgresql": "Save connections to MySQL, PostgreSQL and SQLite, and test one before you save it.",
     "schema_browser": "Schema browser",
-    "databases_tables_and_views_with": "Databases, tables and views, with each table's columns, comments and CREATE statement.",
     "table_content": "Table content",
     "browse_rows_and_edit_cells": "Browse rows and edit cells in place. NULL and binary values are easy to tell apart.",
     "filters": "Filters",
     "combine_conditions_with_match_all": "Combine conditions with Match All or Match Any. The filter searches the whole table.",
     "sql_console": "SQL console",
-    "run_several_statements_at_once": "Run several statements at once and pick between their results.",
     "export": "Export",
     "save_rows_as_csv_or": "Save rows as CSV or an Excel workbook, or copy them straight into a spreadsheet.",
     "sql_next_to_your_rows": "SQL next to your rows",
@@ -314,9 +317,22 @@
     "tls_when_you_want_it": "TLS when you want it",
     "require_encryption_or_verify_the": "Require encryption, or verify the server's certificate and host name too.",
     "no_dependencies": "No dependencies",
-    "the_mysql_and_postgresql_protocols": "The MySQL and PostgreSQL protocols are built in. No drivers to install, nothing extra to slow it down.",
+    "the_mysql_and_postgresql_protocols": "The MySQL and PostgreSQL protocols are built in, and Qdrant and Milvus are reached through their REST APIs. No drivers to install.",
     "null_is_null": "NULL is NULL",
     "sql_null_shows_as_a": "SQL NULL shows as a badge, so it never looks like the text “NULL”.",
+    "a_native_client_for_sql_and": "A fast, native client for SQL and vector databases",
+    "save_connections_to_sql_and": "Save connections to MySQL, PostgreSQL, SQLite, Qdrant and Milvus, and test one before you save it.",
+    "databases_tables_views_and_collections": "Databases, tables, views and collections, with their columns, comments and CREATE statement or configuration.",
+    "console": "Console",
+    "run_sql_or_send_rest_requests": "Run several SQL statements at once and pick between their results, or send REST requests to Qdrant and Milvus.",
+    "vector_databases": "Vector databases",
+    "browse_qdrant_and_milvus_collections": "Browse Qdrant and Milvus collections like tables: points and entities as rows, payloads as columns, and filters turned into each database's own query.",
+    "vectors_you_can_read": "Vectors you can read",
+    "embeddings_show_as_a_color": "Embeddings show as a color fingerprint with their dimension, in pgvector columns too. Open one to see its statistics, heatmap and histogram.",
+    "find_similar_rows": "Find similar rows",
+    "right_click_a_vector_to": "Right-click a vector to find its nearest neighbors — by cosine, L2 or inner product in PostgreSQL, with the indexed metric marked.",
+    "meaning_not_just_matches": "Search by meaning, not just matches",
+    "connect_to_qdrant_or_milvus": "Connect to Qdrant or Milvus, or a PostgreSQL table with pgvector. Find Similar Rows sends the right search for each — an ORDER BY with the distance you pick, or the database's own query — and lists the nearest rows with their distance.",
     "demo_hint": "Try it: open a table, filter its rows, double-click a cell to edit it, or run SQL in the console."
   },
   "pinch": {
@@ -352,7 +368,8 @@
     "add_the_object": "Add the object",
     "place_the_object_on_your": "Place the object on your fingertip or nail.",
     "read_the_weight": "Read the weight",
-    "when_the_reading_settles_the": "When it settles, Stable lights up and the trackpad taps once."
+    "when_the_reading_settles_the": "When it settles, Stable lights up and the trackpad taps once.",
+    "demo_hint": "Try it: click the trackpad to rest a finger, put things from the desk on it, then tare, hold, count paper clips, or calibrate with the coin."
   },
   "about": {
     "software_engineer_backend_ai_agents": "Software Engineer · Backend, AI Agents & native macOS apps",

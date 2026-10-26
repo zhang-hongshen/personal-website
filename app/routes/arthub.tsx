@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 
+import { ArthubDemo } from "~/components/arthub-demo";
 import { Glyph } from "~/components/glyph";
 import {
     DownloadButton, Eyebrow, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Split, Statement, Tree,
@@ -52,7 +53,10 @@ export default function Arthub() {
                 tagline={t("arthub.movies_shows_and_music_beautifully")}
                 action={<DownloadButton repo="zhang-hongshen/Arthub" />}
                 note={t("arthub.apple_silicon_m1_or_later")}
-            />
+            >
+                <ArthubDemo className="mt-16" />
+                <p className="mt-5 text-center text-[13px] text-faint">{t("arthub.demo_hint")}</p>
+            </Hero>
 
             <Section>
                 <SectionTitle>{t("arthub.add_a_folder_arthub_does")}</SectionTitle>

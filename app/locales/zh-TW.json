@@ -46,10 +46,10 @@
     "run_linux_containers_on_your_mac": "在 Mac 上執行 Linux 容器。選好映像檔，設定連接埠和資料夾，幾秒就能跑起來。",
     "notes_and_databases": "筆記與資料庫",
     "pages_tables_and_databases_that": "筆記、表格與資料庫，全部保存在本機。書寫、整理、隨手找到，離線也能用。",
-    "sql_client": "SQL 用戶端",
-    "a_native_sql_client_for": "原生 SQL 用戶端，支援 MySQL、PostgreSQL 與 SQLite。開啟迅速、操作流暢，瀏覽資料表、編輯資料、執行查詢。",
     "trackpad_scale": "觸控式軌跡板秤",
-    "weigh_light_objects_on_your": "用 MacBook 的觸控式軌跡板秤輕巧的物件。扣重、鎖定、計數、校正，像一台真正的電子秤。"
+    "weigh_light_objects_on_your": "用 MacBook 的觸控式軌跡板秤輕巧的物件。扣重、鎖定、計數、校正，像一台真正的電子秤。",
+    "database_client": "資料庫用戶端",
+    "a_native_client_for_sql_and": "原生的 SQL 與向量資料庫用戶端，支援 MySQL、PostgreSQL、SQLite、Qdrant 和 Milvus。瀏覽表和集合、編輯資料、執行查詢，還能查找相似向量。"
   },
   "modelcraft": {
     "ai_that_runs_entirely_on": "AI，完全在本機執行",
@@ -77,7 +77,7 @@
     "conversations_are_processed_on_device": "對話全程在本機處理，僅在下載模型或瀏覽網頁時連網。",
     "integrations": "連動",
     "works_your_other_apps_for": "替你操作其他 App",
-    "modelcraft_connects_to_arthub_and": "ModelCraft 可與 Arthub、Cellar、Keel、TuneStudio 連動，直接替你動手：說想看哪部電影，它就開始播放；問起某個 Key，它就去 Redis 裡查。更多 App 將陸續支援。",
+    "modelcraft_connects_to_arthub_and": "ModelCraft 可與 Arthub、Cellar、Container、Keel、Pinch、Quaero、TuneStudio 連動，直接替你動手：說想看哪部電影，它就開始播放；問起某個 Key，它就去 Redis 裡查。更多 App 將陸續支援。",
     "example_arthub": "「在 Arthub 裡播放我在追的影集的下一集」",
     "example_keel": "「Keel 裡哪些 Key 最占記憶體？」",
     "meta": {
@@ -89,9 +89,14 @@
     "scheduled_tasks": "排程任務",
     "runs_on_its_own_schedule": "時間一到，自己開工",
     "give_it_a_prompt_and_a_time": "寫下要做的事，排好時間。每天或每週，它都會結合已連接的 App 準時完成：彙整今天的筆記，替你挑一部週五晚上的電影。",
-    "demo_chat": "對話",
-    "demo_connectors": "連接器",
-    "demo_hint": "試試看：傳一則訊息，展開回覆裡的工具呼叫看看它做了什麼，下載一個模型，或者新增一個排程任務。"
+    "demo_chat_title": "說一句，它替你操作 App",
+    "demo_chat_body": "回覆由你 Mac 上的模型生成。留意 Dock：ModelCraft 用到哪個 App，它的圖示就會跳動，並彈出視窗顯示做了什麼。點圖示可以再次打開。",
+    "demo_connectors_title": "連上你常用的 App",
+    "demo_connectors_body": "Container、Quaero、Keel、Cellar、Arthub、Pinch 和 TuneStudio。裝好之後，ModelCraft 可以替你啟動容器、查詢資料庫，再把結果存進 Cellar，一次回覆就能串起好幾個 App。",
+    "demo_store_title": "選一個模型",
+    "demo_store_body": "熱門開源模型，下載即用。在對話裡隨時切換。",
+    "demo_tasks_title": "時間一到，自己開工",
+    "demo_tasks_body": "一句提示，一個時間。時間一到便結合已連接的 App 自動執行，結果留在最近對話裡。"
   },
   "arthub": {
     "movies_shows_and_music_beautifully": "電影、影集與音樂，自成一庫",
@@ -126,7 +131,8 @@
     "meta": {
       "title": "Arthub",
       "description": "Arthub 將電影、影集與音樂資料夾整理成影音資料庫，配齊海報、演職員、同步歌詞與字幕。"
-    }
+    },
+    "demo_hint": "試試看：打開一部電影帶字幕播放，瀏覽一部影集的各季，或者播放一張專輯，跟著歌詞一起聽。"
   },
   "keel": {
     "a_native_redis_client": "原生 Redis 用戶端，快速、流暢",
@@ -203,7 +209,8 @@
     "meta": {
       "title": "TuneStudio",
       "description": "TuneStudio 幫你把歌聲修準：一鍵 Auto Tune，或親手調整每一個音符。"
-    }
+    },
+    "demo_hint": "試試看：按播放聽原聲，打開 Auto Tune 或換一種風格，把一個音符上下拖動，再播放一次。把指標移到曲線上可以看每一處的音高。"
   },
   "container": {
     "meta": {
@@ -286,23 +293,19 @@
   "quaero": {
     "meta": {
       "title": "Quaero",
-      "description": "Quaero 是一款快速流暢的原生 SQL 用戶端，支援 MySQL、PostgreSQL 與 SQLite。"
+      "description": "Quaero 是一款快速流暢的原生資料庫用戶端，支援 SQL 與向量資料庫：MySQL、PostgreSQL、SQLite、Qdrant 和 Milvus。"
     },
-    "a_native_sql_client": "快速流暢的原生 SQL 用戶端，支援 MySQL、PostgreSQL 與 SQLite",
     "coming_soon": "即將推出",
     "requirements": "macOS 15 或更新版本",
     "your_databases_at_a_glance": "資料庫，一目了然",
     "connect_browse_query_and_export": "連線、瀏覽、查詢、匯出——原生打造，開啟即用，操作流暢。",
     "connections": "連線",
-    "save_connections_to_mysql_postgresql": "儲存 MySQL、PostgreSQL 和 SQLite 連線，儲存前可先測試。",
     "schema_browser": "結構瀏覽",
-    "databases_tables_and_views_with": "資料庫、資料表與檢視表，附帶每張表的欄位、註解和 CREATE 陳述式。",
     "table_content": "資料表內容",
     "browse_rows_and_edit_cells": "瀏覽資料，直接編輯儲存格。NULL 與二進位值一眼就能分清。",
     "filters": "篩選",
     "combine_conditions_with_match_all": "多個條件可依「全部符合」或「任一符合」組合，在整張表中篩選。",
     "sql_console": "SQL 主控台",
-    "run_several_statements_at_once": "一次執行多個陳述式，並在各自的結果之間切換。",
     "export": "匯出",
     "save_rows_as_csv_or": "把資料存為 CSV 或 Excel 活頁簿，或直接拷貝到試算表。",
     "sql_next_to_your_rows": "SQL 就在資料旁邊",
@@ -314,9 +317,22 @@
     "tls_when_you_want_it": "依需求啟用 TLS",
     "require_encryption_or_verify_the": "可要求加密，也可同時驗證伺服器憑證與主機名稱。",
     "no_dependencies": "零依賴",
-    "the_mysql_and_postgresql_protocols": "內建 MySQL 與 PostgreSQL 協定，無需安裝驅動程式，輕裝上陣。",
+    "the_mysql_and_postgresql_protocols": "內建 MySQL 與 PostgreSQL 協定，Qdrant 和 Milvus 透過各自的 REST API 連線，無需安裝驅動程式。",
     "null_is_null": "NULL 就是 NULL",
     "sql_null_shows_as_a": "SQL NULL 顯示為標記，不會和文字「NULL」混淆。",
+    "a_native_client_for_sql_and": "快速流暢的原生用戶端，SQL 與向量資料庫都能用",
+    "save_connections_to_sql_and": "儲存 MySQL、PostgreSQL、SQLite、Qdrant 和 Milvus 連線，儲存前可先測試。",
+    "databases_tables_views_and_collections": "資料庫、表、檢視與集合，附帶欄位、註解，以及 CREATE 陳述式或集合設定。",
+    "console": "主控台",
+    "run_sql_or_send_rest_requests": "一次執行多條 SQL 陳述式並在結果之間切換，也可以向 Qdrant 和 Milvus 傳送 REST 請求。",
+    "vector_databases": "向量資料庫",
+    "browse_qdrant_and_milvus_collections": "像瀏覽表一樣瀏覽 Qdrant 和 Milvus 的集合：點和實體是列，payload 是欄，篩選條件會轉換成各自資料庫的查詢。",
+    "vectors_you_can_read": "看得懂的向量",
+    "embeddings_show_as_a_color": "向量以彩色指紋顯示，並標出維度，pgvector 欄位也一樣。打開一個向量，就能看到統計、熱度圖和直方圖。",
+    "find_similar_rows": "查找相似列",
+    "right_click_a_vector_to": "右鍵點擊一個向量即可找到最相近的資料。PostgreSQL 中可選餘弦、L2 或內積距離，並標出有索引的那一種。",
+    "meaning_not_just_matches": "按含義搜尋，而不只是比對",
+    "connect_to_qdrant_or_milvus": "連線 Qdrant、Milvus，或者帶 pgvector 的 PostgreSQL 表。「查找相似列」會為每種資料庫發出合適的搜尋：按你選的距離 ORDER BY，或者資料庫自己的查詢請求，再列出最相近的列和它們的距離。",
     "demo_hint": "試試看：打開一張表，篩選資料，雙擊儲存格修改，或者在主控台裡執行 SQL。"
   },
   "pinch": {
@@ -352,7 +368,8 @@
     "add_the_object": "放上物件",
     "place_the_object_on_your": "把物件放在指尖或指甲上。",
     "read_the_weight": "讀取重量",
-    "when_the_reading_settles_the": "讀數穩定後，「穩定」燈亮起，軌跡板輕震一下。"
+    "when_the_reading_settles_the": "讀數穩定後，「穩定」燈亮起，軌跡板輕震一下。",
+    "demo_hint": "試試看：點一下觸控板放上手指，把桌上的東西放上去，然後扣重、鎖定讀數、數迴紋針，或者用硬幣校正。"
   },
   "about": {
     "software_engineer_backend_ai_agents": "軟體工程師 · 後端開發、AI Agent 與原生 macOS 應用程式",

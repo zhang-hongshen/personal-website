@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
+import { Link } from "react-router";
 
 import { ProductIcon } from "~/components/product-icon";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
@@ -107,6 +108,7 @@ function ToolGroup({ tools, running }: { tools: Tool[]; /** The call in progress
                 <span className={running !== undefined ? "motion-safe:animate-pulse" : undefined}>
                     {running !== undefined ? `${toolLabel(tools[running], true)}…` : groupTitle(tools)}
                 </span>
+                {running === undefined && <AppIcons tools={tools} />}
             </button>
             {open && (
                 <div className="mt-2 ml-1 flex flex-col gap-2 border-l border-black/10 pl-4 motion-safe:animate-in motion-safe:fade-in dark:border-white/10">
@@ -114,6 +116,24 @@ function ToolGroup({ tools, running }: { tools: Tool[]; /** The call in progress
                 </div>
             )}
         </div>
+    );
+}
+
+/** The apps a reply used, each once, in the order it first used them. */
+function AppIcons({ tools }: { tools: Tool[] }) {
+    const apps = new Map<string, ReactNode>();
+    for (const t of tools) {
+        if (t.kind === "connector" && !apps.has(t.app)) {
+            apps.set(t.app, <ProductIcon id={t.app} className="size-4" width={16} height={16} />);
+        } else if (t.kind === "native" && !apps.has(t.app)) {
+            apps.set(t.app, <span className={cn("flex size-4 items-center justify-center rounded-[4px] bg-black/6 dark:bg-white/10", TEXT)}><SFSymbol name={t.icon} className="size-2.5" /></span>);
+        }
+    }
+    if (apps.size === 0) return null;
+    return (
+        <span className="ml-0.5 flex items-center gap-0.5" aria-label={[...apps.keys()].map((a) => CONNECTOR_NAME[a as keyof typeof CONNECTOR_NAME] ?? a).join(", ")}>
+            {[...apps].map(([app, icon]) => <span key={app} title={CONNECTOR_NAME[app as keyof typeof CONNECTOR_NAME] ?? app}>{icon}</span>)}
+        </span>
     );
 }
 
@@ -144,7 +164,13 @@ function ToolDetail({ tool }: { tool: Tool }) {
         case "connector":
             return (
                 <div className="flex flex-col gap-1.5">
-                    <p className={cn("text-[11px]", FAINT)}>{CONNECTOR_NAME[tool.app]} · {tool.name}</p>
+                    <p className={cn("flex items-center gap-2 text-[11px]", FAINT)}>
+                        <span className="min-w-0 flex-1 truncate">{CONNECTOR_NAME[tool.app]} · {tool.name}</span>
+                        <Link to={`/products/${tool.app}/`} className={cn("flex shrink-0 items-center gap-0.5 hover:underline", ACCENT)}>
+                            Open {CONNECTOR_NAME[tool.app]}
+                            <SFSymbol name="chevron.right" className="size-2" />
+                        </Link>
+                    </p>
                     <pre className={block}>{tool.args}</pre>
                     <p className={cn("text-[11px]", FAINT)}>Result</p>
                     <pre className={block}>{tool.result}</pre>

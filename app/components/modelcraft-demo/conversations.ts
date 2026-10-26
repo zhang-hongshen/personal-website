@@ -4,8 +4,10 @@ import type { SymbolName } from "~/components/sf-symbol";
 // them) and what it answers. Typed prompts are matched to a scenario by keywords; replies follow the
 // language of the prompt, while tool calls keep the app's English, as the screenshots do.
 
-export type ConnectorId = "arthub" | "cellar" | "keel" | "tunestudio";
-export const CONNECTOR_NAME: Record<ConnectorId, string> = { arthub: "Arthub", cellar: "Cellar", keel: "Keel", tunestudio: "TuneStudio" };
+export type ConnectorId = "arthub" | "cellar" | "container" | "keel" | "pinch" | "quaero" | "tunestudio";
+export const CONNECTOR_NAME: Record<ConnectorId, string> = {
+    arthub: "Arthub", cellar: "Cellar", container: "Container", keel: "Keel", pinch: "Pinch", quaero: "Quaero", tunestudio: "TuneStudio",
+};
 
 /** One tool call. Connectors and the Mac's own apps count as "using an app" in the group's title. */
 export type Tool =
@@ -30,6 +32,76 @@ type Scenario = {
 const json = (value: unknown) => JSON.stringify(value, null, 2);
 
 const SCENARIOS: Scenario[] = [
+    {
+        id: "dev-stack", title: "Start the Dev Stack",
+        prompt: "Start the Lumen dev stack in Container and make sure Redis and Postgres are both answering.",
+        match: /container|docker|dev stack|stack|容器|开发环境/,
+        tools: [
+            {
+                kind: "connector", app: "container", name: "list_containers",
+                args: json({ all: true }),
+                result: json([{ name: "web", image: "nginx:1.27", status: "running" }, { name: "db", image: "postgres:17", status: "running" }, { name: "cache", image: "redis:7.4", status: "stopped" }]),
+            },
+            {
+                kind: "connector", app: "container", name: "start_container",
+                args: json({ name: "cache" }),
+                result: json({ name: "cache", status: "running", ports: ["6379:6379"], networks: ["backend"] }),
+            },
+            {
+                kind: "connector", app: "keel", name: "ping",
+                args: json({ connection: "localhost:6379" }),
+                result: json({ reply: "PONG", latency_ms: 0.4, keys: 1284 }),
+            },
+            {
+                kind: "connector", app: "quaero", name: "run_query",
+                args: json({ connection: "shop", sql: "SELECT count(*) FROM orders;" }),
+                result: json({ columns: ["count"], rows: [[12]], took_ms: 3 }),
+            },
+        ],
+        reply: [
+            "The stack is up. **web** and **db** were already running; **cache** (redis:7.4) was stopped, so I started it in Container.\n- **Redis** answers `PONG` in 0.4 ms and holds 1,284 keys (checked with Keel)\n- **Postgres** answers too: the shop database has 12 orders (checked with Quaero)\nThe API at localhost:8080 should be good to go.",
+            "环境已经起来了。**web** 和 **db** 本来就在运行，**cache**（redis:7.4）是停着的，我在 Container 里把它启动了。\n- **Redis** 0.4 毫秒内返回 `PONG`，共有 1,284 个键（用 Keel 检查）\n- **Postgres** 也正常：shop 数据库里有 12 个订单（用 Quaero 检查）\nlocalhost:8080 上的 API 现在应该可以用了。",
+        ],
+    },
+    {
+        id: "top-customers", title: "Top Customers Report",
+        prompt: "Use Quaero to find our top customers by revenue, save the table as a page in Cellar, and draft a thank-you email to them.",
+        match: /quaero|sql|sales|customer|revenue|数据库|销售|客户|营收/,
+        tools: [
+            {
+                kind: "connector", app: "quaero", name: "run_query",
+                args: json({ connection: "shop", sql: "SELECT c.name, c.email, t.orders, t.revenue\nFROM order_totals t JOIN customers c ON c.id = t.customer_id\nORDER BY t.revenue DESC LIMIT 3;" }),
+                result: json({ columns: ["name", "email", "orders", "revenue"], rows: [["Maya Chen", "maya@lumen.app", 2, 29.98], ["Priya Raman", "priya@lumen.app", 2, 24.98], ["Lucas Moreau", "lucas@example.com", 1, 19.99]] }),
+            },
+            {
+                kind: "connector", app: "cellar", name: "create_page",
+                args: json({ title: "Top customers — October", parent: "Lumen", blocks: [{ type: "table", rows: 3 }, { type: "paragraph" }] }),
+                result: json({ id: "p_93c0", url: "cellar://page/p_93c0", created: true }),
+            },
+            { kind: "native", app: "Mail", icon: "envelope", running: "Creating Mail draft", done: "Created Mail draft", card: [["To", "maya@lumen.app, priya@lumen.app, lucas@example.com"], ["Subject", "Thank you from Lumen"], ["Body", "Thanks for being one of our best customers this year — here's 20% off your next preset pack."]] },
+        ],
+        reply: [
+            "Your top three customers by paid revenue:\n1. **Maya Chen** — 2 orders, $29.98\n2. **Priya Raman** — 2 orders, $24.98\n3. **Lucas Moreau** — 1 order, $19.99\n- Saved the table as **Top customers — October** under Lumen in Cellar\n- Drafted a thank-you with a 20% code in Mail; it's in Drafts for you to check and send",
+            "按已付款收入排，前三位客户是：\n1. **Maya Chen** —— 2 笔订单，$29.98\n2. **Priya Raman** —— 2 笔订单，$24.98\n3. **Lucas Moreau** —— 1 笔订单，$19.99\n- 已把这张表保存到 Cellar 的 Lumen 下，页面名为 **Top customers — October**\n- 在邮件里写好了一封附带 8 折优惠码的感谢信草稿，放在草稿箱等你确认后发送",
+        ],
+    },
+    {
+        id: "weigh-letter", title: "Weigh a Letter",
+        prompt: "Weigh the letter on my trackpad with Pinch, tell me if one stamp is enough, and remind me to post it tomorrow.",
+        match: /pinch|weigh|weight|trackpad|stamp|postage|称重|称一下|重量|邮票/,
+        tools: [
+            {
+                kind: "connector", app: "pinch", name: "read_weight",
+                args: json({ unit: "g", wait_until_stable: true }),
+                result: json({ weight: 17.8, unit: "g", stable: true, tared: true }),
+            },
+            { kind: "native", app: "Reminders", icon: "checklist", running: "Adding a reminder", done: "Added a reminder", card: [["Reminder", "Post the letter"], ["Due", "Tomorrow, 09:00"], ["List", "Personal"]] },
+        ],
+        reply: [
+            "The letter weighs **17.8 g**, under the usual 20 g limit for a standard letter, so one standard stamp is enough. I added **Post the letter** to Reminders for tomorrow at 9:00.",
+            "这封信重 **17.8 克**，低于普通信件常见的 20 克上限，贴一张普通邮票就够了。已经在提醒事项里添加了 **寄信**，明天 9:00 提醒你。",
+        ],
+    },
     {
         id: "release-notes", title: "Release Notes from GitHub",
         prompt: "Read the latest ModelCraft release on GitHub and save the release notes as a page in Cellar.",
@@ -168,13 +240,14 @@ const SCENARIOS: Scenario[] = [
 const chatOf = (s: Scenario): Chat => ({ id: s.id, title: s.title, messages: [{ role: "user", text: s.prompt }, { role: "assistant", text: s.reply[0], tools: s.tools }] });
 
 /** The Recents the window opens with, newest first. */
-export const CHATS: Chat[] = ["daily-notes", "movie-night", "slow-api", "release-notes", "weekly-sync"].map((id) => chatOf(SCENARIOS.find((s) => s.id === id)!));
+export const CHATS: Chat[] = ["dev-stack", "daily-notes", "top-customers", "movie-night", "slow-api", "release-notes", "weekly-sync"].map((id) => chatOf(SCENARIOS.find((s) => s.id === id)!));
 
 /** Prompts offered under an empty New Chat. */
 export const SUGGESTIONS = [
-    "Summarize the notes I edited today in Cellar",
+    "Start my dev stack in Container",
+    "Find our top customers with Quaero",
     "Pick a movie for tonight from Arthub",
-    "Check my Redis server with Keel",
+    "Weigh a letter with Pinch",
 ];
 
 /** General answers, in English and Chinese, for prompts no scenario covers. */

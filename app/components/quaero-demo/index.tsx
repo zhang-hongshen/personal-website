@@ -4,14 +4,19 @@ import { Inspector, MAC, MacSidebar, MacWindow, SearchField, ShowSidebarButton, 
 import { CAPSULE } from "~/components/mac-window";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
-import { CONNECTIONS, KIND_NAME, NEW_CONNECTION, SAMPLE_SQL, createStatement, type Connection, type Kind, type Table, type Value } from "./data";
+import { CONNECTIONS, KIND_NAME, NEW_CONNECTION, SAMPLE_SQL, createStatement, isVectorDB, type Connection, type Kind, type Table, type Value } from "./data";
+import { runRequest, similarRequest } from "./rest";
 import { run, type Result } from "./sql";
+import { parseVector } from "./vector";
+import { VectorCell, VectorDetail, VectorMenu, dimensionsOf, type Metric } from "./vectors";
 
 // A Quaero window that works like the app (Docs/Features in its repository): connections in the
-// sidebar, the schema browser, the table's rows with a filter bar and in-place editing, and the
-// inspector with Table Info or the SQL console. The databases live in the page; a reload starts over.
+// sidebar, the schema browser, the table's rows with a filter bar and in-place editing, vectors with
+// Find Similar Rows, and the inspector with Table Info, the console (SQL, or REST for Qdrant and
+// Milvus) or a vector's details. The databases live in the page; a reload starts over.
 
-const KIND_ICON: Record<Kind, SymbolName> = { postgresql: "cylinder.split.1x2", mysql: "cylinder", sqlite: "doc" };
+const KIND_ICON: Record<Kind, SymbolName> = { postgresql: "cylinder.split.1x2", mysql: "cylinder", sqlite: "doc", qdrant: "circle.hexagongrid", milvus: "circle.hexagongrid.fill" };
+const isVectorColumn = (type: string) => /vector/i.test(type);
 
 type Operator = { id: string; label: string; test: (v: Value, x: string) => boolean; noValue?: boolean };
 const text = (v: Value) => String(v ?? "").toLowerCase();
@@ -40,7 +45,10 @@ export function QuaeroDemo({ className }: { className?: string }) {
     // The database and table open in each connection.
     const [databases, setDatabases] = useState<Record<string, string>>({});
     const [tables, setTables] = useState<Record<string, string>>({});
-    const [inspector, setInspector] = useState<"info" | "console" | null>(null);
+    const [inspector, setInspector] = useState<"info" | "console" | "vector" | null>(null);
+    // The outlined cell, which the vector panel follows, and the open context menu.
+    const [activeCell, setActiveCell] = useState<{ row: number; col: number } | null>(null);
+    const [menu, setMenu] = useState<{ x: number; y: number; row: number; col: number } | null>(null);
     const [tableQuery, setTableQuery] = useState("");
     const [conditions, setConditions] = useState<Condition[]>([]);
     const [applied, setApplied] = useState<{ conditions: Condition[]; all: boolean } | null>(null);
@@ -64,6 +72,7 @@ export function QuaeroDemo({ className }: { className?: string }) {
         setApplied(null);
         setEditing(null);
         setSelectedRow(null);
+        setActiveCell(null);
     }, [table?.name, connectionId, database.name]);
 
     useEffect(() => {
@@ -72,8 +81,12 @@ export function QuaeroDemo({ className }: { className?: string }) {
         return () => clearTimeout(timer);
     }, [loading]);
 
+    // Vectors can't be compared to a typed value, so a condition on one fails in place of the rows.
+    const filterError = applied && table && applied.conditions.some((c) => isVectorColumn(table.columns.find((x) => x.name === c.column)?.type ?? ""))
+        ? "Conditions on vector columns aren't supported. Use Find Similar Rows instead."
+        : null;
     const rows = useMemo(() => {
-        if (!table) return [];
+        if (!table || filterError) return [];
         const indexed = table.rows.map((values, index) => ({ values, index }));
         if (!applied) return indexed;
         const tests = applied.conditions.map((c) => {
@@ -82,7 +95,7 @@ export function QuaeroDemo({ className }: { className?: string }) {
             return (values: Value[]) => op.test(values[at], c.value);
         });
         return indexed.filter(({ values }) => (applied.all ? tests.every((t) => t(values)) : tests.some((t) => t(values))));
-    }, [table, applied, table?.rows]);
+    }, [table, applied, table?.rows, filterError]);
 
     const openConnection = (id: string) => {
         setConnectionId(id);
@@ -110,12 +123,27 @@ export function QuaeroDemo({ className }: { className?: string }) {
         redraw((n) => n + 1);
     };
 
-    const runConsole = () => {
-        const text = sql[connection.kind] ?? SAMPLE_SQL[connection.kind];
-        const out = run(text, database, connection.kind);
+    const runConsole = (override?: string) => {
+        const text = override ?? sql[connection.kind] ?? SAMPLE_SQL[connection.kind];
+        const out = isVectorDB(connection.kind) ? [runRequest(text, database, connection.kind)] : run(text, database, connection.kind);
         setResults((r) => ({ ...r, [connectionId]: out }));
         setResultIndex(out.length - 1);
         redraw((n) => n + 1);
+    };
+
+    /** Writes the search for the rows nearest a vector cell into the console and runs it (VectorColumns.md). */
+    const findSimilar = (row: number, col: number, metric: Metric = "<=>") => {
+        if (!table) return;
+        const vector = String(table.rows[row][col]);
+        const column = table.columns[col].name;
+        const [schema, name] = table.name.includes(".") ? table.name.split(".") : [null, table.name];
+        const text = isVectorDB(connection.kind)
+            ? similarRequest(connection.kind, table, vector)
+            : `SELECT *, "${column}" ${metric} '${vector}' AS distance\nFROM ${schema ? `"${schema}".` : ""}"${name}"\nORDER BY distance\nLIMIT 20;`;
+        setSql((s) => ({ ...s, [connection.kind]: text }));
+        setInspector("console");
+        setMenu(null);
+        runConsole(text);
     };
 
     const exportRows = (format: "csv" | "json") => {
@@ -168,13 +196,13 @@ export function QuaeroDemo({ className }: { className?: string }) {
                             {connection.databases.map((d) => <option key={d.name}>{d.name}</option>)}
                         </select>
                     )}
-                    <SearchField value={tableQuery} placeholder="Filter Tables" onChange={setTableQuery} className="w-full" />
+                    <SearchField value={tableQuery} placeholder={isVectorDB(connection.kind) ? "Filter Collections" : "Filter Tables"} onChange={setTableQuery} className="w-full" />
                 </div>
                 <div className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto pb-3 [&>button]:mx-1.5">
                     {visibleTables.map((t) => (
-                        <SidebarRow key={t.name} icon={t.kind === "view" ? "eye" : "tablecells"} iconClass={MAC.muted} label={t.name} selected={t === table} onClick={() => openTable(t.name)} />
+                        <SidebarRow key={t.name} icon={t.kind === "view" ? "eye" : t.kind === "collection" ? "circle.grid.3x3" : "tablecells"} iconClass={MAC.muted} label={t.name} selected={t === table} onClick={() => openTable(t.name)} />
                     ))}
-                    {database.tables.length === 0 && <Unavailable icon="tablecells" title="No Tables" />}
+                    {database.tables.length === 0 && (isVectorDB(connection.kind) ? <Unavailable icon="circle.grid.3x3" title="No Collections" /> : <Unavailable icon="tablecells" title="No Tables" />)}
                 </div>
             </section>
 
@@ -202,6 +230,7 @@ export function QuaeroDemo({ className }: { className?: string }) {
                 {table ? (
                     <>
                         <FilterBar
+                            kind={connection.kind}
                             table={table}
                             conditions={conditions}
                             matchAll={matchAll}
@@ -217,9 +246,15 @@ export function QuaeroDemo({ className }: { className?: string }) {
                                 <table className="w-max min-w-full border-collapse text-[12px] tabular-nums">
                                     <thead className={cn("sticky top-0 z-10", MAC.window)}>
                                         <tr className={cn("border-b text-left", MAC.line)}>
-                                            {table.columns.map((c) => (
-                                                <th key={c.name} className={cn("border-r px-2 py-1.5 font-semibold whitespace-nowrap last:border-r-0", MAC.line)}>{c.name}</th>
-                                            ))}
+                                            {table.columns.map((c, col) => {
+                                                const dims = isVectorColumn(c.type) ? dimensionsOf(rows.map((r) => r.values[col])) : null;
+                                                return (
+                                                    <th key={c.name} className={cn("border-r px-2 py-1.5 font-semibold whitespace-nowrap last:border-r-0", MAC.line, isVectorColumn(c.type) && "min-w-[220px]")} title={dims ? `${dims} dimensions` : undefined}>
+                                                        {c.name}
+                                                        {dims && <span className={cn("ml-2 font-normal", MAC.muted)}>{dims} dims</span>}
+                                                    </th>
+                                                );
+                                            })}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -228,13 +263,27 @@ export function QuaeroDemo({ className }: { className?: string }) {
                                                 {values.map((v, col) => (
                                                     <td
                                                         key={col}
-                                                        className={cn("max-w-[260px] truncate px-2 py-1 whitespace-nowrap", typeof v === "number" && "text-right")}
-                                                        onDoubleClick={() => table.kind === "table" && setEditing({ row: index, col })}
+                                                        className={cn(
+                                                            "max-w-[260px] truncate px-2 py-1 whitespace-nowrap",
+                                                            typeof v === "number" && "text-right",
+                                                            activeCell?.row === index && activeCell.col === col && "outline-2 -outline-offset-2 outline-[#007aff] dark:outline-[#0a84ff]",
+                                                        )}
+                                                        onClick={() => setActiveCell({ row: index, col })}
+                                                        onDoubleClick={() => table.kind === "table" && !isVectorColumn(table.columns[col].type) && setEditing({ row: index, col })}
+                                                        onContextMenu={(e) => {
+                                                            if (!parseVector(v)) return;
+                                                            e.preventDefault();
+                                                            setSelectedRow(index);
+                                                            setActiveCell({ row: index, col });
+                                                            setMenu({ x: e.clientX, y: e.clientY, row: index, col });
+                                                        }}
                                                     >
                                                         {editing?.row === index && editing.col === col ? (
                                                             <CellField initial={v === null ? "" : String(v)} onDone={(raw) => (raw === null ? setEditing(null) : commitEdit(index, col, raw))} />
                                                         ) : v === null ? (
                                                             <span className={cn("italic", selectedRow === index ? "text-white/70" : MAC.muted)}>NULL</span>
+                                                        ) : parseVector(v) ? (
+                                                            <VectorCell value={v} />
                                                         ) : (
                                                             String(v)
                                                         )}
@@ -245,7 +294,8 @@ export function QuaeroDemo({ className }: { className?: string }) {
                                     </tbody>
                                 </table>
                             )}
-                            {!loading && rows.length === 0 && <Unavailable icon="tablecells" title="No Rows">{applied ? "No rows match the filter." : undefined}</Unavailable>}
+                            {!loading && filterError && <p className="m-4 flex gap-2 text-[12px] text-[#d70015] dark:text-[#ff6961]"><SFSymbol name="xmark.circle.fill" className="mt-0.5 size-3.5 shrink-0" />{filterError}</p>}
+                            {!loading && !filterError && rows.length === 0 && <Unavailable icon="tablecells" title="No Rows">{applied ? "No rows match the filter." : undefined}</Unavailable>}
                         </div>
                     </>
                 ) : (
@@ -255,19 +305,39 @@ export function QuaeroDemo({ className }: { className?: string }) {
 
             <Inspector open={inspector !== null} width={340}>
                 {inspector === "info" && table && <TableInfo kind={connection.kind} table={table} onClose={() => setInspector(null)} />}
+                {inspector === "vector" && table && (
+                    <VectorDetail
+                        column={activeCell ? table.columns[activeCell.col].name : ""}
+                        row={activeCell?.row ?? 0}
+                        value={activeCell ? table.rows[activeCell.row]?.[activeCell.col] ?? null : null}
+                        onClose={() => setInspector(null)}
+                    />
+                )}
                 {inspector === "console" && (
                     <Console
-                        database={database.name}
+                        rest={isVectorDB(connection.kind)}
+                        database={connection.kind === "qdrant" ? null : database.name}
                         sql={sql[connection.kind] ?? SAMPLE_SQL[connection.kind]}
                         results={results[connectionId] ?? []}
                         resultIndex={resultIndex}
                         onSql={(text) => setSql((s) => ({ ...s, [connection.kind]: text }))}
-                        onRun={runConsole}
+                        onRun={() => runConsole()}
                         onPickResult={setResultIndex}
                         onClose={() => setInspector(null)}
                     />
                 )}
             </Inspector>
+
+            {menu && table && (
+                <VectorMenu
+                    at={menu}
+                    kind={connection.kind}
+                    indexed={table.indexes?.some((i) => i.includes("vector_cosine_ops")) ? "<=>" : null}
+                    onSimilar={(metric) => findSimilar(menu.row, menu.col, metric)}
+                    onDetails={() => { setInspector("vector"); setMenu(null); }}
+                    onClose={() => setMenu(null)}
+                />
+            )}
         </MacWindow>
     );
 }
@@ -297,7 +367,8 @@ function ExportMenu({ disabled, onExport }: { disabled: boolean; onExport: (form
     );
 }
 
-function FilterBar({ table, conditions, matchAll, onChange, onMatchAll, onFilter, onClear }: {
+function FilterBar({ kind, table, conditions, matchAll, onChange, onMatchAll, onFilter, onClear }: {
+    kind: Kind;
     table: Table;
     conditions: Condition[];
     matchAll: boolean;
@@ -329,7 +400,7 @@ function FilterBar({ table, conditions, matchAll, onChange, onMatchAll, onFilter
                             {table.columns.map((col) => <option key={col.name}>{col.name}</option>)}
                         </select>
                         <select aria-label="Operator" value={c.op} className={cn("h-6 px-1.5", MAC.field)} onChange={(e) => set(i, { op: e.target.value })}>
-                            {OPERATORS.map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
+                            {OPERATORS.filter((o) => kind !== "qdrant" || (o.id !== "starts" && o.id !== "ends")).map((o) => <option key={o.id} value={o.id}>{o.label}</option>)}
                         </select>
                         {!op.noValue && (
                             <input
@@ -423,6 +494,7 @@ function TableInfo({ kind, table, onClose }: { kind: Kind; table: Table; onClose
                         </tbody>
                     </table>
                 </div>
+                {table.config !== undefined && <p className="-mb-1.5 text-[12px] font-semibold">Collection Configuration</p>}
                 <div className={cn("relative rounded-lg border", MAC.line)}>
                     <button type="button" className={cn("absolute top-1.5 right-1.5 flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px]", MAC.field)} onClick={() => { void navigator.clipboard?.writeText(ddl); setCopied(true); }}>
                         <SFSymbol name="doc.on.doc" className="size-3" />
@@ -435,8 +507,11 @@ function TableInfo({ kind, table, onClose }: { kind: Kind; table: Table; onClose
     );
 }
 
-function Console({ database, sql, results, resultIndex, onSql, onRun, onPickResult, onClose }: {
-    database: string;
+function Console({ rest, database, sql, results, resultIndex, onSql, onRun, onPickResult, onClose }: {
+    /** Takes a REST request (Qdrant, Milvus) instead of SQL. */
+    rest: boolean;
+    /** Hidden for Qdrant, which has no databases. */
+    database: string | null;
     sql: string;
     results: Result[];
     resultIndex: number;
@@ -449,14 +524,14 @@ function Console({ database, sql, results, resultIndex, onSql, onRun, onPickResu
     return (
         <>
             <InspectorHeader title="Console" onClose={onClose}>
-                <span className={cn("flex items-center gap-1 text-[12px]", MAC.muted)}><SFSymbol name="cylinder" className="size-3" />{database}</span>
+                {database && <span className={cn("flex items-center gap-1 text-[12px]", MAC.muted)}><SFSymbol name="cylinder" className="size-3" />{database}</span>}
                 <button type="button" disabled={!sql.trim()} className={cn("flex h-7 items-center gap-1.5 rounded-full px-3 text-[12px] font-medium disabled:opacity-40", MAC.accentBg)} onClick={onRun}>
                     <SFSymbol name="play.fill" className="size-2.5" />Run
                 </button>
             </InspectorHeader>
             <div className="flex min-h-0 flex-1 flex-col gap-2 px-3 pb-3">
                 <textarea
-                    aria-label="SQL"
+                    aria-label={rest ? "Request" : "SQL"}
                     value={sql}
                     spellCheck={false}
                     autoCorrect="off"
@@ -470,7 +545,7 @@ function Console({ database, sql, results, resultIndex, onSql, onRun, onPickResu
                         }
                     }}
                 />
-                <p className={cn("text-[11px]", MAC.muted)}>⌘Return to run</p>
+                <p className={cn("text-[11px]", MAC.muted)}>{rest ? "A request line, then an optional JSON body · ⌘Return to send" : "⌘Return to run"}</p>
                 <div className={cn("flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border", MAC.line)}>
                     {!result ? (
                         <p className={cn("m-auto text-[12px]", MAC.muted)}>Results show here.</p>
@@ -491,7 +566,7 @@ function Console({ database, sql, results, resultIndex, onSql, onRun, onPickResu
                                     {result.rows.map((r, i) => (
                                         <tr key={i} className={MAC.stripe}>
                                             {r.map((v, j) => (
-                                                <td key={j} className={cn("px-2 py-1 whitespace-nowrap", typeof v === "number" && "text-right", v === null && cn("italic", MAC.muted))}>{v === null ? "NULL" : String(v)}</td>
+                                                <td key={j} className={cn("max-w-[240px] truncate px-2 py-1 whitespace-nowrap", typeof v === "number" && "text-right", v === null && cn("italic", MAC.muted))}>{v === null ? "NULL" : parseVector(v) ? <VectorCell value={v} /> : String(v)}</td>
                                             ))}
                                         </tr>
                                     ))}

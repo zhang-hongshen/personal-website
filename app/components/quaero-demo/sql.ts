@@ -1,4 +1,5 @@
 import type { Database, Kind, Table, Value } from "./data";
+import { distance, parseVector } from "./vector";
 
 // A small SQL interpreter over the demo's tables, enough for the console to feel real: SELECT with
 // WHERE, GROUP BY, ORDER BY and LIMIT, the usual aggregates, and INSERT, UPDATE and DELETE. Errors
@@ -20,7 +21,7 @@ class SQLError extends Error {}
 
 function tokenize(sql: string): Token[] {
     const out: Token[] = [];
-    const re = /\s+|--[^\n]*|'((?:[^']|'')*)'|"([^"]+)"|`([^`]+)`|(\d+(?:\.\d+)?)|([A-Za-z_][\w.]*(?:\.\*)?)|(<>|!=|<=|>=|[=<>(),*;+\-/])/gy;
+    const re = /\s+|--[^\n]*|'((?:[^']|'')*)'|"([^"]+)"|`([^`]+)`|(\d+(?:\.\d+)?)|([A-Za-z_][\w.]*(?:\.\*)?)|(<=>|<->|<#>|<>|!=|<=|>=|[=<>(),*;+\-/.])/gy;
     let m: RegExpExecArray | null;
     let at = 0;
     while (at < sql.length) {
@@ -33,6 +34,10 @@ function tokenize(sql: string): Token[] {
         else if (m[4]) out.push({ t: "num", v: m[4] });
         else if (m[5]) out.push(KEYWORDS.has(m[5].toLowerCase()) ? { t: "kw", v: m[5].toLowerCase() } : { t: "id", v: m[5] });
         else if (m[6]) out.push({ t: "op", v: m[6] });
+    }
+    // "public"."products" is one name.
+    for (let i = out.length - 3; i >= 0; i--) {
+        if (out[i].t === "id" && out[i + 1].t === "op" && out[i + 1].v === "." && out[i + 2].t === "id") out.splice(i, 3, { t: "id", v: `${out[i].v}.${out[i + 2].v}` });
     }
     return out;
 }
@@ -83,7 +88,7 @@ class Parser {
     }
     sum(): Expr {
         let l = this.atom();
-        for (let t = this.peek(); t?.t === "op" && ["+", "-", "*", "/"].includes(t.v); t = this.peek()) {
+        for (let t = this.peek(); t?.t === "op" && ["+", "-", "*", "/", "<=>", "<->", "<#>"].includes(t.v); t = this.peek()) {
             this.i++;
             l = { e: "bin", op: t.v, l, r: this.atom() };
         }
@@ -175,6 +180,11 @@ function evaluate(x: Expr, row: Row, group?: Row[], kind?: Kind): Value {
             const l = evaluate(x.l, row, group, kind), r = evaluate(x.r, row, group, kind);
             if (x.op === "like" || x.op === "ilike") return like(l, r, x.op === "ilike" || kind === "mysql");
             if (l === null || r === null) return null;
+            if (x.op === "<=>" || x.op === "<->" || x.op === "<#>") {
+                const a = parseVector(l), b = parseVector(r);
+                if (!a || !b) throw new SQLError(`operator does not exist: ${typeof l === "number" ? "numeric" : "text"} ${x.op} ${typeof r === "number" ? "numeric" : "text"}`);
+                try { return Math.round(distance(x.op, a, b) * 10000) / 10000; } catch (e) { throw new SQLError((e as Error).message); }
+            }
             const c = compareValues(typeof l === "boolean" ? Number(l) : l, typeof r === "boolean" ? Number(r) : r);
             switch (x.op) {
                 case "=": return c === 0;

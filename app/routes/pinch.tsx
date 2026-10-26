@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 import { Glyph } from "~/components/glyph";
+import { PinchDemo } from "~/components/pinch-demo";
 import {
     ComingSoonButton, Eyebrow, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Split, Statement, Tree,
     type Feature,
@@ -46,7 +47,10 @@ export default function Pinch() {
                 tagline={t("pinch.turn_your_trackpad_into_a")}
                 action={<ComingSoonButton label={t("pinch.coming_soon")} />}
                 note={t("pinch.requirements")}
-            />
+            >
+                <PinchDemo className="mt-16" />
+                <p className="mt-5 text-center text-[13px] text-faint">{t("pinch.demo_hint")}</p>
+            </Hero>
 
             <Section>
                 <SectionTitle>{t("pinch.a_real_scale_on_your")}</SectionTitle>

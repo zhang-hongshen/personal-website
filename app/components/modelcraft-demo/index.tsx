@@ -4,28 +4,34 @@ import { useTranslation } from "react-i18next";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { ChatView, type Pending } from "./chat";
-import { CHATS, replyTo, type Chat } from "./conversations";
+import { CHATS, replyTo, type Chat, type Tool } from "./conversations";
+import { Desktop, appOf, type AppKey } from "./desktop";
 import { CONNECTORS, DEFAULT_MODEL, MODELS, PRESET_TASKS, TASKS, type View } from "./data";
 import { Sidebar } from "./sidebar";
 import { ConnectorsView, DownloadedView, StoreView, type Download } from "./store";
 import { TasksView } from "./tasks";
-import { FONT, MAIN, TEXT, TOOL } from "./ui";
+import { MAIN, TEXT, TOOL } from "./ui";
 
 // A ModelCraft window drawn in HTML that works like the app, within limits: chat with prepared
 // replies, the Model Store with downloads, Connectors, Downloaded Models and Scheduled Tasks. Nothing
-// leaves the page, and a reload starts over.
+// leaves the page, and a reload starts over. It sits on a Mac desktop whose Dock shows the apps a
+// reply uses as it uses them (desktop.tsx). Beside it, a few words on each part of the app follow
+// what the window shows, and picking one opens that part.
 
-const TABS: { view: View; label: string }[] = [
-    { view: "chat", label: "modelcraft.demo_chat" },
-    { view: "store", label: "modelcraft.model_store" },
-    { view: "connectors", label: "modelcraft.demo_connectors" },
-    { view: "tasks", label: "modelcraft.scheduled_tasks" },
+/** What the text beside the window explains, one entry per part of the app; picking one opens it. */
+const FEATURES: { view: View; title: string; body: string }[] = [
+    { view: "chat", title: "modelcraft.demo_chat_title", body: "modelcraft.demo_chat_body" },
+    { view: "connectors", title: "modelcraft.demo_connectors_title", body: "modelcraft.demo_connectors_body" },
+    { view: "store", title: "modelcraft.demo_store_title", body: "modelcraft.demo_store_body" },
+    { view: "tasks", title: "modelcraft.demo_tasks_title", body: "modelcraft.demo_tasks_body" },
 ];
 
 const DOWNLOAD_MS = 2400;
 const THINK_MS = 700;
 const TOOL_MS = 900;
 const RUN_MS = 1600;
+/** How long the app windows a reply opened stay up after it finishes. */
+const LINGER_MS = 4000;
 
 export function ModelCraftDemo({ className }: { className?: string }) {
     const { t } = useTranslation();
@@ -43,6 +49,12 @@ export function ModelCraftDemo({ className }: { className?: string }) {
     const [running, setRunning] = useState<string[]>([]);
     // The conversation each task's latest run made, by task id.
     const [runs, setRuns] = useState<Record<string, string>>({});
+    // The desktop: app windows (frontmost last; `auto` ones were opened by a reply and close after it),
+    // what each app last did, which apps have run, and the icon bouncing in the Dock.
+    const [windows, setWindows] = useState<{ app: AppKey; auto: boolean }[]>([]);
+    const [lastCall, setLastCall] = useState<Partial<Record<AppKey, Tool>>>({});
+    const [used, setUsed] = useState<AppKey[]>([]);
+    const [bounce, setBounce] = useState<{ app: AppKey; n: number } | null>(null);
     // Shown or hidden by the toggle; null until then, which shows it on wide screens only.
     const [sidebar, setSidebar] = useState<boolean | null>(null);
 
@@ -83,6 +95,32 @@ export function ModelCraftDemo({ className }: { className?: string }) {
         )), phase === "thinking" ? THINK_MS : phase === "tool" ? TOOL_MS : 16);
         return () => clearTimeout(timer);
     }, [pending]);
+
+    // Each tool call brings its app forward: the icon bounces and its window opens with the result.
+    const call = pending?.phase === "tool" ? pending.message.tools?.[pending.step] : undefined;
+    useEffect(() => {
+        if (!call) return;
+        const app = appOf(call);
+        setLastCall((l) => ({ ...l, [app]: call }));
+        setUsed((u) => (u.includes(app) ? u : [...u, app]));
+        setBounce((b) => ({ app, n: (b?.n ?? 0) + 1 }));
+        setWindows((ws) => [...ws.filter((w) => w.app !== app), { app, auto: true }].slice(-3));
+    }, [call]);
+
+    // Once the reply is written, the windows it opened close again.
+    const autoOpen = windows.some((w) => w.auto);
+    useEffect(() => {
+        if (pending || !autoOpen) return;
+        const timer = setTimeout(() => setWindows((ws) => ws.filter((w) => !w.auto)), LINGER_MS);
+        return () => clearTimeout(timer);
+    }, [pending, autoOpen]);
+
+    // ModelCraft's icon puts the other windows away; another app's opens or closes its window.
+    const dock = (app: AppKey) => {
+        setTouched(true);
+        if (app === "modelcraft") return setWindows([]);
+        setWindows((ws) => (ws.some((w) => w.app === app) ? ws.filter((w) => w.app !== app) : [...ws, { app, auto: false }].slice(-3)));
+    };
 
     const go = (v: View, id: string | null = chatId) => {
         setTouched(true);
@@ -151,94 +189,106 @@ export function ModelCraftDemo({ className }: { className?: string }) {
         </button>
     );
 
+    // Downloaded Models is part of the Model Store.
+    const feature = view === "downloaded" ? "store" : view;
+
     return (
-        <div className={className}>
-            <div
-                className="relative flex h-[min(640px,80vh)] w-full overflow-hidden rounded-[18px] border border-black/12 text-left shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)] dark:border-white/12"
-                style={{ fontFamily: FONT }}
+        <div className={cn("grid items-center gap-8 text-left lg:grid-cols-[minmax(0,300px)_minmax(0,1fr)] lg:gap-12 xl:-mx-20", className)}>
+            <ul className="flex flex-col gap-1">
+                {FEATURES.map((f) => {
+                    const active = f.view === feature;
+                    return (
+                        <li key={f.view}>
+                            <button
+                                type="button"
+                                aria-pressed={active}
+                                className={cn(
+                                    "w-full py-2 text-left text-[clamp(19px,2.2vw,22px)] leading-tight font-semibold tracking-[-0.015em] transition-colors",
+                                    active ? "text-primary" : "text-muted-foreground hover:text-foreground",
+                                )}
+                                onClick={() => open(f.view)}
+                            >
+                                {t(f.title)}
+                            </button>
+                            <div className={cn("grid transition-[grid-template-rows,opacity] duration-300", active ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0")}>
+                                <p className="overflow-hidden text-[15px] text-muted-foreground" aria-hidden={!active}>
+                                    <span className="block pb-3">{t(f.body)}</span>
+                                </p>
+                            </div>
+                        </li>
+                    );
+                })}
+            </ul>
+
+            <Desktop
+                windows={windows.map((w) => ({ app: w.app, tool: lastCall[w.app] ?? null }))}
+                running={["modelcraft", ...used]}
+                bouncing={bounce}
+                onDock={dock}
             >
-                <Sidebar
-                    view={view}
-                    chatId={chatId}
-                    chats={chats}
-                    hint={!touched}
-                    className={cn(
-                        "absolute inset-y-0 left-0 z-30 transition-transform duration-200 sm:static",
-                        sidebar === null ? "-translate-x-full sm:translate-x-0" : sidebar ? "translate-x-0 shadow-xl sm:shadow-none" : "-translate-x-full sm:hidden",
-                    )}
-                    onOpen={open}
-                    onOpenChat={(id) => go("chat", id)}
-                    onNewChat={() => go("chat", null)}
-                    onHide={() => setSidebar(false)}
-                />
+                <div className="relative flex h-full w-full overflow-hidden rounded-[12px] border border-black/15 text-left shadow-[0_20px_60px_-15px_rgb(0_0_0/0.45)] dark:border-white/15">
+                    <Sidebar
+                        view={view}
+                        chatId={chatId}
+                        chats={chats}
+                        hint={!touched}
+                        className={cn(
+                            "absolute inset-y-0 left-0 z-30 transition-transform duration-200 sm:static",
+                            sidebar === null ? "-translate-x-full sm:translate-x-0" : sidebar ? "translate-x-0 shadow-xl sm:shadow-none" : "-translate-x-full sm:hidden",
+                        )}
+                        onOpen={open}
+                        onOpenChat={(id) => go("chat", id)}
+                        onNewChat={() => go("chat", null)}
+                        onHide={() => setSidebar(false)}
+                    />
 
-                <main className={cn("relative min-w-0 flex-1 select-text", MAIN, TEXT)}>
-                    {view === "chat" && (
-                        <ChatView
-                            chat={chat}
-                            pending={pending}
-                            model={model}
-                            models={downloaded}
-                            focus={touched}
-                            sidebarButton={sidebarButton}
-                            onSend={send}
-                            onPickModel={setModel}
-                            onNewChat={() => go("chat", null)}
-                        />
-                    )}
-                    {view === "store" && <StoreView downloads={downloads} sidebarButton={sidebarButton} onDownload={download} />}
-                    {view === "downloaded" && (
-                        <DownloadedView
-                            models={downloaded.map((name) => MODELS.find((m) => m.name === name)!)}
-                            current={model}
-                            sidebarButton={sidebarButton}
-                            onPick={(name) => {
-                                setModel(name);
-                                go("chat", chatId ?? chats[0]?.id ?? null);
-                            }}
-                            onDelete={deleteModel}
-                        />
-                    )}
-                    {view === "connectors" && <ConnectorsView installed={installed} sidebarButton={sidebarButton} onToggle={toggleConnector} />}
-                    {view === "tasks" && (
-                        <TasksView
-                            tasks={tasks}
-                            canAdd={nextPreset !== undefined}
-                            running={running}
-                            ran={Object.keys(runs)}
-                            sidebarButton={sidebarButton}
-                            onAdd={() => {
-                                setTouched(true);
-                                if (nextPreset) setTasks((ts) => [...ts, nextPreset]);
-                            }}
-                            onToggle={(id) => setTasks((ts) => ts.map((x) => (x.id === id ? { ...x, enabled: !x.enabled } : x)))}
-                            onRun={runTask}
-                            onOpenRun={(id) => go("chat", runs[id])}
-                        />
-                    )}
-                </main>
-            </div>
-
-            <div className="mt-6 flex flex-col items-center gap-3">
-                <div role="tablist" className="inline-flex flex-wrap justify-center gap-1 rounded-full border border-border bg-card p-1 shadow-card">
-                    {TABS.map((tab) => (
-                        <button
-                            key={tab.view}
-                            type="button"
-                            role="tab"
-                            aria-selected={tab.view === view}
-                            className={cn(
-                                "rounded-full px-4 py-1.5 text-sm font-medium transition-colors",
-                                tab.view === view ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground",
-                            )}
-                            onClick={() => open(tab.view)}
-                        >
-                            {t(tab.label)}
-                        </button>
-                    ))}
+                    <main className={cn("relative min-w-0 flex-1 select-text", MAIN, TEXT)}>
+                        {view === "chat" && (
+                            <ChatView
+                                chat={chat}
+                                pending={pending}
+                                model={model}
+                                models={downloaded}
+                                focus={touched}
+                                sidebarButton={sidebarButton}
+                                onSend={send}
+                                onPickModel={setModel}
+                                onNewChat={() => go("chat", null)}
+                            />
+                        )}
+                        {view === "store" && <StoreView downloads={downloads} sidebarButton={sidebarButton} onDownload={download} />}
+                        {view === "downloaded" && (
+                            <DownloadedView
+                                models={downloaded.map((name) => MODELS.find((m) => m.name === name)!)}
+                                current={model}
+                                sidebarButton={sidebarButton}
+                                onPick={(name) => {
+                                    setModel(name);
+                                    go("chat", chatId ?? chats[0]?.id ?? null);
+                                }}
+                                onDelete={deleteModel}
+                            />
+                        )}
+                        {view === "connectors" && <ConnectorsView installed={installed} sidebarButton={sidebarButton} onToggle={toggleConnector} />}
+                        {view === "tasks" && (
+                            <TasksView
+                                tasks={tasks}
+                                canAdd={nextPreset !== undefined}
+                                running={running}
+                                ran={Object.keys(runs)}
+                                sidebarButton={sidebarButton}
+                                onAdd={() => {
+                                    setTouched(true);
+                                    if (nextPreset) setTasks((ts) => [...ts, nextPreset]);
+                                }}
+                                onToggle={(id) => setTasks((ts) => ts.map((x) => (x.id === id ? { ...x, enabled: !x.enabled } : x)))}
+                                onRun={runTask}
+                                onOpenRun={(id) => go("chat", runs[id])}
+                            />
+                        )}
+                    </main>
                 </div>
-                <p className="text-center text-[13px] text-faint">{t("modelcraft.demo_hint")}</p>
-            </div>
+            </Desktop>
         </div>
     );
 }

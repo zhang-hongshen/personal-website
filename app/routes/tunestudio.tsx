@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 import { Glyph } from "~/components/glyph";
+import { TuneStudioDemo } from "~/components/tunestudio-demo";
 import {
     ComingSoonButton, Eyebrow, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Split, Statement,
     type Feature,
@@ -66,7 +67,10 @@ export default function TuneStudio() {
                 tagline={t("tunestudio.put_your_singing_on_pitch")}
                 action={<ComingSoonButton label={t("tunestudio.coming_soon")} />}
                 note={t("tunestudio.requirements")}
-            />
+            >
+                <TuneStudioDemo className="mt-16" />
+                <p className="mt-5 text-center text-[13px] text-faint">{t("tunestudio.demo_hint")}</p>
+            </Hero>
 
             <Section>
                 <SectionTitle>{t("tunestudio.one_click_or_every_note")}</SectionTitle>

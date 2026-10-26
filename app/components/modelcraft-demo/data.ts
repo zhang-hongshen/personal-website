@@ -31,7 +31,10 @@ export const DEFAULT_MODEL = "Qwen3.5-2B-6bit";
 export const CONNECTORS = [
     { id: "arthub", name: "Arthub", summary: "Browse and play the movies, TV shows, and music in your media library.", installed: true },
     { id: "cellar", name: "Cellar", summary: "Search the pages, databases, and notes in your knowledge base.", installed: true },
+    { id: "container", name: "Container", summary: "Start, stop, and inspect the Linux containers on your Mac.", installed: true },
     { id: "keel", name: "Keel", summary: "Browse and edit the keys in your Redis databases.", installed: true },
+    { id: "quaero", name: "Quaero", summary: "Query your SQL and vector databases and read the results.", installed: true },
+    { id: "pinch", name: "Pinch", summary: "Weigh light objects on your trackpad.", installed: false },
     { id: "tunestudio", name: "TuneStudio", summary: "Put sung vocals on pitch and export the corrected audio.", installed: false },
 ];
 
@@ -57,6 +60,11 @@ export const TASKS: Task[] = [
 
 /** What the "+" in Scheduled Tasks adds, one at a time, in place of the app's New Task sheet. */
 export const PRESET_TASKS: Task[] = [
+    {
+        id: "sales-report", title: "Weekly Top Customers", schedule: "Every week on Monday at 09:00",
+        prompt: "Use Quaero to find our top customers by revenue, save the table as a page in Cellar, and draft a thank-you email to them.",
+        next: "Next run Monday, 26 Oct at 09:00", enabled: true,
+    },
     {
         id: "morning-brief", title: "Morning Brief", schedule: "Every weekday at 08:30",
         prompt: "List the to-dos due today in Cellar and the meetings on my agenda page, most urgent first.",
