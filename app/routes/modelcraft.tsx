@@ -34,14 +34,14 @@ export default function ModelCraft() {
                 <ModelCraftDesktop className="mt-16" />
             </Hero>
 
+            <Section className="pt-4">
+                <ModelCraftDemo />
+            </Section>
+
             <Section>
                 <SectionTitle>{t("modelcraft.capable_and_completely_private")}</SectionTitle>
                 <SectionLead>{t("modelcraft.models_run_on_device_no")}</SectionLead>
                 <FeatureGrid features={FEATURES} />
-            </Section>
-
-            <Section className="pt-6">
-                <ModelCraftDemo />
             </Section>
 
             <Statement eyebrow="modelcraft.privacy" title="modelcraft.data_stays_on_the_device" body="modelcraft.conversations_are_processed_on_device" />
