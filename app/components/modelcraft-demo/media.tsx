@@ -136,7 +136,7 @@ export function GeneratedImage({ art, size, saved }: { art: Art; size: string; s
     const s = useText();
     const svg = useRef<SVGSVGElement>(null);
     return (
-        <figure className="mb-3 w-full max-w-[320px]">
+        <figure className="w-full max-w-[320px]">
             <div className="group relative overflow-hidden rounded-xl shadow-sm">
                 <Artwork art={art} moving={false} className="block aspect-square w-full" svgRef={svg} />
                 <button type="button" className={cn(BUTTON, "absolute right-2 bottom-2 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100")} onClick={() => save(svg.current, saved)}>
@@ -169,7 +169,7 @@ export function GeneratedVideo({ art, size, seconds, saved }: { art: Art; size: 
 
     const clock = (t: number) => `0:${String(Math.floor(t)).padStart(2, "0")}`;
     return (
-        <figure className="mb-3 w-full max-w-[320px]">
+        <figure className="w-full max-w-[320px]">
             <div className="group relative overflow-hidden rounded-xl bg-black shadow-sm">
                 <button type="button" aria-label={playing ? s(["Pause", "暂停", "暫停"]) : s(["Play", "播放", "播放"])} className="block w-full" onClick={() => setPlaying((p) => !p)}>
                     <Artwork art={art} moving paused={!playing} className="block aspect-square w-full" svgRef={svg} />

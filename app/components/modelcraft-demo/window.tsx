@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import { useLang, useText } from "~/components/demo-text";
+import { pick, useLang, useText } from "~/components/demo-text";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
 import { ChatView, type Pending } from "./chat";
@@ -20,6 +20,8 @@ const DOWNLOAD_MS = 2400;
 const THINK_MS = 700;
 const TOOL_MS = 900;
 const RUN_MS = 1600;
+/** Between a stretch of text and the tool calls after it. */
+const PAUSE_MS = 400;
 
 export function ModelCraftWindow({ className, view, onView, onCall, onWriting }: {
     className?: string;
@@ -27,7 +29,7 @@ export function ModelCraftWindow({ className, view, onView, onCall, onWriting }:
     onView: (view: View) => void;
     /** A reply has started a tool call. */
     onCall?: (tool: Tool) => void;
-    /** A reply that used tools has started writing its answer. */
+    /** A reply has started writing after its tool calls. */
     onWriting?: () => void;
 }) {
     const s = useText();
@@ -69,33 +71,40 @@ export function ModelCraftWindow({ className, view, onView, onCall, onWriting }:
         return () => cancelAnimationFrame(frame);
     }, [downloading]);
 
-    // Moves a reply through thinking, using a connector and typing, then files it in its conversation.
+    // Moves a reply through thinking, then each of its parts in turn: tool calls one at a time, text
+    // typed out, then files it in its conversation.
     useEffect(() => {
         if (!pending) return;
-        const { phase, message, shown, chatId: id } = pending;
-        if (phase === "typing" && shown >= message.text.length) {
+        const { phase, message, part, step, shown, chatId: id } = pending;
+        const current = message.parts[part];
+        if (phase === "working" && !current) {
             setChats((cs) => cs.map((c) => (c.id === id ? { ...c, messages: [...c.messages, message] } : c)));
             setPending(null);
             return;
         }
+        const next = { part: part + 1, step: 0, shown: 0 };
+        const length = current && "text" in current ? pick(lang)(current.text).length : 0;
         const timer = setTimeout(() => setPending((p) => p && (
-            phase === "thinking" ? { ...p, phase: message.tools ? "tool" : "typing" }
-                : phase === "tool" ? (p.step < message.tools!.length - 1 ? { ...p, step: p.step + 1 } : { ...p, phase: "typing" })
-                    : { ...p, shown: p.shown + 3 }
-        )), phase === "thinking" ? THINK_MS : phase === "tool" ? TOOL_MS : 16);
+            phase === "thinking" ? { ...p, phase: "working" }
+                : "tools" in current ? (step < current.tools.length - 1 ? { ...p, step: step + 1 } : { ...p, ...next })
+                    : shown < length ? { ...p, shown: shown + 3 } : { ...p, ...next }
+        )), phase === "thinking" ? THINK_MS
+            : "tools" in current ? TOOL_MS
+                : shown < length ? 16 : PAUSE_MS);
         return () => clearTimeout(timer);
-    }, [pending]);
+    }, [pending, lang]);
 
-    // Tells the owner about each tool call, and when the answer after them starts.
+    // Tells the owner about each tool call, and when text after them starts.
     const listeners = useRef({ onCall, onWriting });
     listeners.current = { onCall, onWriting };
-    const call = pending?.phase === "tool" ? pending.message.tools?.[pending.step] : undefined;
+    const working = pending?.phase === "working" ? pending.message.parts[pending.part] : undefined;
+    const call = working && "tools" in working ? working.tools[pending!.step] : undefined;
     useEffect(() => {
         if (call) listeners.current.onCall?.(call);
     }, [call]);
-    const writing = pending?.phase === "typing" && pending.message.tools !== undefined;
+    const writing = working && "text" in working && pending!.part > 0 ? pending!.part : undefined;
     useEffect(() => {
-        if (writing) listeners.current.onWriting?.();
+        if (writing !== undefined) listeners.current.onWriting?.();
     }, [writing]);
 
     const go = (v: View, id: string | null = chatId) => {
@@ -121,7 +130,7 @@ export function ModelCraftWindow({ className, view, onView, onCall, onWriting }:
         const target = id;
         const message: Message = { role: "user", text, ...(files.length ? { attachments: files } : {}) };
         setChats((cs) => cs.map((c) => (c.id === target ? { ...c, messages: [...c.messages, message] } : c)));
-        setPending({ chatId: target, message: replyTo(text, installed, lang, files), phase: "thinking", step: 0, shown: 0 });
+        setPending({ chatId: target, message: replyTo(text, installed, lang, files), phase: "thinking", part: 0, step: 0, shown: 0 });
     };
 
     const download = (name: string) => {

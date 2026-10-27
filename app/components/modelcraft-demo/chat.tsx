@@ -5,14 +5,17 @@ import { useLang, useText, type L } from "~/components/demo-text";
 import { ProductIcon } from "~/components/product-icon";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
-import { CONNECTOR_NAME, NATIVE_NAME, SUGGESTIONS, groupTitle, toolLabel, type Attachment, type Chat, type Message, type Tool } from "./conversations";
+import { CONNECTOR_NAME, NATIVE_NAME, SUGGESTIONS, groupTitle, toolLabel, type Attachment, type Chat, type Message, type Part, type Reply, type Tool } from "./conversations";
 import { GeneratedImage, GeneratedVideo } from "./media";
 import { ACCENT, ACCENT_BG, BAR, BODY, BUBBLE, CAPSULE, CARD, FAINT, MUTED, SMALL, TEXT, TITLE, TOOL_ITEM } from "./ui";
 
-/** A reply on its way: thinking, then running its tool calls one `step` at a time, then typing out `shown` characters. */
 const NEW_CHAT: L = ["New Chat", "新对话", "新對話"];
 
-export type Pending = { chatId: string; message: Message; phase: "thinking" | "tool" | "typing"; step: number; shown: number };
+/**
+ * A reply on its way: thinking, then working through its parts. In the part at `part`, tool calls run
+ * one `step` at a time and text types out `shown` characters.
+ */
+export type Pending = { chatId: string; message: Reply; phase: "thinking" | "working"; part: number; step: number; shown: number };
 
 export function ChatView({ chat, pending, model, models, focus, sidebarButton, onSend, onPickModel, onNewChat }: {
     /** Null for a new chat. */
@@ -34,7 +37,7 @@ export function ChatView({ chat, pending, model, models, focus, sidebarButton, o
     useEffect(() => {
         const el = scroller.current;
         if (el) el.scrollTop = el.scrollHeight;
-    }, [chat?.id, chat?.messages.length, reply?.shown, reply?.phase, reply?.step]);
+    }, [chat?.id, chat?.messages.length, reply?.shown, reply?.phase, reply?.part, reply?.step]);
 
     const composer = (
         <Composer model={model} models={models} busy={pending !== null} autoFocus={focus} onSend={onSend} onPickModel={onPickModel} />
@@ -75,7 +78,7 @@ export function ChatView({ chat, pending, model, models, focus, sidebarButton, o
                 <>
                     <div ref={scroller} className={cn("min-h-0 flex-1 overflow-y-auto px-5 pt-2 pb-4", BODY)}>
                         {chat.messages.map((m, i) => <MessageView key={i} message={m} />)}
-                        {reply && <MessageView message={reply.message} phase={reply.phase} step={reply.step} shown={reply.shown} />}
+                        {reply && <MessageView message={reply.message} pending={reply} />}
                     </div>
                     <div className="px-3 pb-3">{composer}</div>
                 </>
@@ -84,7 +87,7 @@ export function ChatView({ chat, pending, model, models, focus, sidebarButton, o
     );
 }
 
-function MessageView({ message, phase, step, shown }: { message: Message; phase?: Pending["phase"]; step?: number; shown?: number }) {
+function MessageView({ message, pending }: { message: Message; pending?: Pending }) {
     const s = useText();
     if (message.role === "user") {
         return (
@@ -100,17 +103,28 @@ function MessageView({ message, phase, step, shown }: { message: Message; phase?
             </div>
         );
     }
-    if (phase === "thinking") return <p className={cn("mb-6 motion-safe:animate-pulse", MUTED)}>{s(["Thinking…", "正在思考…", "正在思考…"])}</p>;
-    const text = shown === undefined ? s(message.text) : s(message.text).slice(0, shown);
-    // What the image and video tools made shows in the reply as soon as each call is done.
-    const made = (message.tools ?? []).slice(0, phase === "tool" ? step ?? 0 : undefined).filter((t) => t.kind === "image" || t.kind === "video");
+    if (pending?.phase === "thinking") return <p className={cn("mb-6 motion-safe:animate-pulse", MUTED)}>{s(["Thinking…", "正在思考…", "正在思考…"])}</p>;
+    // While the reply is on its way, only the parts it has reached show, the last one still going.
+    const parts = pending ? message.parts.slice(0, pending.part + 1) : message.parts;
     return (
-        <div className="mb-6">
-            {message.tools && <ToolGroup tools={message.tools} running={phase === "tool" ? step ?? 0 : undefined} />}
+        <div className="mb-6 flex flex-col gap-3">
+            {parts.map((part, i) => <PartView key={i} part={part} step={pending && i === pending.part ? pending.step : undefined} shown={pending && i === pending.part ? pending.shown : undefined} />)}
+        </div>
+    );
+}
+
+/** A run of tool calls, with what the image and video tools made, or a stretch of text. */
+function PartView({ part, step, shown }: { part: Part; /** The call in progress, or the characters typed so far, while this part is going. */ step?: number; shown?: number }) {
+    const s = useText();
+    if ("text" in part) return <Rich text={shown === undefined ? s(part.text) : s(part.text).slice(0, shown)} />;
+    // What the image and video tools made shows as soon as each call is done.
+    const made = part.tools.slice(0, step).filter((t) => t.kind === "image" || t.kind === "video");
+    return (
+        <div className="flex flex-col gap-3">
+            <ToolGroup tools={part.tools} running={step} />
             {made.map((t, i) => t.kind === "image"
                 ? <GeneratedImage key={i} art={t.art} size={t.size} saved={t.saved} />
                 : t.kind === "video" && <GeneratedVideo key={i} art={t.art} size={t.size} seconds={t.seconds} saved={t.saved} />)}
-            {phase !== "tool" && <Rich text={text} />}
         </div>
     );
 }
@@ -122,7 +136,7 @@ function ToolGroup({ tools, running }: { tools: Tool[]; /** The call in progress
     const [open, setOpen] = useState(false);
     const shown = running === undefined ? tools : tools.slice(0, running + 1);
     return (
-        <div className="mb-3">
+        <div>
             <button type="button" aria-expanded={open} className={cn("flex items-center gap-1.5 text-left font-medium hover:text-[#1c1c1c] dark:hover:text-[#f2f3f0]", MUTED)} onClick={() => setOpen((o) => !o)}>
                 <SFSymbol name="chevron.right" className={cn("size-2.5 shrink-0 transition-transform", open && "rotate-90")} />
                 <span className={running !== undefined ? "motion-safe:animate-pulse" : undefined}>
