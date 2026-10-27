@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Glyph } from "~/components/glyph";
 import { ScreenshotDemo } from "~/components/screenshot-demo";
 import {
-    DownloadButton, Eyebrow, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Split, Statement, Tree,
+    DownloadButton, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Statement,
     type Feature,
 } from "~/components/sections";
 import { getProduct, type AccentHandle } from "~/lib/products";
@@ -25,15 +25,6 @@ const POINTS = [
     { title: "screenshot.auto_scroll", body: "screenshot.on_a_window_auto_scrolls" },
     { title: "screenshot.never_moves_the_pointer", body: "screenshot.you_stay_in_control_frames" },
 ];
-
-const TREE = `Mail window, scrolling capture
-├── Toolbar             kept on top
-├── Sidebar             312 → 1,840 pt
-├── Message list        640 → 6,120 pt
-├── Message             640 → 2,410 pt
-└── Status bar          kept at the bottom
-
-Result                  1 picture, 2,240 × 12,480 px`;
 
 export default function Screenshot() {
     const { t } = useTranslation();
@@ -57,16 +48,7 @@ export default function Screenshot() {
                 <FeatureGrid features={FEATURES} />
             </Section>
 
-            <Section className="pt-6">
-                <Split>
-                    <div>
-                        <Eyebrow>{t("screenshot.scrolling_capture")}</Eyebrow>
-                        <h3>{t("screenshot.like_an_endless_screen")}</h3>
-                        <p>{t("screenshot.the_result_looks_like_the")}</p>
-                    </div>
-                    <Tree>{TREE}</Tree>
-                </Split>
-            </Section>
+            <Statement eyebrow="screenshot.scrolling_capture" title="screenshot.like_an_endless_screen" body="screenshot.the_result_looks_like_the" />
 
             <Statement className="pb-8" eyebrow="screenshot.scrolling" title="screenshot.scroll_however_you_like" />
             <Section className="pt-6">

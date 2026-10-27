@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { KeelDemo, type KeelStop } from "~/components/keel-demo";
 import {
-    ComingSoonButton, Eyebrow, Hero, Points, ProductMeta, Section, Split, Statement, Tree,
+    ComingSoonButton, Hero, Points, ProductMeta, Section, Statement,
 } from "~/components/sections";
 import { FeatureTour, type TourStop } from "~/components/tour";
 import { getProduct, type AccentHandle } from "~/lib/products";
@@ -23,19 +23,6 @@ const POINTS = [
     { title: "keel.large_values_handled", body: "keel.strings_over_1_mb_load" },
 ];
 
-const TREE = `user:1001
-├── profile        hash    2.1 KB
-├── sessions       zset    840 B
-└── cart           list    TTL 29:41
-cache:feed:home    string  1.2 MB
-events             stream  12,408 entries
-
-> HGETALL user:1001:profile
-1) "name"
-2) "Ada"
-3) "plan"
-4) "pro"`;
-
 export default function Keel() {
     const { t } = useTranslation();
     const [stop, setStop] = useState<KeelStop>("browse");
@@ -54,16 +41,7 @@ export default function Keel() {
                 </FeatureTour>
             </Hero>
 
-            <Section className="pt-6">
-                <Split>
-                    <div>
-                        <Eyebrow>{t("keel.connections")}</Eyebrow>
-                        <h3>{t("keel.tls_acl_and_ssh_tunnels")}</h3>
-                        <p>{t("keel.connect_with_a_username_pick")}</p>
-                    </div>
-                    <Tree>{TREE}</Tree>
-                </Split>
-            </Section>
+            <Statement eyebrow="keel.connections" title="keel.tls_acl_and_ssh_tunnels" body="keel.connect_with_a_username_pick" />
 
             <Statement className="pb-8" eyebrow="keel.safety" title="keel.careful_by_default" />
             <Section className="pt-6">

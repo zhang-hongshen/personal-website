@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Glyph } from "~/components/glyph";
 import { PinchDemo } from "~/components/pinch-demo";
 import {
-    ComingSoonButton, Eyebrow, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Split, Statement, Tree,
+    ComingSoonButton, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Statement,
     type Feature,
 } from "~/components/sections";
 import { getProduct, type AccentHandle } from "~/lib/products";
@@ -25,16 +25,6 @@ const STEPS = [
     { title: "pinch.add_the_object", body: "pinch.place_the_object_on_your" },
     { title: "pinch.read_the_weight", body: "pinch.when_the_reading_settles_the" },
 ];
-
-const TREE = `Weighing
-├── Tare           ⌘T    0.0 g    Net
-├── Add a coin           7.5 g    ● Stable
-└── Hold           ⌘L    7.5 g    Hold
-
-Counting mode      ⌘U
-├── Tare                 -- pcs
-├── Add 10 pieces        Tare again → 0.46 g each
-└── Add a handful        38 pcs   ● Stable`;
 
 export default function Pinch() {
     const { t } = useTranslation();
@@ -58,16 +48,7 @@ export default function Pinch() {
                 <FeatureGrid features={FEATURES} />
             </Section>
 
-            <Section className="pt-6">
-                <Split>
-                    <div>
-                        <Eyebrow>{t("pinch.counting_mode")}</Eyebrow>
-                        <h3>{t("pinch.count_instead_of_weigh")}</h3>
-                        <p>{t("pinch.press_tare_add_ten_identical")}</p>
-                    </div>
-                    <Tree>{TREE}</Tree>
-                </Split>
-            </Section>
+            <Statement eyebrow="pinch.counting_mode" title="pinch.count_instead_of_weigh" body="pinch.press_tare_add_ten_identical" />
 
             <Statement className="pb-8" eyebrow="pinch.how_it_works" title="pinch.four_steps_to_a_reading" />
             <Section className="pt-6">

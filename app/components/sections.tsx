@@ -8,6 +8,7 @@ import { useLatestRelease } from "~/lib/release";
 import { cn } from "~/lib/utils";
 import { Glyph } from "./glyph";
 import { ProductIcon } from "./product-icon";
+import { SFSymbol, type SymbolName } from "./sf-symbol";
 
 // Building blocks shared by the product pages.
 
@@ -150,11 +151,38 @@ export function Shot({ light, dark, alt, width, height, className, eager }: {
     );
 }
 
-export function Tree({ children }: { children: string }) {
+/** A folder or file in a FileTree; `note` is a translation key shown at the end of the row. */
+export type FileNode = { name: string; icon?: SymbolName; note?: string; children?: FileNode[] };
+
+/** Folders and files laid out like a Finder list view, every folder open. */
+export function FileTree({ nodes }: { nodes: FileNode[] }) {
+    const { t } = useTranslation();
+    const rows: { node: FileNode; depth: number }[] = [];
+    const walk = (list: FileNode[], depth: number) => list.forEach((node) => {
+        rows.push({ node, depth });
+        if (node.children) walk(node.children, depth + 1);
+    });
+    walk(nodes, 0);
     return (
-        <pre className="m-0 overflow-x-auto rounded-card border border-border bg-card p-[22px] font-mono text-[13px] leading-[1.65] text-muted-foreground shadow-card">
-            {children}
-        </pre>
+        <div className="overflow-x-auto rounded-card border border-border bg-card p-3 shadow-card">
+            {rows.map(({ node, depth }, i) => (
+                <div
+                    key={i}
+                    className="flex h-8 items-center gap-2 rounded-md px-2 text-[14px] whitespace-nowrap odd:bg-muted/50"
+                    style={{ paddingLeft: 8 + depth * 22 }}
+                >
+                    {node.children
+                        ? <SFSymbol name="chevron.down" className="size-2.5 shrink-0 text-faint" />
+                        : <span className="w-2.5 shrink-0" />}
+                    <SFSymbol
+                        name={node.children ? "folder" : node.icon ?? "doc"}
+                        className={cn("size-4 shrink-0", node.children ? "text-[#1a8cff]" : "text-muted-foreground")}
+                    />
+                    <span className="truncate">{node.name}</span>
+                    {node.note && <span className="ml-auto pl-6 text-[13px] text-faint">{t(node.note)}</span>}
+                </div>
+            ))}
+        </div>
     );
 }
 

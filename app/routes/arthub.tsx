@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 
 import { ArthubDemo, type ArthubStop } from "~/components/arthub-demo";
 import {
-    DownloadButton, Eyebrow, Hero, Points, ProductMeta, Section, Split, Statement, Tree,
+    DownloadButton, Eyebrow, FileTree, Hero, Points, ProductMeta, Section, Split, Statement, type FileNode,
 } from "~/components/sections";
 import { FeatureTour, type TourStop } from "~/components/tour";
 import { getProduct, type AccentHandle } from "~/lib/products";
@@ -24,21 +24,42 @@ const POINTS = [
     { title: "arthub.non_destructive", body: "arthub.removing_a_folder_never_touches" },
 ];
 
-const TREE = `TV Shows/
-└── Doctor Who (2005)/
-    ├── Season 01/
-    │   ├── Doctor Who S01E01.mkv
-    │   ├── Doctor Who S01E01.en.srt
-    │   └── Doctor Who S01E02-E03.mkv
-    └── Specials/
-        └── Doctor Who S00E01.mkv
-
-Music/
-└── Adele/
-    └── 25 (2015)/
-        ├── cover.jpg
-        ├── 01 Hello.flac
-        └── 01 Hello.lrc`;
+const TREE: FileNode[] = [
+    {
+        name: "TV Shows",
+        children: [{
+            name: "Doctor Who (2005)",
+            children: [
+                {
+                    name: "Season 01",
+                    children: [
+                        { name: "Doctor Who S01E01.mkv", icon: "film", note: "arthub.file_episode_1" },
+                        { name: "Doctor Who S01E01.en.srt", icon: "captions.bubble", note: "arthub.file_subtitles" },
+                        { name: "Doctor Who S01E02-E03.mkv", icon: "film", note: "arthub.file_episodes_2_3" },
+                    ],
+                },
+                {
+                    name: "Specials",
+                    children: [{ name: "Doctor Who S00E01.mkv", icon: "film", note: "arthub.file_special" }],
+                },
+            ],
+        }],
+    },
+    {
+        name: "Music",
+        children: [{
+            name: "Adele",
+            children: [{
+                name: "25 (2015)",
+                children: [
+                    { name: "cover.jpg", icon: "doc", note: "arthub.file_album_art" },
+                    { name: "01 Hello.flac", icon: "music.note", note: "arthub.file_track_1" },
+                    { name: "01 Hello.lrc", icon: "quote.bubble", note: "arthub.file_lyrics" },
+                ],
+            }],
+        }],
+    },
+];
 
 export default function Arthub() {
     const { t } = useTranslation();
@@ -65,7 +86,7 @@ export default function Arthub() {
                         <h3>{t("arthub.understands_real_world_file_names")}</h3>
                         <p>{t("arthub.resolution_and_source_tags_are")}</p>
                     </div>
-                    <Tree>{TREE}</Tree>
+                    <FileTree nodes={TREE} />
                 </Split>
             </Section>
 

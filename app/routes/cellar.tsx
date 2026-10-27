@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { CellarDemo } from "~/components/cellar-demo";
 import { Glyph } from "~/components/glyph";
 import {
-    ComingSoonButton, Eyebrow, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Split, Statement, Tree,
+    ComingSoonButton, FeatureGrid, Hero, Points, ProductMeta, Section, SectionLead, SectionTitle, Statement,
     type Feature,
 } from "~/components/sections";
 import { getProduct, type AccentHandle } from "~/lib/products";
@@ -26,16 +26,6 @@ const POINTS = [
     { title: "cellar.yours_to_take", body: "cellar.export_to_open_formats_whenever" },
 ];
 
-const TREE = `Reading list          database   42 rows
-├── Table             by Status
-├── Board             grouped by Genre
-└── List              finished this year
-Projects              page
-├── Roadmap           mind map
-├── Architecture      mermaid
-└── Tasks             database   18 rows
-    └── Author        relation → People`;
-
 export default function Cellar() {
     const { t } = useTranslation();
     return (
@@ -57,16 +47,7 @@ export default function Cellar() {
                 <FeatureGrid features={FEATURES} />
             </Section>
 
-            <Section className="pt-6">
-                <Split>
-                    <div>
-                        <Eyebrow>{t("cellar.databases")}</Eyebrow>
-                        <h3>{t("cellar.structure_when_you_need_it")}</h3>
-                        <p>{t("cellar.turn_any_page_into_a")}</p>
-                    </div>
-                    <Tree>{TREE}</Tree>
-                </Split>
-            </Section>
+            <Statement eyebrow="cellar.databases" title="cellar.structure_when_you_need_it" body="cellar.turn_any_page_into_a" />
 
             <Statement className="pb-8" eyebrow="cellar.privacy" title="cellar.local_first_by_design" />
             <Section className="pt-6">
