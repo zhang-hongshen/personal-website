@@ -163,16 +163,6 @@ export function MenuBar({ menus, wifi, brightness, volume, onWifi, onBrightness,
             {title("wifi", <WifiIcon on={wifi} className="h-[13px] w-4" />, (
                 <div className={cn(PANEL, "w-[260px] p-3")}>
                     <Toggle label="Wi-Fi" on={wifi} onChange={onWifi} />
-                    {wifi && (
-                        <>
-                            <p className="mt-3 mb-1 px-1 text-[11px] font-semibold opacity-50">{s(["Known Network", "已知网络", "已知網路"])}</p>
-                            <p className="flex items-center gap-2 rounded-md bg-black/5 px-2 py-1.5 dark:bg-white/8">
-                                <span className="flex size-6 items-center justify-center rounded-full bg-[#0a82ff] text-white"><WifiIcon on className="h-2.5 w-3" /></span>
-                                Lumen Studio
-                                <SFSymbol name="checkmark" className="ml-auto size-2.5 opacity-60" />
-                            </p>
-                        </>
-                    )}
                 </div>
             ), { align: "right", aria: "Wi-Fi" })}
             {title("battery", <BatteryIcon className="h-[11px] w-[23px]" />, (
@@ -184,7 +174,7 @@ export function MenuBar({ menus, wifi, brightness, volume, onWifi, onBrightness,
             {title("control", <ControlCenterIcon className="h-[13px] w-[15px]" />, (
                 <div className={cn(PANEL, "grid w-[280px] gap-2 p-2.5")}>
                     <div className="grid grid-cols-2 gap-2">
-                        <Tile label="Wi-Fi" detail={wifi ? "Lumen Studio" : s(["Off", "关闭", "關閉"])} on={wifi} onClick={() => onWifi(!wifi)} />
+                        <Tile label="Wi-Fi" detail={wifi ? s(["On", "打开", "開啟"]) : s(["Off", "关闭", "關閉"])} on={wifi} onClick={() => onWifi(!wifi)} />
                         <TileGroup />
                     </div>
                     <Slider label={s(["Display", "显示器", "顯示器"])} icon="☀︎" value={brightness} min={0.3} onChange={onBrightness} />

@@ -136,7 +136,7 @@ export function initial(at: Date) {
     };
     return {
         containers: [
-            make("docker.io/library/nginx:1.27", "web", "running", { mounts: [{ source: "~/Sites/lumen", path: "/usr/share/nginx/html", readOnly: true }] }),
+            make("docker.io/library/nginx:1.27", "web", "running", { mounts: [{ source: "~/Sites/shop", path: "/usr/share/nginx/html", readOnly: true }] }),
             make("docker.io/library/postgres:17", "db", "running", { cpus: 4, memory: 2 * GB, mounts: [{ source: "pgdata", path: "/var/lib/postgresql/data", readOnly: false }], networks: ["default", "backend"] }),
             make("docker.io/library/redis:7.4", "cache", "stopped", { memory: 512 * MB, networks: ["backend"] }),
         ],

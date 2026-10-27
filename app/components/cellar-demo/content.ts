@@ -1,5 +1,5 @@
 // What the Cellar demo opens with: a few pages and two databases from the app's showcase data (a small
-// team building Lumen, a photo-editing app), in the visitor's language.
+// team building ModelCraft), in the visitor's language.
 
 export type Lang = "en" | "zh-CN" | "zh-TW";
 
@@ -41,11 +41,11 @@ export function seed(lang: Lang): Doc[] {
     ];
     const people = [s(["Maya Chen", "林晓", "林曉"]), s(["Leo Fischer", "周远", "周遠"]), s(["Priya Raman", "陈思雨", "陳思雨"]), s(["Sam Okafor", "王磊", "王磊"]), s(["Hana Sato", "苏念", "蘇念"])];
     const tasks: [L, number, number, number, L][] = [
-        [["Finalize preset pricing tiers", "确定预设定价档位", "確定預設定價檔位"], 2, 2, 0, ["Oct 26", "10月26日", "10月26日"]],
-        [["Build the preset upload flow", "开发预设上传流程", "開發預設上傳流程"], 1, 2, 1, ["Oct 29", "10月29日", "10月29日"]],
-        [["Monthly creator payout report", "创作者月度分成报表", "創作者月度分潤報表"], 0, 1, 3, ["Nov 6", "11月6日", "11月6日"]],
-        [["Split view on iPad", "iPad 分屏布局", "iPad 分割畫面版面"], 3, 2, 2, ["Oct 22", "10月22日", "10月22日"]],
-        [["Fix crash when exporting HEIC", "修复导出 HEIC 时崩溃", "修正匯出 HEIC 時當機"], 1, 3, 3, ["Today", "今天", "今天"]],
+        [["Pick the Model Store's featured models", "选定模型商店的推荐模型", "選定模型商店的推薦模型"], 2, 2, 0, ["Oct 26", "10月26日", "10月26日"]],
+        [["Build the connector install flow", "开发连接器安装流程", "開發連接器安裝流程"], 1, 2, 1, ["Oct 29", "10月29日", "10月29日"]],
+        [["Monthly download report", "月度下载量报表", "月度下載量報表"], 0, 1, 3, ["Nov 6", "11月6日", "11月6日"]],
+        [["Scheduled tasks settings", "定时任务设置页", "排程任務設定頁"], 3, 2, 2, ["Oct 22", "10月22日", "10月22日"]],
+        [["Fix crash when pausing a download", "修复暂停下载时崩溃", "修正暫停下載時當機"], 1, 3, 3, ["Today", "今天", "今天"]],
         [["New welcome screens", "新的欢迎页", "新的歡迎頁"], 2, 2, 2, ["Oct 28", "10月28日", "10月28日"]],
         [["Write onboarding copy", "撰写引导文案", "撰寫引導文案"], 3, 1, 4, ["Oct 20", "10月20日", "10月20日"]],
     ];
@@ -67,11 +67,11 @@ export function seed(lang: Lang): Doc[] {
         {
             kind: "page", id: "home", title: s(["Home", "首页", "首頁"]),
             blocks: [
-                b("p", ["Everything for Lumen and life outside it. Nothing here leaves this Mac.", "Lumen 的工作和生活里的琐事都在这里，所有内容只存在这台 Mac 上。", "Lumen 的工作和生活裡的瑣事都在這裡，所有內容只存在這台 Mac 上。"]),
+                b("p", ["Everything for ModelCraft and life outside it. Nothing here leaves this Mac.", "ModelCraft 的工作和生活里的琐事都在这里，所有内容只存在这台 Mac 上。", "ModelCraft 的工作和生活裡的瑣事都在這裡，所有內容只存在這台 Mac 上。"]),
                 b("h1", ["This week", "本周", "本週"]),
-                b("todo", ["Send 2.0 beta 3 to TestFlight", "把 2.0 beta 3 发到 TestFlight", "把 2.0 beta 3 發到 TestFlight"], { checked: true }),
+                b("todo", ["Send 1.0 beta 3 to TestFlight", "把 1.0 beta 3 发到 TestFlight", "把 1.0 beta 3 發到 TestFlight"], { checked: true }),
                 b("todo", ["Review the welcome screens with Priya", "和思雨过一遍新的欢迎页", "和思雨過一遍新的歡迎頁"], { checked: true }),
-                b("todo", ["Decide on preset pricing before Thursday", "周四前定下预设的价格", "週四前定下預設的價格"]),
+                b("todo", ["Pick the Model Store's featured models before Thursday", "周四前选定模型商店的推荐模型", "週四前選定模型商店的推薦模型"]),
                 b("todo", ["Book the ryokan for the Kyoto trip", "预订京都旅行的旅馆", "預訂京都旅行的旅館"]),
                 b("todo", ["Finish Klara and the Sun", "读完《克拉拉与太阳》", "讀完《克拉拉與太陽》"]),
                 b("h2", ["Jump to", "常用", "常用"]),
@@ -83,17 +83,17 @@ export function seed(lang: Lang): Doc[] {
             ],
         },
         {
-            kind: "page", id: "launch", title: s(["Lumen 2.0 launch plan", "Lumen 2.0 发布计划", "Lumen 2.0 發布計畫"]),
+            kind: "page", id: "launch", title: s(["ModelCraft 1.0 launch plan", "ModelCraft 1.0 发布计划", "ModelCraft 1.0 發布計畫"]),
             blocks: [
-                b("p", ["Goal: turn Lumen from an editor into a place where photographers share their look, with 1,000 paid presets in the marketplace by the end of Q1.", "目标：让 Lumen 从一个修图工具变成摄影师分享风格的地方，Q1 结束前预设市场上架 1,000 个付费预设。", "目標：讓 Lumen 從一個修圖工具變成攝影師分享風格的地方，Q1 結束前預設市集上架 1,000 個付費預設。"]),
+                b("p", ["Goal: a private assistant that runs entirely on the Mac and works your other apps for you, with 10,000 downloads in the first month.", "目标：做一个完全在 Mac 本地运行、能替你操作其他 App 的私人助手，首月下载 10,000 次。", "目標：做一個完全在 Mac 本機執行、能替你操作其他 App 的私人助理，首月下載 10,000 次。"]),
                 b("h2", ["What ships", "包含内容", "包含內容"]),
-                b("number", ["Presets marketplace — browse, buy, and sell presets inside the app", "预设市场 —— 在应用里浏览、购买和出售预设", "預設市集 —— 在 App 裡瀏覽、購買和販售預設"]),
-                b("number", ["iPad layout — split view, keyboard shortcuts, and Apple Pencil masking", "iPad 布局 —— 分屏、键盘快捷键和 Apple Pencil 蒙版", "iPad 版面 —— 分割畫面、鍵盤快速鍵和 Apple Pencil 遮色片"]),
+                b("number", ["Connectors — work Container, Quaero, Keel, Cellar and Arthub from a chat", "连接器 —— 在对话里操作 Container、Quaero、Keel、Cellar 和 Arthub", "連接器 —— 在對話裡操作 Container、Quaero、Keel、Cellar 和 Arthub"]),
+                b("number", ["Scheduled tasks — run a prompt every day or week", "定时任务 —— 每天或每周自动运行一个提示", "排程任務 —— 每天或每週自動執行一個提示"]),
                 b("number", ["New onboarding — three screens instead of seven", "新的引导流程 —— 从七屏减到三屏", "新的引導流程 —— 從七頁減到三頁"]),
                 b("h2", ["Open questions", "待定问题", "待定問題"]),
-                b("bullet", ["Do presets need a free tier?", "预设要不要有免费档？", "預設要不要有免費方案？"]),
-                b("bullet", ["Who reviews marketplace submissions?", "谁来审核上架的预设？", "誰來審核上架的預設？"]),
-                b("code", "let tiers = [2.99, 4.99, 9.99]\nlet launch = Date(\"2027-01-12\")"),
+                b("bullet", ["Which models should the Model Store feature first?", "模型商店首先推荐哪些模型？", "模型商店首先推薦哪些模型？"]),
+                b("bullet", ["How much memory should the default model need?", "默认模型应该占用多少内存？", "預設模型應該佔用多少記憶體？"]),
+                b("code", "let connectors = [\"container\", \"quaero\", \"keel\", \"cellar\", \"arthub\"]\nlet launch = Date(\"2027-01-12\")"),
             ],
         },
         {

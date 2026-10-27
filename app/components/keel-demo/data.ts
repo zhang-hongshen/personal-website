@@ -33,10 +33,10 @@ const h = (value: Record<string, string>): Entry => ({ data: { type: "hash", val
 function local(): Keyspace {
     const now = Date.now();
     const db0: Record<string, Entry> = {
-        "user:1001": h({ name: "Maya Chen", email: "maya@lumen.app", plan: "pro", created_at: "2026-01-04T09:12:00Z" }),
-        "user:1002": h({ name: "Leo Fischer", email: "leo@lumen.app", plan: "free", created_at: "2026-01-19T16:40:00Z" }),
-        "user:1003": h({ name: "Priya Raman", email: "priya@lumen.app", plan: "pro", created_at: "2026-02-02T11:05:00Z" }),
-        "user:1004": h({ name: "Sam Okafor", email: "sam@lumen.app", plan: "team", created_at: "2026-02-27T08:30:00Z" }),
+        "user:1001": h({ name: "Maya Chen", email: "maya@example.com", plan: "pro", created_at: "2026-01-04T09:12:00Z" }),
+        "user:1002": h({ name: "Leo Fischer", email: "leo@example.com", plan: "free", created_at: "2026-01-19T16:40:00Z" }),
+        "user:1003": h({ name: "Priya Raman", email: "priya@example.com", plan: "pro", created_at: "2026-02-02T11:05:00Z" }),
+        "user:1004": h({ name: "Sam Okafor", email: "sam@example.com", plan: "team", created_at: "2026-02-27T08:30:00Z" }),
         "session:a91f2c0e": s('{"user":1001,"device":"MacBook Pro","ip":"203.0.113.7"}', 1800),
         "session:b07d33a1": s('{"user":1003,"device":"iPhone","ip":"198.51.100.24"}', 642),
         "session:c4e8a9f2": s('{"user":1002,"device":"iPad","ip":"192.0.2.81"}', 95),
@@ -46,7 +46,7 @@ function local(): Keyspace {
         "counter:visits": s("48213"),
         "counter:signups": s("1290"),
         "config:feature_flags": h({ new_onboarding: "on", marketplace: "beta", ipad_split_view: "off" }),
-        "queue:emails": { data: { type: "list", value: ['{"to":"maya@lumen.app","template":"receipt"}', '{"to":"leo@lumen.app","template":"welcome"}', '{"to":"sam@lumen.app","template":"reset_password"}'] }, expiresAt: null },
+        "queue:emails": { data: { type: "list", value: ['{"to":"maya@example.com","template":"receipt"}', '{"to":"leo@example.com","template":"welcome"}', '{"to":"sam@example.com","template":"reset_password"}'] }, expiresAt: null },
         "queue:thumbnails": { data: { type: "list", value: ["upload:9182", "upload:9183", "upload:9187", "upload:9190", "upload:9191"] }, expiresAt: null },
         "tags:popular": { data: { type: "set", value: ["film", "portrait", "night", "street", "bw", "travel"] }, expiresAt: null },
         "online:users": { data: { type: "set", value: ["1001", "1003", "1004"] }, expiresAt: null },

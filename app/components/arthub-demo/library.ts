@@ -324,7 +324,7 @@ export type Album = { id: string; title: string; artist: string; year: number; r
 
 export const ALBUMS: Album[] = [
     {
-        id: "weathervane", title: "Weathervane", artist: "Lumen Hall", year: 2022, root: 57, art: { from: "#ff9a62", to: "#5b2a86", motif: "sun" },
+        id: "weathervane", title: "Weathervane", artist: "Pale Harbor", year: 2022, root: 57, art: { from: "#ff9a62", to: "#5b2a86", motif: "sun" },
         songs: [
             { id: "w1", title: "North Wind", seconds: 214, bpm: 92, chords: [0, 5, 9, 7], lyrics: [[4, "Turn your face to the north wind"], [12, "Let it carry what you couldn't say"], [20, "Every roof in town is singing"], [28, "Every vane has turned away"], [37, "Oh, the weather's coming in"], [45, "And I'm not afraid of it"], [53, "Turn your face to the north wind"], [61, "Let it carry you home"]] },
             { id: "w2", title: "Glass Harbour", seconds: 197, bpm: 78, chords: [0, 8, 3, 10], lyrics: [[3, "The boats are made of glass tonight"], [11, "And the water holds its breath"], [19, "I can see right through the harbour"], [27, "To the place we left"], [36, "Hold still, hold still"], [44, "Let the light come through"]] },

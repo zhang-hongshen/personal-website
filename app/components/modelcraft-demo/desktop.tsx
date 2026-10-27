@@ -118,7 +118,8 @@ function Session({ onRestart, children }: { onRestart: () => void; children: (ap
     const [screen, setScreen] = useState<"on" | "sleep" | "locked">("on");
     const [brightness, setBrightness] = useState(1);
     const [volume, setVolume] = useState(0.6);
-    const [wifi, setWifi] = useState(true);
+    // Off to start with: ModelCraft works without a network.
+    const [wifi, setWifi] = useState(false);
 
     const front = order[order.length - 1] ?? null;
     // With no window in front, Finder is the active app, as on a Mac.

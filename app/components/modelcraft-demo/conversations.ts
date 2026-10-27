@@ -77,18 +77,18 @@ const SCENARIOS: Scenario[] = [
     {
         id: "fix-test", title: ["Fix the Failing Test", "修复失败的测试", "修正失敗的測試"],
         prompt: [
-            "Run the tests in ~/Code/lumen-api and fix whatever fails.",
-            "在 ~/Code/lumen-api 里跑一下测试，把失败的修好。",
-            "在 ~/Code/lumen-api 裡跑一下測試，把失敗的修好。",
+            "Run the tests in ~/Code/shop-api and fix whatever fails.",
+            "在 ~/Code/shop-api 里跑一下测试，把失败的修好。",
+            "在 ~/Code/shop-api 裡跑一下測試，把失敗的修好。",
         ],
         match: /\btests?\b|\bfail|\bbugs?\b|\bfix|测试|修复|修好|測試|修正|錯誤|错误/,
         tools: [
             {
-                kind: "command", command: "cd ~/Code/lumen-api && npm test",
+                kind: "command", command: "cd ~/Code/shop-api && npm test",
                 output: " PASS  src/sessions.test.ts\n FAIL  src/pricing.test.ts\n  ● presetPrice › applies the bundle discount once\n\n    Expected: 15.98\n    Received: 11.98\n\n      at src/pricing.test.ts:27:44\n\nTests:  1 failed, 23 passed, 24 total",
             },
             {
-                kind: "edit", path: "~/Code/lumen-api/src/pricing.ts",
+                kind: "edit", path: "~/Code/shop-api/src/pricing.ts",
                 diff: "@@ -18,7 +18,7 @@ export function presetPrice(items: Preset[], bundle: boolean) {\n   const subtotal = items.reduce((sum, p) => sum + p.price, 0);\n-  const discount = bundle ? items.length * 4 : 0;\n+  const discount = bundle ? 4 : 0;\n   return Math.max(0, subtotal - discount);\n }",
             },
             { kind: "command", command: "npm test", output: " PASS  src/sessions.test.ts\n PASS  src/pricing.test.ts\n\nTests:  24 passed, 24 total\nTime:   1.84 s" },
@@ -161,9 +161,9 @@ const SCENARIOS: Scenario[] = [
     {
         id: "dev-stack", title: ["Start the Dev Stack", "启动开发环境", "啟動開發環境"],
         prompt: [
-            "Start the Lumen dev stack in Container and make sure Redis and Postgres are both answering.",
-            "在 Container 里启动 Lumen 的开发环境，确认 Redis 和 Postgres 都能响应。",
-            "在 Container 裡啟動 Lumen 的開發環境，確認 Redis 和 Postgres 都能回應。",
+            "Start my dev stack in Container and make sure Redis and Postgres are both answering.",
+            "在 Container 里启动我的开发环境，确认 Redis 和 Postgres 都能响应。",
+            "在 Container 裡啟動我的開發環境，確認 Redis 和 Postgres 都能回應。",
         ],
         match: /container|docker|dev stack|stack|容器|开发环境|開發環境/,
         tools: [
@@ -206,18 +206,18 @@ const SCENARIOS: Scenario[] = [
             {
                 kind: "connector", app: "quaero", name: "run_query",
                 args: json({ connection: "shop", sql: "SELECT c.name, c.email, t.orders, t.revenue\nFROM order_totals t JOIN customers c ON c.id = t.customer_id\nORDER BY t.revenue DESC LIMIT 3;" }),
-                result: json({ columns: ["name", "email", "orders", "revenue"], rows: [["Maya Chen", "maya@lumen.app", 2, 29.98], ["Priya Raman", "priya@lumen.app", 2, 24.98], ["Lucas Moreau", "lucas@example.com", 1, 19.99]] }),
+                result: json({ columns: ["name", "email", "orders", "revenue"], rows: [["Maya Chen", "maya@example.com", 2, 29.98], ["Priya Raman", "priya@example.com", 2, 24.98], ["Lucas Moreau", "lucas@example.com", 1, 19.99]] }),
             },
             {
                 kind: "connector", app: "cellar", name: "create_page",
-                args: json({ title: "Top customers — October", parent: "Lumen", blocks: [{ type: "table", rows: 3 }, { type: "paragraph" }] }),
+                args: json({ title: "Top customers — October", parent: "Reports", blocks: [{ type: "table", rows: 3 }, { type: "paragraph" }] }),
                 result: json({ id: "p_93c0", url: "cellar://page/p_93c0", created: true }),
             },
             {
                 kind: "native", app: "Mail", icon: "envelope", ...MAIL_DRAFT,
                 card: [
-                    [TO, "maya@lumen.app, priya@lumen.app, lucas@example.com"],
-                    [SUBJECT, ["Thank you from Lumen", "来自 Lumen 的感谢", "來自 Lumen 的感謝"]],
+                    [TO, "maya@example.com, priya@example.com, lucas@example.com"],
+                    [SUBJECT, ["Thank you for your orders", "感谢你的订购", "感謝你的訂購"]],
                     [BODY, [
                         "Thanks for being one of our best customers this year — here's 20% off your next preset pack.",
                         "感谢你成为我们今年最好的客户之一。下一套预设包可享 8 折优惠。",
@@ -227,9 +227,9 @@ const SCENARIOS: Scenario[] = [
             },
         ],
         reply: [
-            "Your top three customers by paid revenue:\n1. **Maya Chen** — 2 orders, $29.98\n2. **Priya Raman** — 2 orders, $24.98\n3. **Lucas Moreau** — 1 order, $19.99\n- Saved the table as **Top customers — October** under Lumen in Cellar\n- Drafted a thank-you with a 20% code in Mail; it's in Drafts for you to check and send",
-            "按已付款收入排，前三位客户是：\n1. **Maya Chen** —— 2 笔订单，$29.98\n2. **Priya Raman** —— 2 笔订单，$24.98\n3. **Lucas Moreau** —— 1 笔订单，$19.99\n- 已把这张表保存到 Cellar 的 Lumen 下，页面名为 **Top customers — October**\n- 在邮件里写好了一封附带 8 折优惠码的感谢信草稿，放在草稿箱等你确认后发送",
-            "按已付款收入排，前三位客戶是：\n1. **Maya Chen** —— 2 筆訂單，$29.98\n2. **Priya Raman** —— 2 筆訂單，$24.98\n3. **Lucas Moreau** —— 1 筆訂單，$19.99\n- 已把這張表儲存到 Cellar 的 Lumen 下，頁面名為 **Top customers — October**\n- 在郵件裡寫好了一封附上 8 折優惠碼的感謝信草稿，放在草稿匣等你確認後寄出",
+            "Your top three customers by paid revenue:\n1. **Maya Chen** — 2 orders, $29.98\n2. **Priya Raman** — 2 orders, $24.98\n3. **Lucas Moreau** — 1 order, $19.99\n- Saved the table as **Top customers — October** under Reports in Cellar\n- Drafted a thank-you with a 20% code in Mail; it's in Drafts for you to check and send",
+            "按已付款收入排，前三位客户是：\n1. **Maya Chen** —— 2 笔订单，$29.98\n2. **Priya Raman** —— 2 笔订单，$24.98\n3. **Lucas Moreau** —— 1 笔订单，$19.99\n- 已把这张表保存到 Cellar 的 Reports 下，页面名为 **Top customers — October**\n- 在邮件里写好了一封附带 8 折优惠码的感谢信草稿，放在草稿箱等你确认后发送",
+            "按已付款收入排，前三位客戶是：\n1. **Maya Chen** —— 2 筆訂單，$29.98\n2. **Priya Raman** —— 2 筆訂單，$24.98\n3. **Lucas Moreau** —— 1 筆訂單，$19.99\n- 已把這張表儲存到 Cellar 的 Reports 下，頁面名為 **Top customers — October**\n- 在郵件裡寫好了一封附上 8 折優惠碼的感謝信草稿，放在草稿匣等你確認後寄出",
         ],
     },
     {
@@ -303,7 +303,7 @@ const SCENARIOS: Scenario[] = [
             {
                 kind: "native", app: "Mail", icon: "envelope", ...MAIL_DRAFT,
                 card: [
-                    [TO, "leo@lumen.app, priya@lumen.app"],
+                    [TO, "leo@example.com, priya@example.com"],
                     [SUBJECT, ["Movie night on Friday?", "周五来看电影吗？", "週五來看電影嗎？"]],
                     [BODY, ["Paddington 2 at mine, 8 pm. Snacks on me!", "晚上 8 点来我家看《帕丁顿熊 2》，零食我包了！", "晚上 8 點來我家看《帕丁頓熊 2》，零食我包了！"]],
                 ],
@@ -334,12 +334,12 @@ const SCENARIOS: Scenario[] = [
                 args: json({ section: "memory" }),
                 result: json({ used_memory_human: "18.42M", mem_fragmentation_ratio: 1.08, evicted_keys: 0 }),
             },
-            { kind: "command", command: 'grep -rn "keys(" ~/Code/lumen-api/src', output: "src/sessions.ts:42:  const ids = await redis.keys(\"session:*\")\nsrc/admin/stats.ts:17:  const total = (await redis.keys(\"user:*\")).length" },
+            { kind: "command", command: 'grep -rn "keys(" ~/Code/shop-api/src', output: "src/sessions.ts:42:  const ids = await redis.keys(\"session:*\")\nsrc/admin/stats.ts:17:  const total = (await redis.keys(\"user:*\")).length" },
         ],
         reply: [
-            "Redis itself is healthy — 18 MB used, no evictions — but the slow log points at one command: `KEYS session:*` took 18 ms and blocks the server while it runs. It comes from two places in lumen-api:\n- `src/sessions.ts:42` lists sessions with `KEYS session:*`\n- `src/admin/stats.ts:17` counts users with `KEYS user:*`\nSwitching both to `SCAN` with a `MATCH` pattern (or keeping a counter) should make the morning slowdown go away.",
-            "Redis 本身没问题，内存只用了 18 MB，也没有淘汰。但慢日志指向一条命令：`KEYS session:*` 耗时 18 毫秒，执行时会阻塞整个服务器。它出现在 lumen-api 的两个地方：\n- `src/sessions.ts:42` 用 `KEYS session:*` 列出会话\n- `src/admin/stats.ts:17` 用 `KEYS user:*` 统计用户数\n把这两处改成带 `MATCH` 的 `SCAN`（或者单独维护一个计数），早上的卡顿应该就会消失。",
-            "Redis 本身沒問題，記憶體只用了 18 MB，也沒有逐出。但慢查詢日誌指向一條指令：`KEYS session:*` 耗時 18 毫秒，執行時會阻塞整個伺服器。它出現在 lumen-api 的兩個地方：\n- `src/sessions.ts:42` 用 `KEYS session:*` 列出工作階段\n- `src/admin/stats.ts:17` 用 `KEYS user:*` 統計使用者數\n把這兩處改成帶 `MATCH` 的 `SCAN`（或者另外維護一個計數），早上的卡頓應該就會消失。",
+            "Redis itself is healthy — 18 MB used, no evictions — but the slow log points at one command: `KEYS session:*` took 18 ms and blocks the server while it runs. It comes from two places in shop-api:\n- `src/sessions.ts:42` lists sessions with `KEYS session:*`\n- `src/admin/stats.ts:17` counts users with `KEYS user:*`\nSwitching both to `SCAN` with a `MATCH` pattern (or keeping a counter) should make the morning slowdown go away.",
+            "Redis 本身没问题，内存只用了 18 MB，也没有淘汰。但慢日志指向一条命令：`KEYS session:*` 耗时 18 毫秒，执行时会阻塞整个服务器。它出现在 shop-api 的两个地方：\n- `src/sessions.ts:42` 用 `KEYS session:*` 列出会话\n- `src/admin/stats.ts:17` 用 `KEYS user:*` 统计用户数\n把这两处改成带 `MATCH` 的 `SCAN`（或者单独维护一个计数），早上的卡顿应该就会消失。",
+            "Redis 本身沒問題，記憶體只用了 18 MB，也沒有逐出。但慢查詢日誌指向一條指令：`KEYS session:*` 耗時 18 毫秒，執行時會阻塞整個伺服器。它出現在 shop-api 的兩個地方：\n- `src/sessions.ts:42` 用 `KEYS session:*` 列出工作階段\n- `src/admin/stats.ts:17` 用 `KEYS user:*` 統計使用者數\n把這兩處改成帶 `MATCH` 的 `SCAN`（或者另外維護一個計數），早上的卡頓應該就會消失。",
         ],
     },
     {
@@ -363,13 +363,13 @@ const SCENARIOS: Scenario[] = [
             {
                 kind: "connector", app: "cellar", name: "search_pages",
                 args: json({ database: "Meeting notes", sort: "newest", limit: 1 }),
-                result: json({ title: "Weekly sync — 29 Oct", agenda: ["Preset pricing", "iPad layout review", "Beta 3 feedback"] }),
+                result: json({ title: "Weekly sync — 29 Oct", agenda: ["Model Store picks", "Connector install flow review", "Beta 3 feedback"] }),
             },
         ],
         reply: [
-            "Moved **Weekly Sync** to Thursdays, 10:00 – 10:30, starting this week. The latest page in Meeting notes has three items:\n1. Preset pricing — decide between $2.99 and $4.99\n2. iPad layout review with Priya\n3. Beta 3 feedback from TestFlight",
-            "已经把 **每周例会** 改到每周四 10:00 – 10:30，本周开始生效。会议记录里最新一页有三项议程：\n1. 预设定价：在 2.99 和 4.99 美元之间做决定\n2. 和思雨过一遍 iPad 布局\n3. TestFlight 上 Beta 3 的反馈",
-            "已經把 **每週例會** 改到每週四 10:00 – 10:30，本週開始生效。會議記錄裡最新一頁有三項議程：\n1. 預設定價：在 2.99 和 4.99 美元之間做決定\n2. 和思雨過一遍 iPad 版面\n3. TestFlight 上 Beta 3 的回饋",
+            "Moved **Weekly Sync** to Thursdays, 10:00 – 10:30, starting this week. The latest page in Meeting notes has three items:\n1. Model Store picks — which models to feature at launch\n2. Connector install flow review with Priya\n3. Beta 3 feedback from TestFlight",
+            "已经把 **每周例会** 改到每周四 10:00 – 10:30，本周开始生效。会议记录里最新一页有三项议程：\n1. 模型商店推荐：决定上线时推荐哪些模型\n2. 和思雨过一遍连接器的安装流程\n3. TestFlight 上 Beta 3 的反馈",
+            "已經把 **每週例會** 改到每週四 10:00 – 10:30，本週開始生效。會議記錄裡最新一頁有三項議程：\n1. 模型商店推薦：決定上線時推薦哪些模型\n2. 和思雨過一遍連接器的安裝流程\n3. TestFlight 上 Beta 3 的回饋",
         ],
     },
     {
@@ -384,12 +384,12 @@ const SCENARIOS: Scenario[] = [
             {
                 kind: "connector", app: "cellar", name: "search_pages",
                 args: json({ edited: "today" }),
-                result: json([{ title: "Lumen 2.0 launch plan", edited: "09:42" }, { title: "Sync engine design", edited: "11:15" }, { title: "Kyoto trip", edited: "16:03" }]),
+                result: json([{ title: "ModelCraft 1.0 launch plan", edited: "09:42" }, { title: "Sync engine design", edited: "11:15" }, { title: "Kyoto trip", edited: "16:03" }]),
             },
             {
                 kind: "connector", app: "cellar", name: "read_page",
-                args: json({ title: "Lumen 2.0 launch plan" }),
-                result: json({ blocks: 38, open_todos: ["Decide on preset pricing before Thursday"] }),
+                args: json({ title: "ModelCraft 1.0 launch plan" }),
+                result: json({ blocks: 38, open_todos: ["Pick the Model Store's featured models before Thursday"] }),
             },
             {
                 kind: "native", app: "Reminders", icon: "checklist",
@@ -398,9 +398,9 @@ const SCENARIOS: Scenario[] = [
             },
         ],
         reply: [
-            "Here's what changed in Cellar today:\n- **Lumen 2.0 launch plan** — the goal is now 1,000 paid presets by the end of Q1, and Pencil masking moves to 2.1 if it slips.\n- **Sync engine design** — added a diagram of the merge flow and notes on conflict handling.\n- **Kyoto trip** — a day-by-day table and a shortlist of three ryokans.\n**Open to-dos**\n1. Decide on preset pricing before Thursday\n2. Book the ryokan for the Kyoto trip (also due today in Reminders)\n3. Finish Klara and the Sun",
-            "这是 Cellar 里今天改过的内容：\n- **Lumen 2.0 发布计划** —— 目标改为 Q1 结束前上架 1,000 个付费预设，Pencil 蒙版来不及就放到 2.1。\n- **同步引擎设计** —— 加了合并流程图和冲突处理的说明。\n- **京都旅行** —— 按天排好的行程表，还选好了三家旅馆。\n**未完成的待办**\n1. 周四前定下预设的价格\n2. 预订京都旅行的旅馆（提醒事项里也是今天到期）\n3. 读完《克拉拉与太阳》",
-            "這是 Cellar 裡今天改過的內容：\n- **Lumen 2.0 發布計畫** —— 目標改為 Q1 結束前上架 1,000 個付費預設，Pencil 遮色片來不及就放到 2.1。\n- **同步引擎設計** —— 加了合併流程圖和衝突處理的說明。\n- **京都旅行** —— 按天排好的行程表，還選好了三家旅館。\n**未完成的待辦事項**\n1. 週四前定下預設的價格\n2. 預訂京都旅行的旅館（提醒事項裡也是今天到期）\n3. 讀完《克拉拉與太陽》",
+            "Here's what changed in Cellar today:\n- **ModelCraft 1.0 launch plan** — the goal is now 10,000 downloads in the first month, and scheduled tasks are in for 1.0.\n- **Sync engine design** — added a diagram of the merge flow and notes on conflict handling.\n- **Kyoto trip** — a day-by-day table and a shortlist of three ryokans.\n**Open to-dos**\n1. Pick the Model Store's featured models before Thursday\n2. Book the ryokan for the Kyoto trip (also due today in Reminders)\n3. Finish Klara and the Sun",
+            "这是 Cellar 里今天改过的内容：\n- **ModelCraft 1.0 发布计划** —— 目标改为首月下载 10,000 次，定时任务确定放进 1.0。\n- **同步引擎设计** —— 加了合并流程图和冲突处理的说明。\n- **京都旅行** —— 按天排好的行程表，还选好了三家旅馆。\n**未完成的待办**\n1. 周四前选定模型商店的推荐模型\n2. 预订京都旅行的旅馆（提醒事项里也是今天到期）\n3. 读完《克拉拉与太阳》",
+            "這是 Cellar 裡今天改過的內容：\n- **ModelCraft 1.0 發布計畫** —— 目標改為首月下載 10,000 次，排程任務確定放進 1.0。\n- **同步引擎設計** —— 加了合併流程圖和衝突處理的說明。\n- **京都旅行** —— 按天排好的行程表，還選好了三家旅館。\n**未完成的待辦事項**\n1. 週四前選定模型商店的推薦模型\n2. 預訂京都旅行的旅館（提醒事項裡也是今天到期）\n3. 讀完《克拉拉與太陽》",
         ],
     },
 ];
@@ -413,7 +413,7 @@ export const CHATS: Chat[] = ["dev-stack", "night-city-cover", "fix-test", "dail
 /** Prompts offered under an empty New Chat. */
 export const SUGGESTIONS: L[] = [
     ["Start my dev stack in Container", "在 Container 里启动我的开发环境", "在 Container 裡啟動我的開發環境"],
-    ["Run the tests in lumen-api and fix what fails", "跑一下 lumen-api 的测试，把失败的修好", "跑一下 lumen-api 的測試，把失敗的修好"],
+    ["Run the tests in shop-api and fix what fails", "跑一下 shop-api 的测试，把失败的修好", "跑一下 shop-api 的測試，把失敗的修好"],
     ["Turn the Night City cover into a looping video", "把 Night City 封面做成循环视频", "把 Night City 封面做成循環影片"],
     ["Find our top customers with Quaero", "用 Quaero 找出我们的大客户", "用 Quaero 找出我們的大客戶"],
     ["Tidy up my Downloads folder", "整理一下我的下载文件夹", "整理一下我的下載項目"],
