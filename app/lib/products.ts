@@ -15,6 +15,8 @@ import quaeroIconLight from "~/assets/quaero/icon-light.svg";
 import quaeroIconDark from "~/assets/quaero/icon-dark.svg";
 import pinchIconLight from "~/assets/pinch/icon-light.svg";
 import pinchIconDark from "~/assets/pinch/icon-dark.svg";
+import screenshotIconLight from "~/assets/screenshot/icon-light.png";
+import screenshotIconDark from "~/assets/screenshot/icon-dark.png";
 
 /** Groups on the home page and in the Products menu, in display order. */
 export const CATEGORIES = ["ai", "developer", "media", "productivity"] as const;
@@ -75,6 +77,11 @@ export const PRODUCTS: Product[] = [
         id: "pinch", name: "Pinch", category: "productivity", brand: "#ff6b4a", ring: false,
         icon: { light: pinchIconLight, dark: pinchIconDark },
         accent: { light: "#d94a2b", dark: "#ff8c6e" },
+    },
+    {
+        id: "screenshot", name: "Screenshot", category: "productivity", brand: "#4a5cf0", ring: false,
+        icon: { light: screenshotIconLight, dark: screenshotIconDark },
+        accent: { light: "#3a4ae0", dark: "#7f8cff" },
     },
 ];
 

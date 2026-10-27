@@ -17,6 +17,7 @@ const TAGLINES: Record<string, { tagline: string; desc: string }> = {
     cellar: { tagline: "home.notes_and_databases", desc: "home.pages_tables_and_databases_that" },
     quaero: { tagline: "home.database_client", desc: "home.a_native_client_for_sql_and" },
     pinch: { tagline: "home.trackpad_scale", desc: "home.weigh_light_objects_on_your" },
+    screenshot: { tagline: "home.scrolling_screenshots", desc: "home.capture_mark_up_and_scroll" },
 };
 
 export default function Home() {

@@ -14,6 +14,7 @@ export default {
         "/products/cellar",
         "/products/quaero",
         "/products/pinch",
+        "/products/screenshot",
         "/resume",
         "/404",
     ],
