@@ -15,6 +15,7 @@ export default {
         "/products/quaero",
         "/products/pinch",
         "/products/screenshot",
+        "/products/ferry",
         "/resume",
         "/404",
     ],

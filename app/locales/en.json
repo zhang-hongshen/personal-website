@@ -51,7 +51,9 @@
     "scrolling_screenshots": "Scrolling screenshots",
     "capture_mark_up_and_scroll": "A menu bar screenshot tool built for scrolling capture. Scroll a window as usual and get every scroll area in one long picture, then mark it up in place.",
     "database_client": "Database client",
-    "a_native_client_for_sql_and": "A native client for SQL and vector databases: MySQL, PostgreSQL, SQLite, Qdrant and Milvus. Browse tables and collections, edit rows, run queries and find similar vectors."
+    "a_native_client_for_sql_and": "A native client for SQL and vector databases: MySQL, PostgreSQL, SQLite, Qdrant and Milvus. Browse tables and collections, edit rows, run queries and find similar vectors.",
+    "file_transfer": "File transfer",
+    "browse_s3_sftp_and_webdav": "One window for S3, SFTP and WebDAV. Browse buckets and servers like Finder, and move files between them."
   },
   "modelcraft": {
     "ai_that_runs_entirely_on": "AI that runs entirely locally",
@@ -365,6 +367,44 @@
     "on_a_window_auto_scrolls": "On a window, press Auto and Screenshot scrolls to the end for you.",
     "never_moves_the_pointer": "Hands off the pointer",
     "you_stay_in_control_frames": "Screenshot never moves the pointer. It watches you scroll and joins frames as they settle."
+  },
+  "ferry": {
+    "meta": {
+      "title": "Ferry",
+      "description": "Ferry is a native macOS client for S3, SFTP and WebDAV storage, with Finder-style browsing, resumable transfers and in-place editing."
+    },
+    "s3_sftp_and_webdav_in": "S3, SFTP and WebDAV in one Finder-style window.",
+    "coming_soon": "Coming soon",
+    "requirements": "macOS 15 or later",
+    "demo_hint": "Try it: double-click a folder, upload a file, or drag one onto another connection to copy it there.",
+    "model_label": "3D model of the ferry from Ferry's app icon",
+    "remote_files_feel_local": "Remote files that feel local",
+    "ferry_browses_buckets_and_servers": "Ferry browses buckets and servers the way Finder browses your Mac, so there's nothing new to learn.",
+    "browse_like_finder": "Browse like Finder",
+    "tabs_list_icon_and_column": "Tabs, list, icon and column views, folders that expand in place, back and forward, rename by clicking the name.",
+    "resumable_transfers": "Resumable transfers",
+    "a_queue_with_retries_and": "A queue with retries and a bandwidth limit. Interrupted transfers pick up where they left off, even after a restart.",
+    "edit_in_place": "Edit in place",
+    "open_a_remote_file_in": "Open a remote file in its usual app; every save is uploaded back to where it came from.",
+    "inspector": "Inspector",
+    "attributes_thumbnails_and_s3_metadata": "Attributes, thumbnails and S3 metadata, with Content-Type, Cache-Control and custom headers you can edit.",
+    "share_links": "Share links",
+    "presigned_s3_links_valid_for": "Presigned S3 links valid for an hour, a day or a week.",
+    "secrets_in_the_keychain": "Secrets in the Keychain",
+    "passwords_keys_and_passphrases_never": "Passwords, keys and passphrases never touch a file, and connection exports leave them out.",
+    "drag_between_servers": "Drag between servers",
+    "copy_across_connections": "Copy across connections",
+    "paste_or_drag_between_tabs": "Paste or drag between tabs and windows. On the same server, files copy on the server; between servers, Ferry carries them across.",
+    "protocols": "Protocols",
+    "one_interface_for_every_protocol": "One interface for every protocol",
+    "s3": "S3",
+    "aws_and_any_s3_compatible": "AWS and any S3-compatible service, including MinIO, with multipart uploads and versioned deletes.",
+    "sftp": "SFTP",
+    "password_or_ed25519_and_ecdsa": "Password or Ed25519 and ECDSA keys, with host keys checked on first use.",
+    "webdav": "WebDAV",
+    "nextcloud_and_other_webdav_servers": "Nextcloud and other WebDAV servers, with server-side copy and move.",
+    "ftp_and_smb": "FTP and SMB",
+    "on_the_way": "On the way."
   },
   "about": {
     "software_engineer_backend_ai_agents": "Software Engineer · Backend, AI Agents & native macOS apps",

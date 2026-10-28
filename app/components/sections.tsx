@@ -80,10 +80,12 @@ export function ComingSoonButton({ label }: { label: string }) {
 }
 
 /** Icon, name, tagline, call to action and requirements at the top of a product page. */
-export function Hero({ id, tint, tagline, action, note, children }: {
+export function Hero({ id, tint, visual, tagline, action, note, children }: {
     id: string;
     /** Glow behind the hero, as "<color> <percent>". */
     tint: string;
+    /** Shown above the name in place of the icon. */
+    visual?: ReactNode;
     tagline: ReactNode;
     action: ReactNode;
     note: ReactNode;
@@ -96,7 +98,7 @@ export function Hero({ id, tint, tagline, action, note, children }: {
             style={{ background: `radial-gradient(800px 380px at 50% 0%, color-mix(in srgb, ${tint}, transparent), transparent 65%)` }}
         >
             <div className="wrap">
-                <ProductIcon id={id} className="mx-auto mb-5 size-40" width={160} height={160} />
+                {visual ?? <ProductIcon id={id} className="mx-auto mb-5 size-40" width={160} height={160} />}
                 <h1 className="text-[clamp(44px,8vw,76px)] font-extrabold tracking-[-0.04em]">{name}</h1>
                 <p className="mx-auto mt-4 mb-9 max-w-[680px] text-[clamp(18px,2.6vw,22px)] text-muted-foreground">{tagline}</p>
                 <div className="flex flex-wrap items-center justify-center gap-3">{action}</div>

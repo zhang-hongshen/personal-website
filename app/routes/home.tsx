@@ -18,6 +18,7 @@ const TAGLINES: Record<string, { tagline: string; desc: string }> = {
     quaero: { tagline: "home.database_client", desc: "home.a_native_client_for_sql_and" },
     pinch: { tagline: "home.trackpad_scale", desc: "home.weigh_light_objects_on_your" },
     screenshot: { tagline: "home.scrolling_screenshots", desc: "home.capture_mark_up_and_scroll" },
+    ferry: { tagline: "home.file_transfer", desc: "home.browse_s3_sftp_and_webdav" },
 };
 
 export default function Home() {

@@ -51,7 +51,9 @@
     "scrolling_screenshots": "滚动截图",
     "capture_mark_up_and_scroll": "主打滚动截图的菜单栏截图工具。照常滚动窗口，每个滚动区域都完整展开成一张长图，还能原地标注。",
     "database_client": "数据库客户端",
-    "a_native_client_for_sql_and": "原生的 SQL 与向量数据库客户端，支持 MySQL、PostgreSQL、SQLite、Qdrant 和 Milvus。浏览表和集合、编辑数据、运行查询，还能查找相似向量。"
+    "a_native_client_for_sql_and": "原生的 SQL 与向量数据库客户端，支持 MySQL、PostgreSQL、SQLite、Qdrant 和 Milvus。浏览表和集合、编辑数据、运行查询，还能查找相似向量。",
+    "file_transfer": "文件传输",
+    "browse_s3_sftp_and_webdav": "一个窗口管理 S3、SFTP 和 WebDAV。像 Finder 一样浏览存储桶和服务器，在它们之间搬运文件。"
   },
   "modelcraft": {
     "ai_that_runs_entirely_on": "AI，完全在本地运行",
@@ -365,6 +367,44 @@
     "on_a_window_auto_scrolls": "截取窗口时点“自动”，Screenshot 会替你一路滚到底。",
     "never_moves_the_pointer": "不碰你的指针",
     "you_stay_in_control_frames": "Screenshot 从不移动指针。它看着你滚动，等画面稳定后再拼接。"
+  },
+  "ferry": {
+    "meta": {
+      "title": "Ferry",
+      "description": "Ferry 是一款原生 macOS 远程存储客户端，支持 S3、SFTP 和 WebDAV，像 Finder 一样浏览，传输可续传，远程文件可直接编辑。"
+    },
+    "s3_sftp_and_webdav_in": "在一个像 Finder 的窗口里管理 S3、SFTP 和 WebDAV。",
+    "coming_soon": "即将推出",
+    "requirements": "macOS 15 或更高版本",
+    "demo_hint": "试试看：双击打开文件夹、上传文件，或把文件拖到另一个连接上复制过去。",
+    "model_label": "Ferry 应用图标中渡轮的 3D 模型",
+    "remote_files_feel_local": "远程文件，用起来像本地",
+    "ferry_browses_buckets_and_servers": "Ferry 浏览存储桶和服务器的方式，和 Finder 浏览你的 Mac 一样，不用重新学。",
+    "browse_like_finder": "像 Finder 一样浏览",
+    "tabs_list_icon_and_column": "标签页，列表、图标和分栏视图，文件夹原地展开，前进后退，点名字就能重命名。",
+    "resumable_transfers": "可续传的传输",
+    "a_queue_with_retries_and": "带重试和限速的传输队列。传输中断后从断点继续，重启 App 也不怕。",
+    "edit_in_place": "原地编辑",
+    "open_a_remote_file_in": "用平常的 App 打开远程文件，每次保存都会传回原处。",
+    "inspector": "检查器",
+    "attributes_thumbnails_and_s3_metadata": "属性、缩略图和 S3 元数据，Content-Type、Cache-Control 和自定义头都能直接改。",
+    "share_links": "分享链接",
+    "presigned_s3_links_valid_for": "S3 预签名链接，有效期一小时、一天或一周。",
+    "secrets_in_the_keychain": "密钥只放钥匙串",
+    "passwords_keys_and_passphrases_never": "密码、私钥和口令从不写进文件，导出连接时也不会带上。",
+    "drag_between_servers": "在服务器之间拖动",
+    "copy_across_connections": "跨连接复制",
+    "paste_or_drag_between_tabs": "在标签页和窗口之间粘贴或拖动。同一台服务器上直接在服务器端复制；不同服务器之间由 Ferry 帮你搬过去。",
+    "protocols": "协议",
+    "one_interface_for_every_protocol": "所有协议，同一套界面",
+    "s3": "S3",
+    "aws_and_any_s3_compatible": "AWS 以及 MinIO 等任何兼容 S3 的服务，支持分片上传，删除时连同所有版本。",
+    "sftp": "SFTP",
+    "password_or_ed25519_and_ecdsa": "密码或 Ed25519、ECDSA 私钥登录，首次连接时核对主机密钥。",
+    "webdav": "WebDAV",
+    "nextcloud_and_other_webdav_servers": "Nextcloud 等 WebDAV 服务器，复制和移动都在服务器端完成。",
+    "ftp_and_smb": "FTP 和 SMB",
+    "on_the_way": "即将支持。"
   },
   "about": {
     "software_engineer_backend_ai_agents": "软件工程师 · 后端开发、AI Agent 与原生 macOS 应用",
