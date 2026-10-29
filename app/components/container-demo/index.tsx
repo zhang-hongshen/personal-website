@@ -38,7 +38,7 @@ export function ContainerDemo({ className, tour }: { className?: string; tour?: 
     const [selected, setSelected] = useState<Record<Section, string | null>>({ containers: null, images: null, networks: null, volumes: null });
     const [queries, setQueries] = useState<Record<Section, string>>({ containers: "", images: "", networks: "", volumes: "" });
     // Shown or hidden by its button; null until then, which shows it on wide screens only.
-    const [inspector, setInspector] = useState<boolean | null>(null);
+    const [inspector, setInspector] = useState(true);
     const [menu, setMenu] = useState<"new" | "pull" | "delete" | null>(null);
     const [pullRef, setPullRef] = useState("docker.io/library/node:22-alpine");
     const [grid, setGrid] = useState(false);
@@ -77,7 +77,7 @@ export function ContainerDemo({ className, tour }: { className?: string; tour?: 
     }, []);
 
     const select = (id: string) => setSelected((s) => ({ ...s, [section]: id }));
-    const open = (id: Section) => { setSection(id); setMenu(null); sidebar.done(); };
+    const open = (id: Section) => { setSection(id); setMenu(null); };
     useTour(tour, section, open);
 
     /** Moves a container through a transition (Starting, Stopping) to its final state. */
@@ -137,7 +137,7 @@ export function ContainerDemo({ className, tour }: { className?: string; tour?: 
             </MacSidebar>
 
             <main className="flex min-w-0 flex-1 flex-col">
-                <TitleBar leading={<ShowSidebarButton sidebar={sidebar} />} title={t(SECTIONS.find((s) => s.id === section)!.title)} className="flex-wrap gap-y-2 max-sm:h-auto max-sm:py-2">
+                <TitleBar leading={<ShowSidebarButton sidebar={sidebar} />} title={t(SECTIONS.find((s) => s.id === section)!.title)}>
                     <div className={cn(CAPSULE, "relative gap-0.5 px-0.5")}>
                         {section === "containers" && (
                             <>
@@ -192,8 +192,8 @@ export function ContainerDemo({ className, tour }: { className?: string; tour?: 
                     )}
                     {(section === "containers" || section === "images") && (
                         <>
-                            <SearchField value={query} placeholder={section === "containers" ? t(["Search Containers", "搜索容器", "搜尋容器"]) : t(["Search Images", "搜索镜像", "搜尋映像檔"])} onChange={(v) => setQueries((q) => ({ ...q, [section]: v }))} className="w-40 max-sm:order-last max-sm:w-full" />
-                            <ToolButton icon="sidebar.right" label={inspector === false ? t(["Show Inspector", "显示检查器", "顯示檢閱器"]) : t(["Hide Inspector", "隐藏检查器", "隱藏檢閱器"])} onClick={() => setInspector((i) => !(i ?? matchMedia("(min-width: 768px)").matches))} className="h-3.5 w-[18px]" />
+                            <SearchField value={query} placeholder={section === "containers" ? t(["Search Containers", "搜索容器", "搜尋容器"]) : t(["Search Images", "搜索镜像", "搜尋映像檔"])} onChange={(v) => setQueries((q) => ({ ...q, [section]: v }))} className="w-40" />
+                            <ToolButton icon="sidebar.right" label={!inspector ? t(["Show Inspector", "显示检查器", "顯示檢閱器"]) : t(["Hide Inspector", "隐藏检查器", "隱藏檢閱器"])} onClick={() => setInspector((i) => !i)} className="h-3.5 w-[18px]" />
                         </>
                     )}
                 </TitleBar>
@@ -227,7 +227,7 @@ export function ContainerDemo({ className, tour }: { className?: string; tour?: 
                 {section === "volumes" && <TableView items={volumes} columns={volumeColumns(containers, t)} selected={selected.volumes} keyOf={(v) => v.name} onSelect={select} empty={["No volumes.", "没有卷。", "沒有卷宗。"]} />}
             </main>
 
-            <Inspector open={inspector !== false && (section === "containers" || section === "images")} width={340} className={inspector === null ? "max-md:hidden" : undefined}>
+            <Inspector open={inspector && (section === "containers" || section === "images")} width={340}>
                 {section === "containers" && (container ? <ContainerInspector key={container.id} container={container} onChange={changed} /> : <Unavailable icon="shippingbox" title={t(["No Container Selected", "未选择容器", "未選擇容器"])} />)}
                 {section === "images" && (image ? <ImageDetail image={image} used={containers.filter((c) => c.image === image.ref).length} /> : <Unavailable icon="square.stack.3d.up" title={t(["No Image Selected", "未选择镜像", "未選擇映像檔"])}>{t([
                     `${bytes(images.reduce((n, i) => n + i.size, 0))} in ${images.length} images`,

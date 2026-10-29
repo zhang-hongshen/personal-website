@@ -24,6 +24,18 @@ export const MAC = {
     field: "rounded-md bg-black/5 outline-none focus:ring-2 focus:ring-[#007aff]/50 dark:bg-white/8",
 };
 
+/**
+ * Holds a demo at its desktop width: narrower than that, it scrolls sideways rather than squeezing. The
+ * scroll box only exists below the page's full width (1120), so it doesn't clip the shadow on wider screens.
+ */
+export function DemoScroll({ minWidth, className, children }: { minWidth: number; className?: string; children: ReactNode }) {
+    return (
+        <div className={cn("max-[1120px]:-mx-6 max-[1120px]:overflow-x-auto max-[1120px]:overscroll-x-contain max-[1120px]:px-6 max-[1120px]:pb-6", className)}>
+            <div style={{ minWidth }}>{children}</div>
+        </div>
+    );
+}
+
 /** The window: rounded, with a shadow, at a height that fits the screen. */
 export function MacWindow({ className, children }: { className?: string; children: ReactNode }) {
     return (
@@ -70,24 +82,14 @@ export function TrafficLights() {
     );
 }
 
-/**
- * Whether the sidebar shows. It starts as "auto": shown on wide screens and hidden on narrow ones,
- * where it covers the window when shown, so opening something there puts it away again.
- */
+/** Whether the sidebar shows; it starts shown. */
 export function useSidebar() {
-    const [state, setState] = useState<boolean | null>(null);
+    const [state, setState] = useState(true);
     return {
         state,
         show: () => setState(true),
         hide: () => setState(false),
-        /** Call after navigating from the sidebar. */
-        done: () => {
-            if (!matchMedia("(min-width: 640px)").matches) setState(null);
-        },
-        className: cn(
-            "absolute inset-y-0 left-0 z-30 transition-transform duration-200 sm:static",
-            state === null ? "-translate-x-full sm:translate-x-0" : state ? "translate-x-0 shadow-xl sm:shadow-none" : "-translate-x-full sm:hidden",
-        ),
+        className: cn(!state && "hidden"),
     };
 }
 export type Sidebar = ReturnType<typeof useSidebar>;
@@ -114,9 +116,9 @@ export function MacSidebar({ sidebar, width = 220, toolbar, children }: { sideba
 /** The button that brings the sidebar back, for the first toolbar of the window. */
 export function ShowSidebarButton({ sidebar }: { sidebar: Sidebar }) {
     const label = useText()(["Show Sidebar", "显示边栏", "顯示側邊欄"]);
-    if (sidebar.state === true) return null;
+    if (sidebar.state) return null;
     return (
-        <button type="button" aria-label={label} title={label} className={cn(TOOL, sidebar.state === null && "sm:hidden")} onClick={sidebar.show}>
+        <button type="button" aria-label={label} title={label} className={TOOL} onClick={sidebar.show}>
             <SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" />
         </button>
     );
@@ -224,12 +226,12 @@ export function SearchField({ value, placeholder, onChange, className }: { value
     );
 }
 
-/** The trailing inspector column; on narrow screens it covers the window instead. */
+/** The trailing inspector column. */
 export function Inspector({ open, width = 320, className, children }: { open: boolean; width?: number; className?: string; children: ReactNode }) {
     if (!open) return null;
     return (
         <aside
-            className={cn("absolute inset-y-0 right-0 z-20 flex max-w-full shrink-0 flex-col border-l shadow-xl motion-safe:animate-in motion-safe:slide-in-from-right-4 md:static md:shadow-none", MAC.line, MAC.window, className)}
+            className={cn("flex max-w-full shrink-0 flex-col border-l motion-safe:animate-in motion-safe:slide-in-from-right-4", MAC.line, MAC.window, className)}
             style={{ width }}
         >
             {children}

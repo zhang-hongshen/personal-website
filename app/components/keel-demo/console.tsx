@@ -62,7 +62,6 @@ export function Console({ server, db, lines, onLines, onDb, onChange, onClose }:
             <header className="flex h-[52px] shrink-0 items-center gap-2 px-3">
                 <h4 className="mr-auto truncate text-[13px] font-semibold">{s(["Console", "控制台", "主控台"])}</h4>
                 <button type="button" className={cn("h-7 rounded-full px-3 text-[12px]", MAC.field)} onClick={() => onLines([])}>{s(["Clear", "清除", "清除"])}</button>
-                <span className="md:hidden"><ToolButton icon="xmark.circle.fill" label={s(["Close", "关闭", "關閉"])} onClick={onClose} /></span>
             </header>
             <div ref={output} className="min-h-0 flex-1 overflow-y-auto px-3 pb-2 font-mono text-[11.5px] leading-[1.55] select-text">
                 {lines.length === 0 && (

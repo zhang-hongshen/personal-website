@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 
 import { useText, type L } from "~/components/demo-text";
-import { MAC, TrafficLights } from "~/components/mac-ui";
+import { DemoScroll, MAC, TrafficLights } from "~/components/mac-ui";
 import { MAC_FONT } from "~/components/mac-window";
 import { SFSymbol, type SymbolName } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
@@ -70,39 +70,41 @@ export function PinchDemo({ className }: { className?: string }) {
     };
 
     return (
-        <div className={cn("flex flex-col items-center gap-6 lg:flex-row lg:items-start lg:justify-center", className)} style={{ fontFamily: MAC_FONT }}>
-            <div className={cn("relative w-full max-w-[440px] overflow-hidden rounded-[18px] border border-black/12 text-left text-[13px] shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)] dark:border-white/12", C.body, MAC.text)}>
-                <div className="absolute top-4 left-4"><TrafficLights /></div>
-                <div className="flex flex-col gap-5 px-4 pt-11 pb-6 sm:px-6">
-                    <Readout scale={scale} unit={unit} />
-                    <div className="flex justify-center gap-2">
-                        <Key label={s(["Tare", "去皮", "扣重"])} shortcut="⌘T" onClick={() => scale.tare()}>
-                            <span className="text-[15px] tracking-tight">→0←</span>
-                        </Key>
-                        <Key label={s(["Hold", "锁定", "鎖定"])} shortcut="⌘L" lit={scale.isHolding} disabled={!scale.isHolding && !scale.canHold} onClick={() => scale.toggleHold()}>
-                            <Symbol name="lock" />
-                        </Key>
-                        <Key label={s(["Counting Mode", "计数模式", "計數模式"])} shortcut="⌘U" lit={scale.mode === "count"} onClick={() => scale.toggleCounting()}>
-                            <Symbol name="number" />
-                        </Key>
-                        <Key label={s(["Calibrate", "校准", "校正"])} shortcut="⌘K" onClick={() => setCalibrating(true)}>
-                            <Symbol name="scalemass" />
-                        </Key>
+        <DemoScroll minWidth={724} className={className}>
+            <div className="flex items-start justify-center gap-6" style={{ fontFamily: MAC_FONT }}>
+                <div className={cn("relative w-[440px] shrink-0 overflow-hidden rounded-[18px] border border-black/12 text-left text-[13px] shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)] dark:border-white/12", C.body, MAC.text)}>
+                    <div className="absolute top-4 left-4"><TrafficLights /></div>
+                    <div className="flex flex-col gap-5 px-6 pt-11 pb-6">
+                        <Readout scale={scale} unit={unit} />
+                        <div className="flex justify-center gap-2">
+                            <Key label={s(["Tare", "去皮", "扣重"])} shortcut="⌘T" onClick={() => scale.tare()}>
+                                <span className="text-[15px] tracking-tight">→0←</span>
+                            </Key>
+                            <Key label={s(["Hold", "锁定", "鎖定"])} shortcut="⌘L" lit={scale.isHolding} disabled={!scale.isHolding && !scale.canHold} onClick={() => scale.toggleHold()}>
+                                <Symbol name="lock" />
+                            </Key>
+                            <Key label={s(["Counting Mode", "计数模式", "計數模式"])} shortcut="⌘U" lit={scale.mode === "count"} onClick={() => scale.toggleCounting()}>
+                                <Symbol name="number" />
+                            </Key>
+                            <Key label={s(["Calibrate", "校准", "校正"])} shortcut="⌘K" onClick={() => setCalibrating(true)}>
+                                <Symbol name="scalemass" />
+                            </Key>
+                        </div>
+                        <Pan press={scale.press} onClick={toggleFinger} />
                     </div>
-                    <Pan press={scale.press} onClick={toggleFinger} />
+                    {calibrating && <Calibration scale={scale} unit={unit} onClose={() => setCalibrating(false)} />}
                 </div>
-                {calibrating && <Calibration scale={scale} unit={unit} onClose={() => setCalibrating(false)} />}
-            </div>
 
-            <Desk
-                finger={scale.hasContact}
-                placed={placed}
-                unit={unit}
-                onFinger={toggleFinger}
-                onThing={toggleThing}
-                onUnit={setUnit}
-            />
-        </div>
+                <Desk
+                    finger={scale.hasContact}
+                    placed={placed}
+                    unit={unit}
+                    onFinger={toggleFinger}
+                    onThing={toggleThing}
+                    onUnit={setUnit}
+                />
+            </div>
+        </DemoScroll>
     );
 }
 
@@ -310,7 +312,7 @@ function Desk({ finger, placed, unit, onFinger, onThing, onUnit }: {
     const row = "flex h-10 w-full items-center gap-3 rounded-xl px-3 text-left transition-colors";
     const on = "bg-[#ff6b4a]/14 text-foreground ring-1 ring-[#ff6b4a]/50";
     return (
-        <aside className="w-full max-w-[440px] rounded-[18px] border border-border bg-card p-3 text-left text-[13px] lg:w-[260px]">
+        <aside className="w-[260px] rounded-[18px] border border-border bg-card p-3 text-left text-[13px]">
             <p className="px-3 pt-1 pb-2 text-[11px] font-semibold tracking-wide text-faint uppercase">{s(["On the trackpad", "放到触控板上", "放到軌跡板上"])}</p>
             <button type="button" aria-pressed={finger} className={cn(row, finger ? on : "hover:bg-muted")} onClick={onFinger}>
                 <svg viewBox="0 0 24 24" className="size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" aria-hidden>
@@ -318,7 +320,7 @@ function Desk({ finger, placed, unit, onFinger, onThing, onUnit }: {
                 </svg>
                 <span className="flex-1">{finger ? s(["Finger resting", "手指已放上", "手指已放上"]) : s(["Rest a finger", "放上手指", "放上手指"])}</span>
             </button>
-            <div className="mt-1 grid grid-cols-2 gap-1 lg:grid-cols-1">
+            <div className="mt-1 grid grid-cols-1 gap-1">
                 {THINGS.map((t) => (
                     <button key={t.id} type="button" aria-pressed={placed.includes(t.id)} className={cn(row, "h-11", placed.includes(t.id) ? on : "hover:bg-muted")} onClick={() => onThing(t.id)}>
                         <svg viewBox="0 0 24 24" className="size-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>{t.icon}</svg>

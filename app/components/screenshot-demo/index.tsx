@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 
 import { useText } from "~/components/demo-text";
-import { MAC } from "~/components/mac-ui";
+import { DemoScroll, MAC } from "~/components/mac-ui";
 import { MAC_FONT } from "~/components/mac-window";
 import { cn } from "~/lib/utils";
 import { DOC_H, Doc, TOOLBAR_H, Toolbar, WIN } from "./page";
@@ -68,35 +68,37 @@ export function ScreenshotDemo({ className }: { className?: string }) {
     const shown = width ? height / (FULL * k) : 0;
 
     return (
-        <div className={cn("flex w-full items-start gap-4 sm:gap-6", className)} style={{ fontFamily: MAC_FONT }}>
-            <div
-                className={cn("min-w-0 flex-1 overflow-hidden rounded-[14px] border shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)]", MAC.window, MAC.line, MAC.text)}
-                onPointerEnter={(e) => e.pointerType === "mouse" && setPaused(true)}
-                onPointerLeave={(e) => e.pointerType === "mouse" && setPaused(false)}
-                onTouchStart={() => setPaused(true)}
-            >
+        <DemoScroll minWidth={720} className={className}>
+            <div className="flex w-full items-start gap-6" style={{ fontFamily: MAC_FONT }}>
                 <div
-                    ref={viewer}
-                    className={cn("overflow-y-auto overscroll-contain text-left text-[13px]", !width && "invisible")}
-                    style={{ height }}
-                    onScroll={(e) => setScroll(e.currentTarget.scrollTop)}
-                    role="img"
-                    aria-label={s(["A long picture made with Screenshot's scrolling capture: a whole README window, top to bottom.", "用 Screenshot 滚动截图得到的长图：整个 README 窗口，从头到尾。", "用 Screenshot 捲動截圖得到的長圖：整個 README 視窗，從頭到尾。"])}
+                    className={cn("min-w-0 flex-1 overflow-hidden rounded-[14px] border shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)]", MAC.window, MAC.line, MAC.text)}
+                    onPointerEnter={(e) => e.pointerType === "mouse" && setPaused(true)}
+                    onPointerLeave={(e) => e.pointerType === "mouse" && setPaused(false)}
+                    onTouchStart={() => setPaused(true)}
                 >
-                    <Scaled k={k}><Toolbar /><Doc /></Scaled>
-                </div>
-            </div>
-
-            <div className="flex w-[22%] max-w-[150px] shrink-0 flex-col items-center gap-2">
-                <div className="relative w-full cursor-pointer overflow-hidden rounded-[6px] border border-black/12 shadow-md dark:border-white/12" onClick={jump} aria-hidden>
-                    <div className={cn("pointer-events-none", MAC.window, MAC.text)} style={{ aspectRatio: `${WIN.w} / ${FULL}` }}>
-                        <Fill><Toolbar /><Doc /></Fill>
+                    <div
+                        ref={viewer}
+                        className={cn("overflow-y-auto overscroll-contain text-left text-[13px]", !width && "invisible")}
+                        style={{ height }}
+                        onScroll={(e) => setScroll(e.currentTarget.scrollTop)}
+                        role="img"
+                        aria-label={s(["A long picture made with Screenshot's scrolling capture: a whole README window, top to bottom.", "用 Screenshot 滚动截图得到的长图：整个 README 窗口，从头到尾。", "用 Screenshot 捲動截圖得到的長圖：整個 README 視窗，從頭到尾。"])}
+                    >
+                        <Scaled k={k}><Toolbar /><Doc /></Scaled>
                     </div>
-                    <div className="absolute inset-x-0 rounded-[3px] border-2 border-accent bg-accent/10" style={{ top: `${ratio * 100}%`, height: `${shown * 100}%` }} />
                 </div>
-                <p className="text-[12px] text-faint tabular-nums">{(WIN.w * 2).toLocaleString("en-US")} × {(FULL * 2).toLocaleString("en-US")} px</p>
+
+                <div className="flex w-[22%] max-w-[150px] shrink-0 flex-col items-center gap-2">
+                    <div className="relative w-full cursor-pointer overflow-hidden rounded-[6px] border border-black/12 shadow-md dark:border-white/12" onClick={jump} aria-hidden>
+                        <div className={cn("pointer-events-none", MAC.window, MAC.text)} style={{ aspectRatio: `${WIN.w} / ${FULL}` }}>
+                            <Fill><Toolbar /><Doc /></Fill>
+                        </div>
+                        <div className="absolute inset-x-0 rounded-[3px] border-2 border-accent bg-accent/10" style={{ top: `${ratio * 100}%`, height: `${shown * 100}%` }} />
+                    </div>
+                    <p className="text-[12px] text-faint tabular-nums">{(WIN.w * 2).toLocaleString("en-US")} × {(FULL * 2).toLocaleString("en-US")} px</p>
+                </div>
             </div>
-        </div>
+        </DemoScroll>
     );
 }
 

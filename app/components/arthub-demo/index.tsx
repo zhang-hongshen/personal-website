@@ -52,7 +52,6 @@ export function ArthubDemo({ className, tour }: { className?: string; tour?: Tou
     const open = (t: Tab) => {
         setTab(t);
         setSearch("");
-        sidebar.done();
     };
     useTour(tour, tab === "media" || tab === "backup" ? "library" : tab, (stop) => open(stop === "library" ? "media" : stop));
 
@@ -191,21 +190,14 @@ export function ArthubDemo({ className, tour }: { className?: string; tour?: Tou
                             options={musicModes}
                             value={mode}
                             onChange={setMode}
-                            className="max-lg:hidden"
                         />
                     )}
-                    {searchable && <SearchField value={search} placeholder={s(["Search", "搜索", "搜尋"])} onChange={setSearch} className="w-36 max-sm:hidden lg:w-44" />}
+                    {searchable && <SearchField value={search} placeholder={s(["Search", "搜索", "搜尋"])} onChange={setSearch} className="w-44" />}
                     {(tab === "movies" || tab === "shows" || tab === "media") && (
                         scanning ? <span className={cn(CAPSULE, "w-8 justify-center")}><Spinner className="size-4" label={s(["Refreshing", "正在刷新", "正在重新整理"])} /></span> : <ToolButton icon="arrow.clockwise" label={s(["Refresh", "刷新", "重新整理"])} onClick={scan} />
                     )}
                     {tab === "music" && <ToolButton icon="sidebar.right" label={s(LYRICS)} active={lyrics} onClick={() => setLyrics((l) => !l)} />}
                 </TitleBar>
-
-                {!route && tab === "music" && (
-                    <div className="px-5 pb-2 lg:hidden">
-                        <Segmented options={musicModes} value={mode} onChange={setMode} className="w-full" />
-                    </div>
-                )}
 
                 {tab === "movies" && !route && <MoviesHome search={search} progress={progress} onOpen={(id) => push({ kind: "movie", id })} onPlay={playMovie} onGenre={(genre) => push({ kind: "genre", genre })} />}
                 {tab === "movies" && route?.kind === "genre" && <GenreList genre={route.genre} progress={progress} onOpen={(id) => push({ kind: "movie", id })} onPlay={playMovie} />}

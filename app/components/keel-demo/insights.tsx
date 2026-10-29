@@ -103,7 +103,7 @@ function Overview({ server, keys }: { server: Server; keys: number }) {
     ];
     return (
         <div className="flex flex-col gap-4 overflow-y-auto p-4">
-            <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+            <div className="grid grid-cols-4 gap-2">
                 {stats.map(([label, value]) => (
                     <div key={label[0]} className={cn("rounded-xl border p-3", MAC.line)}>
                         <p className={cn("text-[11px]", MAC.muted)}>{s(label)}</p>

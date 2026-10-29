@@ -101,7 +101,7 @@ export function MoviesHome({ search, progress, onOpen, onPlay, onGenre }: {
             <section><SectionTitle>{s(["Top Rated", "评分最高", "評分最高"])}</SectionTitle><Row>{[...movies].sort((a, b) => b.rating - a.rating).map(card)}</Row></section>
             <section>
                 <SectionTitle>{s(["Genres", "类型", "類型"])}</SectionTitle>
-                <div className="grid grid-cols-2 gap-3 px-5 md:grid-cols-3">
+                <div className="grid grid-cols-3 gap-3 px-5">
                     {genres.map((g) => {
                         const art = movies.find((m) => m.genres.includes(g))!.art;
                         return (

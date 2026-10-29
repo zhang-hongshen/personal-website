@@ -102,7 +102,6 @@ export function VectorDetail({ column, row, value, onClose }: { column: string; 
         <>
             <header className="flex h-[52px] shrink-0 items-center gap-2 px-3">
                 <h4 className="mr-auto truncate text-[13px] font-semibold">{s(["Vector", "向量", "向量"])}</h4>
-                <span className="md:hidden"><ToolButton icon="xmark.circle.fill" label={s(["Close", "关闭", "關閉"])} onClick={onClose} /></span>
             </header>
             {!v ? (
                 <p className={cn("m-auto px-6 text-center text-[12px]", MAC.muted)}>

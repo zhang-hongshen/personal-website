@@ -74,7 +74,6 @@ export function FinderWindow({ goTo, onOpenApp }: {
     const go = (to: FolderId) => {
         setHistory((h) => (h.at === to ? h : { back: [...h.back, h.at], at: to, forward: [] }));
         setSelected(null);
-        sidebar.done();
     };
     useEffect(() => {
         if (goTo) go(goTo.folder);
@@ -219,7 +218,7 @@ export function FinderWindow({ goTo, onOpenApp }: {
                                     {SORTS.map((o) => (
                                         <th
                                             key={o.id}
-                                            className={cn("px-3 py-1 font-normal", o.id === "name" ? "w-[38%]" : o.id === "modified" ? "w-[30%]" : o.id === "size" ? "w-[14%] text-right" : "hidden w-[18%] sm:table-cell")}
+                                            className={cn("px-3 py-1 font-normal", o.id === "name" ? "w-[38%]" : o.id === "modified" ? "w-[30%]" : o.id === "size" ? "w-[14%] text-right" : "w-[18%]")}
                                             aria-sort={sort.by === o.id ? (sort.up ? "ascending" : "descending") : undefined}
                                         >
                                             <button type="button" className={cn("inline-flex items-center gap-1", sort.by === o.id && "font-semibold text-[#1d1d1f] dark:text-[#ececec]")} onClick={() => pick(o.id)}>
@@ -250,7 +249,7 @@ export function FinderWindow({ goTo, onOpenApp }: {
                                                     <span className="truncate">{app.name}</span>
                                                 </span>
                                             </td>
-                                            <td className={cn("hidden truncate px-3 py-1 sm:table-cell", !on && MAC.muted)}>{s(KIND)}</td>
+                                            <td className={cn("truncate px-3 py-1", !on && MAC.muted)}>{s(KIND)}</td>
                                             <td className={cn("truncate px-3 py-1", !on && MAC.muted)}>{date(app.modified)}</td>
                                             <td className={cn("px-3 py-1 text-right", !on && MAC.muted)}>{size(app.bytes)}</td>
                                         </tr>

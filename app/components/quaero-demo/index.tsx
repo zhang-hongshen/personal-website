@@ -110,7 +110,6 @@ export function QuaeroDemo({ className, tour }: { className?: string; tour?: Tou
         setConnectionId(id);
         setTableQuery("");
         setResultIndex(0);
-        sidebar.done();
     };
     const openTable = (name: string) => {
         setTables((t) => ({ ...t, [connectionId]: name }));
@@ -195,7 +194,7 @@ export function QuaeroDemo({ className, tour }: { className?: string; tour?: Tou
             </MacSidebar>
 
             {/* The schema browser. On narrow screens the table picker moves into the detail's title bar. */}
-            <section className={cn("hidden w-[220px] shrink-0 flex-col border-r md:flex", MAC.line)}>
+            <section className={cn("flex w-[220px] shrink-0 flex-col border-r", MAC.line)}>
                 <TitleBar leading={<ShowSidebarButton sidebar={sidebar} />} title={connection.name} subtitle={KIND_NAME[connection.kind]} />
                 <div className="flex flex-col gap-2 px-3 pb-2">
                     {connection.databases.length > 1 && (
@@ -223,15 +222,8 @@ export function QuaeroDemo({ className, tour }: { className?: string; tour?: Tou
 
             <main className="flex min-w-0 flex-1 flex-col">
                 <TitleBar
-                    leading={<span className="md:hidden"><ShowSidebarButton sidebar={sidebar} /></span>}
-                    title={
-                        <>
-                            <span className="max-md:hidden">{table?.name ?? s(NO_TABLE)}</span>
-                            <select aria-label={s(["Table", "表", "表格"])} value={table?.name ?? ""} className="bg-transparent font-semibold outline-none md:hidden" onChange={(e) => openTable(e.target.value)}>
-                                {database.tables.map((t) => <option key={t.name}>{t.name}</option>)}
-                            </select>
-                        </>
-                    }
+                    leading={<ShowSidebarButton sidebar={sidebar} />}
+                    title={table?.name ?? s(NO_TABLE)}
                     subtitle={database.name}
                 >
                     <div className={cn(CAPSULE, "gap-0.5 px-0.5")}>
@@ -474,7 +466,6 @@ function InspectorHeader({ title, onClose, children }: { title: string; onClose:
         <header className="flex h-[52px] shrink-0 items-center gap-2 px-3">
             <h4 className="mr-auto truncate text-[13px] font-semibold">{title}</h4>
             {children}
-            <span className="md:hidden"><ToolButton icon="xmark.circle.fill" label={s(CLOSE)} onClick={onClose} /></span>
         </header>
     );
 }

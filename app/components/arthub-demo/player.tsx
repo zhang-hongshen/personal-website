@@ -120,7 +120,7 @@ export function VideoPlayer({ title, subtitle, art, seconds, start, subtitles, o
                     </div>
                 </div>
 
-                <div className="pointer-events-auto absolute inset-x-3 bottom-3 rounded-2xl bg-black/35 px-4 py-3 shadow-[inset_0_0_0_0.5px_rgb(255_255_255/0.2)] backdrop-blur-xl sm:inset-x-8">
+                <div className="pointer-events-auto absolute inset-x-8 bottom-3 rounded-2xl bg-black/35 px-4 py-3 shadow-[inset_0_0_0_0.5px_rgb(255_255_255/0.2)] backdrop-blur-xl">
                     <div className="flex items-center gap-3 text-[11px] text-white/80 tabular-nums">
                         <span>{duration(position)}</span>
                         <input

@@ -66,7 +66,7 @@ export function StoreView({ downloads, sidebarButton, onDownload }: {
                 <button type="button" aria-label={s(["Refresh", "刷新", "重新整理"])} title={s(["Refresh", "刷新", "重新整理"])} className={TOOL} onClick={() => setLoading(true)}>
                     {loading ? <Spinner className="size-4" /> : <SFSymbol name="arrow.triangle.2.circlepath" className="size-4" />}
                 </button>
-                <label className={cn(CAPSULE, "w-48 gap-1.5 px-3 text-[13px] max-sm:w-full")}>
+                <label className={cn(CAPSULE, "w-48 gap-1.5 px-3 text-[13px]")}>
                     <SFSymbol name="magnifyingglass" className="size-3.5 shrink-0 opacity-70" />
                     <input value={query} placeholder={s(["Search", "搜索", "搜尋"])} aria-label={s(["Search models", "搜索模型", "搜尋模型"])} className={cn("min-w-0 flex-1 bg-transparent outline-none placeholder:text-current", TEXT)} onChange={(e) => setQuery(e.target.value)} />
                 </label>

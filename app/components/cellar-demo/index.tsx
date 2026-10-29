@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
-import { TrafficLights } from "~/components/mac-ui";
+import { DemoScroll, TrafficLights } from "~/components/mac-ui";
 import { CAPSULE, MAC_FONT, TOOL_ITEM } from "~/components/mac-window";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
@@ -29,7 +29,7 @@ export function CellarDemo({ className, embedded }: { className?: string; /** In
     const [renaming, setRenaming] = useState<string | null>(null);
     const [query, setQuery] = useState<string | null>(null);
     // Shown or hidden by the toggle; null until then, which shows it on wide screens only.
-    const [sidebar, setSidebar] = useState<boolean | null>(null);
+    const [sidebar, setSidebar] = useState(true);
     const edited = useRef(false);
 
     // Pages are prerendered in English and switch to the visitor's language after hydration; follow
@@ -44,8 +44,6 @@ export function CellarDemo({ className, embedded }: { className?: string; /** In
 
     const open = (id: string) => {
         setQuery(null);
-        // On a narrow screen the sidebar covers the page, so opening one puts it away.
-        if (!matchMedia("(min-width: 640px)").matches) setSidebar(null);
         if (id === openId) return;
         setHistory((h) => ({ list: [...h.list.slice(0, h.at + 1), id], at: h.at + 1 }));
     };
@@ -69,143 +67,147 @@ export function CellarDemo({ className, embedded }: { className?: string; /** In
     const onCaretDone = useCallback(() => setCaret(null), []);
     const matches = query === null ? [] : docs.filter((d) => (d.title || s.untitled).toLowerCase().includes(query.toLowerCase()));
 
-    return (
-        <div className={className}>
-            <div
-                style={VARS}
+    const frame = (
+        <div
+            style={VARS}
+            className={cn(
+                "relative flex w-full overflow-hidden rounded-[18px] border border-black/12 text-left text-[#1d1d1f] shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)] [--cellar-line:rgb(0_0_0/0.07)] [--cellar-muted:#86868b] [--cellar-window:#ffffff]",
+                "dark:border-white/12 dark:text-[#ececec] dark:[--cellar-accent:#0a84ff] dark:[--cellar-line:rgb(255_255_255/0.08)] dark:[--cellar-muted:#98989d] dark:[--cellar-window:#1f1f1f]",
+                embedded ? "h-full rounded-[12px]" : "h-[min(620px,78vh)]",
+            )}
+        >
+            {/* Sidebar. */}
+            <aside
                 className={cn(
-                    "relative flex w-full overflow-hidden rounded-[18px] border border-black/12 text-left text-[#1d1d1f] shadow-[0_24px_70px_-20px_rgb(0_0_0/0.35)] [--cellar-line:rgb(0_0_0/0.07)] [--cellar-muted:#86868b] [--cellar-window:#ffffff]",
-                    "dark:border-white/12 dark:text-[#ececec] dark:[--cellar-accent:#0a84ff] dark:[--cellar-line:rgb(255_255_255/0.08)] dark:[--cellar-muted:#98989d] dark:[--cellar-window:#1f1f1f]",
-                    embedded ? "h-full rounded-[12px]" : "h-[min(620px,78vh)]",
+                    "flex w-[230px] shrink-0 flex-col border-r border-(--cellar-line) bg-[#f2f0ee] text-[13px] dark:bg-[#2a2827]",
+                    !sidebar && "hidden",
                 )}
+                style={{ fontFamily: MAC_FONT }}
             >
-                {/* Sidebar: a column of its own on wide screens, over the page on narrow ones. */}
-                <aside
-                    className={cn(
-                        "absolute inset-y-0 left-0 z-30 flex w-[230px] shrink-0 flex-col border-r border-(--cellar-line) bg-[#f2f0ee] text-[13px] transition-transform duration-200 sm:static dark:bg-[#2a2827]",
-                        sidebar === null ? "-translate-x-full sm:translate-x-0" : sidebar ? "translate-x-0 shadow-xl sm:shadow-none" : "-translate-x-full sm:hidden",
-                    )}
-                    style={{ fontFamily: MAC_FONT }}
-                >
-                    <div className="flex h-[52px] shrink-0 items-center px-4">
-                        <TrafficLights />
-                        <span className={cn(CAPSULE, "ml-auto gap-0.5 px-0.5")}>
-                            <IconButton label={s.newPage} onClick={newPage} hint={!edited.current}><SFSymbol name="plus" className="size-3.5" /></IconButton>
-                            <IconButton label={s.hidePanel} onClick={() => setSidebar(false)}><SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" /></IconButton>
-                        </span>
-                    </div>
+                <div className="flex h-[52px] shrink-0 items-center px-4">
+                    <TrafficLights />
+                    <span className={cn(CAPSULE, "ml-auto gap-0.5 px-0.5")}>
+                        <IconButton label={s.newPage} onClick={newPage} hint={!edited.current}><SFSymbol name="plus" className="size-3.5" /></IconButton>
+                        <IconButton label={s.hidePanel} onClick={() => setSidebar(false)}><SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" /></IconButton>
+                    </span>
+                </div>
 
-                    <div className="relative flex items-center gap-1 px-2.5 pb-1.5">
-                        <label className="flex flex-1 items-center gap-1.5 rounded-md bg-black/6 px-2 py-[5px] text-(--cellar-muted) dark:bg-white/8">
-                            <SFSymbol name="magnifyingglass" className="size-3 shrink-0" />
-                            <input
-                                value={query ?? ""}
-                                placeholder={s.search}
-                                className="w-full min-w-0 bg-transparent text-current outline-none placeholder:text-(--cellar-muted)"
-                                onFocus={() => setQuery((q) => q ?? "")}
-                                onChange={(e) => setQuery(e.target.value)}
-                                onBlur={() => setTimeout(() => setQuery(null), 150)}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter" && matches[0]) open(matches[0].id);
-                                    if (e.key === "Escape") e.currentTarget.blur();
-                                }}
-                            />
-                        </label>
-                        <SFSymbol name="line.3.horizontal.decrease.circle" className="size-4 shrink-0 text-(--cellar-muted)" />
-                        {query !== null && query !== "" && (
-                            <div className="absolute top-full right-2.5 left-2.5 z-10 rounded-lg border border-black/10 bg-(--cellar-window) p-1 shadow-[0_10px_30px_rgb(0_0_0/0.18)] dark:border-white/10">
-                                {matches.length === 0 && <p className="px-2 py-1.5 text-(--cellar-muted)">{s.noResults}</p>}
-                                {matches.map((d) => (
-                                    <button key={d.id} type="button" className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left hover:bg-(--cellar-accent) hover:text-white" onMouseDown={() => open(d.id)}>
-                                        <DocIcon doc={d} />
-                                        {d.title || s.untitled}
+                <div className="relative flex items-center gap-1 px-2.5 pb-1.5">
+                    <label className="flex flex-1 items-center gap-1.5 rounded-md bg-black/6 px-2 py-[5px] text-(--cellar-muted) dark:bg-white/8">
+                        <SFSymbol name="magnifyingglass" className="size-3 shrink-0" />
+                        <input
+                            value={query ?? ""}
+                            placeholder={s.search}
+                            className="w-full min-w-0 bg-transparent text-current outline-none placeholder:text-(--cellar-muted)"
+                            onFocus={() => setQuery((q) => q ?? "")}
+                            onChange={(e) => setQuery(e.target.value)}
+                            onBlur={() => setTimeout(() => setQuery(null), 150)}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && matches[0]) open(matches[0].id);
+                                if (e.key === "Escape") e.currentTarget.blur();
+                            }}
+                        />
+                    </label>
+                    <SFSymbol name="line.3.horizontal.decrease.circle" className="size-4 shrink-0 text-(--cellar-muted)" />
+                    {query !== null && query !== "" && (
+                        <div className="absolute top-full right-2.5 left-2.5 z-10 rounded-lg border border-black/10 bg-(--cellar-window) p-1 shadow-[0_10px_30px_rgb(0_0_0/0.18)] dark:border-white/10">
+                            {matches.length === 0 && <p className="px-2 py-1.5 text-(--cellar-muted)">{s.noResults}</p>}
+                            {matches.map((d) => (
+                                <button key={d.id} type="button" className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left hover:bg-(--cellar-accent) hover:text-white" onMouseDown={() => open(d.id)}>
+                                    <DocIcon doc={d} />
+                                    {d.title || s.untitled}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                <nav className="flex-1 overflow-y-auto px-2.5 py-1">
+                    {docs.map((d) => (
+                        <div
+                            key={d.id}
+                            className={cn(
+                                "flex h-7 items-center gap-2 rounded-md px-2 motion-safe:animate-in motion-safe:fade-in",
+                                d.id === doc.id ? "bg-black/9 dark:bg-white/12" : "hover:bg-black/4 dark:hover:bg-white/5",
+                            )}
+                            onClick={() => renaming !== d.id && open(d.id)}
+                            onDoubleClick={() => setRenaming(d.id)}
+                        >
+                            <DocIcon doc={d} />
+                            {renaming === d.id ? (
+                                <RenameField
+                                    value={d.title}
+                                    onDone={(title) => {
+                                        if (title !== null) change(d.id, { title });
+                                        setRenaming(null);
+                                    }}
+                                />
+                            ) : (
+                                <button type="button" className={cn("min-w-0 flex-1 truncate text-left", !d.title && "text-(--cellar-muted)")}>
+                                    {d.title || s.untitled}
+                                </button>
+                            )}
+                        </div>
+                    ))}
+                </nav>
+            </aside>
+
+            <main className="relative flex min-w-0 flex-1 flex-col bg-(--cellar-window)" style={{ fontFamily: MAC_FONT }}>
+                <header className="flex h-[52px] shrink-0 items-center gap-2 px-3">
+                    {!sidebar && (
+                        <span className={cn(CAPSULE, "px-0.5")}>
+                            <IconButton label={s.showPanel} onClick={() => setSidebar(true)}><SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" /></IconButton>
+                        </span>
+                    )}
+                    <span className={cn(CAPSULE, "gap-0.5 px-0.5")}>
+                        <IconButton label={s.back} disabled={history.at === 0} onClick={() => go(-1)}><SFSymbol name="chevron.left" className="size-3.5" /></IconButton>
+                        <IconButton label={s.forward} disabled={history.at === history.list.length - 1} onClick={() => go(1)}><SFSymbol name="chevron.right" className="size-3.5" /></IconButton>
+                    </span>
+                    <h4 className="ml-1.5 min-w-0 truncate text-[15px] font-semibold text-[#1d1d1f] dark:text-[#ececec]">{doc.title || s.untitled}</h4>
+                    {doc.kind === "database" && (
+                        <div className="ml-auto flex items-center gap-2">
+                            <div className={cn(CAPSULE, "p-0.5 text-[12px]")}>
+                                {(["table", "board"] as Layout[]).map((l) => (
+                                    <button
+                                        key={l}
+                                        type="button"
+                                        className={cn("rounded-[5px] px-2.5 py-0.5", l === layout ? "bg-(--cellar-window) text-current shadow-sm" : "hover:text-current")}
+                                        onClick={() => setLayouts((ls) => ({ ...ls, [doc.id]: l }))}
+                                    >
+                                        {l === "table" ? s.table : s.board}
                                     </button>
                                 ))}
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    )}
+                </header>
 
-                    <nav className="flex-1 overflow-y-auto px-2.5 py-1">
-                        {docs.map((d) => (
-                            <div
-                                key={d.id}
-                                className={cn(
-                                    "flex h-7 items-center gap-2 rounded-md px-2 motion-safe:animate-in motion-safe:fade-in",
-                                    d.id === doc.id ? "bg-black/9 dark:bg-white/12" : "hover:bg-black/4 dark:hover:bg-white/5",
-                                )}
-                                onClick={() => renaming !== d.id && open(d.id)}
-                                onDoubleClick={() => setRenaming(d.id)}
-                            >
-                                <DocIcon doc={d} />
-                                {renaming === d.id ? (
-                                    <RenameField
-                                        value={d.title}
-                                        onDone={(title) => {
-                                            if (title !== null) change(d.id, { title });
-                                            setRenaming(null);
-                                        }}
-                                    />
-                                ) : (
-                                    <button type="button" className={cn("min-w-0 flex-1 truncate text-left", !d.title && "text-(--cellar-muted)")}>
-                                        {d.title || s.untitled}
-                                    </button>
-                                )}
-                            </div>
-                        ))}
-                    </nav>
-                </aside>
+                <div data-scroller className="min-h-0 flex-1 overflow-y-auto text-[#1d1d1f] dark:text-[#ececec]">
+                    {doc.kind === "page" ? (
+                        <PageEditor
+                            key={doc.id}
+                            page={doc}
+                            docs={docs}
+                            caret={caret}
+                            strings={s}
+                            onChange={(blocks, next) => {
+                                change(doc.id, { blocks });
+                                if (next) setCaret(next);
+                            }}
+                            onCaretDone={onCaretDone}
+                            onOpen={open}
+                        />
+                    ) : (
+                        <DatabaseView key={doc.id} db={doc} layout={layout} strings={s} onChange={(rows: Row[]) => change(doc.id, { rows })} />
+                    )}
+                </div>
+            </main>
+        </div>
+    );
 
-                <main className="relative flex min-w-0 flex-1 flex-col bg-(--cellar-window)" style={{ fontFamily: MAC_FONT }}>
-                    <header className="flex h-[52px] shrink-0 items-center gap-2 px-3">
-                        {sidebar !== true && (
-                            <span className={cn(CAPSULE, "px-0.5", sidebar === null && "sm:hidden")}>
-                                <IconButton label={s.showPanel} onClick={() => setSidebar(true)}><SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" /></IconButton>
-                            </span>
-                        )}
-                        <span className={cn(CAPSULE, "gap-0.5 px-0.5")}>
-                            <IconButton label={s.back} disabled={history.at === 0} onClick={() => go(-1)}><SFSymbol name="chevron.left" className="size-3.5" /></IconButton>
-                            <IconButton label={s.forward} disabled={history.at === history.list.length - 1} onClick={() => go(1)}><SFSymbol name="chevron.right" className="size-3.5" /></IconButton>
-                        </span>
-                        <h4 className="ml-1.5 min-w-0 truncate text-[15px] font-semibold text-[#1d1d1f] dark:text-[#ececec]">{doc.title || s.untitled}</h4>
-                        {doc.kind === "database" && (
-                            <div className="ml-auto flex items-center gap-2">
-                                <div className={cn(CAPSULE, "p-0.5 text-[12px]")}>
-                                    {(["table", "board"] as Layout[]).map((l) => (
-                                        <button
-                                            key={l}
-                                            type="button"
-                                            className={cn("rounded-[5px] px-2.5 py-0.5", l === layout ? "bg-(--cellar-window) text-current shadow-sm" : "hover:text-current")}
-                                            onClick={() => setLayouts((ls) => ({ ...ls, [doc.id]: l }))}
-                                        >
-                                            {l === "table" ? s.table : s.board}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </header>
-
-                    <div data-scroller className="min-h-0 flex-1 overflow-y-auto text-[#1d1d1f] dark:text-[#ececec]">
-                        {doc.kind === "page" ? (
-                            <PageEditor
-                                key={doc.id}
-                                page={doc}
-                                docs={docs}
-                                caret={caret}
-                                strings={s}
-                                onChange={(blocks, next) => {
-                                    change(doc.id, { blocks });
-                                    if (next) setCaret(next);
-                                }}
-                                onCaretDone={onCaretDone}
-                                onOpen={open}
-                            />
-                        ) : (
-                            <DatabaseView key={doc.id} db={doc} layout={layout} strings={s} onChange={(rows: Row[]) => change(doc.id, { rows })} />
-                        )}
-                    </div>
-                </main>
-            </div>
+    return (
+        <div className={className}>
+            {embedded ? frame : <DemoScroll minWidth={960}>{frame}</DemoScroll>}
             {!embedded && <p className="mt-5 text-center text-[13px] text-faint">{t("cellar.demo_hint")}</p>}
         </div>
     );

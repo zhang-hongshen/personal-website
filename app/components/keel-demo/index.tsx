@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useText, type L } from "~/components/demo-text";
 import { Inspector, MAC, MacSidebar, MacWindow, Popover, Segmented, ShowSidebarButton, SidebarHeader, SidebarRow, TitleBar, ToolButton, Unavailable, useSidebar } from "~/components/mac-ui";
 import { CAPSULE } from "~/components/mac-window";
-import { SFSymbol } from "~/components/sf-symbol";
 import { useTour, type Tour } from "~/components/tour";
 import { cn } from "~/lib/utils";
 import { KeyBrowser } from "./browser";
@@ -41,7 +40,6 @@ export function KeelDemo({ className, tour }: { className?: string; tour?: Tour<
     const [lines, setLines] = useState<Record<string, Line[]>>({});
     const [menu, setMenu] = useState<"expiry" | "delete" | null>(null);
     // Narrow screens show the key list or the detail, not both.
-    const [showDetail, setShowDetail] = useState(false);
     // The clock for TTLs, null until the page runs so prerendered HTML doesn't depend on the build time.
     const [now, setNow] = useState<number | null>(null);
     const [, redraw] = useState(0);
@@ -67,12 +65,10 @@ export function KeelDemo({ className, tour }: { className?: string; tour?: Tour<
     const openServer = (id: string) => {
         setServerId(id);
         setMenu(null);
-        sidebar.done();
     };
     const selectKey = (name: string) => {
         setKeys((k) => ({ ...k, [serverId]: name }));
         setMenu(null);
-        setShowDetail(true);
     };
     useTour(tour, consoleOpen ? "console" : mode, (stop) => {
         setConsoleOpen(stop === "console");
@@ -85,11 +81,6 @@ export function KeelDemo({ className, tour }: { className?: string; tour?: Tour<
     };
 
     const consoleButton = <ToolButton grouped icon="terminal" label={t(["Console", "控制台", "主控台"])} active={consoleOpen} onClick={() => setConsoleOpen((o) => !o)} />;
-    const back = (
-        <button type="button" aria-label={t(["Back", "返回", "返回"])} className={cn("flex size-8 items-center justify-center rounded-full md:hidden", MAC.field)} onClick={() => setShowDetail(false)}>
-            <SFSymbol name="chevron.left" className="size-3.5" />
-        </button>
-    );
 
     return (
         <MacWindow className={className}>
@@ -115,7 +106,7 @@ export function KeelDemo({ className, tour }: { className?: string; tour?: Tour<
                 </nav>
             </MacSidebar>
 
-            <section className={cn("flex w-full shrink-0 flex-col border-r md:w-[300px]", MAC.line, showDetail && mode === "browse" && "max-md:hidden")}>
+            <section className={cn("flex w-[300px] shrink-0 flex-col border-r", MAC.line)}>
                 <TitleBar leading={<ShowSidebarButton sidebar={sidebar} />} title={t(server.name)} subtitle={`${server.product} ${server.version}`}>
                     <select
                         aria-label={t(["Database", "数据库", "資料庫"])}
@@ -125,7 +116,6 @@ export function KeelDemo({ className, tour }: { className?: string; tour?: Tour<
                     >
                         {server.keyspace.map((d, i) => <option key={i} value={i}>db{i}{Object.keys(d).length ? ` · ${Object.keys(d).length}` : ""}</option>)}
                     </select>
-                    <span className="md:hidden"><div className={cn(CAPSULE, "px-0.5")}>{consoleButton}</div></span>
                 </TitleBar>
                 <div className="px-3 pb-2">
                     <Segmented options={[{ value: "browse", label: t(["Browse", "浏览", "瀏覽"]) }, { value: "insights", label: t(["Insights", "洞察", "洞察"]) }]} value={mode} onChange={setMode} className="w-full" />
@@ -138,7 +128,7 @@ export function KeelDemo({ className, tour }: { className?: string; tour?: Tour<
                             <div key={group.section[0]} className="flex flex-col gap-0.5">
                                 <SidebarHeader>{t(group.section)}</SidebarHeader>
                                 {group.pages.map((p) => (
-                                    <SidebarRow key={p.id} icon={p.icon} label={t(p.title)} selected={p.id === page} onClick={() => { setPage(p.id); setShowDetail(true); }} />
+                                    <SidebarRow key={p.id} icon={p.icon} label={t(p.title)} selected={p.id === page} onClick={() => setPage(p.id)} />
                                 ))}
                             </div>
                         ))}
@@ -146,21 +136,21 @@ export function KeelDemo({ className, tour }: { className?: string; tour?: Tour<
                 )}
             </section>
 
-            <main className={cn("flex min-w-0 flex-1 flex-col", !showDetail && "max-md:hidden")}>
+            <main className="flex min-w-0 flex-1 flex-col">
                 {mode === "insights" ? (
                     <>
-                        <TitleBar leading={back} title={t(PAGES.flatMap((g) => g.pages).find((p) => p.id === page)!.title)} subtitle={t(server.name)}>
-                            <div className={cn(CAPSULE, "px-0.5 max-md:hidden")}>{consoleButton}</div>
+                        <TitleBar title={t(PAGES.flatMap((g) => g.pages).find((p) => p.id === page)!.title)} subtitle={t(server.name)}>
+                            <div className={cn(CAPSULE, "px-0.5")}>{consoleButton}</div>
                         </TitleBar>
                         <InsightsPage page={page} server={server} />
                     </>
                 ) : entry && keyName ? (
                     <>
-                        <TitleBar leading={back} title={<span className="font-mono">{keyName}</span>} subtitle={keySubtitle(entry, t)}>
+                        <TitleBar title={<span className="font-mono">{keyName}</span>} subtitle={keySubtitle(entry, t)}>
                             <div className={cn(CAPSULE, "relative gap-0.5 px-0.5")}>
                                 <ToolButton grouped icon="timer" label={t(["Expiry", "过期时间", "到期時間"])} active={menu === "expiry"} onClick={() => setMenu((m) => (m === "expiry" ? null : "expiry"))} />
                                 <ToolButton grouped icon="trash" label={t(["Delete", "删除", "刪除"])} active={menu === "delete"} onClick={() => setMenu((m) => (m === "delete" ? null : "delete"))} />
-                                <span className="max-md:hidden">{consoleButton}</span>
+                                {consoleButton}
                                 <Popover open={menu === "expiry"} onClose={() => setMenu(null)} className="w-40">
                                     {EXPIRY.map(([label, seconds]) => (
                                         <button key={label[0]} type="button" className="block w-full rounded-md px-2 py-1 text-left hover:bg-[#007aff] hover:text-white" onClick={() => { entry.expiresAt = seconds === null ? null : Date.now() + seconds * 1000; setMenu(null); changed(); }}>
@@ -173,7 +163,7 @@ export function KeelDemo({ className, tour }: { className?: string; tour?: Tour<
                                     <p className={cn("mt-1", MAC.muted)}>{t([`The key and its value are removed from db${dbIndex}. This can't be undone.`, `这个 Key 及其值会从 db${dbIndex} 中删除，无法撤销。`, `這個 Key 及其值會從 db${dbIndex} 中刪除，無法還原。`])}</p>
                                     <div className="mt-3 flex justify-end gap-2">
                                         <button type="button" className={cn("h-7 rounded-md px-3", MAC.field)} onClick={() => setMenu(null)}>{t(["Cancel", "取消", "取消"])}</button>
-                                        <button type="button" className="h-7 rounded-md bg-[#ff3b30] px-3 font-medium text-white" onClick={() => { delete db[keyName]; setKeys((k) => ({ ...k, [serverId]: null })); setMenu(null); setShowDetail(false); }}>{t(["Delete", "删除", "刪除"])}</button>
+                                        <button type="button" className="h-7 rounded-md bg-[#ff3b30] px-3 font-medium text-white" onClick={() => { delete db[keyName]; setKeys((k) => ({ ...k, [serverId]: null })); setMenu(null); }}>{t(["Delete", "删除", "刪除"])}</button>
                                     </div>
                                 </Popover>
                             </div>
@@ -183,7 +173,7 @@ export function KeelDemo({ className, tour }: { className?: string; tour?: Tour<
                     </>
                 ) : (
                     <>
-                        <TitleBar leading={back} title="" ><div className={cn(CAPSULE, "px-0.5 max-md:hidden")}>{consoleButton}</div></TitleBar>
+                        <TitleBar title=""><div className={cn(CAPSULE, "px-0.5")}>{consoleButton}</div></TitleBar>
                         <Unavailable icon="key" title={keyName ? t(["Key Expired", "Key 已过期", "Key 已到期"]) : t(["No Key Selected", "未选择 Key", "未選擇 Key"])}>
                             {keyName
                                 ? t([`${keyName} reached its TTL and was removed.`, `${keyName} 已到达 TTL，被删除了。`, `${keyName} 已到達 TTL，被刪除了。`])

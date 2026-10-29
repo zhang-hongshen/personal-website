@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { useText, type L } from "~/components/demo-text";
-import { MAC, MacWindow, Popover, Spinner, ToolButton, TrafficLights } from "~/components/mac-ui";
+import { DemoScroll, MAC, MacWindow, Popover, Spinner, ToolButton, TrafficLights } from "~/components/mac-ui";
 import { CAPSULE, TOOL, TOOL_ITEM } from "~/components/mac-window";
 import { SFSymbol } from "~/components/sf-symbol";
 import { cn } from "~/lib/utils";
@@ -169,138 +169,140 @@ export function TuneStudioDemo({ className }: { className?: string }) {
     const styleTitle = style && s(style.title);
 
     return (
-        <MacWindow className={cn("flex-col", className)}>
-            <div
-                className="flex min-h-0 flex-1 flex-col"
-                onKeyDown={(e) => {
-                    if ((e.target as HTMLElement).closest("button, input, select, textarea")) return;
-                    if (e.key === " ") { e.preventDefault(); togglePlay(); }
-                    else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "z") { e.preventDefault(); if (e.shiftKey) redo(); else undo(); }
-                }}
-            >
-                <header className="flex h-[52px] shrink-0 items-center gap-2 px-3">
-                    <span className="px-1"><TrafficLights /></span>
-                    <span className="relative">
-                        <ToolButton icon="folder" label={s(["Open (⌘O)", "打开 (⌘O)", "開啟 (⌘O)"])} onClick={() => setMenu(menu === "open" ? null : "open")} />
-                        <Popover open={menu === "open"} onClose={closeMenu} className="right-auto left-0 w-60">
-                            <p className={cn("px-2 pt-1 pb-1.5 text-[11px] font-semibold", MAC.muted)}>{s(["Recordings", "录音", "錄音"])}</p>
-                            {RECORDINGS.map((r) => (
-                                <button key={r.id} type="button" className={cn("flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left", MAC.hover)} onClick={() => open(r.id)}>
-                                    <SFSymbol name="waveform" className={cn("size-4 shrink-0", MAC.accent)} />
-                                    <span className="flex min-w-0 flex-1 flex-col leading-tight">
-                                        <span className="truncate">{s(r.name)}</span>
-                                        <span className={cn("text-[11px]", MAC.muted)}>{s(r.format)}</span>
-                                    </span>
-                                    {r.id === recordingId && <SFSymbol name="checkmark" className="size-3 shrink-0" />}
-                                </button>
-                            ))}
-                        </Popover>
-                    </span>
-                    <h4 className="mr-auto hidden min-w-0 truncate pl-1 text-[15px] font-semibold md:block">{s(take.recording.name)}</h4>
-
-                    <div className={cn(CAPSULE, "max-md:mr-auto")}>
-                        <button
-                            type="button"
-                            aria-label={playing ? s(["Pause", "暂停", "暫停"]) : s(["Play", "播放", "播放"])}
-                            title={playing ? s(["Pause (Space)", "暂停 (空格)", "暫停 (空白鍵)"]) : s(["Play (Space)", "播放 (空格)", "播放 (空白鍵)"])}
-                            className={TOOL_ITEM}
-                            onClick={togglePlay}
-                        >
-                            <SFSymbol name={playing ? "pause.fill" : "play.fill"} className="size-3.5" />
-                        </button>
-                        <span className="relative flex items-center">
-                            <button
-                                type="button"
-                                aria-pressed={!!edits.style}
-                                title={edits.style ? s(["Turn Auto Tune off", "关闭 Auto Tune", "關閉 Auto Tune"]) : s(["Tune the whole song in one click", "一键修整首歌", "一鍵修整首歌"])}
-                                className={cn("flex h-7 items-center gap-1.5 rounded-full pr-1.5 pl-2.5 whitespace-nowrap hover:bg-black/6 dark:hover:bg-white/10", edits.style && MAC.accent)}
-                                onClick={toggleAutoTune}
-                            >
-                                <SFSymbol name={edits.style ? "wand.and.stars.inverse" : "wand.and.stars"} className="size-4" />
-                                <span className="text-[12px] font-medium">{edits.style ? s(["Auto Tune On", "Auto Tune 已开", "Auto Tune 已開"]) : "Auto Tune"}</span>
-                            </button>
-                            <button type="button" aria-label={s(["Auto Tune Style", "Auto Tune 风格", "Auto Tune 風格"])} className="flex h-7 w-5 items-center justify-center rounded-full hover:bg-black/6 dark:hover:bg-white/10" onClick={() => setMenu(menu === "style" ? null : "style")}>
-                                <SFSymbol name="chevron.down" className="size-2.5" />
-                            </button>
-                            <Popover open={menu === "style"} onClose={closeMenu} className="w-64">
-                                {STYLES.map((st) => (
-                                    <button key={st.id} type="button" className={cn("flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left", MAC.hover)} onClick={() => autoTune(st.id)}>
-                                        <span className="mt-0.5 w-3 shrink-0">{edits.style === st.id && <SFSymbol name="checkmark" className="size-3" />}</span>
-                                        <span className="flex flex-col leading-tight">
-                                            <span className="font-medium">{s(st.title)}</span>
-                                            <span className={cn("text-[11px]", MAC.muted)}>{s(st.summary)}</span>
+        <DemoScroll minWidth={960} className={className}>
+            <MacWindow className="flex-col">
+                <div
+                    className="flex min-h-0 flex-1 flex-col"
+                    onKeyDown={(e) => {
+                        if ((e.target as HTMLElement).closest("button, input, select, textarea")) return;
+                        if (e.key === " ") { e.preventDefault(); togglePlay(); }
+                        else if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "z") { e.preventDefault(); if (e.shiftKey) redo(); else undo(); }
+                    }}
+                >
+                    <header className="flex h-[52px] shrink-0 items-center gap-2 px-3">
+                        <span className="px-1"><TrafficLights /></span>
+                        <span className="relative">
+                            <ToolButton icon="folder" label={s(["Open (⌘O)", "打开 (⌘O)", "開啟 (⌘O)"])} onClick={() => setMenu(menu === "open" ? null : "open")} />
+                            <Popover open={menu === "open"} onClose={closeMenu} className="right-auto left-0 w-60">
+                                <p className={cn("px-2 pt-1 pb-1.5 text-[11px] font-semibold", MAC.muted)}>{s(["Recordings", "录音", "錄音"])}</p>
+                                {RECORDINGS.map((r) => (
+                                    <button key={r.id} type="button" className={cn("flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left", MAC.hover)} onClick={() => open(r.id)}>
+                                        <SFSymbol name="waveform" className={cn("size-4 shrink-0", MAC.accent)} />
+                                        <span className="flex min-w-0 flex-1 flex-col leading-tight">
+                                            <span className="truncate">{s(r.name)}</span>
+                                            <span className={cn("text-[11px]", MAC.muted)}>{s(r.format)}</span>
                                         </span>
+                                        {r.id === recordingId && <SFSymbol name="checkmark" className="size-3 shrink-0" />}
                                     </button>
                                 ))}
                             </Popover>
                         </span>
+                        <h4 className="mr-auto min-w-0 truncate pl-1 text-[15px] font-semibold">{s(take.recording.name)}</h4>
+
+                        <div className={CAPSULE}>
+                            <button
+                                type="button"
+                                aria-label={playing ? s(["Pause", "暂停", "暫停"]) : s(["Play", "播放", "播放"])}
+                                title={playing ? s(["Pause (Space)", "暂停 (空格)", "暫停 (空白鍵)"]) : s(["Play (Space)", "播放 (空格)", "播放 (空白鍵)"])}
+                                className={TOOL_ITEM}
+                                onClick={togglePlay}
+                            >
+                                <SFSymbol name={playing ? "pause.fill" : "play.fill"} className="size-3.5" />
+                            </button>
+                            <span className="relative flex items-center">
+                                <button
+                                    type="button"
+                                    aria-pressed={!!edits.style}
+                                    title={edits.style ? s(["Turn Auto Tune off", "关闭 Auto Tune", "關閉 Auto Tune"]) : s(["Tune the whole song in one click", "一键修整首歌", "一鍵修整首歌"])}
+                                    className={cn("flex h-7 items-center gap-1.5 rounded-full pr-1.5 pl-2.5 whitespace-nowrap hover:bg-black/6 dark:hover:bg-white/10", edits.style && MAC.accent)}
+                                    onClick={toggleAutoTune}
+                                >
+                                    <SFSymbol name={edits.style ? "wand.and.stars.inverse" : "wand.and.stars"} className="size-4" />
+                                    <span className="text-[12px] font-medium">{edits.style ? s(["Auto Tune On", "Auto Tune 已开", "Auto Tune 已開"]) : "Auto Tune"}</span>
+                                </button>
+                                <button type="button" aria-label={s(["Auto Tune Style", "Auto Tune 风格", "Auto Tune 風格"])} className="flex h-7 w-5 items-center justify-center rounded-full hover:bg-black/6 dark:hover:bg-white/10" onClick={() => setMenu(menu === "style" ? null : "style")}>
+                                    <SFSymbol name="chevron.down" className="size-2.5" />
+                                </button>
+                                <Popover open={menu === "style"} onClose={closeMenu} className="w-64">
+                                    {STYLES.map((st) => (
+                                        <button key={st.id} type="button" className={cn("flex w-full items-start gap-2 rounded-md px-2 py-1.5 text-left", MAC.hover)} onClick={() => autoTune(st.id)}>
+                                            <span className="mt-0.5 w-3 shrink-0">{edits.style === st.id && <SFSymbol name="checkmark" className="size-3" />}</span>
+                                            <span className="flex flex-col leading-tight">
+                                                <span className="font-medium">{s(st.title)}</span>
+                                                <span className={cn("text-[11px]", MAC.muted)}>{s(st.summary)}</span>
+                                            </span>
+                                        </button>
+                                    ))}
+                                </Popover>
+                            </span>
+                        </div>
+
+                        <span className="flex-1" />
+                        <div className={cn(CAPSULE, "px-0.5")}>
+                            <ToolButton grouped icon="arrow.uturn.backward" label={s(["Undo (⌘Z)", "撤销 (⌘Z)", "還原 (⌘Z)"])} disabled={!history.past.length} onClick={undo} />
+                            <ToolButton grouped icon="arrow.uturn.forward" label={s(["Redo (⇧⌘Z)", "重做 (⇧⌘Z)", "重做 (⇧⌘Z)"])} disabled={!history.future.length} onClick={redo} />
+                        </div>
+                        <div className={cn(CAPSULE, "px-0.5")}>
+                            <ToolButton grouped icon="minus.magnifyingglass" label={s(["Zoom Out", "缩小", "縮小"])} disabled={pps <= 50} onClick={() => setPps((p) => Math.max(p / 1.35, 50))} />
+                            <ToolButton grouped icon="plus.magnifyingglass" label={s(["Zoom In", "放大", "放大"])} disabled={pps >= 400} onClick={() => setPps((p) => Math.min(p * 1.35, 400))} />
+                        </div>
+                        <span className="relative">
+                            <button type="button" aria-label={s(["Export", "导出", "輸出"])} title={s(["Export the tuned audio (⇧⌘E)", "导出修音后的音频 (⇧⌘E)", "輸出修音後的音訊 (⇧⌘E)"])} className={TOOL} onClick={() => setMenu(menu === "export" ? null : "export")}>
+                                <SFSymbol name="square.and.arrow.up" className="size-4" />
+                            </button>
+                            <Popover open={menu === "export"} onClose={closeMenu} className="w-56">
+                                <button type="button" disabled={!tuned || !!busy} className={cn("flex w-full flex-col rounded-md px-2 py-1.5 text-left disabled:opacity-40", MAC.hover)} onClick={() => exportAudio(true)}>
+                                    <span>{s(["Export Tuned Audio…", "导出修音后的音频…", "輸出修音後的音訊…"])}</span>
+                                    <span className={cn("text-[11px]", MAC.muted)}>WAV · {clock(take.duration)}</span>
+                                </button>
+                                <button type="button" className={cn("flex w-full flex-col rounded-md px-2 py-1.5 text-left", MAC.hover)} onClick={() => exportAudio(false)}>
+                                    <span>{s(["Export Original…", "导出原始录音…", "輸出原始錄音…"])}</span>
+                                    <span className={cn("text-[11px]", MAC.muted)}>{s(["WAV, as sung", "WAV，原唱", "WAV，原唱"])}</span>
+                                </button>
+                            </Popover>
+                        </span>
+                    </header>
+
+                    <div className="flex min-h-0 flex-1 flex-col bg-[#f5f5f7] p-3 dark:bg-[#161616]">
+                        <Editor
+                            take={take}
+                            frames={frames}
+                            targets={targets}
+                            selected={selected}
+                            pps={pps}
+                            time={time}
+                            playing={playing}
+                            onSelect={setSelected}
+                            onMove={moveNote}
+                            onSeek={seek}
+                            onReset={resetNote}
+                            onTranspose={(id, by) => moveNote(id, Math.round(targets[id].center) + by, true)}
+                        />
                     </div>
 
-                    <span className="flex-1 max-md:hidden" />
-                    <div className={cn(CAPSULE, "px-0.5 max-sm:hidden")}>
-                        <ToolButton grouped icon="arrow.uturn.backward" label={s(["Undo (⌘Z)", "撤销 (⌘Z)", "還原 (⌘Z)"])} disabled={!history.past.length} onClick={undo} />
-                        <ToolButton grouped icon="arrow.uturn.forward" label={s(["Redo (⇧⌘Z)", "重做 (⇧⌘Z)", "重做 (⇧⌘Z)"])} disabled={!history.future.length} onClick={redo} />
-                    </div>
-                    <div className={cn(CAPSULE, "px-0.5 max-sm:hidden")}>
-                        <ToolButton grouped icon="minus.magnifyingglass" label={s(["Zoom Out", "缩小", "縮小"])} disabled={pps <= 50} onClick={() => setPps((p) => Math.max(p / 1.35, 50))} />
-                        <ToolButton grouped icon="plus.magnifyingglass" label={s(["Zoom In", "放大", "放大"])} disabled={pps >= 400} onClick={() => setPps((p) => Math.min(p * 1.35, 400))} />
-                    </div>
-                    <span className="relative">
-                        <button type="button" aria-label={s(["Export", "导出", "輸出"])} title={s(["Export the tuned audio (⇧⌘E)", "导出修音后的音频 (⇧⌘E)", "輸出修音後的音訊 (⇧⌘E)"])} className={TOOL} onClick={() => setMenu(menu === "export" ? null : "export")}>
-                            <SFSymbol name="square.and.arrow.up" className="size-4" />
-                        </button>
-                        <Popover open={menu === "export"} onClose={closeMenu} className="w-56">
-                            <button type="button" disabled={!tuned || !!busy} className={cn("flex w-full flex-col rounded-md px-2 py-1.5 text-left disabled:opacity-40", MAC.hover)} onClick={() => exportAudio(true)}>
-                                <span>{s(["Export Tuned Audio…", "导出修音后的音频…", "輸出修音後的音訊…"])}</span>
-                                <span className={cn("text-[11px]", MAC.muted)}>WAV · {clock(take.duration)}</span>
-                            </button>
-                            <button type="button" className={cn("flex w-full flex-col rounded-md px-2 py-1.5 text-left", MAC.hover)} onClick={() => exportAudio(false)}>
-                                <span>{s(["Export Original…", "导出原始录音…", "輸出原始錄音…"])}</span>
-                                <span className={cn("text-[11px]", MAC.muted)}>{s(["WAV, as sung", "WAV，原唱", "WAV，原唱"])}</span>
-                            </button>
-                        </Popover>
-                    </span>
-                </header>
-
-                <div className="flex min-h-0 flex-1 flex-col bg-[#f5f5f7] p-3 dark:bg-[#161616]">
-                    <Editor
-                        take={take}
-                        frames={frames}
-                        targets={targets}
-                        selected={selected}
-                        pps={pps}
-                        time={time}
-                        playing={playing}
-                        onSelect={setSelected}
-                        onMove={moveNote}
-                        onSeek={seek}
-                        onReset={resetNote}
-                        onTranspose={(id, by) => moveNote(id, Math.round(targets[id].center) + by, true)}
-                    />
+                    <footer className={cn("flex h-[34px] shrink-0 items-center gap-4 border-t px-4 text-[12px]", MAC.line, MAC.sidebar)}>
+                        <span className="flex min-w-0 items-center gap-1.5">
+                            <SFSymbol name="waveform" className={cn("size-3.5 shrink-0", MAC.muted)} />
+                            <span className="truncate font-medium">{s(take.recording.name)}</span>
+                            <span className={cn("truncate", MAC.muted)}>{s(take.recording.format)}</span>
+                        </span>
+                        <span className="flex-1" />
+                        <span className="shrink-0 tabular-nums">
+                            {clock(time)} <span className="opacity-40">/</span> <span className={MAC.muted}>{clock(take.duration)}</span>
+                        </span>
+                        <span className="flex-1" />
+                        <span className="flex shrink-0 items-center gap-1.5" title={busy ? s(busy) : undefined}>
+                            {busy ? (
+                                <><Spinner className="size-3.5" /><span className={MAC.muted}>{s(busy)}</span></>
+                            ) : tuned ? (
+                                <><SFSymbol name="checkmark.circle.fill" className="size-3.5 text-[#28c840]" /><span className={MAC.muted}>{s(["Tuned audio ready", "修音完成", "修音完成"])}{styleTitle && !Object.keys(edits.manual).length ? ` · ${styleTitle}` : ""}</span></>
+                            ) : (
+                                <><SFSymbol name="circle" className={cn("size-3.5", MAC.muted)} /><span className={MAC.muted}>{s(["No changes yet", "尚未修改", "尚未修改"])}</span></>
+                            )}
+                        </span>
+                    </footer>
                 </div>
-
-                <footer className={cn("flex h-[34px] shrink-0 items-center gap-4 border-t px-4 text-[12px]", MAC.line, MAC.sidebar)}>
-                    <span className="flex min-w-0 items-center gap-1.5">
-                        <SFSymbol name="waveform" className={cn("size-3.5 shrink-0", MAC.muted)} />
-                        <span className="truncate font-medium">{s(take.recording.name)}</span>
-                        <span className={cn("truncate max-sm:hidden", MAC.muted)}>{s(take.recording.format)}</span>
-                    </span>
-                    <span className="flex-1" />
-                    <span className="shrink-0 tabular-nums">
-                        {clock(time)} <span className="opacity-40">/</span> <span className={MAC.muted}>{clock(take.duration)}</span>
-                    </span>
-                    <span className="flex-1" />
-                    <span className="flex shrink-0 items-center gap-1.5" title={busy ? s(busy) : undefined}>
-                        {busy ? (
-                            <><Spinner className="size-3.5" /><span className={MAC.muted}>{s(busy)}</span></>
-                        ) : tuned ? (
-                            <><SFSymbol name="checkmark.circle.fill" className="size-3.5 text-[#28c840]" /><span className={MAC.muted}>{s(["Tuned audio ready", "修音完成", "修音完成"])}{styleTitle && !Object.keys(edits.manual).length ? ` · ${styleTitle}` : ""}</span></>
-                        ) : (
-                            <><SFSymbol name="circle" className={cn("size-3.5", MAC.muted)} /><span className={MAC.muted}>{s(["No changes yet", "尚未修改", "尚未修改"])}</span></>
-                        )}
-                    </span>
-                </footer>
-            </div>
-        </MacWindow>
+            </MacWindow>
+        </DemoScroll>
     );
 }

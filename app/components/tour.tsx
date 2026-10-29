@@ -1,6 +1,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
+import { DemoScroll } from "~/components/mac-ui";
 import { cn } from "~/lib/utils";
 
 // A demo window beside a few words on each part of the app. Picking a part opens it in the window, and
@@ -47,7 +48,7 @@ export function FeatureTour<S extends string>({ stops, stop, onStop, className, 
                     );
                 })}
             </ul>
-            {children}
+            <DemoScroll minWidth={704} className="min-w-0">{children}</DemoScroll>
         </div>
     );
 }

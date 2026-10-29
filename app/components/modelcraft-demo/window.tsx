@@ -48,7 +48,7 @@ export function ModelCraftWindow({ className, view, onView, onCall, onWriting }:
     // The conversation each task's latest run made, by task id.
     const [runs, setRuns] = useState<Record<string, string>>({});
     // Shown or hidden by the toggle; null until then, which shows it on wide screens only.
-    const [sidebar, setSidebar] = useState<boolean | null>(null);
+    const [sidebar, setSidebar] = useState(true);
 
     const downloading = Object.values(downloads).some((d) => d.progress < 1 && !d.stopped);
     useEffect(() => {
@@ -111,8 +111,6 @@ export function ModelCraftWindow({ className, view, onView, onCall, onWriting }:
         setTouched(true);
         setChatId(id);
         onView(v);
-        // On a narrow screen the sidebar covers the window, so going somewhere puts it away.
-        if (!matchMedia("(min-width: 640px)").matches) setSidebar(null);
     };
     const open = (v: View) => go(v, v === "chat" && chatId === null && chats.length ? chats[0].id : chatId);
 
@@ -164,12 +162,12 @@ export function ModelCraftWindow({ className, view, onView, onCall, onWriting }:
 
     const nextPreset = PRESET_TASKS.find((p) => !tasks.some((x) => x.id === p.id));
     const chat = view === "chat" && chatId ? chats.find((c) => c.id === chatId) ?? null : null;
-    const sidebarButton = sidebar !== true && (
+    const sidebarButton = !sidebar && (
         <button
             type="button"
             aria-label={s(["Show Sidebar", "显示边栏", "顯示側邊欄"])}
             title={s(["Show Sidebar", "显示边栏", "顯示側邊欄"])}
-            className={cn(TOOL, sidebar === null && "sm:hidden")}
+            className={TOOL}
             onClick={() => setSidebar(true)}
         >
             <SFSymbol name="sidebar.left" className="h-3.5 w-[18px]" />
@@ -183,10 +181,7 @@ export function ModelCraftWindow({ className, view, onView, onCall, onWriting }:
                 chatId={chatId}
                 chats={chats}
                 hint={!touched}
-                className={cn(
-                    "absolute inset-y-0 left-0 z-30 transition-transform duration-200 sm:static",
-                    sidebar === null ? "-translate-x-full sm:translate-x-0" : sidebar ? "translate-x-0 shadow-xl sm:shadow-none" : "-translate-x-full sm:hidden",
-                )}
+                className={cn(!sidebar && "hidden")}
                 onOpen={open}
                 onOpenChat={(id) => go("chat", id)}
                 onNewChat={() => go("chat", null)}
