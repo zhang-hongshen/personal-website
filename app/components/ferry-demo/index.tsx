@@ -278,12 +278,9 @@ export function FerryDemo({ className }: { className?: string }) {
                         <ToolButton grouped icon="arrow.up" label={s(["Upload", "上传", "上傳"])} onClick={upload} className="size-3.5" />
                         <ToolButton grouped icon="arrow.down" label={s(["Download", "下载", "下載"])} disabled={!selectedItem || !!selectedItem.children} onClick={download} className="size-3.5" />
                     </div>
+                    <SearchField value={filter} placeholder={s(["Filter", "过滤", "過濾"])} onChange={setFilter} className="w-40 max-md:hidden" />
                     <ToolButton icon="sidebar.right" label={s(["Inspector", "检查器", "檢閱器"])} active={inspector} onClick={() => setInspector((o) => !o)} className="h-3.5 w-[18px]" />
                 </TitleBar>
-
-                <div className="flex items-center gap-2 px-3 pb-2">
-                    <SearchField value={filter} placeholder={s(["Filter", "过滤", "過濾"])} onChange={setFilter} className="w-full sm:w-56" />
-                </div>
 
                 <div
                     className={cn("relative min-h-0 flex-1 overflow-y-auto border-t", MAC.line)}
